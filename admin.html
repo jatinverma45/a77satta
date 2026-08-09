@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A77SATTA ADMIN CONTROL PANEL</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Admin specific overrides */
+    body { background: #0a0a0a; color: #fff; min-height: 100vh; }
+    
+    .admin-login-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #0a0a0a;
+      padding: 20px;
+    }
+
+    .admin-login-card {
+      background: #161616;
+      width: 100%;
+      max-width: 440px;
+      padding: 40px 30px;
+      border-radius: 14px;
+      border: 3px solid #ffd400;
+      box-shadow: 0 12px 40px rgba(255, 212, 0, 0.2);
+    }
+
+    .admin-login-card h2 {
+      text-align: center;
+      color: #ffd400;
+      font-size: 26px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    .admin-form-group {
+      margin-bottom: 18px;
+    }
+
+    .admin-form-group label {
+      display: block;
+      font-weight: 900;
+      font-size: 13px;
+      color: #ffd400;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .admin-form-group input, .admin-form-group select, .admin-form-group textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #333;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      background: #0c0c0c;
+      outline: none;
+    }
+
+    .admin-form-group input:focus, .admin-form-group select:focus, .admin-form-group textarea:focus {
+      border-color: #ffd400;
+    }
+
+    .btn-login-submit {
+      width: 100%;
+      padding: 14px;
+      background: #ffd400;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 900;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: 0.2s;
+      letter-spacing: 1px;
+    }
+
+    .btn-login-submit:hover {
+      background: #ffffff;
+    }
+
+    .login-error-txt {
+      color: #ff3333;
+      font-weight: 900;
+      font-size: 13px;
+      text-align: center;
+      margin-top: 14px;
+    }
+
+    /* Admin Panel Main Container */
+    .admin-panel-container {
+      display: none;
+      width: min(100%, 1180px);
+      margin: 0 auto;
+      padding: 10px 0 40px;
+    }
+
+    .admin-nav-bar {
+      margin-bottom: 15px;
+    }
+
+    /* Section Cards */
+    .admin-card-box {
+      background: #ffffff;
+      color: #000000;
+      border-radius: 10px;
+      border: 2px solid #111;
+      margin-bottom: 24px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    .admin-card-header {
+      background: #000000;
+      color: #ffd400;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #ffd400;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .admin-card-header h3 {
+      font-size: 18px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .admin-card-body {
+      padding: 20px;
+      background: #ffffff;
+      color: #000000;
+    }
+
+    /* Tab Content Panes */
+    .admin-main-pane {
+      display: none;
+    }
+    .admin-main-pane.active {
+      display: block;
+    }
+
+    /* Buttons */
+    .btn-adm {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-weight: 900;
+      font-size: 13px;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn-adm-green { background: #1b873f; color: #ffffff; }
+    .btn-adm-red { background: #d50000; color: #ffffff; }
+    .btn-adm-yellow { background: #ffd400; color: #000000; border: 1px solid #111; }
+    .btn-adm:hover { opacity: 0.9; }
+
+    /* Admin Tables */
+    .adm-table-wrap {
+      overflow-x: auto;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #ffffff;
+    }
+
+    .adm-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    .adm-table th {
+      background: #ffd400;
+      color: #000000;
+      font-weight: 900;
+      font-size: 12px;
+      padding: 12px 10px;
+      border: 1px solid #c8ab00;
+      text-transform: uppercase;
+    }
+
+    .adm-table td {
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      font-size: 13px;
+      font-weight: 800;
+      background: #ffffff;
+      color: #000000;
+    }
+
+    .adm-table tr:nth-child(even) td {
+      background: #f9f9f9;
+    }
+
+    .adm-input-cell {
+      width: 100%;
+      padding: 7px 10px;
+      font-size: 13px;
+      font-weight: 900;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      text-align: center;
+      outline: none;
+      color: #000000;
+      background: #ffffff;
+    }
+
+    .adm-input-cell:focus {
+      border-color: #ffd400;
+      background: #fffdf0;
+    }
+
+    .action-row-flex {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* Modal for Add Game */
+    .modal-overlay-adm {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 20000;
+      padding: 20px;
+    }
+
+    .modal-overlay-adm.is-open {
+      display: flex;
+    }
+
+    .modal-card-adm {
+      background: #ffffff;
+      color: #000000;
+      width: 100%;
+      max-width: 480px;
+      padding: 26px;
+      border-radius: 12px;
+      border: 3px solid #ffd400;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .modal-card-adm h4 {
+      font-size: 20px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      border-bottom: 2px solid #ffd400;
+      padding-bottom: 8px;
+    }
+
+    .toast-adm {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      background: #1b873f;
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 14px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      z-index: 99999;
+      display: none;
+    }
+  </style>
+</head>
+<body class="home-page">
+
+  <!-- LOGIN SCREEN -->
+  <div class="admin-login-wrapper" id="loginScreen">
+    <div class="admin-login-card">
+      <h2>A77SATTA ADMIN</h2>
+      <form id="adminLoginForm">
+        <div class="admin-form-group">
+          <label>Username</label>
+          <input type="text" id="adminUser" value="admin" required>
+        </div>
+        <div class="admin-form-group">
+          <label>Password</label>
+          <input type="password" id="adminPass" value="admin123" required>
+        </div>
+        <button type="submit" class="btn-login-submit">LOGIN TO ADMIN PANEL</button>
+        <div class="login-error-txt" id="loginErr"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ADMIN CONTROL PANEL MAIN SHELL -->
+  <div class="landing-shell admin-panel-container" id="adminPanel">
+    
+    <!-- EXACT MAIN WEBSITE TOP NAV BAR PILLS -->
+    <nav class="top-nav admin-nav-bar">
+      <button class="nav-pill active" onclick="switchAdminMainTab('tab-a77satta', this)">A77SATTA 🏰</button>
+      <button class="nav-pill" onclick="switchAdminMainTab('tab-chart', this)">CHART</button>
+      <button class="nav-pill" onclick="switchAdminMainTab('tab-users', this)">USERS</button>
+    </nav>
+
+    <div class="sub-nav-ticker">
+      <marquee behavior="scroll" direction="left" scrollamount="6">A77SATTA ADMIN CONTROL PANEL - Real-time Management for Satta Results, Charts &amp; Site Configurations.</marquee>
+    </div>
+
+    <section class="official-title-bar">
+      <h1>A77SATTA OFFICIAL ADMIN</h1>
+    </section>
+
+    <!-- ======================================================== -->
+    <!-- TAB 1: A77SATTA (HOMEPAGE ADMIN CONTROLS)                -->
+    <!-- ======================================================== -->
+    <div id="tab-a77satta" class="admin-main-pane active">
+      
+      <!-- 1. GAMES LIVE RESULT MANAGER -->
+      <div class="admin-card-box">
+        <div class="admin-card-header">
+          <h3 id="gamesCountTitle">GAMES LIVE RESULT MANAGER (33 GAMES)</h3>
+          <button class="btn-adm btn-adm-green" onclick="openAddGameModal()">+ ADD NEW GAME</button>
+        </div>
+        <div class="admin-card-body">
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="width: 45px;">#</th>
+                  <th style="width: 220px;">GAME NAME</th>
+                  <th style="width: 140px;">TIME</th>
+                  <th style="width: 150px;">YESTERDAY RESULT (कल)</th>
+                  <th style="width: 220px;">TODAY RESULT (आज / WAIT)</th>
+                  <th style="width: 180px;">QUICK ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="todayGamesTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. SITE SETTINGS & TICKER MANAGER -->
+      <div class="admin-card-box">
+        <div class="admin-card-header">
+          <h3>HOMEPAGE SITE SETTINGS &amp; TICKER MANAGER</h3>
+        </div>
+        <div class="admin-card-body">
+          <form id="settingsForm" onsubmit="saveSiteSettings(event)">
+            <div class="admin-form-group">
+              <label>Header Sub-Text (Hindi Tagline)</label>
+              <input type="text" id="setting_hindi_tagline">
+            </div>
+            <div class="admin-form-group">
+              <label>Sub-Nav Moving Ticker Text (Right to Left Single Line)</label>
+              <textarea id="setting_ticker_text" rows="3"></textarea>
+            </div>
+            <div class="admin-form-group">
+              <label>WhatsApp Group / Channel Link</label>
+              <input type="text" id="setting_whatsapp_url">
+            </div>
+            <div class="admin-form-group">
+              <label>Telegram Channel Link</label>
+              <input type="text" id="setting_telegram_url">
+            </div>
+            <div class="admin-form-group">
+              <label>Notice Board Message 1</label>
+              <input type="text" id="setting_notice_1">
+            </div>
+            <div class="admin-form-group">
+              <label>Notice Board Message 2</label>
+              <input type="text" id="setting_notice_2">
+            </div>
+            <button type="submit" class="btn-adm btn-adm-green" style="padding: 10px 28px; font-size: 14px;">SAVE SITE SETTINGS</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- 3. BLOG POSTS MANAGER -->
+      <div class="admin-card-box">
+        <div class="admin-card-header">
+          <h3>HOMEPAGE BLOG POSTS MANAGER</h3>
+        </div>
+        <div class="admin-card-body">
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>TITLE</th>
+                  <th>DATE</th>
+                  <th>TAGS</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="blogsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 2: CHART (CHART PAGE ADMIN CONTROLS)                 -->
+    <!-- ======================================================== -->
+    <div id="tab-chart" class="admin-main-pane">
+      
+      <!-- 1. AUGUST 2026 RECORD CHART MANAGER -->
+      <div class="admin-card-box">
+        <div class="admin-card-header">
+          <h3>AUGUST 2026 RECORD CHART MANAGER</h3>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-green" onclick="addNewChartColumn1()">+ ADD COLUMN</button>
+            <button class="btn-adm btn-adm-green" onclick="addNewChartDateRow()">+ ADD DATE</button>
+            <button class="btn-adm btn-adm-green" onclick="saveAllChartData()">SAVE ALL CHART CHANGES</button>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px;">Edit daily results (01-08 to 09-08) for main Satta games below:</p>
+          <div class="adm-table-wrap">
+            <table class="adm-table" id="chartAdminTable">
+              <thead id="chartAdminThead1">
+                <tr>
+                  <th>DATE</th>
+                  <th>SADAR BAZAR</th>
+                  <th>GWALIOR</th>
+                  <th>DELHI BAZAR</th>
+                  <th>DELHI MATKA</th>
+                  <th>SHRI GANESH</th>
+                  <th>AGRA</th>
+                  <th>FARIDABAD</th>
+                  <th>ALWAR</th>
+                  <th>GAZIABAD</th>
+                  <th>DWARKA</th>
+                  <th>GALI</th>
+                  <th>DISAWER</th>
+                </tr>
+              </thead>
+              <tbody id="chartRecordsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      <!-- 2. AUGUST 2026 SECOND RECORD CHART MANAGER (20 GAMES) -->
+      <div class="admin-card-box">
+        <div class="admin-card-header">
+          <h3>AUGUST 2026 SECOND RECORD CHART MANAGER (20 GAMES)</h3>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-green" onclick="addNewChartColumn2()">+ ADD COLUMN</button>
+            <button class="btn-adm btn-adm-green" onclick="addNewChartDateRow2()">+ ADD DATE</button>
+            <button class="btn-adm btn-adm-green" onclick="saveAllChartData2()">SAVE ALL CHART CHANGES</button>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px;">Edit daily results (01-08 to 09-08) for 20 Satta games below:</p>
+          <div class="adm-table-wrap">
+            <table class="adm-table" id="chartAdminTable2">
+              <thead id="chartAdminThead2">
+                <tr>
+                  <th>DATE</th>
+                  <th>HR SATTA</th>
+                  <th>UJJALA SUPER</th>
+                  <th>KKR CITY</th>
+                  <th>MADHUPURI</th>
+                  <th>ANMOL BAZAR</th>
+                  <th>KAROL BAGH</th>
+                  <th>DELHI DARBAR</th>
+                  <th>NEW GANGA</th>
+                  <th>SKY KING</th>
+                  <th>FATEHABAD</th>
+                  <th>UDAIPUR CITY</th>
+                  <th>RAJ SHREE</th>
+                  <th>VIP AGRA</th>
+                  <th>MOHALI-7</th>
+                  <th>BHADRA BAZAR</th>
+                  <th>MANDI BAZAR</th>
+                  <th>LION BAZAR</th>
+                  <th>SIALKOT</th>
+                  <th>DEHRADUN CITY</th>
+                  <th>DAMAN</th>
+                </tr>
+              </thead>
+              <tbody id="chartRecordsTbody2"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- TAB 3: USERS (USER ACCOUNTS & SECURITY CONTROLS)         -->
+    <!-- ======================================================== -->
+    <div id="tab-users" class="admin-main-pane">
+      
+      <!-- ADMIN USER ACCOUNT & SECURITY -->
+      <div class="admin-card-box">
+        <div class="admin-card-header">
+          <h3>ADMIN ACCOUNT &amp; SECURITY CONTROLS</h3>
+          <span style="background:#ffd400; color:#000; padding:6px 14px; border-radius:20px; font-weight:900; font-size:12px;">LOGGED IN: ADMIN</span>
+        </div>
+        <div class="admin-card-body">
+          <form id="passForm" onsubmit="changeAdminPass(event)" style="max-width: 440px;">
+            <h4 style="font-size:16px; font-weight:900; margin-bottom:14px;">CHANGE ADMIN PASSWORD</h4>
+            <div class="admin-form-group">
+              <label>New Password</label>
+              <input type="password" id="newPassVal" required>
+            </div>
+            <div class="action-row-flex" style="justify-content: flex-start; gap: 12px; margin-top: 16px;">
+              <button type="submit" class="btn-adm btn-adm-green" style="padding: 10px 24px; font-size: 14px;">UPDATE PASSWORD</button>
+              <button type="button" class="btn-adm btn-adm-red" onclick="doLogout()" style="padding: 10px 24px; font-size: 14px;">LOGOUT ADMIN</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <section class="a77-footer" style="margin-top: 30px;">
+      <div class="a77-privacy-row">
+        <a href="https://a77satta.com/privacy-policy">Privacy Policy</a>
+        <a href="https://a77satta.com/terms-and-conditions">Terms &amp; Conditions</a>
+      </div>
+      <div class="a77-copyright-row">
+        <span>© 2026 A77SATTA Admin Control Panel. All Rights Reserved.</span>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- FLOATING REFRESH BUTTON (RIGHT BOTTOM CORNER) -->
+  <div class="floating-refresh-btn" id="refreshBtn" onclick="location.reload();">
+    <span class="refresh-text">Refresh</span>
+    <span class="refresh-circle">
+      <svg class="refresh-svg" width="20" height="20" viewBox="0 0 24 24">
+        <path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+      </svg>
+    </span>
+  </div>
+
+  <!-- ADD NEW GAME MODAL -->
+  <div class="modal-overlay-adm" id="addGameModal">
+    <div class="modal-card-adm">
+      <h4>+ CREATE NEW GAME</h4>
+      <form id="createNewGameForm" onsubmit="submitNewGame(event)">
+        <div class="admin-form-group">
+          <label>Game Name</label>
+          <input type="text" id="newGameName" placeholder="e.g. MUMBAI BAZAR" required style="color:#000; background:#fff;">
+        </div>
+        <div class="admin-form-group">
+          <label>Time</label>
+          <input type="text" id="newGameTime" placeholder="e.g. 05:00 PM" required style="color:#000; background:#fff;">
+        </div>
+        <div class="admin-form-group">
+          <label>Yesterday Result (Optional)</label>
+          <input type="text" id="newGameYesterday" placeholder="e.g. 45" style="color:#000; background:#fff;">
+        </div>
+        <div class="admin-form-group">
+          <label>Today Result (Default: WAIT)</label>
+          <input type="text" id="newGameToday" value="WAIT" style="color:#000; background:#fff;">
+        </div>
+        <div class="admin-form-group">
+          <label>Table Group Placement</label>
+          <select id="newGameTableGroup" style="color:#000; background:#fff;">
+            <option value="1">Main 12 Games Table</option>
+            <option value="2">Lower 21 Games Table</option>
+          </select>
+        </div>
+        <div class="action-row-flex" style="justify-content: flex-end; margin-top: 20px;">
+          <button type="button" class="btn-adm btn-adm-red" onclick="closeAddGameModal()">CANCEL</button>
+          <button type="submit" class="btn-adm btn-adm-green">CREATE GAME</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div class="toast-adm" id="toastMsg">Changes Saved Successfully!</div>
+
+  <script src="js/main.js"></script>
+  <script>
+    let siteDataCache = null;
+
+    // Login Form Submit
+    document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('adminUser').value;
+      const password = document.getElementById('adminPass').value;
+      const errEl = document.getElementById('loginErr');
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          localStorage.setItem('admin_token', data.token);
+          showAdminPanel();
+        } else {
+          errEl.textContent = data.error || 'Invalid credentials';
+        }
+      } catch (err) {
+        errEl.textContent = 'Server error. Please try again.';
+      }
+    });
+
+    function showAdminPanel() {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      loadAdminData();
+    }
+
+    function doLogout() {
+      localStorage.removeItem('admin_token');
+      document.getElementById('loginScreen').style.display = 'flex';
+      document.getElementById('adminPanel').style.display = 'none';
+    }
+
+    if (localStorage.getItem('admin_token')) {
+      showAdminPanel();
+    }
+
+    function switchAdminMainTab(paneId, btn) {
+      document.querySelectorAll('.admin-main-pane').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.top-nav .nav-pill').forEach(b => b.classList.remove('active'));
+      document.getElementById(paneId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toastMsg');
+      t.textContent = msg;
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 2500);
+    }
+
+    // Load Site Data
+    async function loadAdminData() {
+      try {
+        const res = await fetch('/api/site-data');
+        siteDataCache = await res.json();
+        renderGamesTable();
+        renderChartTable();
+        renderChartTable2();
+        renderSettings();
+        renderBlogs();
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    // Render Games Manager Table
+    function renderGamesTable() {
+      const tbody = document.getElementById('todayGamesTbody');
+      const countTitle = document.getElementById('gamesCountTitle');
+      const games = siteDataCache.games || [];
+      if (countTitle) countTitle.textContent = `GAMES LIVE RESULT MANAGER (${games.length} GAMES)`;
+
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      games.forEach((game, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td><input type="text" class="adm-input-cell" id="g_name_${game.id}" value="${game.name}"></td>
+          <td><input type="text" class="adm-input-cell" id="g_time_${game.id}" value="${game.open_time || ''}"></td>
+          <td><input type="text" class="adm-input-cell" id="g_yest_${game.id}" value="${game.yesterday_result || ''}"></td>
+          <td>
+            <div class="action-row-flex">
+              <input type="text" class="adm-input-cell" id="g_today_${game.id}" value="${game.today_result || 'WAIT'}">
+              <button class="btn-adm btn-adm-yellow" type="button" onclick="setWaitVal(${game.id})">SET WAIT</button>
+            </div>
+          </td>
+          <td>
+            <div class="action-row-flex">
+              <button class="btn-adm btn-adm-green" type="button" onclick="saveGameRow(${game.id})">SAVE</button>
+              <button class="btn-adm btn-adm-red" type="button" onclick="deleteGameRow(${game.id})">DELETE</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function setWaitVal(gameId) {
+      document.getElementById(`g_today_${gameId}`).value = 'WAIT';
+    }
+
+    async function saveGameRow(gameId) {
+      const name = document.getElementById(`g_name_${gameId}`).value;
+      const open_time = document.getElementById(`g_time_${gameId}`).value;
+      const yesterday_result = document.getElementById(`g_yest_${gameId}`).value;
+      const today_result = document.getElementById(`g_today_${gameId}`).value;
+
+      try {
+        const res = await fetch('/api/admin/update-game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: gameId, name, open_time, yesterday_result, today_result })
+        });
+        if (res.ok) {
+          showToast(`Saved ${name}!`);
+          loadAdminData();
+        }
+      } catch (e) {
+        alert('Error saving game');
+      }
+    }
+
+    async function deleteGameRow(gameId) {
+      if (!confirm('Are you sure you want to delete this game?')) return;
+      try {
+        const res = await fetch('/api/admin/delete-game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: gameId })
+        });
+        if (res.ok) {
+          showToast('Game deleted');
+          loadAdminData();
+        }
+      } catch (e) {
+        alert('Error deleting game');
+      }
+    }
+
+    // Modal Handlers
+    function openAddGameModal() { document.getElementById('addGameModal').classList.add('is-open'); }
+    function closeAddGameModal() { document.getElementById('addGameModal').classList.remove('is-open'); }
+
+    async function submitNewGame(e) {
+      e.preventDefault();
+      const name = document.getElementById('newGameName').value;
+      const open_time = document.getElementById('newGameTime').value;
+      const yesterday_result = document.getElementById('newGameYesterday').value;
+      const today_result = document.getElementById('newGameToday').value;
+      const table_group = parseInt(document.getElementById('newGameTableGroup').value);
+
+      try {
+        const res = await fetch('/api/admin/add-game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, open_time, yesterday_result, today_result, table_group })
+        });
+        if (res.ok) {
+          closeAddGameModal();
+          showToast(`Created new game ${name}`);
+          loadAdminData();
+        }
+      } catch (e) {
+        alert('Error creating new game');
+      }
+    }
+
+    let extraChartDates = [];
+    let extraGameColumns1 = [];
+
+    function addNewChartColumn1() {
+      const colName = prompt('Enter new Game/Column Name (e.g. MUMBAI NIGHT):');
+      if (!colName || !colName.trim()) return;
+      const formatted = colName.trim().toUpperCase();
+      if (!extraGameColumns1.includes(formatted)) {
+        extraGameColumns1.push(formatted);
+        renderChartTable();
+        showToast(`Added column ${formatted}`);
+      }
+    }
+
+    function addNewChartDateRow() {
+      const nextDateStr = prompt('Enter new Date (e.g. 10-08, 11-08):');
+      if (!nextDateStr || !nextDateStr.trim()) return;
+      const formattedDate = nextDateStr.trim();
+      if (!extraChartDates.includes(formattedDate)) {
+        extraChartDates.push(formattedDate);
+        renderChartTable();
+        showToast(`Added date ${formattedDate}`);
+      }
+    }
+
+    // Render Chart Records Table 1
+    function renderChartTable() {
+      const tbody = document.getElementById('chartRecordsTbody');
+      const thead = document.getElementById('chartAdminThead1');
+      const records = (siteDataCache && siteDataCache.chart_records) || [];
+      
+      let dbDates = records.map(r => r.record_date);
+      let defaultDates = ['01-08', '02-08', '03-08', '04-08', '05-08', '06-08', '07-08', '08-08', '09-08'];
+      let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates]));
+      dates.sort();
+
+      const defaultGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
+      const gamesList = Array.from(new Set([...defaultGames, ...extraGameColumns1]));
+
+      if (thead) {
+        thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
+      }
+
+      const recordsMap = {};
+      records.forEach(r => { recordsMap[`${r.record_date}_${r.game_name}`] = r.result_val; });
+
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      dates.forEach(date => {
+        const tr = document.createElement('tr');
+        let cellsHtml = `<td><strong>${date}</strong></td>`;
+        gamesList.forEach(g => {
+          const val = recordsMap[`${date}_${g}`] || '';
+          cellsHtml += `<td><input type="text" class="adm-input-cell" data-date="${date}" data-game="${g}" value="${val}"></td>`;
+        });
+        tr.innerHTML = cellsHtml;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function saveAllChartData() {
+      const inputs = document.querySelectorAll('#chartRecordsTbody input');
+      for (const input of inputs) {
+        const record_date = input.dataset.date;
+        const game_name = input.dataset.game;
+        const result_val = input.value;
+        await fetch('/api/admin/update-chart-cell', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ record_date, game_name, result_val })
+        });
+      }
+      showToast('All Chart Changes Saved Successfully!');
+      loadAdminData();
+    }
+
+    let extraChartDates2 = [];
+    let extraGameColumns2 = [];
+
+    function addNewChartColumn2() {
+      const colName = prompt('Enter new Game/Column Name (e.g. MUMBAI NIGHT):');
+      if (!colName || !colName.trim()) return;
+      const formatted = colName.trim().toUpperCase();
+      if (!extraGameColumns2.includes(formatted)) {
+        extraGameColumns2.push(formatted);
+        renderChartTable2();
+        showToast(`Added column ${formatted}`);
+      }
+    }
+
+    function addNewChartDateRow2() {
+      const nextDateStr = prompt('Enter new Date (e.g. 10-08, 11-08):');
+      if (!nextDateStr || !nextDateStr.trim()) return;
+      const formattedDate = nextDateStr.trim();
+      if (!extraChartDates2.includes(formattedDate)) {
+        extraChartDates2.push(formattedDate);
+        renderChartTable2();
+        showToast(`Added date ${formattedDate}`);
+      }
+    }
+
+    const lower20GamesList = [
+      'HR SATTA', 'UJJALA SUPER', 'KKR CITY', 'MADHUPURI', 'ANMOL BAZAR', 'KAROL BAGH',
+      'DELHI DARBAR', 'NEW GANGA', 'SKY KING', 'FATEHABAD', 'UDAIPUR CITY', 'RAJ SHREE',
+      'VIP AGRA', 'MOHALI-7', 'BHADRA BAZAR', 'MANDI BAZAR', 'LION BAZAR', 'SIALKOT',
+      'DEHRADUN CITY', 'DAMAN'
+    ];
+
+    const lower20DefaultData = {
+      '01-08': ['31', '15', '03', '61', '12', '19', '61', '05', '61', '75', '24', '95', '15', '21', '02', '57', '19', '13', '27', '55'],
+      '02-08': ['87', '77', '01', '89', '13', '29', '36', '96', '06', '08', '22', '91', '00', '33', '05', '22', '06', '56', '93', '16'],
+      '03-08': ['71', '12', '69', '00', '76', '59', '57', '08', '06', '08', '99', '93', '70', '15', '71', '50', '58', '75', '60', '10'],
+      '04-08': ['93', '18', '88', '05', '42', '20', '74', '94', '24', '52', '13', '71', '11', '14', '66', '69', '68', '47', '57', '21'],
+      '05-08': ['73', '92', '33', '45', '39', '64', '78', '64', '93', '75', '40', '55', '73', '98', '53', '84', '45', '99', '05', '13'],
+      '06-08': ['60', '31', '03', '71', '84', '25', '18', '18', '93', '55', '45', '78', '02', '65', '43', '44', '19', '17', '23', '93'],
+      '07-08': ['59', '45', '86', '21', '67', '99', '69', '54', '48', '43', '00', '13', '42', '00', '19', '47', '05', '06', '64', '63'],
+      '08-08': ['54', '10', '78', '29', '17', '71', '13', '51', '04', '98', '72', '33', '81', '18', '00', '66', '56', '65', '78', '55'],
+      '09-08': ['66', '82', '52', '01', '01', '70', '92', '74', '08', '-', '79', '78', '63', '22', '17', '74', '77', '03', '18', '43']
+    };
+
+    function renderChartTable2() {
+      const tbody = document.getElementById('chartRecordsTbody2');
+      const thead = document.getElementById('chartAdminThead2');
+      const records = (siteDataCache && siteDataCache.chart_records) || [];
+
+      let dbDates = records.map(r => r.record_date);
+      let defaultDates = ['01-08', '02-08', '03-08', '04-08', '05-08', '06-08', '07-08', '08-08', '09-08'];
+      let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates2]));
+      dates.sort();
+
+      const gamesList = Array.from(new Set([...lower20GamesList, ...extraGameColumns2]));
+
+      if (thead) {
+        thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
+      }
+
+      const recordsMap = {};
+      records.forEach(r => { recordsMap[`${r.record_date}_${r.game_name}`] = r.result_val; });
+
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      dates.forEach(date => {
+        const tr = document.createElement('tr');
+        let cellsHtml = `<td><strong>${date}</strong></td>`;
+        gamesList.forEach((g, gIdx) => {
+          let val = recordsMap[`${date}_${g}`];
+          if (val === undefined && lower20DefaultData[date] && gIdx < lower20GamesList.length) {
+            val = lower20DefaultData[date][gIdx];
+          }
+          if (val === undefined) val = '';
+          cellsHtml += `<td><input type="text" class="adm-input-cell" data-date="${date}" data-game="${g}" value="${val}"></td>`;
+        });
+        tr.innerHTML = cellsHtml;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function saveAllChartData2() {
+      const inputs = document.querySelectorAll('#chartRecordsTbody2 input');
+      for (const input of inputs) {
+        const record_date = input.dataset.date;
+        const game_name = input.dataset.game;
+        const result_val = input.value;
+        await fetch('/api/admin/update-chart-cell', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ record_date, game_name, result_val })
+        });
+      }
+      showToast('20 Games Chart Changes Saved Successfully!');
+      loadAdminData();
+    }
+
+    // Render Site Settings
+    function renderSettings() {
+      const s = siteDataCache.settings || {};
+      const elTagline = document.getElementById('setting_hindi_tagline');
+      const elTicker = document.getElementById('setting_ticker_text');
+      const elWa = document.getElementById('setting_whatsapp_url');
+      const elTg = document.getElementById('setting_telegram_url');
+      const elN1 = document.getElementById('setting_notice_1');
+      const elN2 = document.getElementById('setting_notice_2');
+
+      if (elTagline) elTagline.value = s.hindi_tagline || '';
+      if (elTicker) elTicker.value = s.ticker_text || '';
+      if (elWa) elWa.value = s.whatsapp_url || '';
+      if (elTg) elTg.value = s.telegram_url || '';
+      if (elN1) elN1.value = s.notice_1 || '';
+      if (elN2) elN2.value = s.notice_2 || '';
+    }
+
+    async function saveSiteSettings(e) {
+      e.preventDefault();
+      const payload = {
+        hindi_tagline: document.getElementById('setting_hindi_tagline').value,
+        ticker_text: document.getElementById('setting_ticker_text').value,
+        whatsapp_url: document.getElementById('setting_whatsapp_url').value,
+        telegram_url: document.getElementById('setting_telegram_url').value,
+        notice_1: document.getElementById('setting_notice_1').value,
+        notice_2: document.getElementById('setting_notice_2').value
+      };
+
+      try {
+        const res = await fetch('/api/admin/update-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          showToast('Site Settings Saved Successfully!');
+          loadAdminData();
+        }
+      } catch (e) {
+        alert('Error saving settings');
+      }
+    }
+
+    // Render Blogs
+    function renderBlogs() {
+      const tbody = document.getElementById('blogsTbody');
+      const blogs = siteDataCache.blogs || [];
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      blogs.forEach(b => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${b.id}</td>
+          <td><strong>${b.title}</strong></td>
+          <td>${b.post_date || '-'}</td>
+          <td>${b.tags || '-'}</td>
+          <td><button class="btn-adm btn-adm-red" onclick="deleteBlog(${b.id})">DELETE</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    async function deleteBlog(id) {
+      if (!confirm('Delete this blog post?')) return;
+      await fetch('/api/admin/delete-blog', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id })
+      });
+      showToast('Blog deleted');
+      loadAdminData();
+    }
+
+    // Password Change
+    async function changeAdminPass(e) {
+      e.preventDefault();
+      const new_password = document.getElementById('newPassVal').value;
+      const res = await fetch('/api/admin/change-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ new_password })
+      });
+      if (res.ok) {
+        showToast('Password Updated Successfully!');
+        document.getElementById('newPassVal').value = '';
+      }
+    }
+  </script>
+</body>
+</html>
