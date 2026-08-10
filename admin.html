@@ -409,13 +409,13 @@
         <div class="admin-card-header" style="background: #000000; color: #ffd400;">
           <h3 id="table1GamesCountTitle">📊 TABLE 1 LIVE MARKET BOARD GAMES MANAGER (7 GAMES)</h3>
           <div class="action-row-flex">
-            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(1)">💾 SAVE TABLE 1 ORDER</button>
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(1)">💾 SAVE TABLE 1 ALL DATA &amp; ORDER</button>
             <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(1)">+ ADD GAME TO TABLE 1</button>
           </div>
         </div>
         <div class="admin-card-body">
           <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
-            ℹ️ Admin Note: <strong>⬆️ UP / ⬇️ DOWN</strong> buttons se games ko up/down move karein aur "SAVE TABLE 1 ORDER" par click karke homepage sequence set karein.
+            ℹ️ Admin Note: <strong>⬆️ UP / ⬇️ DOWN</strong> buttons se games ko up/down move karein aur "SAVE TABLE 1 ALL DATA &amp; ORDER" par click karke homepage sequence set karein.
           </p>
           <div class="adm-table-wrap">
             <table class="adm-table">
@@ -440,7 +440,7 @@
         <div class="admin-card-header" style="background: #000000; color: #ffd400;">
           <h3 id="table2GamesCountTitle">📋 TABLE 2 ALL GAMES RESULT MANAGER (21 GAMES)</h3>
           <div class="action-row-flex">
-            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(2)">💾 SAVE TABLE 2 ORDER</button>
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(2)">💾 SAVE TABLE 2 ALL DATA &amp; ORDER</button>
             <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(2)">+ ADD GAME TO TABLE 2</button>
           </div>
         </div>
@@ -901,7 +901,7 @@
     // Load Site Data
     async function loadAdminData() {
       try {
-        const res = await fetch('/api/site-data');
+        const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
         siteDataCache = await res.json();
         renderHeroGamesAdminTable();
         renderGamesTable();
@@ -1180,30 +1180,43 @@
       const tbody = document.getElementById(tableGroupId === 1 ? 'table1GamesTbody' : 'table2GamesTbody');
       if (!tbody) return;
 
-      const order = [];
+      const games = [];
       Array.from(tbody.children).forEach((tr, idx) => {
-        const gameId = tr.getAttribute('data-game-id');
-        if (gameId) {
-          order.push({ id: parseInt(gameId), sort_order: idx + 1 });
+        const gameIdStr = tr.getAttribute('data-game-id');
+        if (gameIdStr) {
+          const gameId = parseInt(gameIdStr);
+          const nameEl = document.getElementById(`g_name_${gameId}`);
+          const timeEl = document.getElementById(`g_time_${gameId}`);
+          const yestEl = document.getElementById(`g_yest_${gameId}`);
+          const todayEl = document.getElementById(`g_today_${gameId}`);
+
+          games.push({
+            id: gameId,
+            name: nameEl ? nameEl.value.trim() : '',
+            open_time: timeEl ? timeEl.value.trim() : '',
+            yesterday_result: yestEl ? yestEl.value.trim() : '',
+            today_result: todayEl ? todayEl.value.trim() : 'WAIT',
+            sort_order: idx + 1
+          });
         }
       });
 
-      if (order.length === 0) return;
+      if (games.length === 0) return;
 
       try {
-        const res = await fetch('/api/admin/reorder-games', {
+        const res = await fetch('/api/admin/update-games-batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ order })
+          body: JSON.stringify({ games })
         });
         if (res.ok) {
-          showToast(`Table ${tableGroupId} Sequence Saved Successfully!`);
+          showToast(`Table ${tableGroupId} All Data & Order Saved Successfully!`);
           loadAdminData();
         } else {
-          alert('Failed to save order');
+          alert('Failed to save Table games');
         }
       } catch (e) {
-        alert('Server error saving table order');
+        alert('Server error saving table games');
       }
     }
 
@@ -1543,7 +1556,7 @@
       };
 
       if (!siteDataCache) {
-        fetch('/api/site-data').then(r => r.json()).then(d => {
+        fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(d => {
           siteDataCache = d;
           doRender(d);
         }).catch(err => {
@@ -1689,7 +1702,7 @@
       };
 
       if (!siteDataCache) {
-        fetch('/api/site-data').then(r => r.json()).then(d => {
+        fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' }).then(r => r.json()).then(d => {
           siteDataCache = d;
           doRender2(d);
         }).catch(err => {
