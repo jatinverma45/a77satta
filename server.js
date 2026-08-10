@@ -265,6 +265,13 @@ app.post('/api/admin/update-game', (req, res) => {
   const sql = "UPDATE games SET name = ?, yesterday_result = ?, today_result = ?, open_time = ? WHERE id = ?";
   db.run(sql, [name, yesterday_result, today_result, open_time, id], function(err) {
     if (err) return res.status(500).json({ error: err.message });
+    
+    // AUTOMATIC SYNC TO CHART RECORDS TABLE FOR TODAY'S DATE
+    if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
+      const todayDateStr = '09-08';
+      db.run("INSERT OR REPLACE INTO chart_records (record_date, game_name, result_val) VALUES (?, ?, ?)", [todayDateStr, name, today_result.trim()]);
+    }
+    
     res.json({ success: true, message: 'Game updated successfully' });
   });
 });
