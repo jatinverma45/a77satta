@@ -143,6 +143,18 @@ app.use(async (req, res, next) => {
 // REST API ROUTES (DIRECT POSTGRESQL DRIVEN)
 // ========================================
 
+function getBackupData() {
+  const bPath = process.env.VERCEL ? '/tmp/data_backup.json' : path.join(__dirname, 'data_backup.json');
+  if (fs.existsSync(bPath)) {
+    try { return JSON.parse(fs.readFileSync(bPath, 'utf8')); } catch (e) {}
+  }
+  const bundled = path.join(__dirname, 'data_backup.json');
+  if (fs.existsSync(bundled)) {
+    try { return JSON.parse(fs.readFileSync(bundled, 'utf8')); } catch (e) {}
+  }
+  return null;
+}
+
 // Public: Get all site data for homepage & chart page
 app.get('/api/site-data', async (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
@@ -150,15 +162,58 @@ app.get('/api/site-data', async (req, res) => {
   res.setHeader('Expires', '0');
 
   try {
-    const settingsRes = await pgPool.query('SELECT key, value FROM site_settings');
-    const gamesRes = await pgPool.query('SELECT * FROM games ORDER BY sort_order ASC, id ASC');
-    const chartsRes = await pgPool.query('SELECT * FROM chart_records ORDER BY record_date ASC');
-    const blogsRes = await pgPool.query('SELECT * FROM blogs ORDER BY id DESC');
+    let settingsRes = await pgPool.query('SELECT key, value FROM site_settings');
+    let gamesRes = await pgPool.query('SELECT * FROM games ORDER BY sort_order ASC, id ASC');
+    let chartsRes = await pgPool.query('SELECT * FROM chart_records ORDER BY record_date ASC');
+    let blogsRes = await pgPool.query('SELECT * FROM blogs ORDER BY id DESC');
 
-    const settings = {};
+    let games = gamesRes.rows || [];
+    let settings = {};
     (settingsRes.rows || []).forEach(s => settings[s.key] = s.value);
+    let charts = chartsRes.rows || [];
+    let blogs = blogsRes.rows || [];
 
-    const games = gamesRes.rows || [];
+    // Failsafe: If database table is empty, auto-seed from data_backup.json
+    if (games.length === 0) {
+      const backup = getBackupData();
+      if (backup) {
+        if (backup.games && backup.games.length > 0) {
+          games = backup.games;
+          for (const g of backup.games) {
+            try {
+              await pgPool.query(
+                `INSERT INTO games (id, name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero)
+                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                 ON CONFLICT (name) DO UPDATE SET
+                   open_time = EXCLUDED.open_time,
+                   close_time = EXCLUDED.close_time,
+                   yesterday_result = EXCLUDED.yesterday_result,
+                   today_result = EXCLUDED.today_result,
+                   table_group = EXCLUDED.table_group,
+                   sort_order = EXCLUDED.sort_order,
+                   is_hero = EXCLUDED.is_hero`,
+                [g.id || null, g.name, g.open_time || '', g.close_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.table_group || 1, g.sort_order || 0, g.is_hero || 0]
+              );
+            } catch (e) {}
+          }
+        }
+        if (backup.settings && Object.keys(settings).length === 0) {
+          settings = backup.settings;
+          for (const [k, v] of Object.entries(backup.settings)) {
+            try {
+              await pgPool.query('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value', [k, v]);
+            } catch (e) {}
+          }
+        }
+        if (backup.chart_records && charts.length === 0) {
+          charts = backup.chart_records;
+        }
+        if (backup.blogs && blogs.length === 0) {
+          blogs = backup.blogs;
+        }
+      }
+    }
+
     let heroGames = games.filter(g => g.is_hero === 1);
     if (heroGames.length === 0 && settings.hero_games_json) {
       try { heroGames = JSON.parse(settings.hero_games_json); } catch (e) {}
@@ -174,11 +229,21 @@ app.get('/api/site-data', async (req, res) => {
       settings,
       games,
       hero_games: heroGames,
-      chart_records: chartsRes.rows || [],
-      blogs: blogsRes.rows || []
+      chart_records: charts,
+      blogs
     });
   } catch (e) {
     console.error('PostgreSQL API error:', e.message);
+    const backup = getBackupData();
+    if (backup) {
+      return res.json({
+        settings: backup.settings || {},
+        games: backup.games || [],
+        hero_games: (backup.games || []).filter(g => g.is_hero === 1),
+        chart_records: backup.chart_records || [],
+        blogs: backup.blogs || []
+      });
+    }
     res.status(500).json({ error: e.message });
   }
 });
