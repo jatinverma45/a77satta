@@ -327,17 +327,21 @@ app.post('/api/admin/add-game', async (req, res) => {
   if (!gName) return res.status(400).json({ error: 'Game name is required' });
 
   try {
+    const maxRes = await safeQuery('SELECT COALESCE(MAX(sort_order), 0) as max_ord FROM games WHERE table_group = $1', [grp]);
+    const nextOrd = (maxRes && maxRes.rows && maxRes.rows[0] ? parseInt(maxRes.rows[0].max_ord) : 0) + 1;
+
     const pgRes = await safeQuery(
       `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
-       VALUES ($1, $2, $3, $4, $5, $6, 99)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        ON CONFLICT (name) DO UPDATE SET
          open_time = EXCLUDED.open_time,
          close_time = EXCLUDED.close_time,
          yesterday_result = EXCLUDED.yesterday_result,
          today_result = EXCLUDED.today_result,
-         table_group = EXCLUDED.table_group
+         table_group = EXCLUDED.table_group,
+         sort_order = EXCLUDED.sort_order
        RETURNING id`,
-      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp]
+      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd]
     );
     await syncJSONBackup();
     res.json({ success: true, id: pgRes && pgRes.rows && pgRes.rows[0] ? pgRes.rows[0].id : Date.now() });
