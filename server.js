@@ -347,7 +347,7 @@ app.post('/api/admin/add-game', async (req, res) => {
     res.json({ success: true, id: pgRes && pgRes.rows && pgRes.rows[0] ? pgRes.rows[0].id : Date.now() });
   } catch (e) {
     console.error('Error in add-game:', e.message);
-    res.json({ success: true, id: Date.now() });
+    res.status(500).json({ error: e.message });
   }
 });
 
