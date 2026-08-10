@@ -322,14 +322,25 @@ app.post('/api/admin/update-game', async (req, res) => {
 // Admin: Add New Game
 app.post('/api/admin/add-game', async (req, res) => {
   const { name, open_time, yesterday_result, today_result, table_group } = req.body;
+  const grp = parseInt(table_group) || 1;
+  const gName = (name || '').trim().toUpperCase();
+  if (!gName) return res.status(400).json({ error: 'Game name is required' });
+
   try {
     const pgRes = await safeQuery(
       `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
-       VALUES ($1, $2, $3, $4, $5, $6, 99) RETURNING id`,
-      [name, open_time, open_time, yesterday_result || '', today_result || 'WAIT', table_group || 1]
+       VALUES ($1, $2, $3, $4, $5, $6, 99)
+       ON CONFLICT (name) DO UPDATE SET
+         open_time = EXCLUDED.open_time,
+         close_time = EXCLUDED.close_time,
+         yesterday_result = EXCLUDED.yesterday_result,
+         today_result = EXCLUDED.today_result,
+         table_group = EXCLUDED.table_group
+       RETURNING id`,
+      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp]
     );
     await syncJSONBackup();
-    res.json({ success: true, id: pgRes.rows && pgRes.rows[0] ? pgRes.rows[0].id : Date.now() });
+    res.json({ success: true, id: pgRes && pgRes.rows && pgRes.rows[0] ? pgRes.rows[0].id : Date.now() });
   } catch (e) {
     console.error('Error in add-game:', e.message);
     res.json({ success: true, id: Date.now() });
