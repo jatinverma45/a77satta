@@ -794,11 +794,18 @@
       const nextDateStr = prompt('Enter new Date (e.g. 10-08, 11-08):');
       if (!nextDateStr || !nextDateStr.trim()) return;
       const formattedDate = nextDateStr.trim();
+      const mainGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
+      const items = mainGames.map(g => ({
+        record_date: formattedDate,
+        game_name: g,
+        result_val: '-'
+      }));
+
       try {
-        await fetch('/api/admin/update-chart-cell', {
+        await fetch('/api/admin/update-chart-batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ record_date: formattedDate, game_name: 'SADAR BAZAR', result_val: '-' })
+          body: JSON.stringify({ items })
         });
         showToast(`Added date ${formattedDate}`);
         loadAdminData();
@@ -896,11 +903,17 @@
       const nextDateStr = prompt('Enter new Date (e.g. 10-08, 11-08):');
       if (!nextDateStr || !nextDateStr.trim()) return;
       const formattedDate = nextDateStr.trim();
+      const items = lower20GamesList.map(g => ({
+        record_date: formattedDate,
+        game_name: g,
+        result_val: '-'
+      }));
+
       try {
-        await fetch('/api/admin/update-chart-cell', {
+        await fetch('/api/admin/update-chart-batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ record_date: formattedDate, game_name: 'HR SATTA', result_val: '-' })
+          body: JSON.stringify({ items })
         });
         showToast(`Added date ${formattedDate}`);
         loadAdminData();
