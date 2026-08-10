@@ -37,7 +37,10 @@
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="adm_pass_sec" placeholder="Enter Password" required autocomplete="new-password" value="">
+            <div style="position: relative; display: flex; align-items: center;">
+              <input type="password" id="password" name="adm_pass_sec" placeholder="Enter Password" required autocomplete="new-password" value="" style="background: #ffffff !important; color: #000000 !important; font-weight: 800 !important; border: 2px solid #000000 !important; padding-right: 48px !important;">
+              <button type="button" onclick="togglePassVisibility('password', this)" style="position: absolute; right: 12px; background: none; border: none; font-size: 18px; cursor: pointer; padding: 4px;" title="Show Password">👁️</button>
+            </div>
           </div>
           <div id="loginError" class="login-error-msg" style="display: none;"></div>
           <button type="submit" class="signin-btn">Sign In</button>
@@ -60,6 +63,20 @@
   </div>
 
   <script>
+    function togglePassVisibility(inputId, btn) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = '🙈';
+        btn.setAttribute('title', 'Hide Password');
+      } else {
+        input.type = 'password';
+        btn.innerHTML = '👁️';
+        btn.setAttribute('title', 'Show Password');
+      }
+    }
+
     window.addEventListener('DOMContentLoaded', () => {
       const u = document.getElementById('username');
       const p = document.getElementById('password');
