@@ -320,13 +320,20 @@ app.get('/api/site-data', (req, res) => {
           try {
             const backup = JSON.parse(fs.readFileSync(bPath, 'utf8'));
             if (backup && backup.chart_records && backup.chart_records.length > 0) {
-              const existingMap = new Set(charts.map(c => `${c.record_date}_${c.game_name}`));
+              const recordsMap = {};
+              charts.forEach(c => {
+                if (c && c.record_date && c.game_name) {
+                  recordsMap[`${c.record_date.trim()}_${c.game_name.trim().toUpperCase()}`] = c;
+                }
+              });
               backup.chart_records.forEach(bRecord => {
                 if (bRecord && bRecord.record_date && bRecord.game_name) {
-                  const key = `${bRecord.record_date}_${bRecord.game_name}`;
-                  if (!existingMap.has(key)) {
+                  const key = `${bRecord.record_date.trim()}_${bRecord.game_name.trim().toUpperCase()}`;
+                  if (!recordsMap[key]) {
                     charts.push(bRecord);
-                    existingMap.add(key);
+                    recordsMap[key] = bRecord;
+                  } else if (bRecord.result_val && bRecord.result_val !== '-' && (!recordsMap[key].result_val || recordsMap[key].result_val === '-' || recordsMap[key].result_val === '')) {
+                    recordsMap[key].result_val = bRecord.result_val;
                   }
                 }
               });
