@@ -37,7 +37,7 @@
   // Fetch Site Data & Render Homepage Dynamically
   async function loadFullSiteData() {
     try {
-      const res = await fetch('/api/site-data');
+      const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
 

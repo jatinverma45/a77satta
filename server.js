@@ -421,6 +421,9 @@ db.serialize(() => {
 
 // Public: Get all site data for homepage & chart page
 app.get('/api/site-data', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   const data = {};
 
   db.all("SELECT key, value FROM site_settings", [], (err, settings) => {
