@@ -11,10 +11,25 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
+const fs = require('fs');
+
+let dbPath = path.join(__dirname, 'a77satta.db');
+if (process.env.VERCEL) {
+  const tmpDbPath = '/tmp/a77satta.db';
+  if (!fs.existsSync(tmpDbPath) && fs.existsSync(dbPath)) {
+    try {
+      fs.copyFileSync(dbPath, tmpDbPath);
+    } catch (e) {
+      console.error('Error copying DB to tmp:', e);
+    }
+  }
+  dbPath = tmpDbPath;
+}
+
 // Initialize SQLite Database
-const db = new sqlite3.Database('./a77satta.db', (err) => {
+const db = new sqlite3.Database(dbPath, (err) => {
   if (err) console.error('Database error:', err);
-  else console.log('Connected to SQLite database');
+  else console.log('Connected to SQLite database at', dbPath);
 });
 
 // Seed Initial Data Setup
@@ -343,8 +358,12 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`A77Satta Server running at http://localhost:${PORT}`);
-  console.log(`Admin panel at http://localhost:${PORT}/admin`);
-  console.log(`Default admin: admin / admin123`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`A77Satta Server running at http://localhost:${PORT}`);
+    console.log(`Admin panel at http://localhost:${PORT}/admin`);
+    console.log(`Default admin: admin / admin123`);
+  });
+}
+
+module.exports = app;
