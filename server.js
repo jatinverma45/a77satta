@@ -315,9 +315,10 @@ app.get('/api/site-data', (req, res) => {
         charts = charts || [];
 
         // Merge any missing records from data_backup.json (e.g. 10-08 or newest dates)
-        if (fs.existsSync(backupFilePath)) {
+        const bPath = getBackupFileToRead();
+        if (bPath) {
           try {
-            const backup = JSON.parse(fs.readFileSync(backupFilePath, 'utf8'));
+            const backup = JSON.parse(fs.readFileSync(bPath, 'utf8'));
             if (backup && backup.chart_records && backup.chart_records.length > 0) {
               const existingMap = new Set(charts.map(c => `${c.record_date}_${c.game_name}`));
               backup.chart_records.forEach(bRecord => {
@@ -358,7 +359,15 @@ app.post('/api/admin/login', (req, res) => {
 });
 
 // Backup Sync Engine for persistent storage
-const backupFilePath = process.env.VERCEL ? '/tmp/data_backup.json' : path.join(__dirname, 'data_backup.json');
+const bundledBackupPath = path.join(__dirname, 'data_backup.json');
+const tmpBackupPath = process.env.VERCEL ? '/tmp/data_backup.json' : bundledBackupPath;
+const backupFilePath = tmpBackupPath;
+
+function getBackupFileToRead() {
+  if (fs.existsSync(tmpBackupPath)) return tmpBackupPath;
+  if (fs.existsSync(bundledBackupPath)) return bundledBackupPath;
+  return null;
+}
 
 function syncJSONBackup() {
   const fullData = {};
@@ -375,7 +384,7 @@ function syncJSONBackup() {
         db.all("SELECT * FROM blogs ORDER BY id DESC", [], (err, blogs) => {
           fullData.blogs = blogs || [];
           try {
-            fs.writeFileSync(backupFilePath, JSON.stringify(fullData, null, 2));
+            fs.writeFileSync(tmpBackupPath, JSON.stringify(fullData, null, 2));
           } catch (e) {
             console.error('Error writing backup file:', e);
           }
