@@ -117,50 +117,46 @@ db.serialize(() => {
   db.run("UPDATE site_settings SET value = 'https://t.me/+Mcnw6vRvig0wNDI1' WHERE key = 'telegram_url'", () => {});
   db.run("UPDATE site_settings SET value = 'https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e' WHERE key = 'whatsapp_url'", () => {});
 
-  // Seed default 33 Games if empty
-  db.get("SELECT COUNT(*) as count FROM games", (err, row) => {
-    if (!err && row && row.count === 0) {
-      const gamesList = [
-        ['SADAR BAZAR', '1:30 PM', '1:30 PM', '30', '35', 1, 1],
-        ['GWALIOR', '2:00 PM', '2:00 PM', '47', '87', 1, 2],
-        ['DELHI BAZAR', '3:15 PM', '3:15 PM', '91', '89', 1, 3],
-        ['DELHI MATKA', '3:30 PM', '3:30 PM', '45', '07', 1, 4],
-        ['SHRI GANESH', '4:40 PM', '4:40 PM', '93', 'WAIT', 1, 5],
-        ['AGRA', '5:30 PM', '5:30 PM', '18', 'WAIT', 1, 6],
-        ['FARIDABAD', '6:10 PM', '6:10 PM', '81', 'WAIT', 1, 7],
-        ['ALWAR', '7:35 PM', '7:35 PM', '20', 'WAIT', 1, 8],
-        ['GHAZIABAD', '9:50 PM', '9:50 PM', '99', 'WAIT', 1, 9],
-        ['DWARKA', '10:35 PM', '10:35 PM', '10', 'WAIT', 1, 10],
-        ['GALI', '11:50 PM', '11:50 PM', '93', 'WAIT', 1, 11],
-        ['DISAWER', '5:15 AM', '5:15 AM', '96', '16', 1, 12],
-        ['HR SATTA', '12:15 PM', '12:15 PM', '54', '66', 2, 13],
-        ['UJJALA SUPER', '1:00 PM', '1:00 PM', '78', '52', 2, 14],
-        ['KKR CITY', '1:15 PM', '1:15 PM', '10', '82', 2, 15],
-        ['MADHUPURI', '1:30 PM', '1:30 PM', '29', '01', 2, 16],
-        ['ANMOL BAZAR', '1:45 PM', '1:45 PM', '71', '70', 2, 17],
-        ['KAROL BAGH', '1:50 PM', '1:50 PM', '58', '73', 2, 18],
-        ['SKY KING', '2:00 PM', '2:00 PM', '04', 'WAIT', 2, 19],
-        ['DELHI DARBAR', '2:10 PM', '2:10 PM', '13', '92', 2, 20],
-        ['NEW GANGA', '3:50 PM', '3:50 PM', '51', '74', 2, 21],
-        ['SHRI LAKSHMI', '3:50 PM', '3:50 PM', '51', 'WAIT', 2, 22],
-        ['FATEHABAD', '7:00 PM', '7:00 PM', '98', 'WAIT', 2, 23],
-        ['RAJ SHREE', '7:20 PM', '7:20 PM', '33', 'WAIT', 2, 24],
-        ['UDAIPUR CITY', '7:50 PM', '7:50 PM', '72', 'WAIT', 2, 25],
-        ['VIP AGRA', '7:45 PM', '7:45 PM', '81', 'WAIT', 2, 26],
-        ['MANDI BAZAR', '8:15 PM', '8:15 PM', '66', 'WAIT', 2, 27],
-        ['BHADRA BAZAR', '8:20 PM', '8:20 PM', '00', 'WAIT', 2, 28],
-        ['SIALKOT', '8:20 PM', '8:20 PM', '65', 'WAIT', 2, 29],
-        ['LION BAZAR', '8:30 PM', '8:30 PM', '56', 'WAIT', 2, 30],
-        ['MOHALI-7', '8:40 PM', '8:40 PM', '18', 'WAIT', 2, 31],
-        ['DEHRADUN CITY', '9:40 PM', '9:40 PM', '78', 'WAIT', 2, 32],
-        ['DAMAN', '9:50 PM', '9:50 PM', '55', 'WAIT', 2, 33]
-      ];
+  // Seed default 28 Games matching main website exactly
+  db.run("DELETE FROM games", () => {
+    const gamesList = [
+      // Table 1 Games (7 Games)
+      ['Shri Ganesh', '04:00 AM', '04:00 AM', '45', '15', 1, 1],
+      ['Delhi Bazar', '09:00 AM', '09:00 AM', '-', 'WAIT', 1, 2],
+      ['Faridabad', '06:00 PM', '06:00 PM', '67', '87', 1, 3],
+      ['Ghaziabad', '08:00 PM', '08:00 PM', '-', 'WAIT', 1, 4],
+      ['Gali', '11:00 PM', '11:00 PM', '-', 'WAIT', 1, 5],
+      ['Desawar', '02:00 AM', '02:00 AM', '-', 'WAIT', 1, 6],
+      ['New Game Test', '10:00 AM', '10:00 AM', '-', 'WAIT', 1, 7],
 
-      const stmtGames = db.prepare("INSERT OR IGNORE INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)");
-      gamesList.forEach(g => stmtGames.run(g));
-      stmtGames.finalize();
-      console.log('Seeded 33 Satta Games');
-    }
+      // Table 2 Games (21 Games)
+      ['HR SATTA', '12:15 PM', '12:15 PM', '54', '66', 2, 8],
+      ['KKR CITY', '12:30 PM', '12:30 PM', '78', '52', 2, 9],
+      ['UJJALA SUPER', '12:30 PM', '12:30 PM', '10', '82', 2, 10],
+      ['MADHUPURI', '12:30 PM', '12:30 PM', '29', '01', 2, 11],
+      ['KAROL BAGH', '1:45 PM', '1:45 PM', '71', '70', 2, 12],
+      ['AMMAN BAZAR', '2:00 PM', '2:00 PM', '17', '01', 2, 13],
+      ['SKY KING', '2:00 PM', '2:00 PM', '04', 'WAIT', 2, 14],
+      ['DELHI DARBAR', '2:10 PM', '2:10 PM', '13', '92', 2, 15],
+      ['NEW GANGA', '3:50 PM', '3:50 PM', '51', '74', 2, 16],
+      ['SHRI LAKSHMI', '3:50 PM', '3:50 PM', '51', 'WAIT', 2, 17],
+      ['FATEHABAD', '7:00 PM', '7:00 PM', '98', 'WAIT', 2, 18],
+      ['RAJ SHREE', '7:20 PM', '7:20 PM', '33', 'WAIT', 2, 19],
+      ['UDAIPUR CITY', '7:50 PM', '7:50 PM', '72', 'WAIT', 2, 20],
+      ['VIP AGRA', '7:45 PM', '7:45 PM', '81', 'WAIT', 2, 21],
+      ['MANDI BAZAR', '8:15 PM', '8:15 PM', '66', 'WAIT', 2, 22],
+      ['BHADRA BAZAR', '8:20 PM', '8:20 PM', '00', 'WAIT', 2, 23],
+      ['SIALKOT', '8:20 PM', '8:20 PM', '65', 'WAIT', 2, 24],
+      ['LION BAZAR', '8:30 PM', '8:30 PM', '56', 'WAIT', 2, 25],
+      ['MOHALI-7', '8:40 PM', '8:40 PM', '18', 'WAIT', 2, 26],
+      ['DEHRADUN CITY', '9:40 PM', '9:40 PM', '78', 'WAIT', 2, 27],
+      ['DAMAN', '9:50 PM', '9:50 PM', '55', 'WAIT', 2, 28]
+    ];
+
+    const stmtGames = db.prepare("INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    gamesList.forEach(g => stmtGames.run(g));
+    stmtGames.finalize();
+    console.log('Seeded exact 28 Satta Games matching main site');
   });
 
   // Seed default August 2026 Chart Records if empty
