@@ -69,6 +69,38 @@
         }
       }
 
+      // Render Main Hero Box Games (Dynamic Stack)
+      const heroContainer = document.getElementById('heroGamesList');
+      if (heroContainer) {
+        let heroList = data.hero_games;
+        if ((!heroList || heroList.length === 0) && data.settings && data.settings.hero_games_json) {
+          try { heroList = JSON.parse(data.settings.hero_games_json); } catch(e) {}
+        }
+        if (!heroList || heroList.length === 0) {
+          heroList = [
+            { name: 'RAJ SHREE', today_result: 'WAIT' },
+            { name: 'UDAIPUR CITY', today_result: 'WAIT' }
+          ];
+        }
+
+        let heroHtml = '';
+        heroList.forEach(g => {
+          const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
+          const resVal = g.today_result ? g.today_result.trim() : (g.result || 'WAIT');
+          const resHtml = (!resVal || resVal === 'WAIT')
+            ? `<div class="wait-starburst-badge">WAIT</div>`
+            : `<div class="game-result-main">${resVal}</div>`;
+
+          heroHtml += `
+            <div class="result-block">
+              <div class="game-name-main">${name}</div>
+              ${resHtml}
+            </div>
+          `;
+        });
+        heroContainer.innerHTML = heroHtml;
+      }
+
       // 2. Games Tables Sync
       if (data.games && data.games.length > 0) {
         const group1 = data.games.filter(g => g.table_group === 1 || !g.table_group);

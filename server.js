@@ -58,6 +58,9 @@ db.serialize(() => {
   db.run("ALTER TABLE games ADD COLUMN today_result TEXT DEFAULT 'WAIT'", () => {});
   db.run("ALTER TABLE games ADD COLUMN table_group INTEGER DEFAULT 1", () => {});
   db.run("ALTER TABLE games ADD COLUMN sort_order INTEGER DEFAULT 0", () => {});
+  db.run("ALTER TABLE games ADD COLUMN is_hero INTEGER DEFAULT 0", () => {
+    db.run("UPDATE games SET is_hero = 1 WHERE UPPER(name) IN ('RAJ SHREE', 'UDAIPUR CITY')");
+  });
 
   // Chart Records Table
   db.run(`CREATE TABLE IF NOT EXISTS chart_records (
@@ -97,6 +100,7 @@ db.serialize(() => {
   const defaultSettings = [
     ['ticker_text', 'A77satta is an information portal which keep satta king players updated by providing real-time satta king results for gali satta king , faridabad satta and ghaziabad satta.'],
     ['hindi_tagline', 'हा भाई यही आती हे सबसे पहले खबर रूको और देखो'],
+    ['hero_games_json', '[{"name":"RAJ SHREE","today_result":"WAIT"},{"name":"UDAIPUR CITY","today_result":"WAIT"}]'],
     ['main_game_name', 'GALI'],
     ['main_game_result', '97'],
     ['disawer_time', '5:15 AM'],
@@ -248,6 +252,19 @@ app.get('/api/site-data', (req, res) => {
       if (err) return res.status(500).json({ error: err.message });
       data.games = games || [];
 
+      // Hero games filter
+      let heroGames = (games || []).filter(g => g.is_hero === 1);
+      if (heroGames.length === 0 && data.settings.hero_games_json) {
+        try { heroGames = JSON.parse(data.settings.hero_games_json); } catch(e) {}
+      }
+      if (!heroGames || heroGames.length === 0) {
+        heroGames = [
+          { name: 'RAJ SHREE', today_result: 'WAIT' },
+          { name: 'UDAIPUR CITY', today_result: 'WAIT' }
+        ];
+      }
+      data.hero_games = heroGames;
+
       db.all("SELECT * FROM chart_records ORDER BY record_date ASC", [], (err, charts) => {
         if (err) return res.status(500).json({ error: err.message });
         data.chart_records = charts || [];
@@ -329,6 +346,39 @@ app.post('/api/admin/add-game', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     syncJSONBackup();
     res.json({ success: true, id: this.lastID });
+  });
+});
+
+// Admin: Save / Update Hero Box Games List
+app.post('/api/admin/update-hero-games', (req, res) => {
+  const { games } = req.body; // array of { id, name, today_result }
+  if (!Array.isArray(games)) return res.status(400).json({ error: 'Invalid games array' });
+
+  // 1. Reset all games is_hero = 0
+  db.run("UPDATE games SET is_hero = 0", [], (err) => {
+    if (err) return res.status(500).json({ error: err.message });
+
+    const heroItems = games.map(g => ({
+      id: g.id || null,
+      name: g.name ? g.name.trim().toUpperCase() : '',
+      today_result: g.today_result ? g.today_result.trim() : 'WAIT'
+    }));
+
+    const heroJsonStr = JSON.stringify(heroItems);
+
+    db.run("INSERT OR REPLACE INTO site_settings (key, value) VALUES ('hero_games_json', ?)", [heroJsonStr], (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+
+      // 2. Mark is_hero = 1 and update results in games table
+      const stmt = db.prepare("UPDATE games SET is_hero = 1, today_result = ? WHERE id = ? OR UPPER(name) = ?");
+      heroItems.forEach(g => {
+        stmt.run([g.today_result, g.id || -1, g.name]);
+      });
+      stmt.finalize();
+
+      syncJSONBackup();
+      res.json({ success: true, message: 'Hero Box Games updated successfully' });
+    });
   });
 });
 

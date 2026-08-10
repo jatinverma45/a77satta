@@ -330,6 +330,35 @@
     <!-- ======================================================== -->
     <div id="tab-a77satta" class="admin-main-pane active">
       
+      <!-- 0. HERO FEATURED LIVE GAMES MANAGER -->
+      <div class="admin-card-box" style="border: 3px solid #ffd400;">
+        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
+          <h3>🔥 MAIN HERO BOX LIVE GAMES MANAGER (HOMEPAGE BLACK BOX)</h3>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="addHeroGameRow()">+ ADD GAME TO HERO BOX</button>
+            <button class="btn-adm btn-adm-green" type="button" onclick="saveHeroGamesList()">💾 SAVE HERO BOX</button>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
+            ℹ️ Admin Note: Niche se aap homepage ke Main Black Hero Box me games ko <strong>Change, Add, Replace ya Remove</strong> kar sakte hain:
+          </p>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="width: 45px;">#</th>
+                  <th style="width: 260px;">GAME NAME (CHANGE / REPLACE)</th>
+                  <th style="width: 220px;">RESULT (NUMERIC RESULT / WAIT BADGE)</th>
+                  <th style="width: 180px;">QUICK ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="heroAdminGamesTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- 1. GAMES LIVE RESULT MANAGER -->
       <div class="admin-card-box">
         <div class="admin-card-header">
@@ -670,6 +699,7 @@
       try {
         const res = await fetch('/api/site-data');
         siteDataCache = await res.json();
+        renderHeroGamesAdminTable();
         renderGamesTable();
         renderChartTable();
         renderChartTable2();
@@ -677,6 +707,126 @@
         renderBlogs();
       } catch (e) {
         console.error(e);
+      }
+    }
+
+    // Render Hero Games Admin Table
+    function renderHeroGamesAdminTable() {
+      const tbody = document.getElementById('heroAdminGamesTbody');
+      if (!tbody) return;
+
+      let heroList = (siteDataCache && siteDataCache.hero_games) || [];
+      if (heroList.length === 0 && siteDataCache && siteDataCache.settings && siteDataCache.settings.hero_games_json) {
+        try { heroList = JSON.parse(siteDataCache.settings.hero_games_json); } catch(e) {}
+      }
+      if (!heroList || heroList.length === 0) {
+        heroList = [
+          { name: 'RAJ SHREE', today_result: 'WAIT' },
+          { name: 'UDAIPUR CITY', today_result: 'WAIT' }
+        ];
+      }
+
+      tbody.innerHTML = '';
+      heroList.forEach((game, idx) => {
+        const tr = document.createElement('tr');
+        const gName = game.name ? game.name.toUpperCase() : '';
+        const gRes = game.today_result || game.result || 'WAIT';
+
+        tr.innerHTML = `
+          <td><strong>${idx + 1}</strong></td>
+          <td>
+            <input type="text" class="adm-input-cell hero-game-name" data-idx="${idx}" value="${gName}" placeholder="e.g. RAJ SHREE, GALI">
+          </td>
+          <td>
+            <div class="action-row-flex">
+              <input type="text" class="adm-input-cell hero-game-result" data-idx="${idx}" id="hero_res_${idx}" value="${gRes}" placeholder="Result or WAIT">
+              <button class="btn-adm btn-adm-yellow" type="button" onclick="setHeroWait(${idx})">SET WAIT</button>
+            </div>
+          </td>
+          <td>
+            <div class="action-row-flex">
+              <button class="btn-adm btn-adm-red" type="button" onclick="removeHeroGameRow(${idx})">REMOVE</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function setHeroWait(idx) {
+      const el = document.getElementById(`hero_res_${idx}`);
+      if (el) el.value = 'WAIT';
+    }
+
+    function addHeroGameRow() {
+      const tbody = document.getElementById('heroAdminGamesTbody');
+      if (!tbody) return;
+
+      const idx = tbody.children.length;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${idx + 1}</strong></td>
+        <td>
+          <input type="text" class="adm-input-cell hero-game-name" data-idx="${idx}" value="NEW GAME" placeholder="e.g. FARIDABAD">
+        </td>
+        <td>
+          <div class="action-row-flex">
+            <input type="text" class="adm-input-cell hero-game-result" data-idx="${idx}" id="hero_res_${idx}" value="WAIT" placeholder="Result or WAIT">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="setHeroWait(${idx})">SET WAIT</button>
+          </div>
+        </td>
+        <td>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-red" type="button" onclick="this.closest('tr').remove(); reindexHeroRows();">REMOVE</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function removeHeroGameRow(idx) {
+      const tbody = document.getElementById('heroAdminGamesTbody');
+      if (tbody && tbody.children[idx]) {
+        tbody.children[idx].remove();
+        reindexHeroRows();
+      }
+    }
+
+    function reindexHeroRows() {
+      const tbody = document.getElementById('heroAdminGamesTbody');
+      if (!tbody) return;
+      Array.from(tbody.children).forEach((tr, i) => {
+        tr.children[0].innerHTML = `<strong>${i + 1}</strong>`;
+      });
+    }
+
+    async function saveHeroGamesList() {
+      const nameInputs = document.querySelectorAll('.hero-game-name');
+      const resInputs = document.querySelectorAll('.hero-game-result');
+
+      const games = [];
+      nameInputs.forEach((input, i) => {
+        const nameVal = input.value.trim().toUpperCase();
+        const resVal = resInputs[i] ? resInputs[i].value.trim() : 'WAIT';
+        if (nameVal) {
+          games.push({ name: nameVal, today_result: resVal });
+        }
+      });
+
+      try {
+        const res = await fetch('/api/admin/update-hero-games', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ games })
+        });
+        if (res.ok) {
+          showToast('Hero Box Games Saved Successfully!');
+          loadAdminData();
+        } else {
+          alert('Failed to save Hero games');
+        }
+      } catch (e) {
+        alert('Server error saving Hero games');
       }
     }
 

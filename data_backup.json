@@ -10,11 +10,12 @@
     "telegram_url": "https://t.me/+Mcnw6vRvig0wNDI1",
     "whatsapp_url": "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e",
     "notice_1": "SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.",
-    "notice_2": "SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM"
+    "notice_2": "SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM",
+    "hero_games_json": "[{\"name\":\"RAJ SHREE\",\"today_result\":\"WAIT\"},{\"name\":\"UDAIPUR CITY\",\"today_result\":\"WAIT\"}]"
   },
   "games": [
     {
-      "id": 8,
+      "id": 36,
       "name": "Shri Ganesh",
       "open_time": "04:00 AM",
       "close_time": "04:00 AM",
@@ -24,10 +25,11 @@
       "yesterday_result": "45",
       "today_result": "15",
       "table_group": 1,
-      "sort_order": 1
+      "sort_order": 1,
+      "is_hero": 0
     },
     {
-      "id": 9,
+      "id": 37,
       "name": "Delhi Bazar",
       "open_time": "09:00 AM",
       "close_time": "09:00 AM",
@@ -37,52 +39,28 @@
       "yesterday_result": "-",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 2
-    },
-    {
-      "id": 10,
-      "name": "Faridabad",
-      "open_time": "06:00 PM",
-      "close_time": "06:00 PM",
-      "image": null,
-      "badge": "Hot",
-      "is_active": 1,
-      "yesterday_result": "67",
-      "today_result": "87",
-      "table_group": 1,
-      "sort_order": 3
+      "sort_order": 2,
+      "is_hero": 0
     }
   ],
   "chart_records": [
     {
-      "id": 111,
+      "id": 413,
       "record_date": "01-08",
       "game_name": "DELHI BAZAR",
       "result_val": "71"
     },
     {
-      "id": 112,
-      "record_date": "01-08",
-      "game_name": "DELHI MATKA",
-      "result_val": "21"
-    },
-    {
-      "id": 110,
+      "id": 412,
       "record_date": "01-08",
       "game_name": "GWALIOR",
       "result_val": "38"
     },
     {
-      "id": 109,
+      "id": 411,
       "record_date": "01-08",
       "game_name": "SADAR BAZAR",
       "result_val": "82"
-    },
-    {
-      "id": 113,
-      "record_date": "01-08",
-      "game_name": "SHRI GANESH",
-      "result_val": "26"
     }
   ],
   "blogs": [
