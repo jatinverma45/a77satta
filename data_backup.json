@@ -1,0 +1,110 @@
+{
+  "settings": {
+    "ticker_text": "A77satta is an information portal which keep satta king players updated by providing real-time satta king results for gali satta king , faridabad satta and ghaziabad satta.",
+    "hindi_tagline": "हा भाई यही आती हे सबसे पहले खबर रूको और देखो",
+    "main_game_name": "GALI",
+    "main_game_result": "97",
+    "disawer_time": "5:15 AM",
+    "disawer_prev": "16",
+    "disawer_wait": "WAIT",
+    "telegram_url": "https://t.me/+Mcnw6vRvig0wNDI1",
+    "whatsapp_url": "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e",
+    "notice_1": "SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.",
+    "notice_2": "SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM"
+  },
+  "games": [
+    {
+      "id": 8,
+      "name": "Shri Ganesh",
+      "open_time": "04:00 AM",
+      "close_time": "04:00 AM",
+      "image": null,
+      "badge": "Hot",
+      "is_active": 1,
+      "yesterday_result": "45",
+      "today_result": "15",
+      "table_group": 1,
+      "sort_order": 1
+    },
+    {
+      "id": 9,
+      "name": "Delhi Bazar",
+      "open_time": "09:00 AM",
+      "close_time": "09:00 AM",
+      "image": null,
+      "badge": "Hot",
+      "is_active": 1,
+      "yesterday_result": "-",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 2
+    },
+    {
+      "id": 10,
+      "name": "Faridabad",
+      "open_time": "06:00 PM",
+      "close_time": "06:00 PM",
+      "image": null,
+      "badge": "Hot",
+      "is_active": 1,
+      "yesterday_result": "67",
+      "today_result": "87",
+      "table_group": 1,
+      "sort_order": 3
+    }
+  ],
+  "chart_records": [
+    {
+      "id": 111,
+      "record_date": "01-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "71"
+    },
+    {
+      "id": 112,
+      "record_date": "01-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "21"
+    },
+    {
+      "id": 110,
+      "record_date": "01-08",
+      "game_name": "GWALIOR",
+      "result_val": "38"
+    },
+    {
+      "id": 109,
+      "record_date": "01-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "82"
+    },
+    {
+      "id": 113,
+      "record_date": "01-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "26"
+    }
+  ],
+  "blogs": [
+    {
+      "id": 2,
+      "title": "what is shri ganesh satta king ?",
+      "slug": "what-is-shri-ganesh-satta-king",
+      "image": "https://a77satta.com/_next/image?url=https%3A%2F%2Fcdn.satta-king7.in%2Fimages%2F1785856182655-bj5ycn3ifhogxkq-shri-ganesh-satta-king.jpg&w=1080&q=75",
+      "post_date": "Posted on May 9",
+      "tags": "#shriganeshsattaking #playbajar #playbazaar #sattaking",
+      "content": "Shri Ganesh Satta King is widely followed for its timely 4:40 PM result declaration everyday...",
+      "created_at": "2026-08-09 19:34:21"
+    },
+    {
+      "id": 1,
+      "title": "WHY IS THE DELHI BAZAR SATTA KING SO POPULAR ?",
+      "slug": "why-is-the-delhi-bazar-satta-king-so-popular",
+      "image": "https://a77satta.com/_next/image?url=https%3A%2F%2Fcdn.satta-king7.in%2Fimages%2F1785146554021-rp3k2kxz3h2xpob-delhi-bazar-satta-king-1.jpg&w=1080&q=75",
+      "post_date": "Posted on Jul 27",
+      "tags": "#delhibazarsattaking #delhibazarsatta #sattaking #delhibajarsattaking",
+      "content": "Delhi Bazar Satta King has become one of the most famous games in the Satta King market...",
+      "created_at": "2026-08-09 19:34:21"
+    }
+  ]
+}
