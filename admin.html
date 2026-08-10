@@ -359,13 +359,44 @@
         </div>
       </div>
 
-      <!-- 1. GAMES LIVE RESULT MANAGER -->
-      <div class="admin-card-box">
-        <div class="admin-card-header">
-          <h3 id="gamesCountTitle">GAMES LIVE RESULT MANAGER (33 GAMES)</h3>
-          <button class="btn-adm btn-adm-green" onclick="openAddGameModal()">+ ADD NEW GAME</button>
+      <!-- 1. TABLE 1 LIVE MARKET BOARD GAMES MANAGER (UPPER LIVE TABLE) -->
+      <div class="admin-card-box" style="border: 2px solid #ffd400;">
+        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
+          <h3 id="table1GamesCountTitle">📊 TABLE 1 LIVE MARKET BOARD GAMES MANAGER (7 GAMES)</h3>
+          <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(1)">+ ADD GAME TO TABLE 1</button>
         </div>
         <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
+            ℹ️ Admin Note: Yeh box homepage ke Upper Live Market Board (सट्टा का नाम / कल आया था / आज का रिजल्ट) me games ko <strong>Manage, Edit ya Naya Game Add</strong> karne ke liye hai.
+          </p>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="width: 45px;">#</th>
+                  <th style="width: 220px;">सट्टा का नाम (GAME NAME)</th>
+                  <th style="width: 140px;">TIME</th>
+                  <th style="width: 150px;">कल आया था (YESTERDAY)</th>
+                  <th style="width: 220px;">आज का रिजल्ट (TODAY / WAIT)</th>
+                  <th style="width: 180px;">QUICK ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="table1GamesTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. TABLE 2 ALL GAMES RESULT MANAGER (LOWER BOARD) -->
+      <div class="admin-card-box">
+        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
+          <h3 id="table2GamesCountTitle">📋 TABLE 2 ALL GAMES RESULT MANAGER (21 GAMES)</h3>
+          <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(2)">+ ADD GAME TO TABLE 2</button>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
+            ℹ️ Admin Note: Yeh box homepage ke Lower All Games Table ke results manage aur naye games add karne ke liye hai.
+          </p>
           <div class="adm-table-wrap">
             <table class="adm-table">
               <thead>
@@ -373,12 +404,12 @@
                   <th style="width: 45px;">#</th>
                   <th style="width: 220px;">GAME NAME</th>
                   <th style="width: 140px;">TIME</th>
-                  <th style="width: 150px;">YESTERDAY RESULT (कल)</th>
-                  <th style="width: 220px;">TODAY RESULT (आज / WAIT)</th>
+                  <th style="width: 150px;">YESTERDAY RESULT</th>
+                  <th style="width: 220px;">TODAY RESULT (WAIT)</th>
                   <th style="width: 180px;">QUICK ACTIONS</th>
                 </tr>
               </thead>
-              <tbody id="todayGamesTbody"></tbody>
+              <tbody id="table2GamesTbody"></tbody>
             </table>
           </div>
         </div>
@@ -830,37 +861,56 @@
       }
     }
 
-    // Render Games Manager Table
+    // Render Games Manager Tables (Table 1 & Table 2)
     function renderGamesTable() {
-      const tbody = document.getElementById('todayGamesTbody');
-      const countTitle = document.getElementById('gamesCountTitle');
-      const games = siteDataCache.games || [];
-      if (countTitle) countTitle.textContent = `GAMES LIVE RESULT MANAGER (${games.length} GAMES)`;
+      const tbody1 = document.getElementById('table1GamesTbody');
+      const tbody2 = document.getElementById('table2GamesTbody');
+      const countTitle1 = document.getElementById('table1GamesCountTitle');
+      const countTitle2 = document.getElementById('table2GamesCountTitle');
 
-      if (!tbody) return;
-      tbody.innerHTML = '';
-      games.forEach((game, idx) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${idx + 1}</td>
-          <td><input type="text" class="adm-input-cell" id="g_name_${game.id}" value="${game.name}"></td>
-          <td><input type="text" class="adm-input-cell" id="g_time_${game.id}" value="${game.open_time || ''}"></td>
-          <td><input type="text" class="adm-input-cell" id="g_yest_${game.id}" value="${game.yesterday_result || ''}"></td>
-          <td>
-            <div class="action-row-flex">
-              <input type="text" class="adm-input-cell" id="g_today_${game.id}" value="${game.today_result || 'WAIT'}">
-              <button class="btn-adm btn-adm-yellow" type="button" onclick="setWaitVal(${game.id})">SET WAIT</button>
-            </div>
-          </td>
-          <td>
-            <div class="action-row-flex">
-              <button class="btn-adm btn-adm-green" type="button" onclick="saveGameRow(${game.id})">SAVE</button>
-              <button class="btn-adm btn-adm-red" type="button" onclick="deleteGameRow(${game.id})">DELETE</button>
-            </div>
-          </td>
-        `;
-        tbody.appendChild(tr);
-      });
+      const allGames = siteDataCache.games || [];
+      const group1 = allGames.filter(g => g.table_group === 1 || !g.table_group);
+      const group2 = allGames.filter(g => g.table_group === 2);
+
+      if (countTitle1) countTitle1.textContent = `📊 TABLE 1 LIVE MARKET BOARD GAMES MANAGER (${group1.length} GAMES)`;
+      if (countTitle2) countTitle2.textContent = `📋 TABLE 2 ALL GAMES RESULT MANAGER (${group2.length} GAMES)`;
+
+      if (tbody1) {
+        tbody1.innerHTML = '';
+        group1.forEach((game, idx) => {
+          tbody1.appendChild(createGameRowElement(game, idx + 1));
+        });
+      }
+
+      if (tbody2) {
+        tbody2.innerHTML = '';
+        group2.forEach((game, idx) => {
+          tbody2.appendChild(createGameRowElement(game, idx + 1));
+        });
+      }
+    }
+
+    function createGameRowElement(game, rowNum) {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${rowNum}</td>
+        <td><input type="text" class="adm-input-cell" id="g_name_${game.id}" value="${game.name}"></td>
+        <td><input type="text" class="adm-input-cell" id="g_time_${game.id}" value="${game.open_time || ''}"></td>
+        <td><input type="text" class="adm-input-cell" id="g_yest_${game.id}" value="${game.yesterday_result || ''}"></td>
+        <td>
+          <div class="action-row-flex">
+            <input type="text" class="adm-input-cell" id="g_today_${game.id}" value="${game.today_result || 'WAIT'}">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="setWaitVal(${game.id})">SET WAIT</button>
+          </div>
+        </td>
+        <td>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-green" type="button" onclick="saveGameRow(${game.id})">SAVE</button>
+            <button class="btn-adm btn-adm-red" type="button" onclick="deleteGameRow(${game.id})">DELETE</button>
+          </div>
+        </td>
+      `;
+      return tr;
     }
 
     function setWaitVal(gameId) {
@@ -906,7 +956,12 @@
     }
 
     // Modal Handlers
-    function openAddGameModal() { document.getElementById('addGameModal').classList.add('is-open'); }
+    function openAddGameModal(presetGroup) {
+      document.getElementById('addGameModal').classList.add('is-open');
+      if (presetGroup) {
+        document.getElementById('newGameTableGroup').value = String(presetGroup);
+      }
+    }
     function closeAddGameModal() { document.getElementById('addGameModal').classList.remove('is-open'); }
 
     async function submitNewGame(e) {
