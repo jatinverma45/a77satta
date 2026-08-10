@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
-const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres:SattaaA77king@db.sszqmfagodieabgsbzev.supabase.co:5432/postgres';
+const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.sszqmfagodieabgsbzev:SattaaA77king@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres';
 
 const pgPool = new PgPool({
   connectionString: SUPABASE_DB_URI,
