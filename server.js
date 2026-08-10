@@ -446,35 +446,7 @@ app.get('/api/site-data', (req, res) => {
       data.hero_games = heroGames;
 
       db.all("SELECT * FROM chart_records ORDER BY record_date ASC", [], (err, charts) => {
-        charts = charts || [];
-
-        // Merge any missing records from data_backup.json (e.g. 10-08 or newest dates)
-        const bPath = getBackupFileToRead();
-        if (bPath) {
-          try {
-            const backup = JSON.parse(fs.readFileSync(bPath, 'utf8'));
-            if (backup && backup.chart_records && backup.chart_records.length > 0) {
-              const recordsMap = {};
-              charts.forEach(c => {
-                if (c && c.record_date && c.game_name) {
-                  recordsMap[`${c.record_date.trim()}_${c.game_name.trim().toUpperCase()}`] = c;
-                }
-              });
-              backup.chart_records.forEach(bRecord => {
-                if (bRecord && bRecord.record_date && bRecord.game_name) {
-                  const key = `${bRecord.record_date.trim()}_${bRecord.game_name.trim().toUpperCase()}`;
-                  if (!recordsMap[key]) {
-                    charts.push(bRecord);
-                    recordsMap[key] = bRecord;
-                  } else if (bRecord.result_val && bRecord.result_val !== '-' && (!recordsMap[key].result_val || recordsMap[key].result_val === '-' || recordsMap[key].result_val === '')) {
-                    recordsMap[key].result_val = bRecord.result_val;
-                  }
-                }
-              });
-            }
-          } catch(e) {}
-        }
-        data.chart_records = charts;
+        data.chart_records = charts || [];
 
         db.all("SELECT * FROM blogs ORDER BY id DESC", [], (err, blogs) => {
           if (err) return res.status(500).json({ error: err.message });
