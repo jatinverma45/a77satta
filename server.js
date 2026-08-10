@@ -248,7 +248,7 @@ app.get('/api/site-data', (req, res) => {
     data.settings = {};
     (settings || []).forEach(s => data.settings[s.key] = s.value);
 
-    db.all("SELECT * FROM games ORDER BY id ASC", [], (err, games) => {
+    db.all("SELECT * FROM games ORDER BY sort_order ASC, id ASC", [], (err, games) => {
       if (err) return res.status(500).json({ error: err.message });
       data.games = games || [];
 
@@ -380,6 +380,21 @@ app.post('/api/admin/update-hero-games', (req, res) => {
       res.json({ success: true, message: 'Hero Box Games updated successfully' });
     });
   });
+});
+
+// Admin: Batch Reorder Games (Save Custom Order)
+app.post('/api/admin/reorder-games', (req, res) => {
+  const { order } = req.body; // array of { id, sort_order }
+  if (!Array.isArray(order)) return res.status(400).json({ error: 'Invalid order array' });
+
+  const stmt = db.prepare("UPDATE games SET sort_order = ? WHERE id = ?");
+  order.forEach(item => {
+    stmt.run([item.sort_order, item.id]);
+  });
+  stmt.finalize();
+
+  syncJSONBackup();
+  res.json({ success: true, message: 'Games reordered successfully' });
 });
 
 // Admin: Delete Game

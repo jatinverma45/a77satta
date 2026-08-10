@@ -336,18 +336,18 @@
           <h3>🔥 MAIN HERO BOX LIVE GAMES MANAGER (HOMEPAGE BLACK BOX)</h3>
           <div class="action-row-flex">
             <button class="btn-adm btn-adm-yellow" type="button" onclick="addHeroGameRow()">+ ADD GAME TO HERO BOX</button>
-            <button class="btn-adm btn-adm-green" type="button" onclick="saveHeroGamesList()">💾 SAVE HERO BOX</button>
+            <button class="btn-adm btn-adm-green" type="button" onclick="saveHeroGamesList()">💾 SAVE HERO BOX &amp; ORDER</button>
           </div>
         </div>
         <div class="admin-card-body">
           <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
-            ℹ️ Admin Note: Niche se aap homepage ke Main Black Hero Box me games ko <strong>Change, Add, Replace ya Remove</strong> kar sakte hain:
+            ℹ️ Admin Note: Niche <strong>⬆️ UP / ⬇️ DOWN</strong> buttons se games ka sequence (Order) badlein aur "SAVE HERO BOX &amp; ORDER" par click karein:
           </p>
           <div class="adm-table-wrap">
             <table class="adm-table">
               <thead>
                 <tr>
-                  <th style="width: 45px;">#</th>
+                  <th style="width: 85px;">ORDER #</th>
                   <th style="width: 260px;">GAME NAME (CHANGE / REPLACE)</th>
                   <th style="width: 220px;">RESULT (NUMERIC RESULT / WAIT BADGE)</th>
                   <th style="width: 180px;">QUICK ACTIONS</th>
@@ -363,17 +363,20 @@
       <div class="admin-card-box" style="border: 2px solid #ffd400;">
         <div class="admin-card-header" style="background: #000000; color: #ffd400;">
           <h3 id="table1GamesCountTitle">📊 TABLE 1 LIVE MARKET BOARD GAMES MANAGER (7 GAMES)</h3>
-          <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(1)">+ ADD GAME TO TABLE 1</button>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(1)">💾 SAVE TABLE 1 ORDER</button>
+            <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(1)">+ ADD GAME TO TABLE 1</button>
+          </div>
         </div>
         <div class="admin-card-body">
           <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
-            ℹ️ Admin Note: Yeh box homepage ke Upper Live Market Board (सट्टा का नाम / कल आया था / आज का रिजल्ट) me games ko <strong>Manage, Edit ya Naya Game Add</strong> karne ke liye hai.
+            ℹ️ Admin Note: <strong>⬆️ UP / ⬇️ DOWN</strong> buttons se games ko up/down move karein aur "SAVE TABLE 1 ORDER" par click karke homepage sequence set karein.
           </p>
           <div class="adm-table-wrap">
             <table class="adm-table">
               <thead>
                 <tr>
-                  <th style="width: 45px;">#</th>
+                  <th style="width: 85px;">ORDER #</th>
                   <th style="width: 220px;">सट्टा का नाम (GAME NAME)</th>
                   <th style="width: 140px;">TIME</th>
                   <th style="width: 150px;">कल आया था (YESTERDAY)</th>
@@ -391,17 +394,20 @@
       <div class="admin-card-box">
         <div class="admin-card-header" style="background: #000000; color: #ffd400;">
           <h3 id="table2GamesCountTitle">📋 TABLE 2 ALL GAMES RESULT MANAGER (21 GAMES)</h3>
-          <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(2)">+ ADD GAME TO TABLE 2</button>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(2)">💾 SAVE TABLE 2 ORDER</button>
+            <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(2)">+ ADD GAME TO TABLE 2</button>
+          </div>
         </div>
         <div class="admin-card-body">
           <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
-            ℹ️ Admin Note: Yeh box homepage ke Lower All Games Table ke results manage aur naye games add karne ke liye hai.
+            ℹ️ Admin Note: <strong>⬆️ UP / ⬇️ DOWN</strong> buttons se games ka order up/down karein aur "SAVE TABLE 2 ORDER" par click karein.
           </p>
           <div class="adm-table-wrap">
             <table class="adm-table">
               <thead>
                 <tr>
-                  <th style="width: 45px;">#</th>
+                  <th style="width: 85px;">ORDER #</th>
                   <th style="width: 220px;">GAME NAME</th>
                   <th style="width: 140px;">TIME</th>
                   <th style="width: 150px;">YESTERDAY RESULT</th>
@@ -741,6 +747,64 @@
       }
     }
 
+    // Reorder Rows Helpers
+    function moveRowUp(btn) {
+      const tr = btn.closest('tr');
+      const prev = tr.previousElementSibling;
+      if (prev) {
+        tr.parentNode.insertBefore(tr, prev);
+        reindexTableRows(tr.parentNode);
+      }
+    }
+
+    function moveRowDown(btn) {
+      const tr = btn.closest('tr');
+      const next = tr.nextElementSibling;
+      if (next) {
+        tr.parentNode.insertBefore(next, tr);
+        reindexTableRows(tr.parentNode);
+      }
+    }
+
+    function reindexTableRows(tbody) {
+      if (!tbody) return;
+      Array.from(tbody.children).forEach((tr, idx) => {
+        const badge = tr.querySelector('.row-num-badge strong');
+        if (badge) badge.textContent = idx + 1;
+      });
+    }
+
+    async function saveTableOrder(tableGroupId) {
+      const tbody = document.getElementById(tableGroupId === 1 ? 'table1GamesTbody' : 'table2GamesTbody');
+      if (!tbody) return;
+
+      const order = [];
+      Array.from(tbody.children).forEach((tr, idx) => {
+        const gameId = tr.getAttribute('data-game-id');
+        if (gameId) {
+          order.push({ id: parseInt(gameId), sort_order: idx + 1 });
+        }
+      });
+
+      if (order.length === 0) return;
+
+      try {
+        const res = await fetch('/api/admin/reorder-games', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ order })
+        });
+        if (res.ok) {
+          showToast(`Table ${tableGroupId} Sequence Saved Successfully!`);
+          loadAdminData();
+        } else {
+          alert('Failed to save order');
+        }
+      } catch (e) {
+        alert('Server error saving table order');
+      }
+    }
+
     // Render Hero Games Admin Table
     function renderHeroGamesAdminTable() {
       const tbody = document.getElementById('heroAdminGamesTbody');
@@ -764,7 +828,11 @@
         const gRes = game.today_result || game.result || 'WAIT';
 
         tr.innerHTML = `
-          <td><strong>${idx + 1}</strong></td>
+          <td style="white-space: nowrap;">
+            <span class="row-num-badge"><strong>${idx + 1}</strong></span>
+            <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 4px;" onclick="moveRowUp(this)">⬆️</button>
+            <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
+          </td>
           <td>
             <input type="text" class="adm-input-cell hero-game-name" data-idx="${idx}" value="${gName}" placeholder="e.g. RAJ SHREE, GALI">
           </td>
@@ -796,7 +864,11 @@
       const idx = tbody.children.length;
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td><strong>${idx + 1}</strong></td>
+        <td style="white-space: nowrap;">
+          <span class="row-num-badge"><strong>${idx + 1}</strong></span>
+          <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 4px;" onclick="moveRowUp(this)">⬆️</button>
+          <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
+        </td>
         <td>
           <input type="text" class="adm-input-cell hero-game-name" data-idx="${idx}" value="NEW GAME" placeholder="e.g. FARIDABAD">
         </td>
@@ -808,7 +880,7 @@
         </td>
         <td>
           <div class="action-row-flex">
-            <button class="btn-adm btn-adm-red" type="button" onclick="this.closest('tr').remove(); reindexHeroRows();">REMOVE</button>
+            <button class="btn-adm btn-adm-red" type="button" onclick="this.closest('tr').remove(); reindexTableRows(document.getElementById('heroAdminGamesTbody'));">REMOVE</button>
           </div>
         </td>
       `;
@@ -819,16 +891,8 @@
       const tbody = document.getElementById('heroAdminGamesTbody');
       if (tbody && tbody.children[idx]) {
         tbody.children[idx].remove();
-        reindexHeroRows();
+        reindexTableRows(tbody);
       }
-    }
-
-    function reindexHeroRows() {
-      const tbody = document.getElementById('heroAdminGamesTbody');
-      if (!tbody) return;
-      Array.from(tbody.children).forEach((tr, i) => {
-        tr.children[0].innerHTML = `<strong>${i + 1}</strong>`;
-      });
     }
 
     async function saveHeroGamesList() {
@@ -851,7 +915,7 @@
           body: JSON.stringify({ games })
         });
         if (res.ok) {
-          showToast('Hero Box Games Saved Successfully!');
+          showToast('Hero Box Games & Order Saved Successfully!');
           loadAdminData();
         } else {
           alert('Failed to save Hero games');
@@ -892,8 +956,13 @@
 
     function createGameRowElement(game, rowNum) {
       const tr = document.createElement('tr');
+      tr.setAttribute('data-game-id', game.id);
       tr.innerHTML = `
-        <td>${rowNum}</td>
+        <td style="white-space: nowrap;">
+          <span class="row-num-badge"><strong>${rowNum}</strong></span>
+          <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 4px;" onclick="moveRowUp(this)">⬆️</button>
+          <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
+        </td>
         <td><input type="text" class="adm-input-cell" id="g_name_${game.id}" value="${game.name}"></td>
         <td><input type="text" class="adm-input-cell" id="g_time_${game.id}" value="${game.open_time || ''}"></td>
         <td><input type="text" class="adm-input-cell" id="g_yest_${game.id}" value="${game.yesterday_result || ''}"></td>

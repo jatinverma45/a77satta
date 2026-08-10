@@ -15,7 +15,7 @@
   },
   "games": [
     {
-      "id": 36,
+      "id": 64,
       "name": "Shri Ganesh",
       "open_time": "04:00 AM",
       "close_time": "04:00 AM",
@@ -27,37 +27,23 @@
       "table_group": 1,
       "sort_order": 1,
       "is_hero": 0
-    },
-    {
-      "id": 37,
-      "name": "Delhi Bazar",
-      "open_time": "09:00 AM",
-      "close_time": "09:00 AM",
-      "image": null,
-      "badge": "Hot",
-      "is_active": 1,
-      "yesterday_result": "-",
-      "today_result": "WAIT",
-      "table_group": 1,
-      "sort_order": 2,
-      "is_hero": 0
     }
   ],
   "chart_records": [
     {
-      "id": 413,
+      "id": 715,
       "record_date": "01-08",
       "game_name": "DELHI BAZAR",
       "result_val": "71"
     },
     {
-      "id": 412,
+      "id": 714,
       "record_date": "01-08",
       "game_name": "GWALIOR",
       "result_val": "38"
     },
     {
-      "id": 411,
+      "id": 713,
       "record_date": "01-08",
       "game_name": "SADAR BAZAR",
       "result_val": "82"
