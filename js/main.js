@@ -121,11 +121,31 @@
         const datesSet = new Set(['01-08', '02-08', '03-08', '04-08', '05-08', '06-08', '07-08', '08-08', '09-08']);
         
         data.chart_records.forEach(r => {
-          recordsMap[`${r.record_date}_${r.game_name}`] = r.result_val;
-          datesSet.add(r.record_date);
+          if (r.record_date && r.game_name) {
+            const key = `${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`;
+            recordsMap[key] = r.result_val;
+            datesSet.add(r.record_date.trim());
+          }
         });
 
         const dates = Array.from(datesSet).sort();
+
+        function getVal(date, gameName) {
+          const gUpper = gameName.trim().toUpperCase();
+          const directKey = `${date}_${gUpper}`;
+          if (recordsMap[directKey] !== undefined) return recordsMap[directKey];
+
+          // Fuzzy search fallback for capitalization or variant names
+          for (const [k, v] of Object.entries(recordsMap)) {
+            const [d, g] = k.split('_');
+            if (d === date) {
+              if (g.includes(gUpper) || gUpper.includes(g) || (gUpper === 'DISAWER' && g === 'DESAWAR') || (gUpper === 'DESAWAR' && g === 'DISAWER')) {
+                return v;
+              }
+            }
+          }
+          return '-';
+        }
 
         // Table 1 (Main 12 Games)
         const table1Tbody = document.querySelector('.lower-stat-table-wrap:first-of-type table tbody');
@@ -135,7 +155,7 @@
           dates.forEach(d => {
             html += `<tr><td>${d}</td>`;
             mainGames.forEach(g => {
-              html += `<td>${recordsMap[`${d}_${g}`] || '-'}</td>`;
+              html += `<td>${getVal(d, g)}</td>`;
             });
             html += `</tr>`;
           });
@@ -147,7 +167,7 @@
         if (table2Tbody) {
           const lowerGames = [
             'HR SATTA', 'UJJALA SUPER', 'KKR CITY', 'MADHUPURI', 'ANMOL BAZAR', 'KAROL BAGH',
-            'DELHI DARBAR', 'NEW GANGA', 'SKY KING', 'FATEHABAD', 'UDAIPUR CITY', 'RAJ SHREE',
+            'AMMAN BAZAR', 'DELHI DARBAR', 'NEW GANGA', 'SKY KING', 'FATEHABAD', 'UDAIPUR CITY', 'RAJ SHREE',
             'VIP AGRA', 'MOHALI-7', 'BHADRA BAZAR', 'MANDI BAZAR', 'LION BAZAR', 'SIALKOT',
             'DEHRADUN CITY', 'DAMAN'
           ];
@@ -155,7 +175,7 @@
           dates.forEach(d => {
             html += `<tr><td>${d}</td>`;
             lowerGames.forEach(g => {
-              html += `<td>${recordsMap[`${d}_${g}`] || '-'}</td>`;
+              html += `<td>${getVal(d, g)}</td>`;
             });
             html += `</tr>`;
           });
