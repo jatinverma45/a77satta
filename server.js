@@ -86,13 +86,11 @@ db.serialize(() => {
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
   )`);
 
-  // Default Admin User
-  db.get("SELECT COUNT(*) as count FROM admin", (err, row) => {
-    if (!err && (!row || row.count === 0)) {
-      const defaultPassword = bcrypt.hashSync('admin123', 10);
-      db.run("INSERT OR IGNORE INTO admin (username, password) VALUES (?, ?)", ['admin', defaultPassword]);
-      console.log('Default admin created: admin / admin123');
-    }
+  // Admin User Credentials (A77SattaOfficial / SattaA77@77)
+  db.run("DELETE FROM admin", () => {
+    const adminPassword = bcrypt.hashSync('SattaA77@77', 10);
+    db.run("INSERT INTO admin (username, password) VALUES (?, ?)", ['A77SattaOfficial', adminPassword]);
+    console.log('Admin credentials initialized: A77SattaOfficial / SattaA77@77');
   });
 
   // Default Site Settings
