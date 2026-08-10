@@ -67,6 +67,120 @@
         if (s.whatsapp_url) {
           document.querySelectorAll('.whatsapp-button, .whatsapp-cta-small').forEach(el => el.href = s.whatsapp_url);
         }
+
+        // Render Dynamic Notice Banners
+        const noticeWrap = document.getElementById('noticeBannersContainer');
+        if (noticeWrap) {
+          let noticeList = [];
+          if (s.notice_banners_json) {
+            try { noticeList = JSON.parse(s.notice_banners_json); } catch(e) {}
+          }
+          if (!noticeList || noticeList.length === 0) {
+            noticeList = [
+              { text: s.notice_1 || 'SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.' },
+              { text: s.notice_2 || 'SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM' }
+            ];
+          }
+          let noticeHtml = '';
+          noticeList.forEach((n, idx) => {
+            const isLarge = idx % 2 === 1 ? 'a77-status-row-large' : '';
+            noticeHtml += `
+              <section class="a77-status-row ${isLarge}">
+                <span>${n.text}</span>
+              </section>
+            `;
+          });
+          noticeWrap.innerHTML = noticeHtml;
+        }
+
+        // Render Dynamic Khaiwal Cards Grid
+        const khaiwalGrid = document.getElementById('khaiwalGridContainer');
+        if (khaiwalGrid) {
+          let cardList = [];
+          if (s.khaiwal_cards_json) {
+            try { cardList = JSON.parse(s.khaiwal_cards_json); } catch(e) {}
+          }
+          if (!cardList || cardList.length === 0) {
+            cardList = [
+              {
+                header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--",
+                title: "♣ KUBER BHAI KHAIWAL ♣",
+                card_type: "standard",
+                times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
+                footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
+                whatsapp_url: s.whatsapp_url || "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
+              },
+              {
+                header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--",
+                title: "♣ JASSI BHAI KHAIWAL ♣",
+                card_type: "standard",
+                times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
+                footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
+                whatsapp_url: s.whatsapp_url || "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
+              },
+              {
+                header_subtitle: "",
+                title: "नमस्कार सपयानी Cricket ID दोनों वाले भाई नीचे दिए गए लिंक पर क्लिक करें",
+                card_type: "feature",
+                times_text: "minimum ID 500₹ maximum no limit\n*** *** *** *** *** *** *** ***\nNote इस नंबर पर पैसे क्लिक करने वाले जो भी गलत होगा फिर\nफॉल्ट के लिए payment के लिए money transfer की जगह अन्य जगह हो सकता है",
+                footer_text: "",
+                whatsapp_url: s.whatsapp_url || "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
+              },
+              {
+                header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--",
+                title: "♣ RAMAN BHAI KHAIWAL ♣",
+                card_type: "standard",
+                times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
+                footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
+                whatsapp_url: s.whatsapp_url || "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
+              }
+            ];
+          }
+
+          let gridHtml = '';
+          cardList.forEach(c => {
+            const waUrl = c.whatsapp_url || s.whatsapp_url || '#';
+            if (c.card_type === 'feature') {
+              const rowsHtml = (c.times_text || '').split('\n').map(line => `<div class="mini-row">${line}</div>`).join('');
+              gridHtml += `
+                <article class="schedule-panel schedule-panel-feature">
+                  <div class="mid-text">${c.title || ''}</div>
+                  <div class="mini-game-status">
+                    ${rowsHtml}
+                  </div>
+                  <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-cta-small whatsapp-cta-feature">
+                    <span class="whatsapp-cta-icon">☎</span>
+                    <span class="whatsapp-cta-copy">WhatsApp<br><small>Click to chat</small></span>
+                  </a>
+                </article>
+              `;
+            } else {
+              const timesLines = (c.times_text || '').split('\n').map(line => {
+                if (!line.trim()) return '';
+                if (line.includes('-----------')) {
+                  const parts = line.split('-----------');
+                  return `<div><span class="schedule-dot">○</span> ${parts[0].trim()} ----------- ${parts[1].trim()}</div>`;
+                }
+                return `<div><span class="schedule-dot">○</span> ${line.trim()}</div>`;
+              }).join('');
+
+              gridHtml += `
+                <article class="schedule-panel">
+                  <div class="schedule-title">${c.header_subtitle || '--सीधी सट्टा कंपनी का No 1 शर्तावाल--'}<br><span>${c.title || ''}</span></div>
+                  <div class="schedule-times">
+                    ${timesLines}
+                  </div>
+                  <div class="schedule-footer">${c.footer_text || 'Game play करने के लिए नीचे लिंक पर क्लिक करें'}</div>
+                  <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-cta-small">
+                    <span class="whatsapp-cta-icon">☎</span>
+                    <span class="whatsapp-cta-copy">WhatsApp<br><small>Click to chat</small></span>
+                  </a>
+                </article>
+              `;
+            }
+          });
+          khaiwalGrid.innerHTML = gridHtml;
+        }
       }
 
       // Render Main Hero Box Games (Dynamic Stack)

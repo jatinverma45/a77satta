@@ -97,10 +97,56 @@ db.serialize(() => {
   });
 
   // Default Site Settings
+  const defaultNoticeBanners = JSON.stringify([
+    { id: 1, text: "SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM." },
+    { id: 2, text: "SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM" }
+  ]);
+
+  const defaultKhaiwalCards = JSON.stringify([
+    {
+      id: 1,
+      header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--",
+      title: "♣ KUBER BHAI KHAIWAL ♣",
+      card_type: "standard",
+      times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
+      footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
+      whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
+    },
+    {
+      id: 2,
+      header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--",
+      title: "♣ JASSI BHAI KHAIWAL ♣",
+      card_type: "standard",
+      times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
+      footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
+      whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
+    },
+    {
+      id: 3,
+      header_subtitle: "",
+      title: "नमस्कार सपयानी Cricket ID दोनों वाले भाई नीचे दिए गए लिंक पर क्लिक करें",
+      card_type: "feature",
+      times_text: "minimum ID 500₹ maximum no limit\n*** *** *** *** *** *** *** ***\nNote इस नंबर पर पैसे क्लिक करने वाले जो भी गलत होगा फिर\nफॉल्ट के लिए payment के लिए money transfer की जगह अन्य जगह हो सकता है",
+      footer_text: "",
+      whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
+    },
+    {
+      id: 4,
+      header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--",
+      title: "♣ RAMAN BHAI KHAIWAL ♣",
+      card_type: "standard",
+      times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
+      footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
+      whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
+    }
+  ]);
+
   const defaultSettings = [
     ['ticker_text', 'A77satta is an information portal which keep satta king players updated by providing real-time satta king results for gali satta king , faridabad satta and ghaziabad satta.'],
     ['hindi_tagline', 'हा भाई यही आती हे सबसे पहले खबर रूको और देखो'],
     ['hero_games_json', '[{"name":"RAJ SHREE","today_result":"WAIT"},{"name":"UDAIPUR CITY","today_result":"WAIT"}]'],
+    ['notice_banners_json', defaultNoticeBanners],
+    ['khaiwal_cards_json', defaultKhaiwalCards],
     ['main_game_name', 'GALI'],
     ['main_game_result', '97'],
     ['disawer_time', '5:15 AM'],

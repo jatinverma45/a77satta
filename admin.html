@@ -419,9 +419,65 @@
             </table>
           </div>
         </div>
+      <!-- 3. HOMEPAGE NOTICE BANNERS MANAGER -->
+      <div class="admin-card-box" style="border: 2px solid #ffd400;">
+        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
+          <h3>📢 HOMEPAGE NOTICE BANNERS MANAGER</h3>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="addNoticeBannerRow()">+ ADD NOTICE BANNER</button>
+            <button class="btn-adm btn-adm-green" type="button" onclick="saveNoticeBanners()">💾 SAVE NOTICE BANNERS</button>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
+            ℹ️ Admin Note: Homepage par yellow full-width Notice Banners ko <strong>Add, Edit, Reorder ya Delete</strong> karne ke liye niche use karein:
+          </p>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="width: 85px;">ORDER #</th>
+                  <th>NOTICE BANNER TEXT</th>
+                  <th style="width: 140px;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="noticeBannersTbody"></tbody>
+            </table>
+          </div>
+        </div>
       </div>
 
-      <!-- 2. SITE SETTINGS & TICKER MANAGER -->
+      <!-- 4. KHAIWAL SCHEDULE CARDS MANAGER -->
+      <div class="admin-card-box" style="border: 2px solid #ffd400;">
+        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
+          <h3>♣ KHAIWAL SCHEDULE CARDS MANAGER (YELLOW PANELS)</h3>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="openKhaiwalModal()">+ ADD KHAIWAL CARD</button>
+            <button class="btn-adm btn-adm-green" type="button" onclick="saveKhaiwalCardsList()">💾 SAVE KHAIWAL CARDS</button>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
+            ℹ️ Admin Note: Niche Khaiwal feature cards (Kuber Bhai Khaiwal, Jassi Bhai Khaiwal, Cricket ID Card, Raman Bhai Khaiwal) ko <strong>Add, Edit, Reorder ya Delete</strong> kar sakte hain:
+          </p>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="width: 85px;">ORDER #</th>
+                  <th style="width: 220px;">CARD TITLE / KHAIWAL NAME</th>
+                  <th style="width: 140px;">CARD TYPE</th>
+                  <th>TIMINGS / DETAILS PREVIEW</th>
+                  <th style="width: 180px;">QUICK ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="khaiwalCardsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. SITE SETTINGS & TICKER MANAGER -->
       <div class="admin-card-box">
         <div class="admin-card-header">
           <h3>HOMEPAGE SITE SETTINGS &amp; TICKER MANAGER</h3>
@@ -620,6 +676,47 @@
     </span>
   </div>
 
+  <!-- KHAIWAL CARD EDIT / CREATE MODAL -->
+  <div class="modal-overlay-adm" id="khaiwalCardModal">
+    <div class="modal-card-adm" style="max-width: 600px;">
+      <h4 id="khaiwalModalTitle">+ EDIT / ADD KHAIWAL CARD</h4>
+      <form id="khaiwalCardForm" onsubmit="saveKhaiwalModalForm(event)">
+        <input type="hidden" id="khaiwalEditIdx" value="-1">
+        <div class="admin-form-group">
+          <label>Card Type</label>
+          <select id="khaiwalType" style="color:#000; background:#fff;" onchange="toggleKhaiwalTypeFields()">
+            <option value="standard">Standard Khaiwal Card (Timing List)</option>
+            <option value="feature">Feature Info Card (Cricket ID / Special Note)</option>
+          </select>
+        </div>
+        <div class="admin-form-group" id="khaiwalHeaderGroup">
+          <label>Header Subtitle (Top Line)</label>
+          <input type="text" id="khaiwalSubtitle" placeholder="--सीधी सट्टा कंपनी का No 1 शर्तावाल--" style="color:#000; background:#fff;">
+        </div>
+        <div class="admin-form-group">
+          <label>Main Title / Name</label>
+          <input type="text" id="khaiwalTitle" placeholder="♣ KUBER BHAI KHAIWAL ♣" required style="color:#000; background:#fff;">
+        </div>
+        <div class="admin-form-group">
+          <label>Timings / Game Details (One per line)</label>
+          <textarea id="khaiwalTimesText" rows="6" placeholder="सट्टे बाजार ----------- 1:30 pm&#10;दिल्ली बाजार ----------- 2:50 pm" required style="color:#000; background:#fff; font-family: monospace;"></textarea>
+        </div>
+        <div class="admin-form-group" id="khaiwalFooterGroup">
+          <label>Footer Line Text</label>
+          <input type="text" id="khaiwalFooterText" placeholder="Game play करने के लिए नीचे लिंक पर क्लिक करें" style="color:#000; background:#fff;">
+        </div>
+        <div class="admin-form-group">
+          <label>WhatsApp CTA Link</label>
+          <input type="text" id="khaiwalWhatsappUrl" placeholder="https://whatsapp.com/channel/..." style="color:#000; background:#fff;">
+        </div>
+        <div class="action-row-flex" style="justify-content: flex-end; margin-top: 20px;">
+          <button type="button" class="btn-adm btn-adm-red" onclick="closeKhaiwalModal()">CANCEL</button>
+          <button type="submit" class="btn-adm btn-adm-green">SAVE CARD</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- ADD NEW GAME MODAL -->
   <div class="modal-overlay-adm" id="addGameModal">
     <div class="modal-card-adm">
@@ -738,12 +835,247 @@
         siteDataCache = await res.json();
         renderHeroGamesAdminTable();
         renderGamesTable();
+        renderNoticeBannersAdminTable();
+        renderKhaiwalCardsAdminTable();
         renderChartTable();
         renderChartTable2();
         renderSettings();
         renderBlogs();
       } catch (e) {
         console.error(e);
+      }
+    }
+
+    // Notice Banners Admin Logic
+    function renderNoticeBannersAdminTable() {
+      const tbody = document.getElementById('noticeBannersTbody');
+      if (!tbody) return;
+
+      let noticeList = [];
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.notice_banners_json) {
+        try { noticeList = JSON.parse(siteDataCache.settings.notice_banners_json); } catch(e) {}
+      }
+      if (!noticeList || noticeList.length === 0) {
+        const n1 = siteDataCache && siteDataCache.settings ? siteDataCache.settings.notice_1 : null;
+        const n2 = siteDataCache && siteDataCache.settings ? siteDataCache.settings.notice_2 : null;
+        noticeList = [
+          { text: n1 || 'SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.' },
+          { text: n2 || 'SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM' }
+        ];
+      }
+
+      tbody.innerHTML = '';
+      noticeList.forEach((n, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="white-space: nowrap;">
+            <span class="row-num-badge"><strong>${idx + 1}</strong></span>
+            <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 4px;" onclick="moveRowUp(this)">⬆️</button>
+            <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
+          </td>
+          <td>
+            <input type="text" class="adm-input-cell notice-banner-input" value="${n.text || ''}" placeholder="Enter Notice Banner text...">
+          </td>
+          <td>
+            <div class="action-row-flex">
+              <button class="btn-adm btn-adm-red" type="button" onclick="this.closest('tr').remove(); reindexTableRows(document.getElementById('noticeBannersTbody'));">DELETE</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addNoticeBannerRow() {
+      const tbody = document.getElementById('noticeBannersTbody');
+      if (!tbody) return;
+      const idx = tbody.children.length;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="white-space: nowrap;">
+          <span class="row-num-badge"><strong>${idx + 1}</strong></span>
+          <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 4px;" onclick="moveRowUp(this)">⬆️</button>
+          <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
+        </td>
+        <td>
+          <input type="text" class="adm-input-cell notice-banner-input" value="" placeholder="Enter new Notice Banner text...">
+        </td>
+        <td>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-red" type="button" onclick="this.closest('tr').remove(); reindexTableRows(document.getElementById('noticeBannersTbody'));">DELETE</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    async function saveNoticeBanners() {
+      const inputs = document.querySelectorAll('.notice-banner-input');
+      const list = [];
+      inputs.forEach((inp, idx) => {
+        const txt = inp.value.trim();
+        if (txt) {
+          list.push({ id: idx + 1, text: txt });
+        }
+      });
+
+      const jsonStr = JSON.stringify(list);
+      try {
+        const res = await fetch('/api/admin/update-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            notice_banners_json: jsonStr,
+            notice_1: list[0] ? list[0].text : '',
+            notice_2: list[1] ? list[1].text : ''
+          })
+        });
+        if (res.ok) {
+          showToast('Notice Banners Saved Successfully!');
+          loadAdminData();
+        }
+      } catch(e) {
+        alert('Error saving notice banners');
+      }
+    }
+
+    // Khaiwal Cards Admin Logic
+    let currentKhaiwalCardsList = [];
+
+    function renderKhaiwalCardsAdminTable() {
+      const tbody = document.getElementById('khaiwalCardsTbody');
+      if (!tbody) return;
+
+      let cardList = [];
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
+        try { cardList = JSON.parse(siteDataCache.settings.khaiwal_cards_json); } catch(e) {}
+      }
+      if (!cardList || cardList.length === 0) {
+        cardList = [
+          { id: 1, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ KUBER BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
+          { id: 2, header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--", title: "♣ JASSI BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
+          { id: 3, header_subtitle: "", title: "नमस्कार सपयानी Cricket ID दोनों वाले भाई नीचे दिए गए लिंक पर क्लिक करें", card_type: "feature", times_text: "minimum ID 500₹ maximum no limit\n*** *** *** *** *** *** *** ***\nNote इस नंबर पर पैसे क्लिक करने वाले जो भी गलत होगा फिर\nफॉल्ट के लिए payment के लिए money transfer की जगह अन्य जगह हो सकता है", footer_text: "", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
+          { id: 4, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ RAMAN BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" }
+        ];
+      }
+      currentKhaiwalCardsList = cardList;
+
+      tbody.innerHTML = '';
+      cardList.forEach((c, idx) => {
+        const tr = document.createElement('tr');
+        tr.setAttribute('data-card-idx', idx);
+        const snippet = (c.times_text || '').split('\n').slice(0, 2).join(' | ');
+        const badgeType = c.card_type === 'feature' ? '<span style="background:#ff0000; color:#fff; padding:2px 8px; border-radius:4px; font-weight:800;">FEATURE</span>' : '<span style="background:#ffd400; color:#000; padding:2px 8px; border-radius:4px; font-weight:800;">STANDARD</span>';
+
+        tr.innerHTML = `
+          <td style="white-space: nowrap;">
+            <span class="row-num-badge"><strong>${idx + 1}</strong></span>
+            <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 4px;" onclick="moveRowUp(this)">⬆️</button>
+            <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
+          </td>
+          <td><strong>${c.title || ''}</strong></td>
+          <td>${badgeType}</td>
+          <td style="font-size: 12px; color: #555;">${snippet}...</td>
+          <td>
+            <div class="action-row-flex">
+              <button class="btn-adm btn-adm-green" type="button" onclick="openKhaiwalModal(${idx})">EDIT</button>
+              <button class="btn-adm btn-adm-red" type="button" onclick="deleteKhaiwalCardRow(${idx})">DELETE</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openKhaiwalModal(idx = -1) {
+      document.getElementById('khaiwalEditIdx').value = idx;
+      if (idx >= 0 && currentKhaiwalCardsList[idx]) {
+        const c = currentKhaiwalCardsList[idx];
+        document.getElementById('khaiwalModalTitle').textContent = `✏️ EDIT KHAIWAL CARD: ${c.title || ''}`;
+        document.getElementById('khaiwalType').value = c.card_type || 'standard';
+        document.getElementById('khaiwalSubtitle').value = c.header_subtitle || '';
+        document.getElementById('khaiwalTitle').value = c.title || '';
+        document.getElementById('khaiwalTimesText').value = c.times_text || '';
+        document.getElementById('khaiwalFooterText').value = c.footer_text || '';
+        document.getElementById('khaiwalWhatsappUrl').value = c.whatsapp_url || '';
+      } else {
+        document.getElementById('khaiwalModalTitle').textContent = `+ ADD NEW KHAIWAL CARD`;
+        document.getElementById('khaiwalType').value = 'standard';
+        document.getElementById('khaiwalSubtitle').value = '--सीधी सट्टा कंपनी का No 1 शर्तावाल--';
+        document.getElementById('khaiwalTitle').value = '♣ NEW BHAI KHAIWAL ♣';
+        document.getElementById('khaiwalTimesText').value = 'सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nफरीदाबाद ----------- 5:50 pm\nगाजियाबाद ----------- 8:50 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM';
+        document.getElementById('khaiwalFooterText').value = 'Game play करने के लिए नीचे लिंक पर क्लिक करें';
+        document.getElementById('khaiwalWhatsappUrl').value = 'https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e';
+      }
+      toggleKhaiwalTypeFields();
+      document.getElementById('khaiwalCardModal').classList.add('is-open');
+    }
+
+    function closeKhaiwalModal() {
+      document.getElementById('khaiwalCardModal').classList.remove('is-open');
+    }
+
+    function toggleKhaiwalTypeFields() {
+      const type = document.getElementById('khaiwalType').value;
+      document.getElementById('khaiwalHeaderGroup').style.display = type === 'feature' ? 'none' : 'block';
+      document.getElementById('khaiwalFooterGroup').style.display = type === 'feature' ? 'none' : 'block';
+    }
+
+    function saveKhaiwalModalForm(e) {
+      e.preventDefault();
+      const idx = parseInt(document.getElementById('khaiwalEditIdx').value);
+      const cardObj = {
+        id: idx >= 0 && currentKhaiwalCardsList[idx] ? currentKhaiwalCardsList[idx].id : Date.now(),
+        card_type: document.getElementById('khaiwalType').value,
+        header_subtitle: document.getElementById('khaiwalSubtitle').value.trim(),
+        title: document.getElementById('khaiwalTitle').value.trim(),
+        times_text: document.getElementById('khaiwalTimesText').value.trim(),
+        footer_text: document.getElementById('khaiwalFooterText').value.trim(),
+        whatsapp_url: document.getElementById('khaiwalWhatsappUrl').value.trim()
+      };
+
+      if (idx >= 0 && idx < currentKhaiwalCardsList.length) {
+        currentKhaiwalCardsList[idx] = cardObj;
+      } else {
+        currentKhaiwalCardsList.push(cardObj);
+      }
+
+      closeKhaiwalModal();
+      saveKhaiwalCardsList();
+    }
+
+    function deleteKhaiwalCardRow(idx) {
+      if (!confirm('Are you sure you want to delete this Khaiwal Card?')) return;
+      currentKhaiwalCardsList.splice(idx, 1);
+      saveKhaiwalCardsList();
+    }
+
+    async function saveKhaiwalCardsList() {
+      const tbody = document.getElementById('khaiwalCardsTbody');
+      if (tbody) {
+        const reorderedList = [];
+        Array.from(tbody.children).forEach(tr => {
+          const idx = parseInt(tr.getAttribute('data-card-idx'));
+          if (!isNaN(idx) && currentKhaiwalCardsList[idx]) {
+            reorderedList.push(currentKhaiwalCardsList[idx]);
+          }
+        });
+        if (reorderedList.length > 0) currentKhaiwalCardsList = reorderedList;
+      }
+
+      const jsonStr = JSON.stringify(currentKhaiwalCardsList);
+      try {
+        const res = await fetch('/api/admin/update-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ khaiwal_cards_json: jsonStr })
+        });
+        if (res.ok) {
+          showToast('Khaiwal Cards Saved Successfully!');
+          loadAdminData();
+        }
+      } catch(e) {
+        alert('Error saving Khaiwal Cards');
       }
     }
 
