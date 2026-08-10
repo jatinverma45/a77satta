@@ -157,26 +157,48 @@ db.serialize(() => {
     console.log('Seeded exact 28 Satta Games matching main site');
   });
 
-  // Seed default August 2026 Chart Records if empty
-  db.get("SELECT COUNT(*) as count FROM chart_records", (err, row) => {
-    if (!err && row && row.count === 0) {
-      const initialChartData = [
-        ['01-08', 'SADAR BAZAR', '82'], ['01-08', 'GWALIOR', '38'], ['01-08', 'DELHI BAZAR', '71'], ['01-08', 'DELHI MATKA', '21'], ['01-08', 'SHRI GANESH', '26'], ['01-08', 'AGRA', '48'], ['01-08', 'FARIDABAD', '57'], ['01-08', 'ALWAR', '25'], ['01-08', 'GAZIABAD', '23'], ['01-08', 'DWARKA', '48'], ['01-08', 'GALI', '92'], ['01-08', 'DISAWER', '-'],
-        ['02-08', 'SADAR BAZAR', '31'], ['02-08', 'GWALIOR', '22'], ['02-08', 'DELHI BAZAR', '09'], ['02-08', 'DELHI MATKA', '16'], ['02-08', 'SHRI GANESH', '58'], ['02-08', 'AGRA', '29'], ['02-08', 'FARIDABAD', '06'], ['02-08', 'ALWAR', '42'], ['02-08', 'GAZIABAD', '15'], ['02-08', 'DWARKA', '76'], ['02-08', 'GALI', '31'], ['02-08', 'DISAWER', '31'],
-        ['03-08', 'SADAR BAZAR', '05'], ['03-08', 'GWALIOR', '80'], ['03-08', 'DELHI BAZAR', '53'], ['03-08', 'DELHI MATKA', '56'], ['03-08', 'SHRI GANESH', '31'], ['03-08', 'AGRA', '73'], ['03-08', 'FARIDABAD', '95'], ['03-08', 'ALWAR', '59'], ['03-08', 'GAZIABAD', '60'], ['03-08', 'DWARKA', '79'], ['03-08', 'GALI', '59'], ['03-08', 'DISAWER', '74'],
-        ['04-08', 'SADAR BAZAR', '99'], ['04-08', 'GWALIOR', '01'], ['04-08', 'DELHI BAZAR', '12'], ['04-08', 'DELHI MATKA', '67'], ['04-08', 'SHRI GANESH', '10'], ['04-08', 'AGRA', '78'], ['04-08', 'FARIDABAD', '12'], ['04-08', 'ALWAR', '34'], ['04-08', 'GAZIABAD', '24'], ['04-08', 'DWARKA', '15'], ['04-08', 'GALI', '27'], ['04-08', 'DISAWER', '31'],
-        ['05-08', 'SADAR BAZAR', '24'], ['05-08', 'GWALIOR', '60'], ['05-08', 'DELHI BAZAR', '47'], ['05-08', 'DELHI MATKA', '19'], ['05-08', 'SHRI GANESH', '75'], ['05-08', 'AGRA', '76'], ['05-08', 'FARIDABAD', '57'], ['05-08', 'ALWAR', '56'], ['05-08', 'GAZIABAD', '22'], ['05-08', 'DWARKA', '01'], ['05-08', 'GALI', '85'], ['05-08', 'DISAWER', '93'],
-        ['06-08', 'SADAR BAZAR', '95'], ['06-08', 'GWALIOR', '21'], ['06-08', 'DELHI BAZAR', '61'], ['06-08', 'DELHI MATKA', '16'], ['06-08', 'SHRI GANESH', '97'], ['06-08', 'AGRA', '48'], ['06-08', 'FARIDABAD', '22'], ['06-08', 'ALWAR', '24'], ['06-08', 'GAZIABAD', '89'], ['06-08', 'DWARKA', '79'], ['06-08', 'GALI', '80'], ['06-08', 'DISAWER', '51'],
-        ['07-08', 'SADAR BAZAR', '48'], ['07-08', 'GWALIOR', '15'], ['07-08', 'DELHI BAZAR', '52'], ['07-08', 'DELHI MATKA', '27'], ['07-08', 'SHRI GANESH', '80'], ['07-08', 'AGRA', '02'], ['07-08', 'FARIDABAD', '26'], ['07-08', 'ALWAR', '09'], ['07-08', 'GAZIABAD', '60'], ['07-08', 'DWARKA', '58'], ['07-08', 'GALI', '35'], ['07-08', 'DISAWER', '83'],
-        ['08-08', 'SADAR BAZAR', '30'], ['08-08', 'GWALIOR', '47'], ['08-08', 'DELHI BAZAR', '91'], ['08-08', 'DELHI MATKA', '45'], ['08-08', 'SHRI GANESH', '93'], ['08-08', 'AGRA', '18'], ['08-08', 'FARIDABAD', '81'], ['08-08', 'ALWAR', '20'], ['08-08', 'GAZIABAD', '99'], ['08-08', 'DWARKA', '10'], ['08-08', 'GALI', '93'], ['08-08', 'DISAWER', '96'],
-        ['09-08', 'SADAR BAZAR', '35'], ['09-08', 'GWALIOR', '87'], ['09-08', 'DELHI BAZAR', '89'], ['09-08', 'DELHI MATKA', '07'], ['09-08', 'SHRI GANESH', '74'], ['09-08', 'AGRA', '39'], ['09-08', 'FARIDABAD', '63'], ['09-08', 'ALWAR', '82'], ['09-08', 'GAZIABAD', '53'], ['09-08', 'DWARKA', '95'], ['09-08', 'GALI', '97'], ['09-08', 'DISAWER', '16']
-      ];
+  // Seed default August 2026 Chart Records (Table 1 + Table 2)
+  db.run("DELETE FROM chart_records", () => {
+    const initialChartData = [
+      // Table 1 (01-08 to 10-08)
+      ['01-08', 'SADAR BAZAR', '82'], ['01-08', 'GWALIOR', '38'], ['01-08', 'DELHI BAZAR', '71'], ['01-08', 'DELHI MATKA', '21'], ['01-08', 'SHRI GANESH', '26'], ['01-08', 'AGRA', '48'], ['01-08', 'FARIDABAD', '57'], ['01-08', 'ALWAR', '25'], ['01-08', 'GAZIABAD', '23'], ['01-08', 'DWARKA', '48'], ['01-08', 'GALI', '92'], ['01-08', 'DISAWER', '-'],
+      ['02-08', 'SADAR BAZAR', '31'], ['02-08', 'GWALIOR', '22'], ['02-08', 'DELHI BAZAR', '09'], ['02-08', 'DELHI MATKA', '16'], ['02-08', 'SHRI GANESH', '58'], ['02-08', 'AGRA', '29'], ['02-08', 'FARIDABAD', '06'], ['02-08', 'ALWAR', '42'], ['02-08', 'GAZIABAD', '15'], ['02-08', 'DWARKA', '76'], ['02-08', 'GALI', '31'], ['02-08', 'DISAWER', '31'],
+      ['03-08', 'SADAR BAZAR', '05'], ['03-08', 'GWALIOR', '80'], ['03-08', 'DELHI BAZAR', '53'], ['03-08', 'DELHI MATKA', '56'], ['03-08', 'SHRI GANESH', '31'], ['03-08', 'AGRA', '73'], ['03-08', 'FARIDABAD', '95'], ['03-08', 'ALWAR', '59'], ['03-08', 'GAZIABAD', '60'], ['03-08', 'DWARKA', '79'], ['03-08', 'GALI', '59'], ['03-08', 'DISAWER', '74'],
+      ['04-08', 'SADAR BAZAR', '99'], ['04-08', 'GWALIOR', '01'], ['04-08', 'DELHI BAZAR', '12'], ['04-08', 'DELHI MATKA', '67'], ['04-08', 'SHRI GANESH', '10'], ['04-08', 'AGRA', '78'], ['04-08', 'FARIDABAD', '12'], ['04-08', 'ALWAR', '34'], ['04-08', 'GAZIABAD', '24'], ['04-08', 'DWARKA', '15'], ['04-08', 'GALI', '27'], ['04-08', 'DISAWER', '31'],
+      ['05-08', 'SADAR BAZAR', '24'], ['05-08', 'GWALIOR', '60'], ['05-08', 'DELHI BAZAR', '47'], ['05-08', 'DELHI MATKA', '19'], ['05-08', 'SHRI GANESH', '75'], ['05-08', 'AGRA', '76'], ['05-08', 'FARIDABAD', '57'], ['05-08', 'ALWAR', '56'], ['05-08', 'GAZIABAD', '22'], ['05-08', 'DWARKA', '01'], ['05-08', 'GALI', '85'], ['05-08', 'DISAWER', '93'],
+      ['06-08', 'SADAR BAZAR', '95'], ['06-08', 'GWALIOR', '21'], ['06-08', 'DELHI BAZAR', '61'], ['06-08', 'DELHI MATKA', '16'], ['06-08', 'SHRI GANESH', '97'], ['06-08', 'AGRA', '48'], ['06-08', 'FARIDABAD', '22'], ['06-08', 'ALWAR', '24'], ['06-08', 'GAZIABAD', '89'], ['06-08', 'DWARKA', '79'], ['06-08', 'GALI', '80'], ['06-08', 'DISAWER', '51'],
+      ['07-08', 'SADAR BAZAR', '48'], ['07-08', 'GWALIOR', '15'], ['07-08', 'DELHI BAZAR', '52'], ['07-08', 'DELHI MATKA', '27'], ['07-08', 'SHRI GANESH', '80'], ['07-08', 'AGRA', '02'], ['07-08', 'FARIDABAD', '26'], ['07-08', 'ALWAR', '09'], ['07-08', 'GAZIABAD', '60'], ['07-08', 'DWARKA', '58'], ['07-08', 'GALI', '35'], ['07-08', 'DISAWER', '83'],
+      ['08-08', 'SADAR BAZAR', '30'], ['08-08', 'GWALIOR', '47'], ['08-08', 'DELHI BAZAR', '91'], ['08-08', 'DELHI MATKA', '45'], ['08-08', 'SHRI GANESH', '93'], ['08-08', 'AGRA', '18'], ['08-08', 'FARIDABAD', '81'], ['08-08', 'ALWAR', '20'], ['08-08', 'GAZIABAD', '99'], ['08-08', 'DWARKA', '10'], ['08-08', 'GALI', '93'], ['08-08', 'DISAWER', '96'],
+      ['09-08', 'SADAR BAZAR', '35'], ['09-08', 'GWALIOR', '87'], ['09-08', 'DELHI BAZAR', '89'], ['09-08', 'DELHI MATKA', '07'], ['09-08', 'SHRI GANESH', '74'], ['09-08', 'AGRA', '39'], ['09-08', 'FARIDABAD', '63'], ['09-08', 'ALWAR', '82'], ['09-08', 'GAZIABAD', '53'], ['09-08', 'DWARKA', '95'], ['09-08', 'GALI', '97'], ['09-08', 'DISAWER', '16'],
+      ['10-08', 'DELHI BAZAR', '23'], ['10-08', 'AGRA', '23'],
 
-      const stmtChart = db.prepare("INSERT OR REPLACE INTO chart_records (record_date, game_name, result_val) VALUES (?, ?, ?)");
-      initialChartData.forEach(c => stmtChart.run(c));
-      stmtChart.finalize();
-      console.log('Seeded August 2026 Chart Records');
-    }
+      // Table 2 (01-08 to 10-08)
+      ['01-08', 'HR SATTA', '31'], ['01-08', 'UJJALA SUPER', '15'], ['01-08', 'KKR CITY', '03'], ['01-08', 'MADHUPURI', '61'], ['01-08', 'ANMOL BAZAR', '12'], ['01-08', 'KAROL BAGH', '19'], ['01-08', 'AMMAN BAZAR', '-'], ['01-08', 'DELHI DARBAR', '61'], ['01-08', 'NEW GANGA', '05'], ['01-08', 'SKY KING', '61'], ['01-08', 'FATEHABAD', '75'], ['01-08', 'UDAIPUR CITY', '24'], ['01-08', 'RAJ SHREE', '95'], ['01-08', 'VIP AGRA', '15'], ['01-08', 'MOHALI-7', '21'], ['01-08', 'BHADRA BAZAR', '02'], ['01-08', 'MANDI BAZAR', '57'], ['01-08', 'LION BAZAR', '19'], ['01-08', 'SIALKOT', '13'], ['01-08', 'DEHRADUN CITY', '27'], ['01-08', 'DAMAN', '55'],
+
+      ['02-08', 'HR SATTA', '87'], ['02-08', 'UJJALA SUPER', '77'], ['02-08', 'KKR CITY', '01'], ['02-08', 'MADHUPURI', '89'], ['02-08', 'ANMOL BAZAR', '13'], ['02-08', 'KAROL BAGH', '29'], ['02-08', 'AMMAN BAZAR', '-'], ['02-08', 'DELHI DARBAR', '36'], ['02-08', 'NEW GANGA', '96'], ['02-08', 'SKY KING', '06'], ['02-08', 'FATEHABAD', '08'], ['02-08', 'UDAIPUR CITY', '22'], ['02-08', 'RAJ SHREE', '91'], ['02-08', 'VIP AGRA', '00'], ['02-08', 'MOHALI-7', '33'], ['02-08', 'BHADRA BAZAR', '05'], ['02-08', 'MANDI BAZAR', '22'], ['02-08', 'LION BAZAR', '06'], ['02-08', 'SIALKOT', '56'], ['02-08', 'DEHRADUN CITY', '93'], ['02-08', 'DAMAN', '16'],
+
+      ['03-08', 'HR SATTA', '71'], ['03-08', 'UJJALA SUPER', '12'], ['03-08', 'KKR CITY', '69'], ['03-08', 'MADHUPURI', '00'], ['03-08', 'ANMOL BAZAR', '76'], ['03-08', 'KAROL BAGH', '59'], ['03-08', 'AMMAN BAZAR', '-'], ['03-08', 'DELHI DARBAR', '57'], ['03-08', 'NEW GANGA', '08'], ['03-08', 'SKY KING', '06'], ['03-08', 'FATEHABAD', '08'], ['03-08', 'UDAIPUR CITY', '99'], ['03-08', 'RAJ SHREE', '93'], ['03-08', 'VIP AGRA', '70'], ['03-08', 'MOHALI-7', '15'], ['03-08', 'BHADRA BAZAR', '71'], ['03-08', 'MANDI BAZAR', '50'], ['03-08', 'LION BAZAR', '58'], ['03-08', 'SIALKOT', '75'], ['03-08', 'DEHRADUN CITY', '60'], ['03-08', 'DAMAN', '10'],
+
+      ['04-08', 'HR SATTA', '93'], ['04-08', 'UJJALA SUPER', '18'], ['04-08', 'KKR CITY', '88'], ['04-08', 'MADHUPURI', '05'], ['04-08', 'ANMOL BAZAR', '42'], ['04-08', 'KAROL BAGH', '20'], ['04-08', 'AMMAN BAZAR', '-'], ['04-08', 'DELHI DARBAR', '74'], ['04-08', 'NEW GANGA', '94'], ['04-08', 'SKY KING', '24'], ['04-08', 'FATEHABAD', '52'], ['04-08', 'UDAIPUR CITY', '13'], ['04-08', 'RAJ SHREE', '71'], ['04-08', 'VIP AGRA', '11'], ['04-08', 'MOHALI-7', '14'], ['04-08', 'BHADRA BAZAR', '66'], ['04-08', 'MANDI BAZAR', '69'], ['04-08', 'LION BAZAR', '68'], ['04-08', 'SIALKOT', '47'], ['04-08', 'DEHRADUN CITY', '57'], ['04-08', 'DAMAN', '21'],
+
+      ['05-08', 'HR SATTA', '73'], ['05-08', 'UJJALA SUPER', '92'], ['05-08', 'KKR CITY', '33'], ['05-08', 'MADHUPURI', '45'], ['05-08', 'ANMOL BAZAR', '39'], ['05-08', 'KAROL BAGH', '64'], ['05-08', 'AMMAN BAZAR', '-'], ['05-08', 'DELHI DARBAR', '78'], ['05-08', 'NEW GANGA', '64'], ['05-08', 'SKY KING', '93'], ['05-08', 'FATEHABAD', '75'], ['05-08', 'UDAIPUR CITY', '40'], ['05-08', 'RAJ SHREE', '55'], ['05-08', 'VIP AGRA', '73'], ['05-08', 'MOHALI-7', '98'], ['05-08', 'BHADRA BAZAR', '53'], ['05-08', 'MANDI BAZAR', '84'], ['05-08', 'LION BAZAR', '45'], ['05-08', 'SIALKOT', '99'], ['05-08', 'DEHRADUN CITY', '05'], ['05-08', 'DAMAN', '13'],
+
+      ['06-08', 'HR SATTA', '60'], ['06-08', 'UJJALA SUPER', '31'], ['06-08', 'KKR CITY', '03'], ['06-08', 'MADHUPURI', '71'], ['06-08', 'ANMOL BAZAR', '84'], ['06-08', 'KAROL BAGH', '25'], ['06-08', 'AMMAN BAZAR', '-'], ['06-08', 'DELHI DARBAR', '18'], ['06-08', 'NEW GANGA', '18'], ['06-08', 'SKY KING', '93'], ['06-08', 'FATEHABAD', '55'], ['06-08', 'UDAIPUR CITY', '45'], ['06-08', 'RAJ SHREE', '78'], ['06-08', 'VIP AGRA', '02'], ['06-08', 'MOHALI-7', '65'], ['06-08', 'BHADRA BAZAR', '43'], ['06-08', 'MANDI BAZAR', '44'], ['06-08', 'LION BAZAR', '19'], ['06-08', 'SIALKOT', '17'], ['06-08', 'DEHRADUN CITY', '23'], ['06-08', 'DAMAN', '93'],
+
+      ['07-08', 'HR SATTA', '59'], ['07-08', 'UJJALA SUPER', '45'], ['07-08', 'KKR CITY', '86'], ['07-08', 'MADHUPURI', '21'], ['07-08', 'ANMOL BAZAR', '67'], ['07-08', 'KAROL BAGH', '99'], ['07-08', 'AMMAN BAZAR', '-'], ['07-08', 'DELHI DARBAR', '69'], ['07-08', 'NEW GANGA', '54'], ['07-08', 'SKY KING', '48'], ['07-08', 'FATEHABAD', '43'], ['07-08', 'UDAIPUR CITY', '00'], ['07-08', 'RAJ SHREE', '13'], ['07-08', 'VIP AGRA', '42'], ['07-08', 'MOHALI-7', '00'], ['07-08', 'BHADRA BAZAR', '19'], ['07-08', 'MANDI BAZAR', '47'], ['07-08', 'LION BAZAR', '05'], ['07-08', 'SIALKOT', '06'], ['07-08', 'DEHRADUN CITY', '64'], ['07-08', 'DAMAN', '63'],
+
+      ['08-08', 'HR SATTA', '54'], ['08-08', 'UJJALA SUPER', '10'], ['08-08', 'KKR CITY', '78'], ['08-08', 'MADHUPURI', '29'], ['08-08', 'ANMOL BAZAR', '17'], ['08-08', 'KAROL BAGH', '71'], ['08-08', 'AMMAN BAZAR', '-'], ['08-08', 'DELHI DARBAR', '13'], ['08-08', 'NEW GANGA', '51'], ['08-08', 'SKY KING', '04'], ['08-08', 'FATEHABAD', '98'], ['08-08', 'UDAIPUR CITY', '72'], ['08-08', 'RAJ SHREE', '33'], ['08-08', 'VIP AGRA', '81'], ['08-08', 'MOHALI-7', '18'], ['08-08', 'BHADRA BAZAR', '00'], ['08-08', 'MANDI BAZAR', '66'], ['08-08', 'LION BAZAR', '56'], ['08-08', 'SIALKOT', '65'], ['08-08', 'DEHRADUN CITY', '78'], ['08-08', 'DAMAN', '55'],
+
+      ['09-08', 'HR SATTA', '66'], ['09-08', 'UJJALA SUPER', '82'], ['09-08', 'KKR CITY', '52'], ['09-08', 'MADHUPURI', '01'], ['09-08', 'ANMOL BAZAR', '01'], ['09-08', 'KAROL BAGH', '70'], ['09-08', 'AMMAN BAZAR', '-'], ['09-08', 'DELHI DARBAR', '92'], ['09-08', 'NEW GANGA', '74'], ['09-08', 'SKY KING', '08'], ['09-08', 'FATEHABAD', '-'], ['09-08', 'UDAIPUR CITY', '79'], ['09-08', 'RAJ SHREE', '78'], ['09-08', 'VIP AGRA', '63'], ['09-08', 'MOHALI-7', '22'], ['09-08', 'BHADRA BAZAR', '17'], ['09-08', 'MANDI BAZAR', '74'], ['09-08', 'LION BAZAR', '77'], ['09-08', 'SIALKOT', '03'], ['09-08', 'DEHRADUN CITY', '18'], ['09-08', 'DAMAN', '43'],
+
+      ['10-08', 'KKR CITY', '34'], ['10-08', 'AMMAN BAZAR', '-'], ['10-08', 'DELHI DARBAR', '12']
+    ];
+
+    const stmtChart = db.prepare("INSERT OR REPLACE INTO chart_records (record_date, game_name, result_val) VALUES (?, ?, ?)");
+    initialChartData.forEach(c => stmtChart.run(c));
+    stmtChart.finalize();
+    console.log('Seeded verified August 2026 Chart Records');
+    syncJSONBackup();
   });
 
   // Seed default Blog Posts if empty
