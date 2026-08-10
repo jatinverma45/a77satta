@@ -844,19 +844,36 @@
 
     async function saveAllChartData() {
       const inputs = document.querySelectorAll('#chartRecordsTbody input');
-      for (const input of inputs) {
-        const record_date = input.dataset.date;
-        const game_name = input.dataset.game;
-        const result_val = input.value;
-        await fetch('/api/admin/update-chart-cell', {
+      const items = [];
+      inputs.forEach(input => {
+        if (input.dataset.date && input.dataset.game) {
+          items.push({
+            record_date: input.dataset.date,
+            game_name: input.dataset.game,
+            result_val: input.value
+          });
+        }
+      });
+
+      try {
+        const res = await fetch('/api/admin/update-chart-batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ record_date, game_name, result_val })
+          body: JSON.stringify({ items })
         });
+        if (res.ok) {
+          showToast('All Chart 1 Changes Saved Successfully!');
+          loadAdminData();
+        } else {
+          alert('Error saving chart changes');
+        }
+      } catch (e) {
+        alert('Error connecting to server');
       }
-      showToast('All Chart Changes Saved Successfully!');
-      loadAdminData();
     }
+
+    let extraChartDates2 = [];
+    let extraGameColumns2 = [];
 
     async function addNewChartColumn2() {
       const colName = prompt('Enter new Game/Column Name (e.g. MUMBAI NIGHT):');
@@ -950,18 +967,32 @@
 
     async function saveAllChartData2() {
       const inputs = document.querySelectorAll('#chartRecordsTbody2 input');
-      for (const input of inputs) {
-        const record_date = input.dataset.date;
-        const game_name = input.dataset.game;
-        const result_val = input.value;
-        await fetch('/api/admin/update-chart-cell', {
+      const items = [];
+      inputs.forEach(input => {
+        if (input.dataset.date && input.dataset.game) {
+          items.push({
+            record_date: input.dataset.date,
+            game_name: input.dataset.game,
+            result_val: input.value
+          });
+        }
+      });
+
+      try {
+        const res = await fetch('/api/admin/update-chart-batch', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ record_date, game_name, result_val })
+          body: JSON.stringify({ items })
         });
+        if (res.ok) {
+          showToast('All Chart 2 Changes Saved Successfully!');
+          loadAdminData();
+        } else {
+          alert('Error saving chart changes');
+        }
+      } catch (e) {
+        alert('Error connecting to server');
       }
-      showToast('20 Games Chart Changes Saved Successfully!');
-      loadAdminData();
     }
 
     // Render Site Settings

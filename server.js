@@ -320,7 +320,7 @@ app.post('/api/admin/delete-game', (req, res) => {
   });
 });
 
-// Admin: Save/Update Chart Cell
+// Admin: Save/Update Single Chart Cell
 app.post('/api/admin/update-chart-cell', (req, res) => {
   const { record_date, game_name, result_val } = req.body;
   const sql = "INSERT OR REPLACE INTO chart_records (record_date, game_name, result_val) VALUES (?, ?, ?)";
@@ -328,6 +328,28 @@ app.post('/api/admin/update-chart-cell', (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     syncJSONBackup();
     res.json({ success: true });
+  });
+});
+
+// Admin: Save/Update Batch Chart Cells (Instant High-Speed Save)
+app.post('/api/admin/update-chart-batch', (req, res) => {
+  const { items } = req.body;
+  if (!Array.isArray(items) || items.length === 0) {
+    return res.json({ success: true, count: 0 });
+  }
+
+  db.serialize(() => {
+    db.run("BEGIN TRANSACTION");
+    const stmt = db.prepare("INSERT OR REPLACE INTO chart_records (record_date, game_name, result_val) VALUES (?, ?, ?)");
+    items.forEach(item => {
+      stmt.run([item.record_date, item.game_name, item.result_val]);
+    });
+    stmt.finalize();
+    db.run("COMMIT", (err) => {
+      if (err) return res.status(500).json({ error: err.message });
+      syncJSONBackup();
+      res.json({ success: true, count: items.length });
+    });
   });
 });
 
