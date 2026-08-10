@@ -253,6 +253,34 @@ app.post('/api/admin/login', (req, res) => {
   });
 });
 
+// Backup Sync Engine for persistent storage
+const backupFilePath = process.env.VERCEL ? '/tmp/data_backup.json' : path.join(__dirname, 'data_backup.json');
+
+function syncJSONBackup() {
+  const fullData = {};
+  db.all("SELECT key, value FROM site_settings", [], (err, settings) => {
+    fullData.settings = {};
+    (settings || []).forEach(s => fullData.settings[s.key] = s.value);
+
+    db.all("SELECT * FROM games ORDER BY id ASC", [], (err, games) => {
+      fullData.games = games || [];
+
+      db.all("SELECT * FROM chart_records ORDER BY record_date ASC", [], (err, charts) => {
+        fullData.chart_records = charts || [];
+
+        db.all("SELECT * FROM blogs ORDER BY id DESC", [], (err, blogs) => {
+          fullData.blogs = blogs || [];
+          try {
+            fs.writeFileSync(backupFilePath, JSON.stringify(fullData, null, 2));
+          } catch (e) {
+            console.error('Error writing backup file:', e);
+          }
+        });
+      });
+    });
+  });
+}
+
 // Admin: Update Game Result (Today / Yesterday)
 app.post('/api/admin/update-game', (req, res) => {
   const { id, name, open_time, yesterday_result, today_result } = req.body;
@@ -266,6 +294,7 @@ app.post('/api/admin/update-game', (req, res) => {
       db.run("INSERT OR REPLACE INTO chart_records (record_date, game_name, result_val) VALUES (?, ?, ?)", [todayDateStr, name, today_result.trim()]);
     }
     
+    syncJSONBackup();
     res.json({ success: true, message: 'Game updated successfully' });
   });
 });
@@ -276,6 +305,7 @@ app.post('/api/admin/add-game', (req, res) => {
   const sql = "INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order) VALUES (?, ?, ?, ?, ?, ?, 99)";
   db.run(sql, [name, open_time, open_time, yesterday_result || '', today_result || 'WAIT', table_group || 1], function(err) {
     if (err) return res.status(500).json({ error: err.message });
+    syncJSONBackup();
     res.json({ success: true, id: this.lastID });
   });
 });
@@ -285,6 +315,7 @@ app.post('/api/admin/delete-game', (req, res) => {
   const { id } = req.body;
   db.run("DELETE FROM games WHERE id = ?", [id], function(err) {
     if (err) return res.status(500).json({ error: err.message });
+    syncJSONBackup();
     res.json({ success: true });
   });
 });
@@ -295,6 +326,7 @@ app.post('/api/admin/update-chart-cell', (req, res) => {
   const sql = "INSERT OR REPLACE INTO chart_records (record_date, game_name, result_val) VALUES (?, ?, ?)";
   db.run(sql, [record_date, game_name, result_val], function(err) {
     if (err) return res.status(500).json({ error: err.message });
+    syncJSONBackup();
     res.json({ success: true });
   });
 });
@@ -308,6 +340,7 @@ app.post('/api/admin/update-settings', (req, res) => {
   }
   stmt.finalize((err) => {
     if (err) return res.status(500).json({ error: err.message });
+    syncJSONBackup();
     res.json({ success: true, message: 'Settings saved successfully' });
   });
 });
@@ -319,12 +352,14 @@ app.post('/api/admin/save-blog', (req, res) => {
     const sql = "UPDATE blogs SET title=?, slug=?, image=?, post_date=?, tags=?, content=? WHERE id=?";
     db.run(sql, [title, slug, image, post_date, tags, content, id], function(err) {
       if (err) return res.status(500).json({ error: err.message });
+      syncJSONBackup();
       res.json({ success: true });
     });
   } else {
     const sql = "INSERT INTO blogs (title, slug, image, post_date, tags, content) VALUES (?, ?, ?, ?, ?, ?)";
     db.run(sql, [title, slug, image, post_date, tags, content], function(err) {
       if (err) return res.status(500).json({ error: err.message });
+      syncJSONBackup();
       res.json({ success: true, id: this.lastID });
     });
   }
@@ -335,6 +370,7 @@ app.post('/api/admin/delete-blog', (req, res) => {
   const { id } = req.body;
   db.run("DELETE FROM blogs WHERE id = ?", [id], function(err) {
     if (err) return res.status(500).json({ error: err.message });
+    syncJSONBackup();
     res.json({ success: true });
   });
 });
@@ -343,8 +379,9 @@ app.post('/api/admin/delete-blog', (req, res) => {
 app.post('/api/admin/change-password', (req, res) => {
   const { new_password } = req.body;
   const hash = bcrypt.hashSync(new_password, 10);
-  db.run("UPDATE admin SET password = ? WHERE username = 'admin'", [hash], function(err) {
+  db.run("UPDATE admin SET password = ? WHERE username = 'A77SattaOfficial'", [hash], function(err) {
     if (err) return res.status(500).json({ error: err.message });
+    syncJSONBackup();
     res.json({ success: true, message: 'Password updated successfully' });
   });
 });
