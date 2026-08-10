@@ -652,6 +652,19 @@
       setTimeout(() => { t.style.display = 'none'; }, 2500);
     }
 
+    // Automatic Date Generator up to current day
+    function getAutoDatesUpToToday() {
+      const dates = [];
+      const now = new Date();
+      const currentDay = now.getDate();
+      const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+      for (let d = 1; d <= currentDay; d++) {
+        const dayStr = String(d).padStart(2, '0');
+        dates.push(`${dayStr}-${currentMonth}`);
+      }
+      return dates;
+    }
+
     // Load Site Data
     async function loadAdminData() {
       try {
@@ -820,11 +833,11 @@
       const thead = document.getElementById('chartAdminThead1');
       const records = (siteDataCache && siteDataCache.chart_records) || [];
       
-      let dbDates = records.map(r => r.record_date);
+      let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
       let defaultDates = getAutoDatesUpToToday();
       let dates = Array.from(new Set([...defaultDates, ...dbDates])).sort();
 
-      let dbGames = records.map(r => r.game_name);
+      let dbGames = records.map(r => (r && r.game_name) ? r.game_name.trim().toUpperCase() : null).filter(Boolean);
       const defaultGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
       const gamesList = Array.from(new Set([...defaultGames, ...dbGames]));
 
@@ -833,7 +846,11 @@
       }
 
       const recordsMap = {};
-      records.forEach(r => { recordsMap[`${r.record_date}_${r.game_name}`] = r.result_val; });
+      records.forEach(r => {
+        if (r && r.record_date && r.game_name) {
+          recordsMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r.result_val;
+        }
+      });
 
       if (!tbody) return;
       tbody.innerHTML = '';
@@ -946,7 +963,7 @@
       const thead = document.getElementById('chartAdminThead2');
       const records = (siteDataCache && siteDataCache.chart_records) || [];
 
-      let dbDates = records.map(r => r.record_date);
+      let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
       let defaultDates = getAutoDatesUpToToday();
       let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates2])).sort();
 
@@ -957,7 +974,11 @@
       }
 
       const recordsMap = {};
-      records.forEach(r => { recordsMap[`${r.record_date}_${r.game_name}`] = r.result_val; });
+      records.forEach(r => {
+        if (r && r.record_date && r.game_name) {
+          recordsMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r.result_val;
+        }
+      });
 
       if (!tbody) return;
       tbody.innerHTML = '';
