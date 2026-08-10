@@ -159,39 +159,57 @@
           return '-';
         }
 
+        const tableWraps = document.querySelectorAll('.lower-stat-table-wrap');
+
         // Table 1 (Main 12 Games)
-        const table1Tbody = document.querySelector('.lower-stat-table-wrap:first-of-type table tbody');
-        if (table1Tbody) {
+        if (tableWraps.length > 0) {
           const mainGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
-          let html = '';
-          dates.forEach(d => {
-            html += `<tr><td>${d}</td>`;
-            mainGames.forEach(g => {
-              html += `<td>${getVal(d, g)}</td>`;
+          const t1Thead = tableWraps[0].querySelector('thead');
+          const t1Tbody = tableWraps[0].querySelector('tbody');
+
+          if (t1Thead) {
+            t1Thead.innerHTML = `<tr><th>Date</th>${mainGames.map(g => `<th>${g}</th>`).join('')}</tr>`;
+          }
+
+          if (t1Tbody) {
+            let html = '';
+            dates.forEach(d => {
+              html += `<tr><td>${d}</td>`;
+              mainGames.forEach(g => {
+                html += `<td>${getVal(d, g)}</td>`;
+              });
+              html += `</tr>`;
             });
-            html += `</tr>`;
-          });
-          table1Tbody.innerHTML = html;
+            t1Tbody.innerHTML = html;
+          }
         }
 
         // Table 2 (20 Lower Games)
-        const table2Tbody = document.querySelector('.lower-stat-table-wrap:last-of-type table tbody');
-        if (table2Tbody) {
+        if (tableWraps.length > 1) {
           const lowerGames = [
             'HR SATTA', 'UJJALA SUPER', 'KKR CITY', 'MADHUPURI', 'ANMOL BAZAR', 'KAROL BAGH',
             'AMMAN BAZAR', 'DELHI DARBAR', 'NEW GANGA', 'SKY KING', 'FATEHABAD', 'UDAIPUR CITY', 'RAJ SHREE',
             'VIP AGRA', 'MOHALI-7', 'BHADRA BAZAR', 'MANDI BAZAR', 'LION BAZAR', 'SIALKOT',
             'DEHRADUN CITY', 'DAMAN'
           ];
-          let html = '';
-          dates.forEach(d => {
-            html += `<tr><td>${d}</td>`;
-            lowerGames.forEach(g => {
-              html += `<td>${getVal(d, g)}</td>`;
+          const t2Thead = tableWraps[1].querySelector('thead');
+          const t2Tbody = tableWraps[1].querySelector('tbody');
+
+          if (t2Thead) {
+            t2Thead.innerHTML = `<tr><th>Date</th>${lowerGames.map(g => `<th>${g}</th>`).join('')}</tr>`;
+          }
+
+          if (t2Tbody) {
+            let html = '';
+            dates.forEach(d => {
+              html += `<tr><td>${d}</td>`;
+              lowerGames.forEach(g => {
+                html += `<td>${getVal(d, g)}</td>`;
+              });
+              html += `</tr>`;
             });
-            html += `</tr>`;
-          });
-          table2Tbody.innerHTML = html;
+            t2Tbody.innerHTML = html;
+          }
         }
       }
 
