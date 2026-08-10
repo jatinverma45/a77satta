@@ -190,10 +190,10 @@ app.get('/api/site-data', async (req, res) => {
   res.setHeader('Expires', '0');
 
   try {
-    let settingsRes = await pgPool.query('SELECT key, value FROM site_settings');
-    let gamesRes = await pgPool.query('SELECT * FROM games ORDER BY sort_order ASC, id ASC');
-    let chartsRes = await pgPool.query('SELECT * FROM chart_records ORDER BY record_date ASC');
-    let blogsRes = await pgPool.query('SELECT * FROM blogs ORDER BY id DESC');
+    let settingsRes = await safeQuery('SELECT key, value FROM site_settings');
+    let gamesRes = await safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC');
+    let chartsRes = await safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC');
+    let blogsRes = await safeQuery('SELECT * FROM blogs ORDER BY id DESC');
 
     let games = gamesRes.rows || [];
     let settings = {};
