@@ -16,12 +16,19 @@ const fs = require('fs');
 let dbPath = path.join(__dirname, 'a77satta.db');
 if (process.env.VERCEL) {
   const tmpDbPath = '/tmp/a77satta.db';
+  const tmpBackupPath = '/tmp/data_backup.json';
+  const bundledBackupPath = path.join(__dirname, 'data_backup.json');
+
   try {
-    if (fs.existsSync(dbPath)) {
+    // Only copy initial DB / backup IF /tmp/a77satta.db does NOT exist yet
+    if (!fs.existsSync(tmpDbPath) && fs.existsSync(dbPath)) {
       fs.copyFileSync(dbPath, tmpDbPath);
     }
+    if (!fs.existsSync(tmpBackupPath) && fs.existsSync(bundledBackupPath)) {
+      fs.copyFileSync(bundledBackupPath, tmpBackupPath);
+    }
   } catch (e) {
-    console.error('Error copying DB to tmp:', e);
+    console.error('Error initializing tmp database:', e);
   }
   dbPath = tmpDbPath;
 }
