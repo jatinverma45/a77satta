@@ -1443,39 +1443,51 @@
     function renderChartTable() {
       const tbody = document.getElementById('chartRecordsTbody');
       const thead = document.getElementById('chartAdminThead1');
-      const records = (siteDataCache && siteDataCache.chart_records) || [];
-      
-      let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
-      let defaultDates = getAutoDatesUpToToday();
-      let dates = Array.from(new Set([...defaultDates, ...dbDates])).sort();
-
-      let dbGames = records.map(r => (r && r.game_name) ? r.game_name.trim().toUpperCase() : null).filter(Boolean);
-      const defaultGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
-      const gamesList = Array.from(new Set([...defaultGames, ...dbGames]));
-
-      if (thead) {
-        thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
-      }
-
-      const recordsMap = {};
-      records.forEach(r => {
-        if (r && r.record_date && r.game_name) {
-          recordsMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r.result_val;
-        }
-      });
-
       if (!tbody) return;
-      tbody.innerHTML = '';
-      dates.forEach(date => {
-        const tr = document.createElement('tr');
-        let cellsHtml = `<td><strong>${date}</strong></td>`;
-        gamesList.forEach(g => {
-          const val = recordsMap[`${date}_${g}`] || '';
-          cellsHtml += `<td><input type="text" class="adm-input-cell" data-date="${date}" data-game="${g}" value="${val}"></td>`;
+
+      const defaultGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
+
+      const doRender = (dataObj) => {
+        const records = (dataObj && dataObj.chart_records) || [];
+        let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
+        let defaultDates = getAutoDatesUpToToday();
+        let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates])).sort();
+        const gamesList = Array.from(new Set([...defaultGames, ...extraGameColumns1]));
+
+        if (thead) {
+          thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
+        }
+
+        const recordsMap = {};
+        records.forEach(r => {
+          if (r && r.record_date && r.game_name) {
+            recordsMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r.result_val;
+          }
         });
-        tr.innerHTML = cellsHtml;
-        tbody.appendChild(tr);
-      });
+
+        tbody.innerHTML = '';
+        dates.forEach(date => {
+          const tr = document.createElement('tr');
+          let cellsHtml = `<td><strong>${date}</strong></td>`;
+          gamesList.forEach(g => {
+            const val = recordsMap[`${date}_${g}`] !== undefined ? recordsMap[`${date}_${g}`] : '-';
+            cellsHtml += `<td><input type="text" class="adm-input-cell" data-date="${date}" data-game="${g}" value="${val}"></td>`;
+          });
+          tr.innerHTML = cellsHtml;
+          tbody.appendChild(tr);
+        });
+      };
+
+      if (!siteDataCache) {
+        fetch('/api/site-data').then(r => r.json()).then(d => {
+          siteDataCache = d;
+          doRender(d);
+        }).catch(err => {
+          doRender({ chart_records: [] });
+        });
+      } else {
+        doRender(siteDataCache);
+      }
     }
 
     async function saveAllChartData() {
@@ -1574,41 +1586,54 @@
     function renderChartTable2() {
       const tbody = document.getElementById('chartRecordsTbody2');
       const thead = document.getElementById('chartAdminThead2');
-      const records = (siteDataCache && siteDataCache.chart_records) || [];
-
-      let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
-      let defaultDates = getAutoDatesUpToToday();
-      let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates2])).sort();
-
-      const gamesList = Array.from(new Set([...lower20GamesList, ...extraGameColumns2]));
-
-      if (thead) {
-        thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
-      }
-
-      const recordsMap = {};
-      records.forEach(r => {
-        if (r && r.record_date && r.game_name) {
-          recordsMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r.result_val;
-        }
-      });
-
       if (!tbody) return;
-      tbody.innerHTML = '';
-      dates.forEach(date => {
-        const tr = document.createElement('tr');
-        let cellsHtml = `<td><strong>${date}</strong></td>`;
-        gamesList.forEach((g, gIdx) => {
-          let val = recordsMap[`${date}_${g}`];
-          if (val === undefined && lower20DefaultData[date] && gIdx < lower20GamesList.length) {
-            val = lower20DefaultData[date][gIdx];
+
+      const doRender2 = (dataObj) => {
+        const records = (dataObj && dataObj.chart_records) || [];
+        const gamesList = Array.from(new Set([...lower20GamesList, ...extraGameColumns2]));
+
+        let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
+        let defaultDates = getAutoDatesUpToToday();
+        let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates2])).sort();
+
+        if (thead) {
+          thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
+        }
+
+        const recordsMap = {};
+        records.forEach(r => {
+          if (r && r.record_date && r.game_name) {
+            recordsMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r.result_val;
           }
-          if (val === undefined) val = '';
-          cellsHtml += `<td><input type="text" class="adm-input-cell" data-date="${date}" data-game="${g}" value="${val}"></td>`;
         });
-        tr.innerHTML = cellsHtml;
-        tbody.appendChild(tr);
-      });
+
+        tbody.innerHTML = '';
+        dates.forEach(date => {
+          const tr = document.createElement('tr');
+          let cellsHtml = `<td><strong>${date}</strong></td>`;
+          gamesList.forEach((g, gIdx) => {
+            let val = recordsMap[`${date}_${g}`];
+            if (val === undefined && lower20DefaultData[date] && gIdx < lower20GamesList.length) {
+              val = lower20DefaultData[date][gIdx];
+            }
+            if (val === undefined) val = '-';
+            cellsHtml += `<td><input type="text" class="adm-input-cell" data-date="${date}" data-game="${g}" value="${val}"></td>`;
+          });
+          tr.innerHTML = cellsHtml;
+          tbody.appendChild(tr);
+        });
+      };
+
+      if (!siteDataCache) {
+        fetch('/api/site-data').then(r => r.json()).then(d => {
+          siteDataCache = d;
+          doRender2(d);
+        }).catch(err => {
+          doRender2({ chart_records: [] });
+        });
+      } else {
+        doRender2(siteDataCache);
+      }
     }
 
     async function saveAllChartData2() {

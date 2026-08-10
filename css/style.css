@@ -2016,58 +2016,58 @@ img{max-width:100%;height:auto;display:block}
   }
 
   .date-line {
-    font-size: clamp(13px, 3.8vw, 17px) !important;
-    font-weight: 700 !important;
+    font-size: clamp(12px, 3.5vw, 15px) !important;
+    font-weight: 600 !important;
     color: #ffd700 !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 8px !important;
     text-align: center !important;
   }
 
   .result-text {
-    font-size: clamp(15px, 4.5vw, 21px) !important;
+    font-size: clamp(14px, 4vw, 18px) !important;
     line-height: 1.35 !important;
-    font-weight: 900 !important;
+    font-weight: 600 !important;
     color: #ffffff !important;
     text-align: center !important;
-    margin-bottom: 16px !important;
+    margin-bottom: 14px !important;
     padding: 0 6px !important;
   }
 
   .game-name-main {
-    font-size: clamp(26px, 7.5vw, 42px) !important;
-    font-weight: 900 !important;
+    font-size: clamp(22px, 6.5vw, 32px) !important;
+    font-weight: 700 !important;
     color: #ffffff !important;
-    letter-spacing: 1px !important;
+    letter-spacing: 0.5px !important;
   }
 
   .game-result-main {
-    font-size: clamp(40px, 11vw, 62px) !important;
-    font-weight: 900 !important;
+    font-size: clamp(34px, 9.5vw, 48px) !important;
+    font-weight: 800 !important;
     color: #ffffff !important;
-    letter-spacing: 1px !important;
-    margin: 6px 0 12px !important;
+    letter-spacing: 0.5px !important;
+    margin: 4px 0 10px !important;
   }
 
   /* 5. DISAWER BOTTOM SECTION */
   .bottom-disclaimer {
     background: #ffd700 !important;
     width: 100% !important;
-    padding: 14px 8px 16px !important;
+    padding: 12px 8px 14px !important;
     text-align: center !important;
-    margin-top: 16px !important;
+    margin-top: 14px !important;
     box-sizing: border-box !important;
   }
 
   .bottom-disclaimer .bottom-title {
-    font-size: clamp(22px, 6.5vw, 30px) !important;
-    font-weight: 900 !important;
-    letter-spacing: 1px !important;
+    font-size: clamp(18px, 5.5vw, 24px) !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.5px !important;
     color: #000000 !important;
   }
 
   .bottom-disclaimer .bottom-time {
-    font-size: clamp(13px, 3.8vw, 17px) !important;
-    font-weight: 700 !important;
+    font-size: clamp(12px, 3.5vw, 15px) !important;
+    font-weight: 600 !important;
     margin-top: 2px !important;
     color: #000000 !important;
   }
@@ -2077,55 +2077,58 @@ img{max-width:100%;height:auto;display:block}
     align-items: center !important;
     justify-content: center !important;
     gap: 8px !important;
-    margin-top: 8px !important;
+    margin-top: 6px !important;
   }
 
   .score-number {
-    font-size: clamp(18px, 5vw, 24px) !important;
-    font-weight: 900 !important;
+    font-size: clamp(16px, 4.5vw, 20px) !important;
+    font-weight: 700 !important;
     color: #000000 !important;
   }
 
   /* 6. CTA ROWS (TELEGRAM / WHATSAPP) */
   .a77-cta-row {
     min-height: auto !important;
-    padding: 14px 10px !important;
-    margin: 12px 0 !important;
+    padding: 12px 10px !important;
+    margin: 10px 0 !important;
   }
 
   .a77-cta-text {
-    font-size: clamp(12px, 3.6vw, 17px) !important;
-    margin-bottom: 8px !important;
+    font-size: clamp(11.5px, 3.3vw, 15px) !important;
+    font-weight: 600 !important;
+    margin-bottom: 6px !important;
     line-height: 1.3 !important;
   }
 
   .a77-cta-button {
-    min-height: 38px !important;
-    padding: 2px 14px 2px 4px !important;
+    min-height: 36px !important;
+    padding: 2px 12px 2px 4px !important;
     max-width: 100% !important;
   }
 
   .a77-cta-button .cta-icon {
-    width: 36px !important;
-    height: 36px !important;
-    font-size: 18px !important;
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 16px !important;
   }
 
   .a77-cta-button .cta-label {
-    font-size: 13px !important;
+    font-size: 12px !important;
+    font-weight: 700 !important;
   }
 
   .a77-cta-button .cta-sub {
-    font-size: 9px !important;
+    font-size: 8.5px !important;
   }
 
   /* 7. STATUS ROWS */
   .a77-status-row {
     min-height: auto !important;
-    padding: 12px 8px !important;
-    font-size: clamp(12px, 3.4vw, 16px) !important;
-    letter-spacing: 0.5px !important;
-    margin-bottom: 10px !important;
+    padding: 10px 8px !important;
+    font-size: clamp(11px, 3.2vw, 14.5px) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px !important;
+    margin-bottom: 8px !important;
   }
 
   .a77-status-row-large {
@@ -2136,42 +2139,46 @@ img{max-width:100%;height:auto;display:block}
   .a77-market-grid {
     display: flex !important;
     flex-direction: column !important;
-    padding: 8px !important;
-    gap: 12px !important;
+    padding: 6px !important;
+    gap: 10px !important;
     width: 100% !important;
   }
 
   .schedule-panel {
-    padding: 12px 8px !important;
+    padding: 10px 8px !important;
   }
 
   .schedule-title {
-    font-size: 14px !important;
+    font-size: 12.5px !important;
+    font-weight: 700 !important;
   }
 
   .schedule-times {
-    font-size: 10.5px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
   }
 
   .a77-market-board,
   .a77-results-dashboard {
     width: 100% !important;
-    margin-top: 12px !important;
+    margin-top: 10px !important;
   }
 
   .a77-market-board-header,
   .a77-market-row,
   .a77-results-dashboard .a77-dashboard-header,
   .a77-results-dashboard .a77-dashboard-row {
-    font-size: clamp(10px, 3vw, 13px) !important;
+    font-size: clamp(9.5px, 2.8vw, 12px) !important;
+    font-weight: 600 !important;
   }
 
   .a77-market-row .market-title,
   .a77-market-row .market-cell,
   .a77-results-dashboard .dashboard-game,
   .a77-results-dashboard .dashboard-value {
-    font-size: clamp(11px, 3.2vw, 14px) !important;
-    padding: 8px 4px !important;
+    font-size: clamp(10.5px, 3vw, 13px) !important;
+    font-weight: 600 !important;
+    padding: 6px 3px !important;
   }
 
   /* 9. FLOATING REFRESH BUTTON */
