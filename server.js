@@ -16,12 +16,12 @@ const fs = require('fs');
 let dbPath = path.join(__dirname, 'a77satta.db');
 if (process.env.VERCEL) {
   const tmpDbPath = '/tmp/a77satta.db';
-  if (!fs.existsSync(tmpDbPath) && fs.existsSync(dbPath)) {
-    try {
+  try {
+    if (fs.existsSync(dbPath)) {
       fs.copyFileSync(dbPath, tmpDbPath);
-    } catch (e) {
-      console.error('Error copying DB to tmp:', e);
     }
+  } catch (e) {
+    console.error('Error copying DB to tmp:', e);
   }
   dbPath = tmpDbPath;
 }
