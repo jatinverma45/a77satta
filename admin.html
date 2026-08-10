@@ -773,25 +773,37 @@
     let extraChartDates = [];
     let extraGameColumns1 = [];
 
-    function addNewChartColumn1() {
+    async function addNewChartColumn1() {
       const colName = prompt('Enter new Game/Column Name (e.g. MUMBAI NIGHT):');
       if (!colName || !colName.trim()) return;
       const formatted = colName.trim().toUpperCase();
-      if (!extraGameColumns1.includes(formatted)) {
-        extraGameColumns1.push(formatted);
-        renderChartTable();
+      try {
+        await fetch('/api/admin/update-chart-cell', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ record_date: '01-08', game_name: formatted, result_val: '-' })
+        });
         showToast(`Added column ${formatted}`);
+        loadAdminData();
+      } catch (e) {
+        alert('Error adding column');
       }
     }
 
-    function addNewChartDateRow() {
+    async function addNewChartDateRow() {
       const nextDateStr = prompt('Enter new Date (e.g. 10-08, 11-08):');
       if (!nextDateStr || !nextDateStr.trim()) return;
       const formattedDate = nextDateStr.trim();
-      if (!extraChartDates.includes(formattedDate)) {
-        extraChartDates.push(formattedDate);
-        renderChartTable();
+      try {
+        await fetch('/api/admin/update-chart-cell', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ record_date: formattedDate, game_name: 'SADAR BAZAR', result_val: '-' })
+        });
         showToast(`Added date ${formattedDate}`);
+        loadAdminData();
+      } catch (e) {
+        alert('Error adding date');
       }
     }
 
@@ -803,11 +815,11 @@
       
       let dbDates = records.map(r => r.record_date);
       let defaultDates = ['01-08', '02-08', '03-08', '04-08', '05-08', '06-08', '07-08', '08-08', '09-08'];
-      let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates]));
-      dates.sort();
+      let dates = Array.from(new Set([...defaultDates, ...dbDates])).sort();
 
+      let dbGames = records.map(r => r.game_name);
       const defaultGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
-      const gamesList = Array.from(new Set([...defaultGames, ...extraGameColumns1]));
+      const gamesList = Array.from(new Set([...defaultGames, ...dbGames]));
 
       if (thead) {
         thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
@@ -846,28 +858,37 @@
       loadAdminData();
     }
 
-    let extraChartDates2 = [];
-    let extraGameColumns2 = [];
-
-    function addNewChartColumn2() {
+    async function addNewChartColumn2() {
       const colName = prompt('Enter new Game/Column Name (e.g. MUMBAI NIGHT):');
       if (!colName || !colName.trim()) return;
       const formatted = colName.trim().toUpperCase();
-      if (!extraGameColumns2.includes(formatted)) {
-        extraGameColumns2.push(formatted);
-        renderChartTable2();
+      try {
+        await fetch('/api/admin/update-chart-cell', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ record_date: '01-08', game_name: formatted, result_val: '-' })
+        });
         showToast(`Added column ${formatted}`);
+        loadAdminData();
+      } catch (e) {
+        alert('Error adding column');
       }
     }
 
-    function addNewChartDateRow2() {
+    async function addNewChartDateRow2() {
       const nextDateStr = prompt('Enter new Date (e.g. 10-08, 11-08):');
       if (!nextDateStr || !nextDateStr.trim()) return;
       const formattedDate = nextDateStr.trim();
-      if (!extraChartDates2.includes(formattedDate)) {
-        extraChartDates2.push(formattedDate);
-        renderChartTable2();
+      try {
+        await fetch('/api/admin/update-chart-cell', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ record_date: formattedDate, game_name: 'HR SATTA', result_val: '-' })
+        });
         showToast(`Added date ${formattedDate}`);
+        loadAdminData();
+      } catch (e) {
+        alert('Error adding date');
       }
     }
 
