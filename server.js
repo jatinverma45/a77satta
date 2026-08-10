@@ -392,7 +392,7 @@ db.serialize(() => {
         [
           'WHY IS THE DELHI BAZAR SATTA KING SO POPULAR ?',
           'why-is-the-delhi-bazar-satta-king-so-popular',
-          'https://a77satta.com/_next/image?url=https%3A%2F%2Fcdn.satta-king7.in%2Fimages%2F1785146554021-rp3k2kxz3h2xpob-delhi-bazar-satta-king-1.jpg&w=1080&q=75',
+          '/images/delhi_bazar_blog.png',
           'Posted on Jul 27',
           '#delhibazarsattaking #delhibazarsatta #sattaking #delhibajarsattaking',
           'Delhi Bazar Satta King has become one of the most famous games in the Satta King market...'
@@ -400,7 +400,7 @@ db.serialize(() => {
         [
           'what is shri ganesh satta king ?',
           'what-is-shri-ganesh-satta-king',
-          'https://a77satta.com/_next/image?url=https%3A%2F%2Fcdn.satta-king7.in%2Fimages%2F1785856182655-bj5ycn3ifhogxkq-shri-ganesh-satta-king.jpg&w=1080&q=75',
+          '/images/shri_ganesh_blog.png',
           'Posted on May 9',
           '#shriganeshsattaking #playbajar #playbazaar #sattaking',
           'Shri Ganesh Satta King is widely followed for its timely 4:40 PM result declaration everyday...'
