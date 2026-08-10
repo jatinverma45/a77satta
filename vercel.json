@@ -41,7 +41,7 @@
     },
     {
       "src": "/login",
-      "dest": "/admin.html"
+      "dest": "/login.html"
     },
     {
       "src": "/(.*)",
