@@ -1119,7 +1119,8 @@
       saveKhaiwalCardsList();
     }
 
-    async function saveKhaiwalCardsList() {
+    async function saveKhaiwalCardsList(btn) {
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING KHAIWAL...'; }
       const tbody = document.getElementById('khaiwalCardsTbody');
       if (tbody) {
         const reorderedList = [];
@@ -1141,10 +1142,17 @@
         });
         if (res.ok) {
           showToast('Khaiwal Cards Saved Successfully!');
-          loadAdminData();
+          if (btn) {
+            btn.textContent = '✅ KHAIWAL SAVED!';
+            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE KHAIWAL CARDS'; }, 1500);
+          }
+          await loadAdminData();
+        } else {
+          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE KHAIWAL CARDS'; }
         }
       } catch(e) {
         alert('Error saving Khaiwal Cards');
+        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE KHAIWAL CARDS'; }
       }
     }
 
@@ -1199,6 +1207,7 @@
             open_time: timeInp ? timeInp.value.trim() : '',
             yesterday_result: yestInp ? yestInp.value.trim() : '',
             today_result: todayInp ? todayInp.value.trim() : 'WAIT',
+            table_group: tableGroupId,
             sort_order: idx + 1
           });
         }
@@ -1366,9 +1375,9 @@
       const countTitle1 = document.getElementById('table1GamesCountTitle');
       const countTitle2 = document.getElementById('table2GamesCountTitle');
 
-      const allGames = siteDataCache.games || [];
-      const group1 = allGames.filter(g => g.table_group === 1 || !g.table_group);
-      const group2 = allGames.filter(g => g.table_group === 2);
+      const allGames = (siteDataCache && siteDataCache.games) || [];
+      const group1 = allGames.filter(g => parseInt(g.table_group) === 1 || !g.table_group || String(g.table_group) === '1');
+      const group2 = allGames.filter(g => parseInt(g.table_group) === 2 || String(g.table_group) === '2');
 
       if (countTitle1) countTitle1.textContent = `📊 TABLE 1 LIVE MARKET BOARD GAMES MANAGER (${group1.length} GAMES)`;
       if (countTitle2) countTitle2.textContent = `📋 TABLE 2 ALL GAMES RESULT MANAGER (${group2.length} GAMES)`;
