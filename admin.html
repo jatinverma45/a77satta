@@ -292,14 +292,14 @@
   <div class="admin-login-wrapper" id="loginScreen">
     <div class="admin-login-card">
       <h2>A77SATTA ADMIN</h2>
-      <form id="adminLoginForm">
+      <form id="adminLoginForm" autocomplete="off">
         <div class="admin-form-group">
           <label>Username</label>
-          <input type="text" id="adminUser" placeholder="Enter Username" required autocomplete="off">
+          <input type="text" id="adminUser" name="adm_sec_usr" placeholder="Enter Username" required autocomplete="off" value="">
         </div>
         <div class="admin-form-group">
           <label>Password</label>
-          <input type="password" id="adminPass" placeholder="Enter Password" required autocomplete="off">
+          <input type="password" id="adminPass" name="adm_sec_pwd" placeholder="Enter Password" required autocomplete="new-password" value="">
         </div>
         <button type="submit" class="btn-login-submit">LOGIN TO ADMIN PANEL</button>
         <div class="login-error-txt" id="loginErr"></div>
