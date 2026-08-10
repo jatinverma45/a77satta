@@ -12,6 +12,36 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname)));
 
 const fs = require('fs');
+const { Client: PgClient } = require('pg');
+const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres:SattaaA77king@db.sszqmfagodieabgsbzev.supabase.co:5432/postgres';
+
+async function pushToSupabase(fullData) {
+  try {
+    const client = new PgClient({ connectionString: SUPABASE_DB_URI, ssl: { rejectUnauthorized: false } });
+    await client.connect();
+    const jsonStr = JSON.stringify(fullData);
+    await client.query('INSERT INTO site_store (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value, updated_at = NOW()', ['full_site_backup', jsonStr]);
+    await client.end();
+    console.log('✅ Synced data to Supabase Cloud PostgreSQL!');
+  } catch (e) {
+    console.error('Error syncing to Supabase Cloud DB:', e.message);
+  }
+}
+
+async function fetchFromSupabase() {
+  try {
+    const client = new PgClient({ connectionString: SUPABASE_DB_URI, ssl: { rejectUnauthorized: false } });
+    await client.connect();
+    const res = await client.query('SELECT value FROM site_store WHERE key = $1', ['full_site_backup']);
+    await client.end();
+    if (res.rows && res.rows.length > 0 && res.rows[0].value) {
+      return JSON.parse(res.rows[0].value);
+    }
+  } catch (e) {
+    console.error('Error fetching from Supabase Cloud DB:', e.message);
+  }
+  return null;
+}
 
 let dbPath = path.join(__dirname, 'a77satta.db');
 if (process.env.VERCEL) {
@@ -173,6 +203,50 @@ db.serialize(() => {
 
   db.run("UPDATE site_settings SET value = 'https://t.me/+Mcnw6vRvig0wNDI1' WHERE key = 'telegram_url'", () => {});
   db.run("UPDATE site_settings SET value = 'https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e' WHERE key = 'whatsapp_url'", () => {});
+
+  // Supabase Cloud Restoration Engine
+  fetchFromSupabase().then(supaBackup => {
+    const backup = supaBackup || (function() {
+      const bPath = getBackupFileToRead();
+      if (bPath) {
+        try { return JSON.parse(fs.readFileSync(bPath, 'utf8')); } catch(e){}
+      }
+      return null;
+    })();
+
+    if (backup) {
+      if (backup.games && backup.games.length > 0) {
+        db.run("DELETE FROM games", () => {
+          const stmtGames = db.prepare("INSERT INTO games (id, name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+          backup.games.forEach(g => {
+            stmtGames.run([g.id || null, g.name, g.open_time || '', g.close_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.table_group || 1, g.sort_order || 0, g.is_hero || 0]);
+          });
+          stmtGames.finalize();
+          console.log('✅ Synchronized games from Supabase Cloud DB:', backup.games.length);
+        });
+      }
+      if (backup.chart_records && backup.chart_records.length > 0) {
+        db.run("DELETE FROM chart_records", () => {
+          const stmtChart = db.prepare("INSERT OR REPLACE INTO chart_records (record_date, game_name, result_val) VALUES (?, ?, ?)");
+          backup.chart_records.forEach(c => {
+            if (c && c.record_date && c.game_name) {
+              stmtChart.run([c.record_date.trim(), c.game_name.trim().toUpperCase(), c.result_val || '-']);
+            }
+          });
+          stmtChart.finalize();
+          console.log('✅ Synchronized chart records from Supabase Cloud DB:', backup.chart_records.length);
+        });
+      }
+      if (backup.settings) {
+        const stmtSettings = db.prepare("INSERT OR REPLACE INTO site_settings (key, value) VALUES (?, ?)");
+        Object.keys(backup.settings).forEach(k => {
+          stmtSettings.run([k, backup.settings[k]]);
+        });
+        stmtSettings.finalize();
+        console.log('✅ Synchronized site settings from Supabase Cloud DB');
+      }
+    }
+  });
 
   // Preserve Games: Only seed if database table is completely empty
   db.get("SELECT COUNT(*) as count FROM games", (err, row) => {
@@ -459,6 +533,8 @@ function syncJSONBackup() {
           } catch (e) {
             console.error('Error writing backup file:', e);
           }
+          // Instant Push to Supabase Cloud DB
+          pushToSupabase(fullData);
         });
       });
     });
