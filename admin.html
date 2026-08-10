@@ -821,7 +821,7 @@
       const records = (siteDataCache && siteDataCache.chart_records) || [];
       
       let dbDates = records.map(r => r.record_date);
-      let defaultDates = ['01-08', '02-08', '03-08', '04-08', '05-08', '06-08', '07-08', '08-08', '09-08'];
+      let defaultDates = getAutoDatesUpToToday();
       let dates = Array.from(new Set([...defaultDates, ...dbDates])).sort();
 
       let dbGames = records.map(r => r.game_name);
@@ -947,9 +947,8 @@
       const records = (siteDataCache && siteDataCache.chart_records) || [];
 
       let dbDates = records.map(r => r.record_date);
-      let defaultDates = ['01-08', '02-08', '03-08', '04-08', '05-08', '06-08', '07-08', '08-08', '09-08'];
-      let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates2]));
-      dates.sort();
+      let defaultDates = getAutoDatesUpToToday();
+      let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates2])).sort();
 
       const gamesList = Array.from(new Set([...lower20GamesList, ...extraGameColumns2]));
 

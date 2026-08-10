@@ -22,6 +22,18 @@
   setInterval(updateClock, 1000);
   document.addEventListener('DOMContentLoaded', updateClock);
 
+  function getAutoDatesUpToToday() {
+    const dates = [];
+    const now = new Date();
+    const currentDay = now.getDate();
+    const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+    for (let d = 1; d <= currentDay; d++) {
+      const dayStr = String(d).padStart(2, '0');
+      dates.push(`${dayStr}-${currentMonth}`);
+    }
+    return dates;
+  }
+
   // Fetch Site Data & Render Homepage Dynamically
   async function loadFullSiteData() {
     try {
@@ -116,9 +128,9 @@
       }
 
       // 3. Record Chart Tables Sync
-      if (data.chart_records && data.chart_records.length > 0) {
+      if (data.chart_records) {
         const recordsMap = {};
-        const datesSet = new Set(['01-08', '02-08', '03-08', '04-08', '05-08', '06-08', '07-08', '08-08', '09-08']);
+        const datesSet = new Set(getAutoDatesUpToToday());
         
         data.chart_records.forEach(r => {
           if (r.record_date && r.game_name) {
