@@ -198,7 +198,6 @@ db.serialize(() => {
           ['Ghaziabad', '08:00 PM', '08:00 PM', '-', 'WAIT', 1, 4],
           ['Gali', '11:00 PM', '11:00 PM', '-', 'WAIT', 1, 5],
           ['Desawar', '02:00 AM', '02:00 AM', '-', 'WAIT', 1, 6],
-          ['New Game Test', '10:00 AM', '10:00 AM', '-', 'WAIT', 1, 7],
 
           // Table 2 Games (21 Games)
           ['HR SATTA', '12:15 PM', '12:15 PM', '54', '66', 2, 8],

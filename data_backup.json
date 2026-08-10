@@ -101,20 +101,7 @@
       "sort_order": 6,
       "is_hero": 0
     },
-    {
-      "id": 126,
-      "name": "New Game Test",
-      "open_time": "10:00 AM",
-      "close_time": "10:00 AM",
-      "image": null,
-      "badge": "Hot",
-      "is_active": 1,
-      "yesterday_result": "-",
-      "today_result": "WAIT",
-      "table_group": 1,
-      "sort_order": 7,
-      "is_hero": 0
-    },
+
     {
       "id": 127,
       "name": "HR SATTA",
