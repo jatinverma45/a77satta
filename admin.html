@@ -578,6 +578,8 @@
             </table>
           </div>
         </div>
+      </div>
+
       <!-- 2. AUGUST 2026 SECOND RECORD CHART MANAGER (20 GAMES) -->
       <div class="admin-card-box">
         <div class="admin-card-header">
@@ -806,6 +808,10 @@
       document.querySelectorAll('.top-nav .nav-pill').forEach(b => b.classList.remove('active'));
       document.getElementById(paneId).classList.add('active');
       btn.classList.add('active');
+      if (paneId === 'tab-chart') {
+        renderChartTable();
+        renderChartTable2();
+      }
     }
 
     function showToast(msg) {
@@ -1562,7 +1568,7 @@
       '07-08': ['59', '45', '86', '21', '67', '99', '-', '69', '54', '48', '43', '00', '13', '42', '00', '19', '47', '05', '06', '64', '63'],
       '08-08': ['54', '10', '78', '29', '17', '71', '-', '13', '51', '04', '98', '72', '33', '81', '18', '00', '66', '56', '65', '78', '55'],
       '09-08': ['66', '82', '52', '01', '01', '70', '-', '92', '74', '08', '-', '79', '78', '63', '22', '17', '74', '77', '03', '18', '43'],
-      '10-08': ['-', '-', '34', '-', '-', '-', '-', '12', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
+      '10-08': ['80', '81', '30', '36', '61', '69', '-', '73', '24', '53', '84', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
     };
 
     function renderChartTable2() {

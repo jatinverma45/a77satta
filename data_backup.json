@@ -17,7 +17,7 @@
   },
   "games": [
     {
-      "id": 92,
+      "id": 120,
       "name": "Shri Ganesh",
       "open_time": "04:00 AM",
       "close_time": "04:00 AM",
@@ -33,19 +33,19 @@
   ],
   "chart_records": [
     {
-      "id": 1017,
+      "id": 1319,
       "record_date": "01-08",
       "game_name": "DELHI BAZAR",
       "result_val": "71"
     },
     {
-      "id": 1016,
+      "id": 1318,
       "record_date": "01-08",
       "game_name": "GWALIOR",
       "result_val": "38"
     },
     {
-      "id": 1015,
+      "id": 1317,
       "record_date": "01-08",
       "game_name": "SADAR BAZAR",
       "result_val": "82"
