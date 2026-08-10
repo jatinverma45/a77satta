@@ -312,17 +312,27 @@ app.get('/api/site-data', (req, res) => {
       data.hero_games = heroGames;
 
       db.all("SELECT * FROM chart_records ORDER BY record_date ASC", [], (err, charts) => {
-        if (err || !charts || charts.length === 0) {
-          if (fs.existsSync(backupFilePath)) {
-            try {
-              const backup = JSON.parse(fs.readFileSync(backupFilePath, 'utf8'));
-              if (backup && backup.chart_records && backup.chart_records.length > 0) {
-                charts = backup.chart_records;
-              }
-            } catch(e) {}
-          }
+        charts = charts || [];
+
+        // Merge any missing records from data_backup.json (e.g. 10-08 or newest dates)
+        if (fs.existsSync(backupFilePath)) {
+          try {
+            const backup = JSON.parse(fs.readFileSync(backupFilePath, 'utf8'));
+            if (backup && backup.chart_records && backup.chart_records.length > 0) {
+              const existingMap = new Set(charts.map(c => `${c.record_date}_${c.game_name}`));
+              backup.chart_records.forEach(bRecord => {
+                if (bRecord && bRecord.record_date && bRecord.game_name) {
+                  const key = `${bRecord.record_date}_${bRecord.game_name}`;
+                  if (!existingMap.has(key)) {
+                    charts.push(bRecord);
+                    existingMap.add(key);
+                  }
+                }
+              });
+            }
+          } catch(e) {}
         }
-        data.chart_records = charts || [];
+        data.chart_records = charts;
 
         db.all("SELECT * FROM blogs ORDER BY id DESC", [], (err, blogs) => {
           if (err) return res.status(500).json({ error: err.message });
