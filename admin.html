@@ -1110,19 +1110,21 @@
       }
 
       closeKhaiwalModal();
+      renderKhaiwalCardsAdminTable();
       saveKhaiwalCardsList();
     }
 
     function deleteKhaiwalCardRow(idx) {
       if (!confirm('Are you sure you want to delete this Khaiwal Card?')) return;
       currentKhaiwalCardsList.splice(idx, 1);
+      renderKhaiwalCardsAdminTable();
       saveKhaiwalCardsList();
     }
 
     async function saveKhaiwalCardsList(btn) {
       if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING KHAIWAL...'; }
       const tbody = document.getElementById('khaiwalCardsTbody');
-      if (tbody) {
+      if (btn && tbody) {
         const reorderedList = [];
         Array.from(tbody.children).forEach(tr => {
           const idx = parseInt(tr.getAttribute('data-card-idx'));
@@ -1130,7 +1132,9 @@
             reorderedList.push(currentKhaiwalCardsList[idx]);
           }
         });
-        if (reorderedList.length > 0) currentKhaiwalCardsList = reorderedList;
+        if (reorderedList.length === currentKhaiwalCardsList.length) {
+          currentKhaiwalCardsList = reorderedList;
+        }
       }
 
       const jsonStr = JSON.stringify(currentKhaiwalCardsList);
@@ -1146,7 +1150,10 @@
             btn.textContent = '✅ KHAIWAL SAVED!';
             setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE KHAIWAL CARDS'; }, 1500);
           }
-          await loadAdminData();
+          if (!siteDataCache) siteDataCache = {};
+          if (!siteDataCache.settings) siteDataCache.settings = {};
+          siteDataCache.settings.khaiwal_cards_json = jsonStr;
+          renderKhaiwalCardsAdminTable();
         } else {
           if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE KHAIWAL CARDS'; }
         }
