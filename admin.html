@@ -1014,24 +1014,27 @@
     // Khaiwal Cards Admin Logic
     let currentKhaiwalCardsList = [];
 
+    function getInitialKhaiwalCards() {
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
+        try {
+          const list = JSON.parse(siteDataCache.settings.khaiwal_cards_json);
+          if (Array.isArray(list) && list.length > 0) return list;
+        } catch(e) {}
+      }
+      return [
+        { id: 1, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ KUBER BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
+        { id: 2, header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--", title: "♣ JASSI BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
+        { id: 3, header_subtitle: "", title: "नमस्कार सपयानी Cricket ID दोनों वाले भाई नीचे दिए गए लिंक पर क्लिक करें", card_type: "feature", times_text: "minimum ID 500₹ maximum no limit\n*** *** *** *** *** *** *** ***\nNote इस नंबर पर पैसे क्लिक करने वाले जो भी गलत होगा फिर\nफॉल्ट के लिए payment के लिए money transfer की जगह अन्य जगह हो सकता है", footer_text: "", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
+        { id: 4, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ RAMAN BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" }
+      ];
+    }
+
     function renderKhaiwalCardsAdminTable() {
       const tbody = document.getElementById('khaiwalCardsTbody');
       if (!tbody) return;
 
       if (!currentKhaiwalCardsList || currentKhaiwalCardsList.length === 0) {
-        let cardList = [];
-        if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
-          try { cardList = JSON.parse(siteDataCache.settings.khaiwal_cards_json); } catch(e) {}
-        }
-        if (!cardList || cardList.length === 0) {
-          cardList = [
-            { id: 1, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ KUBER BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
-            { id: 2, header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--", title: "♣ JASSI BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
-            { id: 3, header_subtitle: "", title: "नमस्कार सपयानी Cricket ID दोनों वाले भाई नीचे दिए गए लिंक पर क्लिक करें", card_type: "feature", times_text: "minimum ID 500₹ maximum no limit\n*** *** *** *** *** *** *** ***\nNote इस नंबर पर पैसे क्लिक करने वाले जो भी गलत होगा फिर\nफॉल्ट के लिए payment के लिए money transfer की जगह अन्य जगह हो सकता है", footer_text: "", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
-            { id: 4, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ RAMAN BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" }
-          ];
-        }
-        currentKhaiwalCardsList = cardList;
+        currentKhaiwalCardsList = getInitialKhaiwalCards();
       }
 
       tbody.innerHTML = '';
@@ -1062,6 +1065,9 @@
     }
 
     function openKhaiwalModal(idx = -1) {
+      if (!currentKhaiwalCardsList || currentKhaiwalCardsList.length === 0) {
+        currentKhaiwalCardsList = getInitialKhaiwalCards();
+      }
       document.getElementById('khaiwalEditIdx').value = idx;
       if (idx >= 0 && currentKhaiwalCardsList[idx]) {
         const c = currentKhaiwalCardsList[idx];
@@ -1097,6 +1103,9 @@
 
     function saveKhaiwalModalForm(e) {
       e.preventDefault();
+      if (!currentKhaiwalCardsList || currentKhaiwalCardsList.length === 0) {
+        currentKhaiwalCardsList = getInitialKhaiwalCards();
+      }
       const idx = parseInt(document.getElementById('khaiwalEditIdx').value);
       const cardObj = {
         id: idx >= 0 && currentKhaiwalCardsList[idx] ? currentKhaiwalCardsList[idx].id : Date.now(),
@@ -1127,7 +1136,12 @@
     }
 
     async function saveKhaiwalCardsList(btn) {
-      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING KHAIWAL...'; }
+      const mainBtn = btn || document.querySelector("button[onclick='saveKhaiwalCardsList(this)']");
+      if (mainBtn) {
+        mainBtn.disabled = true;
+        mainBtn.textContent = '⏳ SAVING KHAIWAL...';
+      }
+
       const tbody = document.getElementById('khaiwalCardsTbody');
       if (btn && tbody) {
         const reorderedList = [];
@@ -1142,6 +1156,10 @@
         }
       }
 
+      if (!currentKhaiwalCardsList || currentKhaiwalCardsList.length === 0) {
+        currentKhaiwalCardsList = getInitialKhaiwalCards();
+      }
+
       const jsonStr = JSON.stringify(currentKhaiwalCardsList);
       try {
         const res = await fetch('/api/admin/update-settings', {
@@ -1151,20 +1169,30 @@
         });
         if (res.ok) {
           showToast('Khaiwal Cards Saved Successfully!');
-          if (btn) {
-            btn.textContent = '✅ KHAIWAL SAVED!';
-            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE KHAIWAL CARDS'; }, 1500);
+          if (mainBtn) {
+            mainBtn.textContent = '✅ KHAIWAL SAVED!';
+            setTimeout(() => {
+              mainBtn.disabled = false;
+              mainBtn.textContent = '💾 SAVE KHAIWAL CARDS';
+            }, 1500);
           }
           if (!siteDataCache) siteDataCache = {};
           if (!siteDataCache.settings) siteDataCache.settings = {};
           siteDataCache.settings.khaiwal_cards_json = jsonStr;
           renderKhaiwalCardsAdminTable();
         } else {
-          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE KHAIWAL CARDS'; }
+          alert('Error: Failed to save Khaiwal Cards to database');
+          if (mainBtn) {
+            mainBtn.disabled = false;
+            mainBtn.textContent = '💾 SAVE KHAIWAL CARDS';
+          }
         }
       } catch(e) {
-        alert('Error saving Khaiwal Cards');
-        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE KHAIWAL CARDS'; }
+        alert('Server error saving Khaiwal Cards');
+        if (mainBtn) {
+          mainBtn.disabled = false;
+          mainBtn.textContent = '💾 SAVE KHAIWAL CARDS';
+        }
       }
     }
 
