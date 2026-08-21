@@ -269,6 +269,46 @@
       background: #fffdf0;
     }
 
+    /* Fix Column Header Inputs & Visibility in Admin Chart Tables */
+    #chartAdminTable, #chartAdminTable2 {
+      min-width: 100%;
+      table-layout: auto;
+    }
+
+    #chartAdminTable th, #chartAdminTable2 th {
+      min-width: 140px;
+      padding: 8px 6px;
+      vertical-align: middle;
+    }
+
+    #chartAdminTable th:first-child, #chartAdminTable2 th:first-child {
+      min-width: 90px;
+      width: 90px;
+    }
+
+    .chart1-col-header, .chart2-col-header {
+      width: 100% !important;
+      min-width: 120px !important;
+      padding: 6px 8px !important;
+      font-size: 13px !important;
+      font-weight: 900 !important;
+      text-transform: uppercase !important;
+      text-align: center !important;
+      border: 2px solid #000000 !important;
+      border-radius: 4px !important;
+      background: #ffffff !important;
+      color: #000000 !important;
+      box-sizing: border-box !important;
+    }
+
+    .chart1-cell-input, .chart2-cell-input {
+      min-width: 60px !important;
+      padding: 6px 4px !important;
+      font-size: 13px !important;
+      font-weight: 900 !important;
+      text-align: center !important;
+    }
+
     .action-row-flex {
       display: flex;
       align-items: center;
@@ -1714,12 +1754,12 @@
         if (thead) {
           thead.innerHTML = `
             <tr>
-              <th style="min-width: 80px;">DATE</th>
+              <th style="min-width: 90px; width: 90px;">DATE</th>
               ${gamesList.map((g, idx) => `
-                <th>
-                  <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
-                    <input type="text" class="adm-input-cell chart1-col-header" data-col-idx="${idx}" value="${g}" title="Edit column name" style="font-weight:900; text-align:center; text-transform:uppercase; padding:4px 6px; border:2px solid #000;">
-                    <button type="button" class="btn-adm btn-adm-red" style="padding:1px 5px; font-size:10px;" onclick="deleteChartColumn(1, '${g}')" title="Delete Column">❌</button>
+                <th style="min-width: 140px; padding: 8px 6px;">
+                  <div style="display:flex; flex-direction:column; align-items:center; gap:5px; width:100%;">
+                    <input type="text" class="adm-input-cell chart1-col-header" data-col-idx="${idx}" value="${g}" title="Edit column name" placeholder="COL NAME">
+                    <button type="button" class="btn-adm btn-adm-red" style="padding:2px 8px; font-size:10px; font-weight:800;" onclick="deleteChartColumn(1, '${g}')" title="Delete Column">❌ DELETE</button>
                   </div>
                 </th>
               `).join('')}
@@ -1860,12 +1900,12 @@
         if (thead) {
           thead.innerHTML = `
             <tr>
-              <th style="min-width: 80px;">DATE</th>
+              <th style="min-width: 90px; width: 90px;">DATE</th>
               ${gamesList.map((g, idx) => `
-                <th>
-                  <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
-                    <input type="text" class="adm-input-cell chart2-col-header" data-col-idx="${idx}" value="${g}" title="Edit column name" style="font-weight:900; text-align:center; text-transform:uppercase; padding:4px 6px; border:2px solid #000;">
-                    <button type="button" class="btn-adm btn-adm-red" style="padding:1px 5px; font-size:10px;" onclick="deleteChartColumn(2, '${g}')" title="Delete Column">❌</button>
+                <th style="min-width: 140px; padding: 8px 6px;">
+                  <div style="display:flex; flex-direction:column; align-items:center; gap:5px; width:100%;">
+                    <input type="text" class="adm-input-cell chart2-col-header" data-col-idx="${idx}" value="${g}" title="Edit column name" placeholder="COL NAME">
+                    <button type="button" class="btn-adm btn-adm-red" style="padding:2px 8px; font-size:10px; font-weight:800;" onclick="deleteChartColumn(2, '${g}')" title="Delete Column">❌ DELETE</button>
                   </div>
                 </th>
               `).join('')}
