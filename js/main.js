@@ -226,7 +226,6 @@
       // 2. Games Tables Sync
       if (data.games && data.games.length > 0) {
         const group1 = data.games.filter(g => g.table_group === 1 || !g.table_group);
-        const group2 = data.games.filter(g => g.table_group === 2);
 
         // Render Upper Live Table 1
         const board1 = document.querySelector('.a77-market-board');
@@ -252,32 +251,6 @@
             `;
           });
           board1.innerHTML = rowsHtml;
-        }
-
-        // Render Lower Live Table 2
-        const board2 = document.querySelector('.a77-results-dashboard');
-        if (board2 && group2.length > 0) {
-          let rowsHtml = `
-            <div class="a77-dashboard-header">
-              <div>सट्टा का नाम</div>
-              <div>कल आया था</div>
-              <div>आज का रिजल्ट</div>
-            </div>
-          `;
-          group2.forEach(g => {
-            const todayRes = g.today_result === 'WAIT' || !g.today_result
-              ? `<span class="wait-star-yellow">WAIT</span>`
-              : g.today_result;
-
-            rowsHtml += `
-              <div class="a77-dashboard-row">
-                <div class="dashboard-game">${g.name}<br><span>${g.open_time || ''}</span></div>
-                <div class="dashboard-value">${g.yesterday_result || '-'}</div>
-                <div class="dashboard-value dashboard-result">${todayRes}</div>
-              </div>
-            `;
-          });
-          board2.innerHTML = rowsHtml;
         }
       }
 
@@ -341,40 +314,6 @@
               html += `</tr>`;
             });
             t1Tbody.innerHTML = html;
-          }
-        }
-
-        // Table 2 (Lower Games)
-        if (tableWraps.length > 1) {
-          let lowerGames = [
-            'HR SATTA', 'UJJALA SUPER', 'KKR CITY', 'MADHUPURI', 'ANMOL BAZAR', 'KAROL BAGH',
-            'AMMAN BAZAR', 'DELHI DARBAR', 'NEW GANGA', 'SKY KING', 'FATEHABAD', 'UDAIPUR CITY', 'RAJ SHREE',
-            'VIP AGRA', 'MOHALI-7', 'BHADRA BAZAR', 'MANDI BAZAR', 'LION BAZAR', 'SIALKOT',
-            'DEHRADUN CITY', 'DAMAN'
-          ];
-          if (data.settings && data.settings.chart2_columns_json) {
-            try {
-              const parsed = JSON.parse(data.settings.chart2_columns_json);
-              if (Array.isArray(parsed) && parsed.length > 0) lowerGames = parsed;
-            } catch(e) {}
-          }
-          const t2Thead = tableWraps[1].querySelector('thead');
-          const t2Tbody = tableWraps[1].querySelector('tbody');
-
-          if (t2Thead) {
-            t2Thead.innerHTML = `<tr><th>Date</th>${lowerGames.map(g => `<th>${g}</th>`).join('')}</tr>`;
-          }
-
-          if (t2Tbody) {
-            let html = '';
-            dates.forEach(d => {
-              html += `<tr><td>${d}</td>`;
-              lowerGames.forEach(g => {
-                html += `<td>${getVal(d, g)}</td>`;
-              });
-              html += `</tr>`;
-            });
-            t2Tbody.innerHTML = html;
           }
         }
       }

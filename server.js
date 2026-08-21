@@ -65,6 +65,8 @@ const db = new sqlite3.Database(dbPath, (err) => {
 const bundledBackupPath = path.join(__dirname, 'data_backup.json');
 const tmpBackupPath = process.env.VERCEL ? '/tmp/data_backup.json' : bundledBackupPath;
 
+const MAIN_12_GAMES = new Set(['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER']);
+
 async function syncJSONBackup() {
   try {
     const backup = getBackupData() || {};
@@ -88,19 +90,23 @@ async function syncJSONBackup() {
 
     if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
       const gameMap = {};
-      gamesRes.rows.forEach(g => {
-        if (g && g.name) gameMap[g.name.trim().toUpperCase()] = g;
-      });
       (backup.games || []).forEach(g => {
+        if (g && g.name && MAIN_12_GAMES.has(g.name.trim().toUpperCase())) gameMap[g.name.trim().toUpperCase()] = g;
+      });
+      gamesRes.rows.forEach(g => {
         if (g && g.name) {
           const key = g.name.trim().toUpperCase();
-          gameMap[key] = { ...(gameMap[key] || {}), ...g };
+          if (MAIN_12_GAMES.has(key)) {
+            gameMap[key] = { ...(gameMap[key] || {}), ...g };
+          }
         }
       });
       fullData.games = Object.values(gameMap);
       fullData.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
     }
+    fullData.games = fullData.games.filter(g => g && g.name && MAIN_12_GAMES.has(g.name.trim().toUpperCase()));
 
+    delete fullData.settings.chart2_columns_json;
     const jsonStr = JSON.stringify(fullData, null, 2);
     try {
       fs.writeFileSync(tmpBackupPath, jsonStr);
@@ -171,6 +177,9 @@ async function initDatabase() {
         content TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+
+      DELETE FROM games WHERE table_group = 2;
+      DELETE FROM site_settings WHERE key = 'chart2_columns_json';
     `);
 
     // Ensure Admin User Exists
@@ -245,19 +254,27 @@ app.get('/api/site-data', async (req, res) => {
     if (backup) {
       if (backup.settings) {
         settings = { ...settings, ...backup.settings };
+        delete settings.chart2_columns_json;
       }
       if (backup.games && backup.games.length > 0) {
         const gameMap = {};
-        games.forEach(g => {
-          if (g && g.name) gameMap[g.name.trim().toUpperCase()] = g;
-        });
         backup.games.forEach(g => {
-          if (g && g.name) {
+          if (g && g.name && MAIN_12_GAMES.has(g.name.trim().toUpperCase())) {
             const key = g.name.trim().toUpperCase();
-            gameMap[key] = { ...(gameMap[key] || {}), ...g };
+            gameMap[key] = { ...g };
           }
         });
-        games = Object.values(gameMap);
+        games.forEach(g => {
+          if (g && g.name) {
+            const key = g.name.trim().toUpperCase();
+            if (MAIN_12_GAMES.has(key)) {
+              gameMap[key] = { ...gameMap[key], ...g };
+            }
+          }
+        });
+        games = Object.values(gameMap).filter(g => MAIN_12_GAMES.has((g.name || '').trim().toUpperCase()));
+      } else {
+        games = games.filter(g => g && g.name && MAIN_12_GAMES.has(g.name.trim().toUpperCase()));
       }
       games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
       if (backup.chart_records && backup.chart_records.length > 0) {

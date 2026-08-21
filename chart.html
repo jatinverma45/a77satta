@@ -235,11 +235,6 @@
               JSON.parse(liveSiteData.settings.chart1_columns_json).forEach(c => dbGames.push(`${c.toUpperCase()} SATTA KING CHART 2026`));
             } catch(e) {}
           }
-          if (liveSiteData.settings && liveSiteData.settings.chart2_columns_json) {
-            try {
-              JSON.parse(liveSiteData.settings.chart2_columns_json).forEach(c => dbGames.push(`${c.toUpperCase()} SATTA KING CHART 2026`));
-            } catch(e) {}
-          }
           dynamicChartNames = Array.from(new Set([...dynamicChartNames, ...dbGames]));
         }
 
