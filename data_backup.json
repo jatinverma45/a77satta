@@ -3524,6 +3524,16 @@
       "record_date": "20-08",
       "game_name": "SADAR KING",
       "result_val": "76"
+    },
+    {
+      "record_date": "21-08",
+      "game_name": "PERSISTENCE TEST",
+      "result_val": "44"
+    },
+    {
+      "record_date": "20-08",
+      "game_name": "PERSISTENCE TEST",
+      "result_val": "33"
     }
   ],
   "blogs": [

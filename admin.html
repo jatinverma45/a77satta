@@ -1688,11 +1688,14 @@
 
     async function deleteGameRow(gameId) {
       if (!confirm('Are you sure you want to delete this game?')) return;
+      const tr = document.querySelector(`tr[data-game-id="${gameId}"]`);
+      const nameInp = tr ? tr.querySelector('.game-name-input') : null;
+      const name = nameInp ? nameInp.value.trim() : '';
       try {
         const res = await fetch('/api/admin/delete-game', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: gameId })
+          body: JSON.stringify({ id: gameId, name })
         });
         if (res.ok) {
           showToast('Game deleted');

@@ -216,16 +216,26 @@ app.use(async (req, res, next) => {
 // REST API ROUTES (DIRECT POSTGRESQL DRIVEN)
 // ========================================
 
+let memoryBackupCache = null;
+
 function getBackupData() {
+  if (memoryBackupCache) return memoryBackupCache;
+
   const bPath = process.env.VERCEL ? '/tmp/data_backup.json' : path.join(__dirname, 'data_backup.json');
   if (fs.existsSync(bPath)) {
-    try { return JSON.parse(fs.readFileSync(bPath, 'utf8')); } catch (e) {}
+    try {
+      memoryBackupCache = JSON.parse(fs.readFileSync(bPath, 'utf8'));
+      return memoryBackupCache;
+    } catch (e) {}
   }
   const bundled = path.join(__dirname, 'data_backup.json');
   if (fs.existsSync(bundled)) {
-    try { return JSON.parse(fs.readFileSync(bundled, 'utf8')); } catch (e) {}
+    try {
+      memoryBackupCache = JSON.parse(fs.readFileSync(bundled, 'utf8'));
+      return memoryBackupCache;
+    } catch (e) {}
   }
-  return null;
+  return { settings: {}, games: [], chart_records: [], blogs: [] };
 }
 
 // Public: Get all site data for homepage & chart page
@@ -235,50 +245,58 @@ app.get('/api/site-data', async (req, res) => {
   res.setHeader('Expires', '0');
 
   try {
-    let settingsRes = await safeQuery('SELECT key, value FROM site_settings');
-    let gamesRes = await safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC');
-    let chartsRes = await safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC');
-    let blogsRes = await safeQuery('SELECT * FROM blogs ORDER BY id DESC');
-
-    let games = gamesRes.rows || [];
-    let settings = {};
-    (settingsRes.rows || []).forEach(s => settings[s.key] = s.value);
-    let charts = chartsRes.rows || [];
-    let blogs = blogsRes.rows || [];
+    let settingsRes = await safeQuery('SELECT key, value FROM site_settings').catch(() => null);
+    let gamesRes = await safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null);
+    let chartsRes = await safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null);
+    let blogsRes = await safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null);
 
     const backup = getBackupData();
-    if (backup) {
-      if (backup.settings) {
-        settings = { ...settings, ...backup.settings };
-        delete settings.chart2_columns_json;
-      }
-      if (backup.games && backup.games.length > 0) {
-        const gameMap = {};
-        backup.games.forEach(g => {
-          if (g && g.name) {
-            const key = g.id || g.name.trim().toUpperCase();
-            gameMap[key] = { ...g };
-          }
-        });
-        games.forEach(g => {
-          if (g && g.name) {
-            const key = g.id || g.name.trim().toUpperCase();
-            gameMap[key] = { ...gameMap[key], ...g };
-          }
-        });
-        games = Object.values(gameMap);
-      }
-      games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
-      if (backup.chart_records && backup.chart_records.length > 0) {
-        const chartMap = {};
-        charts.forEach(r => { if (r.record_date && r.game_name) chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r; });
-        backup.chart_records.forEach(r => { if (r.record_date && r.game_name) chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r; });
-        charts = Object.values(chartMap);
-      }
-      if (blogs.length === 0 && backup.blogs && backup.blogs.length > 0) {
-        blogs = backup.blogs;
-      }
+    let settings = { ...(backup.settings || {}) };
+    delete settings.chart2_columns_json;
+
+    if (settingsRes && settingsRes.rows) {
+      settingsRes.rows.forEach(s => settings[s.key] = s.value);
     }
+
+    const gameMap = {};
+    if (backup.games && backup.games.length > 0) {
+      backup.games.forEach(g => {
+        if (g && g.name) {
+          const key = g.name.trim().toUpperCase();
+          gameMap[key] = { ...g };
+        }
+      });
+    }
+    if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
+      gamesRes.rows.forEach(g => {
+        if (g && g.name) {
+          const key = g.name.trim().toUpperCase();
+          gameMap[key] = { ...(gameMap[key] || {}), ...g };
+        }
+      });
+    }
+
+    let games = Object.values(gameMap);
+    games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
+
+    let chartMap = {};
+    if (backup.chart_records && backup.chart_records.length > 0) {
+      backup.chart_records.forEach(r => {
+        if (r.record_date && r.game_name) {
+          chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r;
+        }
+      });
+    }
+    if (chartsRes && chartsRes.rows && chartsRes.rows.length > 0) {
+      chartsRes.rows.forEach(r => {
+        if (r.record_date && r.game_name) {
+          chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r;
+        }
+      });
+    }
+    let charts = Object.values(chartMap);
+
+    let blogs = (blogsRes && blogsRes.rows && blogsRes.rows.length > 0) ? blogsRes.rows : (backup.blogs || []);
 
     let heroGames = [];
     if (settings.hero_games_json) {
@@ -307,18 +325,14 @@ app.get('/api/site-data', async (req, res) => {
       blogs
     });
   } catch (e) {
-    console.error('PostgreSQL API error:', e.message);
     const backup = getBackupData();
-    if (backup) {
-      return res.json({
-        settings: backup.settings || {},
-        games: backup.games || [],
-        hero_games: (backup.games || []).filter(g => g.is_hero === 1),
-        chart_records: backup.chart_records || [],
-        blogs: backup.blogs || []
-      });
-    }
-    res.status(500).json({ error: e.message });
+    return res.json({
+      settings: backup.settings || {},
+      games: backup.games || [],
+      hero_games: (backup.games || []).filter(g => g.is_hero === 1),
+      chart_records: backup.chart_records || [],
+      blogs: backup.blogs || []
+    });
   }
 });
 
@@ -358,7 +372,6 @@ function getTodayAndYesterdayDateStr() {
 app.post('/api/admin/update-game', async (req, res) => {
   const { id, name, open_time, yesterday_result, today_result } = req.body;
 
-  // 1. Immediately update backup locally
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.games) backup.games = [];
   if (!backup.chart_records) backup.chart_records = [];
@@ -409,40 +422,38 @@ app.post('/api/admin/update-game', async (req, res) => {
 
   saveBackupDataLocally(backup);
 
-  // 2. Background DB save
-  (async () => {
-    try {
+  // Synchronous Awaited DB save
+  try {
+    await safeQuery(
+      'UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4 WHERE id = $5 OR UPPER(name) = UPPER($1)',
+      [name, yesterday_result, today_result, open_time, id || -1]
+    );
+    if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
       await safeQuery(
-        'UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4 WHERE id = $5 OR UPPER(name) = UPPER($1)',
-        [name, yesterday_result, today_result, open_time, id || -1]
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [todayStr, name, today_result.trim()]
       );
-      if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
-        await safeQuery(
-          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-          [todayStr, name, today_result.trim()]
-        );
-      } else {
-        await safeQuery(
-          `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
-          [todayStr, name]
-        );
-      }
+    } else {
+      await safeQuery(
+        `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
+        [todayStr, name]
+      );
+    }
 
-      if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
-        await safeQuery(
-          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-          [yestStr, name, yesterday_result.trim()]
-        );
-      } else {
-        await safeQuery(
-          `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
-          [yestStr, name]
-        );
-      }
-    } catch (e) {}
-  })();
+    if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [yestStr, name, yesterday_result.trim()]
+      );
+    } else {
+      await safeQuery(
+        `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
+        [yestStr, name]
+      );
+    }
+  } catch (e) {}
 
   res.json({ success: true, message: 'Game updated successfully' });
 });
@@ -454,12 +465,12 @@ app.post('/api/admin/add-game', async (req, res) => {
   const gName = (name || '').trim().toUpperCase();
   if (!gName) return res.status(400).json({ error: 'Game name is required' });
 
-  const newId = Date.now();
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.games) backup.games = [];
 
   const grpGames = backup.games.filter(g => parseInt(g.table_group) === grp);
   const nextOrd = grpGames.length + 1;
+  const newId = Date.now();
 
   const newGameObj = {
     id: newId,
@@ -470,25 +481,30 @@ app.post('/api/admin/add-game', async (req, res) => {
     table_group: grp,
     sort_order: nextOrd
   };
-  backup.games.push(newGameObj);
+
+  const existingIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === gName);
+  if (existingIdx !== -1) {
+    backup.games[existingIdx] = { ...backup.games[existingIdx], ...newGameObj };
+  } else {
+    backup.games.push(newGameObj);
+  }
+
   saveBackupDataLocally(backup);
 
-  // Background DB save
-  (async () => {
-    try {
-      await safeQuery(
-        `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)
-         ON CONFLICT (name) DO UPDATE SET
-           open_time = EXCLUDED.open_time,
-           yesterday_result = EXCLUDED.yesterday_result,
-           today_result = EXCLUDED.today_result,
-           table_group = EXCLUDED.table_group,
-           sort_order = EXCLUDED.sort_order`,
-        [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd]
-      );
-    } catch (e) {}
-  })();
+  // Synchronous Awaited DB save
+  try {
+    await safeQuery(
+      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
+       ON CONFLICT (name) DO UPDATE SET
+         open_time = EXCLUDED.open_time,
+         yesterday_result = EXCLUDED.yesterday_result,
+         today_result = EXCLUDED.today_result,
+         table_group = EXCLUDED.table_group,
+         sort_order = EXCLUDED.sort_order`,
+      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd]
+    );
+  } catch (e) {}
 
   res.json({ success: true, id: newId });
 });
@@ -506,29 +522,26 @@ app.post('/api/admin/update-hero-games', async (req, res) => {
 
   const heroJsonStr = JSON.stringify(heroItems);
 
-  // 1. Save locally to backup immediately
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.settings) backup.settings = {};
   backup.settings.hero_games_json = heroJsonStr;
   saveBackupDataLocally(backup);
 
-  // 2. Background DB update
-  (async () => {
-    try {
-      await safeQuery('UPDATE games SET is_hero = 0');
+  // Synchronous Awaited DB update
+  try {
+    await safeQuery('UPDATE games SET is_hero = 0');
+    await safeQuery(
+      `INSERT INTO site_settings (key, value) VALUES ($1, $2)
+       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+      ['hero_games_json', heroJsonStr]
+    );
+    for (const g of heroItems) {
       await safeQuery(
-        `INSERT INTO site_settings (key, value) VALUES ($1, $2)
-         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-        ['hero_games_json', heroJsonStr]
+        'UPDATE games SET is_hero = 1, today_result = $1 WHERE id = $2 OR UPPER(name) = $3',
+        [g.today_result, g.id || -1, g.name]
       );
-      for (const g of heroItems) {
-        await safeQuery(
-          'UPDATE games SET is_hero = 1, today_result = $1 WHERE id = $2 OR UPPER(name) = $3',
-          [g.today_result, g.id || -1, g.name]
-        );
-      }
-    } catch (e) {}
-  })();
+    }
+  } catch (e) {}
 
   res.json({ success: true, message: 'Hero Box Games updated successfully' });
 });
@@ -542,7 +555,7 @@ app.post('/api/admin/reorder-games', async (req, res) => {
   if (!backup.games) backup.games = [];
 
   order.forEach(item => {
-    const existingIdx = backup.games.findIndex(g => g.id === item.id);
+    const existingIdx = backup.games.findIndex(g => g.id === item.id || (g.name || '').toUpperCase() === (item.name || '').toUpperCase());
     if (existingIdx !== -1) {
       backup.games[existingIdx].sort_order = parseInt(item.sort_order) || 0;
     }
@@ -551,13 +564,11 @@ app.post('/api/admin/reorder-games', async (req, res) => {
   backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
   saveBackupDataLocally(backup);
 
-  (async () => {
-    for (const item of order) {
-      try {
-        await safeQuery('UPDATE games SET sort_order = $1 WHERE id = $2', [item.sort_order, item.id]);
-      } catch (e) {}
-    }
-  })();
+  for (const item of order) {
+    try {
+      await safeQuery('UPDATE games SET sort_order = $1 WHERE id = $2 OR UPPER(name) = UPPER($3)', [item.sort_order, item.id || -1, item.name || '']);
+    } catch (e) {}
+  }
 
   res.json({ success: true, message: 'Games reordered successfully' });
 });
@@ -630,63 +641,60 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
   backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
   saveBackupDataLocally(backup);
 
-  (async () => {
-    for (const g of games) {
-      if (g.id || g.name) {
-        const gNameUpper = (g.name || '').trim().toUpperCase();
-        try {
+  for (const g of games) {
+    if (g.id || g.name) {
+      const gNameUpper = (g.name || '').trim().toUpperCase();
+      try {
+        await safeQuery(
+          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5 WHERE id = $6 OR UPPER(name) = UPPER($1)`,
+          [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, g.id || -1]
+        );
+        if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
           await safeQuery(
-            `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5 WHERE id = $6 OR UPPER(name) = UPPER($1)`,
-            [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, g.id || -1]
+            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+            [todayStr, gNameUpper, g.today_result.trim()]
           );
-          if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
-            await safeQuery(
-              `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-               ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-              [todayStr, gNameUpper, g.today_result.trim()]
-            );
-          } else {
-            await safeQuery(
-              `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
-              [todayStr, gNameUpper]
-            );
-          }
+        } else {
+          await safeQuery(
+            `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
+            [todayStr, gNameUpper]
+          );
+        }
 
-          if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
-            await safeQuery(
-              `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-               ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-              [yestStr, gNameUpper, g.yesterday_result.trim()]
-            );
-          } else {
-            await safeQuery(
-              `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
-              [yestStr, gNameUpper]
-            );
-          }
-        } catch (e) {}
-      }
+        if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
+          await safeQuery(
+            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+            [yestStr, gNameUpper, g.yesterday_result.trim()]
+          );
+        } else {
+          await safeQuery(
+            `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
+            [yestStr, gNameUpper]
+          );
+        }
+      } catch (e) {}
     }
-  })();
+  }
 
   res.json({ success: true, count: games.length });
 });
 
 // Admin: Delete Game
 app.post('/api/admin/delete-game', async (req, res) => {
-  const { id } = req.body;
+  const { id, name } = req.body;
 
   const backup = getBackupData();
   if (backup && backup.games) {
-    backup.games = backup.games.filter(g => g.id !== id);
+    const nameUpper = (name || '').trim().toUpperCase();
+    backup.games = backup.games.filter(g => g.id !== id && (nameUpper === '' || (g.name || '').toUpperCase() !== nameUpper));
     saveBackupDataLocally(backup);
   }
 
-  (async () => {
-    try {
-      await safeQuery('DELETE FROM games WHERE id = $1', [id]);
-    } catch (e) {}
-  })();
+  try {
+    await safeQuery('DELETE FROM games WHERE id = $1 OR UPPER(name) = UPPER($2)', [id || -1, name || '']);
+  } catch (e) {}
 
   res.json({ success: true });
 });
@@ -695,15 +703,25 @@ app.post('/api/admin/delete-game', async (req, res) => {
 app.post('/api/admin/update-chart-cell', async (req, res) => {
   const { record_date, game_name, result_val } = req.body;
   try {
-    await pgPool.query(
+    await safeQuery(
       `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
        ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
       [record_date, game_name, result_val]
     );
-    await syncJSONBackup();
+
+    const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+    if (!backup.chart_records) backup.chart_records = [];
+    const gNameUpper = (game_name || '').trim().toUpperCase();
+    const cIdx = backup.chart_records.findIndex(r => r.record_date === record_date && (r.game_name || '').toUpperCase() === gNameUpper);
+    if (cIdx !== -1) {
+      backup.chart_records[cIdx].result_val = result_val;
+    } else {
+      backup.chart_records.push({ record_date, game_name: gNameUpper, result_val });
+    }
+    saveBackupDataLocally(backup);
+
     res.json({ success: true });
   } catch (e) {
-    console.error(e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -713,7 +731,6 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
   const { items } = req.body;
   if (!Array.isArray(items) || items.length === 0) return res.json({ success: true, count: 0 });
 
-  // 1. Save locally to backup file immediately
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.chart_records) backup.chart_records = [];
 
@@ -729,18 +746,15 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
   });
   saveBackupDataLocally(backup);
 
-  // 2. Background DB save
-  (async () => {
-    for (const item of items) {
-      try {
-        await safeQuery(
-          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-          [item.record_date, item.game_name, item.result_val]
-        );
-      } catch (e) {}
-    }
-  })();
+  for (const item of items) {
+    try {
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [item.record_date, item.game_name, item.result_val]
+      );
+    } catch (e) {}
+  }
 
   res.json({ success: true, count: items.length });
 });
@@ -749,7 +763,6 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
 app.post('/api/admin/update-settings', async (req, res) => {
   const settings = req.body;
 
-  // 1. Save locally to backup file immediately
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.settings) backup.settings = {};
   for (const [key, value] of Object.entries(settings)) {
@@ -757,19 +770,16 @@ app.post('/api/admin/update-settings', async (req, res) => {
   }
   saveBackupDataLocally(backup);
 
-  // 2. Background DB save
-  (async () => {
-    for (const [key, value] of Object.entries(settings)) {
-      const valStr = typeof value === 'object' ? JSON.stringify(value) : String(value);
-      try {
-        await safeQuery(
-          `INSERT INTO site_settings (key, value) VALUES ($1, $2)
-           ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-          [key, valStr]
-        );
-      } catch (e) {}
-    }
-  })();
+  for (const [key, value] of Object.entries(settings)) {
+    const valStr = typeof value === 'object' ? JSON.stringify(value) : String(value);
+    try {
+      await safeQuery(
+        `INSERT INTO site_settings (key, value) VALUES ($1, $2)
+         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+        [key, valStr]
+      );
+    } catch (e) {}
+  }
 
   res.json({ success: true, message: 'Settings saved successfully' });
 });
