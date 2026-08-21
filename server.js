@@ -293,27 +293,56 @@ app.post('/api/admin/login', async (req, res) => {
 // Admin: Update Game Result (Today / Yesterday)
 app.post('/api/admin/update-game', async (req, res) => {
   const { id, name, open_time, yesterday_result, today_result } = req.body;
-  try {
-    await safeQuery(
-      'UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4 WHERE id = $5 OR UPPER(name) = UPPER($1)',
-      [name, yesterday_result, today_result, open_time, id || -1]
-    );
 
-    if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
-      const todayDateStr = '09-08';
-      await safeQuery(
-        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [todayDateStr, name, today_result.trim()]
-      );
-    }
+  // 1. Immediately update backup locally
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  if (!backup.games) backup.games = [];
+  if (!backup.chart_records) backup.chart_records = [];
 
-    await syncJSONBackup();
-    res.json({ success: true, message: 'Game updated successfully' });
-  } catch (e) {
-    console.error('Error in update-game:', e.message);
-    res.json({ success: true, message: 'Game updated (fallback)' });
+  const gNameUpper = (name || '').trim().toUpperCase();
+  const existingIdx = backup.games.findIndex(
+    g => (g.id && id && g.id === id) || (g.name || '').toUpperCase() === gNameUpper
+  );
+
+  if (existingIdx !== -1) {
+    if (gNameUpper) backup.games[existingIdx].name = gNameUpper;
+    if (open_time !== undefined) backup.games[existingIdx].open_time = open_time;
+    if (yesterday_result !== undefined) backup.games[existingIdx].yesterday_result = yesterday_result;
+    if (today_result !== undefined) backup.games[existingIdx].today_result = today_result;
   }
+
+  if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
+    const todayDateStr = '09-08';
+    const cIdx = backup.chart_records.findIndex(
+      r => r.record_date === todayDateStr && (r.game_name || '').toUpperCase() === gNameUpper
+    );
+    if (cIdx !== -1) {
+      backup.chart_records[cIdx].result_val = today_result.trim();
+    } else {
+      backup.chart_records.push({ record_date: todayDateStr, game_name: gNameUpper, result_val: today_result.trim() });
+    }
+  }
+  saveBackupDataLocally(backup);
+
+  // 2. Background DB save
+  (async () => {
+    try {
+      await safeQuery(
+        'UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4 WHERE id = $5 OR UPPER(name) = UPPER($1)',
+        [name, yesterday_result, today_result, open_time, id || -1]
+      );
+      if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
+        const todayDateStr = '09-08';
+        await safeQuery(
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+          [todayDateStr, name, today_result.trim()]
+        );
+      }
+    } catch (e) {}
+  })();
+
+  res.json({ success: true, message: 'Game updated successfully' });
 });
 
 // Admin: Add New Game
@@ -323,29 +352,43 @@ app.post('/api/admin/add-game', async (req, res) => {
   const gName = (name || '').trim().toUpperCase();
   if (!gName) return res.status(400).json({ error: 'Game name is required' });
 
-  try {
-    const maxRes = await safeQuery('SELECT COALESCE(MAX(sort_order), 0) as max_ord FROM games WHERE table_group = $1', [grp]);
-    const nextOrd = (maxRes && maxRes.rows && maxRes.rows[0] ? parseInt(maxRes.rows[0].max_ord) : 0) + 1;
+  const newId = Date.now();
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  if (!backup.games) backup.games = [];
 
-    const pgRes = await safeQuery(
-      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
-       ON CONFLICT (name) DO UPDATE SET
-         open_time = EXCLUDED.open_time,
-         close_time = EXCLUDED.close_time,
-         yesterday_result = EXCLUDED.yesterday_result,
-         today_result = EXCLUDED.today_result,
-         table_group = EXCLUDED.table_group,
-         sort_order = EXCLUDED.sort_order
-       RETURNING id`,
-      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd]
-    );
-    await syncJSONBackup();
-    res.json({ success: true, id: pgRes && pgRes.rows && pgRes.rows[0] ? pgRes.rows[0].id : Date.now() });
-  } catch (e) {
-    console.error('Error in add-game:', e.message);
-    res.status(500).json({ error: e.message });
-  }
+  const grpGames = backup.games.filter(g => parseInt(g.table_group) === grp);
+  const nextOrd = grpGames.length + 1;
+
+  const newGameObj = {
+    id: newId,
+    name: gName,
+    open_time: open_time || '',
+    yesterday_result: yesterday_result || '',
+    today_result: today_result || 'WAIT',
+    table_group: grp,
+    sort_order: nextOrd
+  };
+  backup.games.push(newGameObj);
+  saveBackupDataLocally(backup);
+
+  // Background DB save
+  (async () => {
+    try {
+      await safeQuery(
+        `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         ON CONFLICT (name) DO UPDATE SET
+           open_time = EXCLUDED.open_time,
+           yesterday_result = EXCLUDED.yesterday_result,
+           today_result = EXCLUDED.today_result,
+           table_group = EXCLUDED.table_group,
+           sort_order = EXCLUDED.sort_order`,
+        [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd]
+      );
+    } catch (e) {}
+  })();
+
+  res.json({ success: true, id: newId });
 });
 
 // Admin: Save Hero Box Games
@@ -393,16 +436,28 @@ app.post('/api/admin/reorder-games', async (req, res) => {
   const { order } = req.body;
   if (!Array.isArray(order)) return res.status(400).json({ error: 'Invalid order array' });
 
-  try {
-    for (const item of order) {
-      await safeQuery('UPDATE games SET sort_order = $1 WHERE id = $2', [item.sort_order, item.id]);
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  if (!backup.games) backup.games = [];
+
+  order.forEach(item => {
+    const existingIdx = backup.games.findIndex(g => g.id === item.id);
+    if (existingIdx !== -1) {
+      backup.games[existingIdx].sort_order = parseInt(item.sort_order) || 0;
     }
-    await syncJSONBackup();
-    res.json({ success: true, message: 'Games reordered successfully' });
-  } catch (e) {
-    console.error('Error in reorder-games:', e.message);
-    res.json({ success: true, message: 'Games reordered' });
-  }
+  });
+
+  backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
+  saveBackupDataLocally(backup);
+
+  (async () => {
+    for (const item of order) {
+      try {
+        await safeQuery('UPDATE games SET sort_order = $1 WHERE id = $2', [item.sort_order, item.id]);
+      } catch (e) {}
+    }
+  })();
+
+  res.json({ success: true, message: 'Games reordered successfully' });
 });
 
 // Admin: Save/Update Batch Games (Saves all details + order for multiple games at once)
@@ -410,42 +465,90 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
   const { games } = req.body;
   if (!Array.isArray(games) || games.length === 0) return res.json({ success: true, count: 0 });
 
-  try {
-    const todayDateStr = '09-08';
-    for (const g of games) {
-      if (g.id || g.name) {
-        await safeQuery(
-          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5 WHERE id = $6 OR UPPER(name) = UPPER($1)`,
-          [g.name || '', g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, g.id || -1]
-        );
-        if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
-          await safeQuery(
-            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-            [todayDateStr, g.name, g.today_result.trim()]
-          );
-        }
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  if (!backup.games) backup.games = [];
+  if (!backup.chart_records) backup.chart_records = [];
+
+  const todayDateStr = '09-08';
+
+  games.forEach(g => {
+    if (!g.name) return;
+    const gNameUpper = g.name.trim().toUpperCase();
+    const existingIdx = backup.games.findIndex(
+      bg => (bg.id && g.id && bg.id === g.id) || (bg.name || '').toUpperCase() === gNameUpper
+    );
+
+    const updatedGame = {
+      id: g.id || (existingIdx !== -1 ? backup.games[existingIdx].id : Date.now()),
+      name: gNameUpper,
+      open_time: g.open_time !== undefined ? g.open_time : '',
+      yesterday_result: g.yesterday_result !== undefined ? g.yesterday_result : '',
+      today_result: g.today_result !== undefined ? g.today_result : 'WAIT',
+      table_group: parseInt(g.table_group) || 1,
+      sort_order: parseInt(g.sort_order) || 0
+    };
+
+    if (existingIdx !== -1) {
+      backup.games[existingIdx] = { ...backup.games[existingIdx], ...updatedGame };
+    } else {
+      backup.games.push(updatedGame);
+    }
+
+    if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
+      const cIdx = backup.chart_records.findIndex(
+        r => r.record_date === todayDateStr && (r.game_name || '').toUpperCase() === gNameUpper
+      );
+      if (cIdx !== -1) {
+        backup.chart_records[cIdx].result_val = g.today_result.trim();
+      } else {
+        backup.chart_records.push({ record_date: todayDateStr, game_name: gNameUpper, result_val: g.today_result.trim() });
       }
     }
-    await syncJSONBackup();
-    res.json({ success: true, count: games.length });
-  } catch (e) {
-    console.error('Error in update-games-batch:', e.message);
-    res.json({ success: true, count: games.length });
-  }
+  });
+
+  backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
+  saveBackupDataLocally(backup);
+
+  (async () => {
+    for (const g of games) {
+      if (g.id || g.name) {
+        try {
+          await safeQuery(
+            `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5 WHERE id = $6 OR UPPER(name) = UPPER($1)`,
+            [g.name || '', g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, g.id || -1]
+          );
+          if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
+            await safeQuery(
+              `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+               ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+              [todayDateStr, g.name, g.today_result.trim()]
+            );
+          }
+        } catch (e) {}
+      }
+    }
+  })();
+
+  res.json({ success: true, count: games.length });
 });
 
 // Admin: Delete Game
 app.post('/api/admin/delete-game', async (req, res) => {
   const { id } = req.body;
-  try {
-    await safeQuery('DELETE FROM games WHERE id = $1', [id]);
-    await syncJSONBackup();
-    res.json({ success: true });
-  } catch (e) {
-    console.error('Error in delete-game:', e.message);
-    res.json({ success: true });
+
+  const backup = getBackupData();
+  if (backup && backup.games) {
+    backup.games = backup.games.filter(g => g.id !== id);
+    saveBackupDataLocally(backup);
   }
+
+  (async () => {
+    try {
+      await safeQuery('DELETE FROM games WHERE id = $1', [id]);
+    } catch (e) {}
+  })();
+
+  res.json({ success: true });
 });
 
 // Admin: Save/Update Single Chart Cell

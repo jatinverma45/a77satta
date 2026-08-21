@@ -19,17 +19,6 @@
   },
   "games": [
     {
-      "id": 120,
-      "name": "LAAL BAZAR",
-      "open_time": "01:40 PM",
-      "close_time": "01:40 PM",
-      "yesterday_result": "43",
-      "today_result": "WAIT",
-      "table_group": 1,
-      "sort_order": 1,
-      "is_hero": 0
-    },
-    {
       "id": 141,
       "name": "MANDI BAZAR",
       "open_time": "8:15 PM",
@@ -41,11 +30,22 @@
       "is_hero": 0
     },
     {
-      "id": 121,
+      "id": 1,
       "name": "MATKA KING",
       "open_time": "02:40 PM",
       "close_time": "02:40 PM",
       "yesterday_result": "82",
+      "today_result": "99",
+      "table_group": 1,
+      "sort_order": 1,
+      "is_hero": 0
+    },
+    {
+      "id": 2,
+      "name": "LAAL BAZAR",
+      "open_time": "01:40 PM",
+      "close_time": "01:40 PM",
+      "yesterday_result": "43",
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 2,
@@ -1935,7 +1935,7 @@
       "id": 146,
       "record_date": "09-08",
       "game_name": "MATKA KING",
-      "result_val": "81"
+      "result_val": "99"
     },
     {
       "id": 1592,
