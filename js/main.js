@@ -337,7 +337,9 @@
         // Table 1 (Main Games)
         if (tableWraps.length > 0) {
           let mainGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
-          if (data.settings && data.settings.chart1_columns_json) {
+          if (data.games && data.games.length > 0) {
+            mainGames = data.games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
+          } else if (data.settings && data.settings.chart1_columns_json) {
             try {
               const parsed = JSON.parse(data.settings.chart1_columns_json);
               if (Array.isArray(parsed) && parsed.length > 0) mainGames = parsed;

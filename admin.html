@@ -855,13 +855,6 @@
           <label>Today Result (Default: WAIT)</label>
           <input type="text" id="newGameToday" value="WAIT" style="color:#000; background:#fff;">
         </div>
-        <div class="admin-form-group">
-          <label>Table Group Placement</label>
-          <select id="newGameTableGroup" style="color:#000; background:#fff;">
-            <option value="1">Main 12 Games Table</option>
-            <option value="2">Lower 21 Games Table</option>
-          </select>
-        </div>
         <div class="action-row-flex" style="justify-content: flex-end; margin-top: 20px;">
           <button type="button" class="btn-adm btn-adm-red" onclick="closeAddGameModal()">CANCEL</button>
           <button type="submit" class="btn-adm btn-adm-green">CREATE GAME</button>
@@ -1711,11 +1704,8 @@
     }
 
     // Modal Handlers
-    function openAddGameModal(presetGroup) {
+    function openAddGameModal() {
       document.getElementById('addGameModal').classList.add('is-open');
-      if (presetGroup) {
-        document.getElementById('newGameTableGroup').value = String(presetGroup);
-      }
     }
     function closeAddGameModal() { document.getElementById('addGameModal').classList.remove('is-open'); }
 
@@ -1725,7 +1715,7 @@
       const open_time = document.getElementById('newGameTime').value;
       const yesterday_result = document.getElementById('newGameYesterday').value;
       const today_result = document.getElementById('newGameToday').value;
-      const table_group = parseInt(document.getElementById('newGameTableGroup').value);
+      const table_group = 1;
 
       try {
         const res = await fetch('/api/admin/add-game', {
@@ -1750,6 +1740,10 @@
     const defaultChart1Games = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
 
     function getChart1ActiveColumns() {
+      if (siteDataCache && siteDataCache.games && siteDataCache.games.length > 0) {
+        chart1CustomCols = siteDataCache.games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
+        return chart1CustomCols;
+      }
       if (chart1CustomCols && Array.isArray(chart1CustomCols) && chart1CustomCols.length > 0) {
         return chart1CustomCols;
       }

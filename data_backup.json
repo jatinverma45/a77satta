@@ -140,7 +140,7 @@
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 11,
-      "is_hero": 0
+      "is_hero": 1
     },
     {
       "id": 12,
@@ -152,226 +152,6 @@
       "table_group": 1,
       "sort_order": 12,
       "is_hero": 1
-    },
-    {
-      "id": 13,
-      "name": "HR SATTA",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 1,
-      "is_hero": 0
-    },
-    {
-      "id": 14,
-      "name": "UJJALA SUPER",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 2,
-      "is_hero": 0
-    },
-    {
-      "id": 15,
-      "name": "KKR CITY",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 3,
-      "is_hero": 0
-    },
-    {
-      "id": 16,
-      "name": "MADHUPURI",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 4,
-      "is_hero": 0
-    },
-    {
-      "id": 17,
-      "name": "ANMOL BAZAR",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 5,
-      "is_hero": 0
-    },
-    {
-      "id": 18,
-      "name": "KAROL BAGH",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 6,
-      "is_hero": 0
-    },
-    {
-      "id": 19,
-      "name": "DELHI DARBAR",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 7,
-      "is_hero": 0
-    },
-    {
-      "id": 20,
-      "name": "NEW GANGA",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 8,
-      "is_hero": 0
-    },
-    {
-      "id": 21,
-      "name": "SKY KING",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 9,
-      "is_hero": 0
-    },
-    {
-      "id": 22,
-      "name": "FATEHABAD",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 10,
-      "is_hero": 0
-    },
-    {
-      "id": 23,
-      "name": "UDAIPUR CITY",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 11,
-      "is_hero": 0
-    },
-    {
-      "id": 24,
-      "name": "RAJ SHREE",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 12,
-      "is_hero": 0
-    },
-    {
-      "id": 25,
-      "name": "VIP AGRA",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 13,
-      "is_hero": 0
-    },
-    {
-      "id": 26,
-      "name": "MOHALI-7",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 14,
-      "is_hero": 0
-    },
-    {
-      "id": 27,
-      "name": "BHADRA BAZAR",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 15,
-      "is_hero": 0
-    },
-    {
-      "id": 28,
-      "name": "MANDI BAZAR",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 16,
-      "is_hero": 0
-    },
-    {
-      "id": 29,
-      "name": "LION BAZAR",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 17,
-      "is_hero": 0
-    },
-    {
-      "id": 30,
-      "name": "SIALKOT",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 18,
-      "is_hero": 0
-    },
-    {
-      "id": 31,
-      "name": "DEHRADUN CITY",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 19,
-      "is_hero": 0
-    },
-    {
-      "id": 32,
-      "name": "DAMAN",
-      "open_time": "07:30 PM",
-      "close_time": "07:30 PM",
-      "yesterday_result": "50",
-      "today_result": "WAIT",
-      "table_group": 2,
-      "sort_order": 20,
-      "is_hero": 0
     }
   ],
   "chart_records": [
@@ -3729,6 +3509,21 @@
       "record_date": "21-08",
       "game_name": "DAMAN",
       "result_val": "-"
+    },
+    {
+      "record_date": "20-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "22"
+    },
+    {
+      "record_date": "21-08",
+      "game_name": "SADAR KING",
+      "result_val": "82"
+    },
+    {
+      "record_date": "20-08",
+      "game_name": "SADAR KING",
+      "result_val": "76"
     }
   ],
   "blogs": [
