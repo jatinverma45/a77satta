@@ -1310,22 +1310,28 @@
             <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
           </td>
           <td>
-            <input type="text" class="adm-input-cell hero-game-name" data-idx="${idx}" value="${gName}" placeholder="e.g. RAJ SHREE, GALI">
+            <input type="text" class="adm-input-cell hero-game-name" value="${gName}" placeholder="e.g. RAJ SHREE, GALI">
           </td>
           <td>
             <div class="action-row-flex">
-              <input type="text" class="adm-input-cell hero-game-result" data-idx="${idx}" id="hero_res_${idx}" value="${gRes}" placeholder="Result or WAIT">
-              <button class="btn-adm btn-adm-yellow" type="button" onclick="setHeroWait(${idx})">SET WAIT</button>
+              <input type="text" class="adm-input-cell hero-game-result" value="${gRes}" placeholder="Result or WAIT">
+              <button class="btn-adm btn-adm-yellow" type="button" onclick="setHeroWaitRow(this)">SET WAIT</button>
             </div>
           </td>
           <td>
             <div class="action-row-flex">
-              <button class="btn-adm btn-adm-red" type="button" onclick="removeHeroGameRow(${idx})">REMOVE</button>
+              <button class="btn-adm btn-adm-red" type="button" onclick="this.closest('tr').remove(); reindexTableRows(document.getElementById('heroAdminGamesTbody'));">REMOVE</button>
             </div>
           </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    function setHeroWaitRow(btn) {
+      const tr = btn ? btn.closest('tr') : null;
+      const el = tr ? tr.querySelector('.hero-game-result') : null;
+      if (el) el.value = 'WAIT';
     }
 
     function setHeroWait(idx) {
@@ -1346,12 +1352,12 @@
           <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
         </td>
         <td>
-          <input type="text" class="adm-input-cell hero-game-name" data-idx="${idx}" value="NEW GAME" placeholder="e.g. FARIDABAD">
+          <input type="text" class="adm-input-cell hero-game-name" value="NEW GAME" placeholder="e.g. FARIDABAD">
         </td>
         <td>
           <div class="action-row-flex">
-            <input type="text" class="adm-input-cell hero-game-result" data-idx="${idx}" id="hero_res_${idx}" value="WAIT" placeholder="Result or WAIT">
-            <button class="btn-adm btn-adm-yellow" type="button" onclick="setHeroWait(${idx})">SET WAIT</button>
+            <input type="text" class="adm-input-cell hero-game-result" value="WAIT" placeholder="Result or WAIT">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="setHeroWaitRow(this)">SET WAIT</button>
           </div>
         </td>
         <td>
@@ -1395,16 +1401,16 @@
           showToast('Hero Box Games Saved Successfully!');
           if (btn) {
             btn.textContent = '✅ HERO BOX SAVED!';
-            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX GAMES & ORDER'; }, 1500);
+            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX & ORDER'; }, 1500);
           }
           await loadAdminData();
         } else {
           alert('Failed to save Hero games');
-          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX GAMES & ORDER'; }
+          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX & ORDER'; }
         }
       } catch (e) {
         alert('Server error saving Hero games');
-        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX GAMES & ORDER'; }
+        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX & ORDER'; }
       }
     }
 
@@ -1452,7 +1458,7 @@
         <td>
           <div class="action-row-flex">
             <input type="text" class="adm-input-cell game-today-input" id="g_today_${game.id}" value="${game.today_result || 'WAIT'}">
-            <button class="btn-adm btn-adm-yellow" type="button" onclick="setWaitVal(${game.id})">SET WAIT</button>
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="setWaitValRow(this)">SET WAIT</button>
           </div>
         </td>
         <td>
@@ -1463,6 +1469,12 @@
         </td>
       `;
       return tr;
+    }
+
+    function setWaitValRow(btn) {
+      const tr = btn ? btn.closest('tr') : null;
+      const el = tr ? tr.querySelector('.game-today-input') : null;
+      if (el) el.value = 'WAIT';
     }
 
     function setWaitVal(gameId) {
@@ -1560,47 +1572,120 @@
       }
     }
 
+    // Dynamic Chart Manager Logic (Chart 1 & Chart 2)
+    let chart1CustomCols = null;
+    let chart2CustomCols = null;
     let extraChartDates = [];
-    let extraGameColumns1 = [];
+    let extraChartDates2 = [];
 
-    async function addNewChartColumn1() {
-      const colName = prompt('Enter new Game/Column Name (e.g. MUMBAI NIGHT):');
+    const defaultChart1Games = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
+    const defaultChart2Games = [
+      'HR SATTA', 'UJJALA SUPER', 'KKR CITY', 'MADHUPURI', 'ANMOL BAZAR', 'KAROL BAGH', 'AMMAN BAZAR',
+      'DELHI DARBAR', 'NEW GANGA', 'SKY KING', 'FATEHABAD', 'UDAIPUR CITY', 'RAJ SHREE',
+      'VIP AGRA', 'MOHALI-7', 'BHADRA BAZAR', 'MANDI BAZAR', 'LION BAZAR', 'SIALKOT',
+      'DEHRADUN CITY', 'DAMAN'
+    ];
+
+    function getChart1ActiveColumns() {
+      if (chart1CustomCols && Array.isArray(chart1CustomCols) && chart1CustomCols.length > 0) {
+        return chart1CustomCols;
+      }
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.chart1_columns_json) {
+        try {
+          const parsed = JSON.parse(siteDataCache.settings.chart1_columns_json);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            chart1CustomCols = parsed;
+            return chart1CustomCols;
+          }
+        } catch(e) {}
+      }
+      chart1CustomCols = [...defaultChart1Games];
+      return chart1CustomCols;
+    }
+
+    function getChart2ActiveColumns() {
+      if (chart2CustomCols && Array.isArray(chart2CustomCols) && chart2CustomCols.length > 0) {
+        return chart2CustomCols;
+      }
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.chart2_columns_json) {
+        try {
+          const parsed = JSON.parse(siteDataCache.settings.chart2_columns_json);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            chart2CustomCols = parsed;
+            return chart2CustomCols;
+          }
+        } catch(e) {}
+      }
+      chart2CustomCols = [...defaultChart2Games];
+      return chart2CustomCols;
+    }
+
+    function addNewChartColumn1() {
+      const colName = prompt('Enter new Game/Column Name for Chart 1 (e.g. MUMBAI NIGHT):');
       if (!colName || !colName.trim()) return;
       const formatted = colName.trim().toUpperCase();
-      try {
-        await fetch('/api/admin/update-chart-cell', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ record_date: '01-08', game_name: formatted, result_val: '-' })
-        });
-        showToast(`Added column ${formatted}`);
-        loadAdminData();
-      } catch (e) {
-        alert('Error adding column');
+      const cols = getChart1ActiveColumns();
+      if (!cols.includes(formatted)) {
+        cols.push(formatted);
+        chart1CustomCols = cols;
+        showToast(`Added column ${formatted} to Chart 1`);
+        renderChartTable();
+      } else {
+        alert(`Column "${formatted}" already exists!`);
       }
     }
 
-    async function addNewChartDateRow() {
-      const nextDateStr = prompt('Enter new Date (e.g. 10-08, 11-08):');
+    function addNewChartColumn2() {
+      const colName = prompt('Enter new Game/Column Name for Chart 2 (e.g. MUMBAI NIGHT):');
+      if (!colName || !colName.trim()) return;
+      const formatted = colName.trim().toUpperCase();
+      const cols = getChart2ActiveColumns();
+      if (!cols.includes(formatted)) {
+        cols.push(formatted);
+        chart2CustomCols = cols;
+        showToast(`Added column ${formatted} to Chart 2`);
+        renderChartTable2();
+      } else {
+        alert(`Column "${formatted}" already exists!`);
+      }
+    }
+
+    function deleteChartColumn(tableNum, colName) {
+      if (!confirm(`Are you sure you want to delete column "${colName}" from Chart ${tableNum}?`)) return;
+      if (tableNum === 1) {
+        const cols = getChart1ActiveColumns();
+        const idx = cols.indexOf(colName);
+        if (idx !== -1) cols.splice(idx, 1);
+        chart1CustomCols = cols;
+        renderChartTable();
+      } else {
+        const cols = getChart2ActiveColumns();
+        const idx = cols.indexOf(colName);
+        if (idx !== -1) cols.splice(idx, 1);
+        chart2CustomCols = cols;
+        renderChartTable2();
+      }
+    }
+
+    function addNewChartDateRow() {
+      const nextDateStr = prompt('Enter new Date for Chart 1 (e.g. 10-08, 11-08):');
       if (!nextDateStr || !nextDateStr.trim()) return;
       const formattedDate = nextDateStr.trim();
-      const mainGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
-      const items = mainGames.map(g => ({
-        record_date: formattedDate,
-        game_name: g,
-        result_val: '-'
-      }));
+      if (!extraChartDates.includes(formattedDate)) {
+        extraChartDates.push(formattedDate);
+        showToast(`Added date ${formattedDate} to Chart 1`);
+        renderChartTable();
+      }
+    }
 
-      try {
-        await fetch('/api/admin/update-chart-batch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items })
-        });
-        showToast(`Added date ${formattedDate}`);
-        loadAdminData();
-      } catch (e) {
-        alert('Error adding date');
+    function addNewChartDateRow2() {
+      const nextDateStr = prompt('Enter new Date for Chart 2 (e.g. 10-08, 11-08):');
+      if (!nextDateStr || !nextDateStr.trim()) return;
+      const formattedDate = nextDateStr.trim();
+      if (!extraChartDates2.includes(formattedDate)) {
+        extraChartDates2.push(formattedDate);
+        showToast(`Added date ${formattedDate} to Chart 2`);
+        renderChartTable2();
       }
     }
 
@@ -1610,17 +1695,27 @@
       const thead = document.getElementById('chartAdminThead1');
       if (!tbody) return;
 
-      const defaultGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
-
       const doRender = (dataObj) => {
         const records = (dataObj && dataObj.chart_records) || [];
         let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
         let defaultDates = getAutoDatesUpToToday();
         let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates])).sort();
-        const gamesList = Array.from(new Set([...defaultGames, ...extraGameColumns1]));
+        const gamesList = getChart1ActiveColumns();
 
         if (thead) {
-          thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
+          thead.innerHTML = `
+            <tr>
+              <th style="min-width: 80px;">DATE</th>
+              ${gamesList.map((g, idx) => `
+                <th>
+                  <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <input type="text" class="adm-input-cell chart1-col-header" data-col-idx="${idx}" value="${g}" title="Edit column name" style="font-weight:900; text-align:center; text-transform:uppercase; padding:4px 6px; border:2px solid #000;">
+                    <button type="button" class="btn-adm btn-adm-red" style="padding:1px 5px; font-size:10px;" onclick="deleteChartColumn(1, '${g}')" title="Delete Column">❌</button>
+                  </div>
+                </th>
+              `).join('')}
+            </tr>
+          `;
         }
 
         const recordsMap = {};
@@ -1634,9 +1729,9 @@
         dates.forEach(date => {
           const tr = document.createElement('tr');
           let cellsHtml = `<td><strong>${date}</strong></td>`;
-          gamesList.forEach(g => {
+          gamesList.forEach((g, gIdx) => {
             const val = recordsMap[`${date}_${g}`] !== undefined ? recordsMap[`${date}_${g}`] : '-';
-            cellsHtml += `<td><input type="text" class="adm-input-cell" data-date="${date}" data-game="${g}" value="${val}"></td>`;
+            cellsHtml += `<td><input type="text" class="adm-input-cell chart1-cell-input" data-date="${date}" data-col-idx="${gIdx}" value="${val}"></td>`;
           });
           tr.innerHTML = cellsHtml;
           tbody.appendChild(tr);
@@ -1655,15 +1750,48 @@
       }
     }
 
-    async function saveAllChartData() {
-      const inputs = document.querySelectorAll('#chartRecordsTbody input');
+    async function saveAllChartData(btn) {
+      const mainBtn = btn || document.querySelector("button[onclick='saveAllChartData(this)']");
+      if (mainBtn) {
+        mainBtn.disabled = true;
+        mainBtn.textContent = '⏳ SAVING CHART 1...';
+      }
+
+      // 1. Read updated column headers
+      const headerInputs = document.querySelectorAll('.chart1-col-header');
+      const updatedCols = [];
+      headerInputs.forEach(inp => {
+        const val = inp.value.trim().toUpperCase();
+        if (val) updatedCols.push(val);
+      });
+
+      chart1CustomCols = updatedCols;
+
+      // 2. Save dynamic column list to site_settings
+      const jsonCols = JSON.stringify(updatedCols);
+      try {
+        await fetch('/api/admin/update-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chart1_columns_json: jsonCols })
+        });
+        if (!siteDataCache) siteDataCache = {};
+        if (!siteDataCache.settings) siteDataCache.settings = {};
+        siteDataCache.settings.chart1_columns_json = jsonCols;
+      } catch(e) {}
+
+      // 3. Read chart cells
+      const cellInputs = document.querySelectorAll('.chart1-cell-input');
       const items = [];
-      inputs.forEach(input => {
-        if (input.dataset.date && input.dataset.game) {
+      cellInputs.forEach(inp => {
+        const date = inp.dataset.date;
+        const colIdx = parseInt(inp.dataset.colIdx);
+        const gameName = updatedCols[colIdx];
+        if (date && gameName) {
           items.push({
-            record_date: input.dataset.date,
-            game_name: input.dataset.game,
-            result_val: input.value
+            record_date: date,
+            game_name: gameName,
+            result_val: inp.value.trim()
           });
         }
       });
@@ -1675,65 +1803,24 @@
           body: JSON.stringify({ items })
         });
         if (res.ok) {
-          showToast('All Chart 1 Changes Saved Successfully!');
-          loadAdminData();
+          showToast('All Chart 1 Changes & Columns Saved Successfully!');
+          if (mainBtn) {
+            mainBtn.textContent = '✅ CHART 1 SAVED!';
+            setTimeout(() => {
+              mainBtn.disabled = false;
+              mainBtn.textContent = 'SAVE ALL CHART CHANGES';
+            }, 1500);
+          }
+          await loadAdminData();
         } else {
           alert('Error saving chart changes');
+          if (mainBtn) { mainBtn.disabled = false; mainBtn.textContent = 'SAVE ALL CHART CHANGES'; }
         }
       } catch (e) {
         alert('Error connecting to server');
+        if (mainBtn) { mainBtn.disabled = false; mainBtn.textContent = 'SAVE ALL CHART CHANGES'; }
       }
     }
-
-    let extraChartDates2 = [];
-    let extraGameColumns2 = [];
-
-    async function addNewChartColumn2() {
-      const colName = prompt('Enter new Game/Column Name (e.g. MUMBAI NIGHT):');
-      if (!colName || !colName.trim()) return;
-      const formatted = colName.trim().toUpperCase();
-      try {
-        await fetch('/api/admin/update-chart-cell', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ record_date: '01-08', game_name: formatted, result_val: '-' })
-        });
-        showToast(`Added column ${formatted}`);
-        loadAdminData();
-      } catch (e) {
-        alert('Error adding column');
-      }
-    }
-
-    async function addNewChartDateRow2() {
-      const nextDateStr = prompt('Enter new Date (e.g. 10-08, 11-08):');
-      if (!nextDateStr || !nextDateStr.trim()) return;
-      const formattedDate = nextDateStr.trim();
-      const items = lower20GamesList.map(g => ({
-        record_date: formattedDate,
-        game_name: g,
-        result_val: '-'
-      }));
-
-      try {
-        await fetch('/api/admin/update-chart-batch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items })
-        });
-        showToast(`Added date ${formattedDate}`);
-        loadAdminData();
-      } catch (e) {
-        alert('Error adding date');
-      }
-    }
-
-    const lower20GamesList = [
-      'HR SATTA', 'UJJALA SUPER', 'KKR CITY', 'MADHUPURI', 'ANMOL BAZAR', 'KAROL BAGH', 'AMMAN BAZAR',
-      'DELHI DARBAR', 'NEW GANGA', 'SKY KING', 'FATEHABAD', 'UDAIPUR CITY', 'RAJ SHREE',
-      'VIP AGRA', 'MOHALI-7', 'BHADRA BAZAR', 'MANDI BAZAR', 'LION BAZAR', 'SIALKOT',
-      'DEHRADUN CITY', 'DAMAN'
-    ];
 
     const lower20DefaultData = {
       '01-08': ['31', '15', '03', '61', '12', '19', '-', '61', '05', '61', '75', '24', '95', '15', '21', '02', '57', '19', '13', '27', '55'],
@@ -1755,14 +1842,26 @@
 
       const doRender2 = (dataObj) => {
         const records = (dataObj && dataObj.chart_records) || [];
-        const gamesList = Array.from(new Set([...lower20GamesList, ...extraGameColumns2]));
+        const gamesList = getChart2ActiveColumns();
 
         let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
         let defaultDates = getAutoDatesUpToToday();
         let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates2])).sort();
 
         if (thead) {
-          thead.innerHTML = `<tr><th>DATE</th>${gamesList.map(g => `<th>${g}</th>`).join('')}</tr>`;
+          thead.innerHTML = `
+            <tr>
+              <th style="min-width: 80px;">DATE</th>
+              ${gamesList.map((g, idx) => `
+                <th>
+                  <div style="display:flex; flex-direction:column; align-items:center; gap:4px;">
+                    <input type="text" class="adm-input-cell chart2-col-header" data-col-idx="${idx}" value="${g}" title="Edit column name" style="font-weight:900; text-align:center; text-transform:uppercase; padding:4px 6px; border:2px solid #000;">
+                    <button type="button" class="btn-adm btn-adm-red" style="padding:1px 5px; font-size:10px;" onclick="deleteChartColumn(2, '${g}')" title="Delete Column">❌</button>
+                  </div>
+                </th>
+              `).join('')}
+            </tr>
+          `;
         }
 
         const recordsMap = {};
@@ -1778,11 +1877,11 @@
           let cellsHtml = `<td><strong>${date}</strong></td>`;
           gamesList.forEach((g, gIdx) => {
             let val = recordsMap[`${date}_${g}`];
-            if (val === undefined && lower20DefaultData[date] && gIdx < lower20GamesList.length) {
+            if (val === undefined && lower20DefaultData[date] && gIdx < defaultChart2Games.length) {
               val = lower20DefaultData[date][gIdx];
             }
             if (val === undefined) val = '-';
-            cellsHtml += `<td><input type="text" class="adm-input-cell" data-date="${date}" data-game="${g}" value="${val}"></td>`;
+            cellsHtml += `<td><input type="text" class="adm-input-cell chart2-cell-input" data-date="${date}" data-col-idx="${gIdx}" value="${val}"></td>`;
           });
           tr.innerHTML = cellsHtml;
           tbody.appendChild(tr);
@@ -1801,15 +1900,48 @@
       }
     }
 
-    async function saveAllChartData2() {
-      const inputs = document.querySelectorAll('#chartRecordsTbody2 input');
+    async function saveAllChartData2(btn) {
+      const mainBtn = btn || document.querySelector("button[onclick='saveAllChartData2(this)']");
+      if (mainBtn) {
+        mainBtn.disabled = true;
+        mainBtn.textContent = '⏳ SAVING CHART 2...';
+      }
+
+      // 1. Read updated column headers
+      const headerInputs = document.querySelectorAll('.chart2-col-header');
+      const updatedCols = [];
+      headerInputs.forEach(inp => {
+        const val = inp.value.trim().toUpperCase();
+        if (val) updatedCols.push(val);
+      });
+
+      chart2CustomCols = updatedCols;
+
+      // 2. Save dynamic column list to site_settings
+      const jsonCols = JSON.stringify(updatedCols);
+      try {
+        await fetch('/api/admin/update-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chart2_columns_json: jsonCols })
+        });
+        if (!siteDataCache) siteDataCache = {};
+        if (!siteDataCache.settings) siteDataCache.settings = {};
+        siteDataCache.settings.chart2_columns_json = jsonCols;
+      } catch(e) {}
+
+      // 3. Read chart cells
+      const cellInputs = document.querySelectorAll('.chart2-cell-input');
       const items = [];
-      inputs.forEach(input => {
-        if (input.dataset.date && input.dataset.game) {
+      cellInputs.forEach(inp => {
+        const date = inp.dataset.date;
+        const colIdx = parseInt(inp.dataset.colIdx);
+        const gameName = updatedCols[colIdx];
+        if (date && gameName) {
           items.push({
-            record_date: input.dataset.date,
-            game_name: input.dataset.game,
-            result_val: input.value
+            record_date: date,
+            game_name: gameName,
+            result_val: inp.value.trim()
           });
         }
       });
@@ -1821,13 +1953,22 @@
           body: JSON.stringify({ items })
         });
         if (res.ok) {
-          showToast('All Chart 2 Changes Saved Successfully!');
-          loadAdminData();
+          showToast('All Chart 2 Changes & Columns Saved Successfully!');
+          if (mainBtn) {
+            mainBtn.textContent = '✅ CHART 2 SAVED!';
+            setTimeout(() => {
+              mainBtn.disabled = false;
+              mainBtn.textContent = 'SAVE ALL CHART CHANGES';
+            }, 1500);
+          }
+          await loadAdminData();
         } else {
           alert('Error saving chart changes');
+          if (mainBtn) { mainBtn.disabled = false; mainBtn.textContent = 'SAVE ALL CHART CHANGES'; }
         }
       } catch (e) {
         alert('Error connecting to server');
+        if (mainBtn) { mainBtn.disabled = false; mainBtn.textContent = 'SAVE ALL CHART CHANGES'; }
       }
     }
 

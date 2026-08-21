@@ -307,9 +307,15 @@
 
         const tableWraps = document.querySelectorAll('.lower-stat-table-wrap');
 
-        // Table 1 (Main 12 Games)
+        // Table 1 (Main Games)
         if (tableWraps.length > 0) {
-          const mainGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
+          let mainGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
+          if (data.settings && data.settings.chart1_columns_json) {
+            try {
+              const parsed = JSON.parse(data.settings.chart1_columns_json);
+              if (Array.isArray(parsed) && parsed.length > 0) mainGames = parsed;
+            } catch(e) {}
+          }
           const t1Thead = tableWraps[0].querySelector('thead');
           const t1Tbody = tableWraps[0].querySelector('tbody');
 
@@ -330,14 +336,20 @@
           }
         }
 
-        // Table 2 (20 Lower Games)
+        // Table 2 (Lower Games)
         if (tableWraps.length > 1) {
-          const lowerGames = [
+          let lowerGames = [
             'HR SATTA', 'UJJALA SUPER', 'KKR CITY', 'MADHUPURI', 'ANMOL BAZAR', 'KAROL BAGH',
             'AMMAN BAZAR', 'DELHI DARBAR', 'NEW GANGA', 'SKY KING', 'FATEHABAD', 'UDAIPUR CITY', 'RAJ SHREE',
             'VIP AGRA', 'MOHALI-7', 'BHADRA BAZAR', 'MANDI BAZAR', 'LION BAZAR', 'SIALKOT',
             'DEHRADUN CITY', 'DAMAN'
           ];
+          if (data.settings && data.settings.chart2_columns_json) {
+            try {
+              const parsed = JSON.parse(data.settings.chart2_columns_json);
+              if (Array.isArray(parsed) && parsed.length > 0) lowerGames = parsed;
+            } catch(e) {}
+          }
           const t2Thead = tableWraps[1].querySelector('thead');
           const t2Tbody = tableWraps[1].querySelector('tbody');
 

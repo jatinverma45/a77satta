@@ -206,23 +206,46 @@
     const closeBtn = document.getElementById('chartModalClose');
 
     if (grid) {
-      chartNames.forEach((name) => {
-        const card = document.createElement('div');
-        card.className = 'chart-card-item';
-        card.textContent = name;
-
-        const openChart = () => {
-          if (modalTitle) modalTitle.textContent = name;
-          if (modalBody) modalBody.innerHTML = buildTableMarkup(name);
-          if (modal) {
-            modal.classList.add('is-open');
-            modal.setAttribute('aria-hidden', 'false');
+      const renderGrid = () => {
+        let dynamicChartNames = [...chartNames];
+        if (liveSiteData) {
+          const dbGames = [];
+          if (liveSiteData.games) liveSiteData.games.forEach(g => { if (g.name) dbGames.push(`${g.name.toUpperCase()} SATTA KING CHART 2026`); });
+          if (liveSiteData.settings && liveSiteData.settings.chart1_columns_json) {
+            try {
+              JSON.parse(liveSiteData.settings.chart1_columns_json).forEach(c => dbGames.push(`${c.toUpperCase()} SATTA KING CHART 2026`));
+            } catch(e) {}
           }
-        };
+          if (liveSiteData.settings && liveSiteData.settings.chart2_columns_json) {
+            try {
+              JSON.parse(liveSiteData.settings.chart2_columns_json).forEach(c => dbGames.push(`${c.toUpperCase()} SATTA KING CHART 2026`));
+            } catch(e) {}
+          }
+          dynamicChartNames = Array.from(new Set([...dynamicChartNames, ...dbGames]));
+        }
 
-        card.addEventListener('click', openChart);
-        grid.appendChild(card);
-      });
+        grid.innerHTML = '';
+        dynamicChartNames.forEach((name) => {
+          const card = document.createElement('div');
+          card.className = 'chart-card-item';
+          card.textContent = name;
+
+          const openChart = () => {
+            if (modalTitle) modalTitle.textContent = name;
+            if (modalBody) modalBody.innerHTML = buildTableMarkup(name);
+            if (modal) {
+              modal.classList.add('is-open');
+              modal.setAttribute('aria-hidden', 'false');
+            }
+          };
+
+          card.addEventListener('click', openChart);
+          grid.appendChild(card);
+        });
+      };
+
+      renderGrid();
+      fetchLiveSiteData().then(renderGrid);
     }
 
     if (closeBtn) {

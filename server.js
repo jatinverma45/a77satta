@@ -30,9 +30,9 @@ function safeQuery(text, params = []) {
     const timer = setTimeout(() => {
       if (!finished) {
         finished = true;
-        reject(new Error('PostgreSQL query timeout (3s limit)'));
+        reject(new Error('PostgreSQL query timeout (1s limit)'));
       }
-    }, 3000);
+    }, 1000);
 
     pgPool.query(text, params)
       .then(res => {
@@ -93,6 +93,16 @@ async function syncJSONBackup() {
     console.error('Error syncing backup file:', e.message);
     return false;
   }
+}
+
+function saveBackupDataLocally(updatedData) {
+  try {
+    const jsonStr = JSON.stringify(updatedData, null, 2);
+    fs.writeFileSync(tmpBackupPath, jsonStr);
+    if (tmpBackupPath !== bundledBackupPath) {
+      try { fs.writeFileSync(bundledBackupPath, jsonStr); } catch (e) {}
+    }
+  } catch(e) {}
 }
 
 // Database Initialization Middleware
@@ -202,44 +212,22 @@ app.get('/api/site-data', async (req, res) => {
     let charts = chartsRes.rows || [];
     let blogs = blogsRes.rows || [];
 
-    // Failsafe: If database table is empty, auto-seed from data_backup.json
-    if (games.length === 0) {
-      const backup = getBackupData();
-      if (backup) {
-        if (backup.games && backup.games.length > 0) {
-          games = backup.games;
-          for (const g of backup.games) {
-            try {
-              await pgPool.query(
-                `INSERT INTO games (id, name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero)
-                 VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-                 ON CONFLICT (name) DO UPDATE SET
-                   open_time = EXCLUDED.open_time,
-                   close_time = EXCLUDED.close_time,
-                   yesterday_result = EXCLUDED.yesterday_result,
-                   today_result = EXCLUDED.today_result,
-                   table_group = EXCLUDED.table_group,
-                   sort_order = EXCLUDED.sort_order,
-                   is_hero = EXCLUDED.is_hero`,
-                [g.id || null, g.name, g.open_time || '', g.close_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.table_group || 1, g.sort_order || 0, g.is_hero || 0]
-              );
-            } catch (e) {}
-          }
-        }
-        if (backup.settings && Object.keys(settings).length === 0) {
-          settings = backup.settings;
-          for (const [k, v] of Object.entries(backup.settings)) {
-            try {
-              await pgPool.query('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value', [k, v]);
-            } catch (e) {}
-          }
-        }
-        if (backup.chart_records && charts.length === 0) {
-          charts = backup.chart_records;
-        }
-        if (backup.blogs && blogs.length === 0) {
-          blogs = backup.blogs;
-        }
+    const backup = getBackupData();
+    if (backup) {
+      if (backup.settings) {
+        settings = { ...backup.settings, ...settings };
+      }
+      if (games.length === 0 && backup.games && backup.games.length > 0) {
+        games = backup.games;
+      }
+      if (backup.chart_records && backup.chart_records.length > 0) {
+        const chartMap = {};
+        charts.forEach(r => { if (r.record_date && r.game_name) chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r; });
+        backup.chart_records.forEach(r => { if (r.record_date && r.game_name) chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r; });
+        charts = Object.values(chartMap);
+      }
+      if (blogs.length === 0 && backup.blogs && backup.blogs.length > 0) {
+        blogs = backup.blogs;
       }
     }
 
@@ -469,45 +457,65 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
   const { items } = req.body;
   if (!Array.isArray(items) || items.length === 0) return res.json({ success: true, count: 0 });
 
-  const client = await pgPool.connect();
-  try {
-    await client.query('BEGIN');
-    for (const item of items) {
-      await client.query(
-        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [item.record_date, item.game_name, item.result_val]
-      );
+  // 1. Save locally to backup file immediately
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  if (!backup.chart_records) backup.chart_records = [];
+
+  items.forEach(item => {
+    const existingIdx = backup.chart_records.findIndex(
+      r => r.record_date === item.record_date && (r.game_name || '').toUpperCase() === (item.game_name || '').toUpperCase()
+    );
+    if (existingIdx !== -1) {
+      backup.chart_records[existingIdx].result_val = item.result_val;
+    } else {
+      backup.chart_records.push({ record_date: item.record_date, game_name: item.game_name, result_val: item.result_val });
     }
-    await client.query('COMMIT');
-    await syncJSONBackup();
-    res.json({ success: true, count: items.length });
-  } catch (e) {
-    await client.query('ROLLBACK');
-    console.error(e);
-    res.status(500).json({ error: e.message });
-  } finally {
-    client.release();
-  }
+  });
+  saveBackupDataLocally(backup);
+
+  // 2. Background DB save
+  (async () => {
+    for (const item of items) {
+      try {
+        await safeQuery(
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+          [item.record_date, item.game_name, item.result_val]
+        );
+      } catch (e) {}
+    }
+  })();
+
+  res.json({ success: true, count: items.length });
 });
 
 // Admin: Save Settings (Ticker, Hindi tagline, Links, Khaiwal Cards, etc.)
 app.post('/api/admin/update-settings', async (req, res) => {
   const settings = req.body;
-  try {
-    for (const [key, value] of Object.entries(settings)) {
-      await safeQuery(
-        `INSERT INTO site_settings (key, value) VALUES ($1, $2)
-         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-        [key, typeof value === 'object' ? JSON.stringify(value) : String(value)]
-      );
-    }
-    await syncJSONBackup();
-    res.json({ success: true, message: 'Settings saved successfully' });
-  } catch (e) {
-    console.error('Error in update-settings:', e.message);
-    res.json({ success: true, message: 'Settings saved' });
+
+  // 1. Save locally to backup file immediately
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  if (!backup.settings) backup.settings = {};
+  for (const [key, value] of Object.entries(settings)) {
+    backup.settings[key] = typeof value === 'object' ? JSON.stringify(value) : String(value);
   }
+  saveBackupDataLocally(backup);
+
+  // 2. Background DB save
+  (async () => {
+    for (const [key, value] of Object.entries(settings)) {
+      const valStr = typeof value === 'object' ? JSON.stringify(value) : String(value);
+      try {
+        await safeQuery(
+          `INSERT INTO site_settings (key, value) VALUES ($1, $2)
+           ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+          [key, valStr]
+        );
+      } catch (e) {}
+    }
+  })();
+
+  res.json({ success: true, message: 'Settings saved successfully' });
 });
 
 // Admin: Save/Update Blog Post
