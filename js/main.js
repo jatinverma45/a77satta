@@ -39,7 +39,7 @@
   async function loadFullSiteData() {
     // 1. Instant local render from cache if available
     try {
-      const cached = localStorage.getItem('a77satta_site_cache');
+      const cached = localStorage.getItem('a77satta_site_cache_v4');
       if (cached) renderSiteData(JSON.parse(cached));
     } catch(e) {}
 
@@ -48,7 +48,7 @@
       const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
-      try { localStorage.setItem('a77satta_site_cache', JSON.stringify(data)); } catch(e) {}
+      try { localStorage.setItem('a77satta_site_cache_v4', JSON.stringify(data)); } catch(e) {}
       renderSiteData(data);
     } catch(e) {
       console.log('API sync offline or fallback active');
