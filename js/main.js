@@ -305,7 +305,7 @@
           for (const [k, v] of Object.entries(recordsMap)) {
             const [d, g] = k.split('_');
             if (d === date) {
-              if (g.includes(gUpper) || gUpper.includes(g) || (gUpper === 'DISAWER' && g === 'DESAWAR') || (gUpper === 'DESAWAR' && g === 'DISAWER')) {
+              if (g === gUpper || (gUpper === 'DISAWER' && g === 'DESAWAR') || (gUpper === 'DESAWAR' && g === 'DISAWER')) {
                 return v;
               }
             }

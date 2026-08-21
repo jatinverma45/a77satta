@@ -30,9 +30,9 @@ function safeQuery(text, params = []) {
     const timer = setTimeout(() => {
       if (!finished) {
         finished = true;
-        reject(new Error('PostgreSQL query timeout (1s limit)'));
+        reject(new Error('PostgreSQL query timeout (5s limit)'));
       }
-    }, 1000);
+    }, 5000);
 
     pgPool.query(text, params)
       .then(res => {
@@ -89,12 +89,13 @@ async function syncJSONBackup() {
     if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
       const gameMap = {};
       gamesRes.rows.forEach(g => {
-        const key = g.id ? `id_${g.id}` : `name_${(g.name || '').toUpperCase()}`;
-        gameMap[key] = g;
+        if (g && g.name) gameMap[g.name.trim().toUpperCase()] = g;
       });
       (backup.games || []).forEach(g => {
-        const key = g.id ? `id_${g.id}` : `name_${(g.name || '').toUpperCase()}`;
-        gameMap[key] = { ...(gameMap[key] || {}), ...g };
+        if (g && g.name) {
+          const key = g.name.trim().toUpperCase();
+          gameMap[key] = { ...(gameMap[key] || {}), ...g };
+        }
       });
       fullData.games = Object.values(gameMap);
       fullData.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
@@ -181,6 +182,15 @@ async function initDatabase() {
     }
 
     console.log('🚀 Supabase Real SQL PostgreSQL Database Initialized Successfully!');
+    try {
+      const backup = getBackupData();
+      if (backup && backup.settings) {
+        for (const [key, value] of Object.entries(backup.settings)) {
+          const valStr = typeof value === 'object' ? JSON.stringify(value) : String(value);
+          await pgPool.query('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value', [key, valStr]).catch(()=>{});
+        }
+      }
+    } catch(e) {}
     isDbReady = true;
   } catch (e) {
     console.error('❌ Supabase PostgreSQL initialization error:', e.message);
@@ -239,12 +249,13 @@ app.get('/api/site-data', async (req, res) => {
       if (backup.games && backup.games.length > 0) {
         const gameMap = {};
         games.forEach(g => {
-          const key = g.id ? `id_${g.id}` : `name_${(g.name || '').toUpperCase()}`;
-          gameMap[key] = g;
+          if (g && g.name) gameMap[g.name.trim().toUpperCase()] = g;
         });
         backup.games.forEach(g => {
-          const key = g.id ? `id_${g.id}` : `name_${(g.name || '').toUpperCase()}`;
-          gameMap[key] = { ...(gameMap[key] || {}), ...g };
+          if (g && g.name) {
+            const key = g.name.trim().toUpperCase();
+            gameMap[key] = { ...(gameMap[key] || {}), ...g };
+          }
         });
         games = Object.values(gameMap);
       }

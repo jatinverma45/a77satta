@@ -156,7 +156,9 @@
       if (liveSiteData && liveSiteData.chart_records) {
         const dateMap = {};
         liveSiteData.chart_records.forEach(r => {
-          if (r.game_name.toUpperCase().includes(cleanName.toUpperCase()) || cleanName.toUpperCase().includes(r.game_name.toUpperCase())) {
+          const gUpper = r.game_name.trim().toUpperCase();
+          const cUpper = cleanName.trim().toUpperCase();
+          if (gUpper === cUpper || (gUpper === 'DISAWER' && cUpper === 'DESAWAR') || (gUpper === 'DESAWAR' && cUpper === 'DISAWER')) {
             dateMap[r.record_date] = r.result_val;
           }
         });
