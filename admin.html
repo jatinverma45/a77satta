@@ -967,21 +967,19 @@
       if (siteDataCache && siteDataCache.games) {
         siteDataCache.games.forEach(g => { if (g.name) games.push(g.name.trim().toUpperCase()); });
       }
-      const c1Cols = getChart1ActiveColumns();
-      const allGames = Array.from(new Set([...games, ...c1Cols])).sort();
 
       const currentSaved = (siteDataCache && siteDataCache.settings && siteDataCache.settings.featured_banner_game)
         ? siteDataCache.settings.featured_banner_game.trim().toUpperCase()
         : 'DISAWER';
 
       select.innerHTML = '';
-      allGames.forEach(g => {
+      games.forEach(g => {
         const opt = document.createElement('option');
         opt.value = g;
         opt.textContent = g;
         select.appendChild(opt);
       });
-      if (allGames.includes(currentSaved)) {
+      if (games.includes(currentSaved)) {
         select.value = currentSaved;
       }
     }

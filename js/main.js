@@ -82,7 +82,14 @@
         btn.onclick = () => {
           const sel = document.getElementById('gameSelect');
           if (sel && sel.value) {
-            window.location.href = 'chart.html?game=' + encodeURIComponent(sel.value.trim());
+            const val = sel.value.trim();
+            if (window.location.pathname.includes('chart.html')) {
+              if (typeof openChartForGameName === 'function') {
+                openChartForGameName(val);
+              }
+            } else {
+              window.location.href = 'chart.html?game=' + encodeURIComponent(val);
+            }
           }
         };
       });
