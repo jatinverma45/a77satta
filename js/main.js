@@ -14,8 +14,9 @@
     const formattedTime = now.toLocaleTimeString('en-US', timeOptions);
     const dateStr = `${formattedDate} ${formattedTime}`;
 
-    const topDateEl = document.getElementById('live-date-str');
-    if (topDateEl) topDateEl.textContent = dateStr;
+    document.querySelectorAll('#live-date-str, .live-date-str, .date-line').forEach(el => {
+      el.textContent = dateStr;
+    });
   }
 
   updateClock();
