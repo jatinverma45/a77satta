@@ -629,6 +629,85 @@
     <!-- ======================================================== -->
     <div id="tab-chart" class="admin-main-pane">
       
+      <!-- 0. ALL SATTA KING CHART CARDS MANAGER (CUSTOM BUTTONS ON CHART.HTML) -->
+      <div class="admin-card-box" style="border: 2px solid #ffd400;">
+        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
+          <h3>🎴 CHART.HTML PAGE BUTTONS &amp; CARDS MANAGER</h3>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="addChartCardRow()">+ ADD NEW CHART CARD</button>
+            <button class="btn-adm btn-adm-green" type="button" onclick="saveCustomChartCards(this)">💾 SAVE CHART CARDS ORDER</button>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
+            ℹ️ Admin Note: <code>chart.html</code> page par jo Yellow Chart Buttons hote hain unhe <strong>Add, Edit, Reorder ya Delete</strong> karne ke liye niche use karein:
+          </p>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="width: 85px;">ORDER #</th>
+                  <th>CHART CARD BUTTON TITLE</th>
+                  <th style="width: 140px;">ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody id="chartCardsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 0.5. MONTHLY & ANNUAL CHART QUICK EDITOR (EDIT ANY GAME FOR ANY MONTH) -->
+      <div class="admin-card-box" style="border: 2px solid #1b873f;">
+        <div class="admin-card-header" style="background: #1b873f; color: #ffffff;">
+          <h3>📅 MONTHLY / ANNUAL CHART QUICK EDITOR (ALL MONTHS &amp; GAMES)</h3>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveMonthlyChartEditorData(this)">💾 SAVE MONTHLY ENTRIES</button>
+          </div>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
+            ℹ️ Admin Note: Kisi bhi Game ka kisi bhi Month (e.g. JAN, FEB, AUG, DEC) ka Chart Data direct edit &amp; fill karne ke liye niche select karein:
+          </p>
+          <div style="display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 16px;">
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <label style="font-weight: 900; font-size: 12px;">SELECT GAME:</label>
+              <select id="monthlyEditorGameSelect" style="padding: 8px 12px; font-size: 13px; font-weight: 900; border: 2px solid #000; border-radius: 4px; min-width: 180px;" onchange="loadMonthlyChartEditorData()"></select>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+              <label style="font-weight: 900; font-size: 12px;">SELECT MONTH:</label>
+              <select id="monthlyEditorMonthSelect" style="padding: 8px 12px; font-size: 13px; font-weight: 900; border: 2px solid #000; border-radius: 4px; min-width: 140px;" onchange="loadMonthlyChartEditorData()">
+                <option value="01">01 - JANUARY</option>
+                <option value="02">02 - FEBRUARY</option>
+                <option value="03">03 - MARCH</option>
+                <option value="04">04 - APRIL</option>
+                <option value="05">05 - MAY</option>
+                <option value="06">06 - JUNE</option>
+                <option value="07">07 - JULY</option>
+                <option value="08" selected>08 - AUGUST</option>
+                <option value="09">09 - SEPTEMBER</option>
+                <option value="10">10 - OCTOBER</option>
+                <option value="11">11 - NOVEMBER</option>
+                <option value="12">12 - DECEMBER</option>
+              </select>
+            </div>
+            <button class="btn-adm btn-adm-yellow" type="button" style="margin-top: 18px;" onclick="loadMonthlyChartEditorData()">↻ LOAD MONTH DATA</button>
+          </div>
+          <div class="adm-table-wrap">
+            <table class="adm-table">
+              <thead>
+                <tr>
+                  <th style="width: 80px;">DATE</th>
+                  <th style="width: 200px;">GAME NAME</th>
+                  <th>RESULT VALUE (e.g. 82, 38, 99 or -)</th>
+                </tr>
+              </thead>
+              <tbody id="monthlyChartEditorTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
       <!-- 1. AUGUST 2026 RECORD CHART MANAGER -->
       <div class="admin-card-box">
         <div class="admin-card-header">
@@ -912,6 +991,9 @@
       document.getElementById(paneId).classList.add('active');
       btn.classList.add('active');
       if (paneId === 'tab-chart') {
+        renderChartCardsAdminTable();
+        populateMonthlyGameSelect();
+        loadMonthlyChartEditorData();
         renderChartTable();
         renderChartTable2();
       }
@@ -949,6 +1031,9 @@
         renderGamesTable();
         renderNoticeBannersAdminTable();
         renderKhaiwalCardsAdminTable();
+        renderChartCardsAdminTable();
+        populateMonthlyGameSelect();
+        loadMonthlyChartEditorData();
         renderChartTable();
         renderChartTable2();
         renderSettings();
@@ -1735,6 +1820,220 @@
         extraChartDates2.push(formattedDate);
         showToast(`Added date ${formattedDate} to Chart 2`);
         renderChartTable2();
+      }
+    }
+
+    // Chart Cards Admin Logic
+    const defaultChartNames = [
+      'DAMAN SATTA KING CHART 2026', 'KAROL BAGH SATTA KING CHART 2026', 'RAJ SHREE SATTA KING CHART 2026',
+      'GALI SATTA KING CHART 2026', 'DWARKA SATTA KING CHART 2026', 'GAZIABAD SATTA KING CHART 2026',
+      'ALWAR SATTA KING CHART 2026', 'FARIDABAD SATTA KING CHART 2026', 'AGRA SATTA KING CHART 2026',
+      'SHRI GANESH SATTA KING CHART 2026', 'DELHI BAZAR SATTA KING CHART 2026', 'GWALIOR SATTA KING CHART 2026',
+      'SADAR BAZAR SATTA KING CHART 2026', 'DISAWER SATTA KING CHART 2026', 'HR SATTA SATTA KING CHART 2026',
+      'UJJALA SUPER SATTA KING CHART 2026', 'NEW GANGA SATTA KING CHART 2026', 'DELHI MATKA SATTA KING CHART 2026',
+      'DEHRADUN CITY SATTA KING CHART 2026', 'KKR CITY SATTA KING CHART 2026', 'DELHI DARBAR SATTA KING CHART 2026',
+      'MANDI BAZAR SATTA KING CHART 2026', 'MADHUPURI SATTA KING CHART 2026', 'FATEHABAD SATTA KING CHART 2026',
+      'LION BAZAR SATTA KING CHART 2026', 'SIALKOT SATTA KING CHART 2026', 'BHADRA BAZAR SATTA KING CHART 2026',
+      'ANMOL BAZAR SATTA KING CHART 2026', 'SKY KING SATTA KING CHART 2026', 'MOHALI-7 SATTA KING CHART 2026',
+      'UDAIPUR CITY SATTA KING CHART 2026', 'VIP AGRA SATTA KING CHART 2026', 'SHRI LAKSHMI SATTA KING CHART 2026'
+    ];
+
+    function getActiveChartCardsList() {
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.custom_chart_cards_json) {
+        try {
+          const parsed = JSON.parse(siteDataCache.settings.custom_chart_cards_json);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch(e) {}
+      }
+      return [...defaultChartNames];
+    }
+
+    function renderChartCardsAdminTable() {
+      const tbody = document.getElementById('chartCardsTbody');
+      if (!tbody) return;
+
+      const list = getActiveChartCardsList();
+      tbody.innerHTML = '';
+      list.forEach((title, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="white-space: nowrap;">
+            <span class="row-num-badge"><strong>${idx + 1}</strong></span>
+            <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 4px;" onclick="moveRowUp(this)">⬆️</button>
+            <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
+          </td>
+          <td>
+            <input type="text" class="adm-input-cell custom-chart-card-input" value="${title}" placeholder="e.g. KUBER SATTA KING CHART 2026">
+          </td>
+          <td>
+            <div class="action-row-flex">
+              <button class="btn-adm btn-adm-red" type="button" onclick="this.closest('tr').remove(); reindexTableRows(document.getElementById('chartCardsTbody'));">DELETE</button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addChartCardRow() {
+      const tbody = document.getElementById('chartCardsTbody');
+      if (!tbody) return;
+      const idx = tbody.children.length;
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="white-space: nowrap;">
+          <span class="row-num-badge"><strong>${idx + 1}</strong></span>
+          <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 4px;" onclick="moveRowUp(this)">⬆️</button>
+          <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
+        </td>
+        <td>
+          <input type="text" class="adm-input-cell custom-chart-card-input" value="" placeholder="e.g. KUBER SATTA KING CHART 2026">
+        </td>
+        <td>
+          <div class="action-row-flex">
+            <button class="btn-adm btn-adm-red" type="button" onclick="this.closest('tr').remove(); reindexTableRows(document.getElementById('chartCardsTbody'));">DELETE</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    async function saveCustomChartCards(btn) {
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING CARDS...'; }
+      const inputs = document.querySelectorAll('.custom-chart-card-input');
+      const list = [];
+      inputs.forEach(inp => {
+        const val = inp.value.trim();
+        if (val) list.push(val);
+      });
+
+      const jsonStr = JSON.stringify(list);
+      try {
+        const res = await fetch('/api/admin/update-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ custom_chart_cards_json: jsonStr })
+        });
+        if (res.ok) {
+          showToast('Chart Cards Saved Successfully!');
+          if (btn) {
+            btn.textContent = '✅ CARDS SAVED!';
+            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE CHART CARDS ORDER'; }, 1500);
+          }
+          if (!siteDataCache) siteDataCache = {};
+          if (!siteDataCache.settings) siteDataCache.settings = {};
+          siteDataCache.settings.custom_chart_cards_json = jsonStr;
+        }
+      } catch(e) {
+        alert('Error saving chart cards');
+        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE CHART CARDS ORDER'; }
+      }
+    }
+
+    // Monthly Chart Quick Editor Logic
+    function populateMonthlyGameSelect() {
+      const select = document.getElementById('monthlyEditorGameSelect');
+      if (!select) return;
+
+      const games = [];
+      if (siteDataCache && siteDataCache.games) {
+        siteDataCache.games.forEach(g => { if (g.name) games.push(g.name.trim().toUpperCase()); });
+      }
+      const c1Cols = getChart1ActiveColumns();
+      const c2Cols = getChart2ActiveColumns();
+      const allGames = Array.from(new Set([...games, ...c1Cols, ...c2Cols])).sort();
+
+      const currentVal = select.value;
+      select.innerHTML = '';
+      allGames.forEach(g => {
+        const opt = document.createElement('option');
+        opt.value = g;
+        opt.textContent = g;
+        select.appendChild(opt);
+      });
+      if (currentVal && allGames.includes(currentVal)) {
+        select.value = currentVal;
+      }
+    }
+
+    function loadMonthlyChartEditorData() {
+      populateMonthlyGameSelect();
+      const gameSelect = document.getElementById('monthlyEditorGameSelect');
+      const monthSelect = document.getElementById('monthlyEditorMonthSelect');
+      const tbody = document.getElementById('monthlyChartEditorTbody');
+      if (!gameSelect || !monthSelect || !tbody) return;
+
+      const selectedGame = gameSelect.value;
+      const selectedMonth = monthSelect.value;
+      if (!selectedGame) return;
+
+      const recordsMap = {};
+      if (siteDataCache && siteDataCache.chart_records) {
+        siteDataCache.chart_records.forEach(r => {
+          if (r && r.record_date && r.game_name) {
+            recordsMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r.result_val;
+          }
+        });
+      }
+
+      tbody.innerHTML = '';
+      for (let day = 1; day <= 31; day++) {
+        const dayStr = String(day).padStart(2, '0');
+        const dateKey = `${dayStr}-${selectedMonth}`;
+        const mapKey = `${dateKey}_${selectedGame}`;
+        const val = recordsMap[mapKey] !== undefined ? recordsMap[mapKey] : '-';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${dateKey}</strong></td>
+          <td><strong>${selectedGame}</strong></td>
+          <td>
+            <input type="text" class="adm-input-cell monthly-editor-result-input" data-date="${dateKey}" data-game="${selectedGame}" value="${val}" placeholder="Result or -">
+          </td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    async function saveMonthlyChartEditorData(btn) {
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING MONTH ENTRIES...'; }
+      const inputs = document.querySelectorAll('.monthly-editor-result-input');
+      const items = [];
+      inputs.forEach(inp => {
+        const date = inp.dataset.date;
+        const game = inp.dataset.game;
+        const val = inp.value.trim();
+        if (date && game) {
+          items.push({ record_date: date, game_name: game, result_val: val });
+        }
+      });
+
+      if (items.length === 0) {
+        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE MONTHLY ENTRIES'; }
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/update-chart-batch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ items })
+        });
+        if (res.ok) {
+          showToast(`Monthly Entries Saved Successfully!`);
+          if (btn) {
+            btn.textContent = '✅ MONTHLY ENTRIES SAVED!';
+            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE MONTHLY ENTRIES'; }, 1500);
+          }
+          await loadAdminData();
+          loadMonthlyChartEditorData();
+        } else {
+          alert('Failed to save monthly chart data');
+          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE MONTHLY ENTRIES'; }
+        }
+      } catch(e) {
+        alert('Server error saving monthly chart data');
+        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE MONTHLY ENTRIES'; }
       }
     }
 

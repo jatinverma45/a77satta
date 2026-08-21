@@ -154,24 +154,33 @@
       let tableRows = yearlySampleData;
 
       if (liveSiteData && liveSiteData.chart_records) {
-        const dateMap = {};
+        const fullDateMap = {};
         liveSiteData.chart_records.forEach(r => {
+          if (!r || !r.record_date || !r.game_name) return;
           const gUpper = r.game_name.trim().toUpperCase();
           const cUpper = cleanName.trim().toUpperCase();
           if (gUpper === cUpper || (gUpper === 'DISAWER' && cUpper === 'DESAWAR') || (gUpper === 'DESAWAR' && cUpper === 'DISAWER')) {
-            dateMap[r.record_date] = r.result_val;
+            const parts = r.record_date.trim().split('-');
+            if (parts.length === 2) {
+              const dayNum = parseInt(parts[0], 10);
+              const monthNum = parseInt(parts[1], 10);
+              if (!isNaN(dayNum) && !isNaN(monthNum)) {
+                fullDateMap[`${monthNum}_${dayNum}`] = r.result_val;
+              }
+            }
           }
         });
 
-        tableRows = yearlySampleData.map((row, idx) => {
-          const dayNum = String(idx + 1).padStart(2, '0');
-          const dateKey = `${dayNum}-08`;
-          if (dateMap[dateKey] !== undefined) {
-            const newRow = [...row];
-            newRow[7] = dateMap[dateKey];
-            return newRow;
+        tableRows = yearlySampleData.map((row, dayIdx) => {
+          const dayNum = dayIdx + 1;
+          const newRow = [...row];
+          for (let monthNum = 1; monthNum <= 12; monthNum++) {
+            const key = `${monthNum}_${dayNum}`;
+            if (fullDateMap[key] !== undefined) {
+              newRow[monthNum - 1] = fullDateMap[key];
+            }
           }
-          return row;
+          return newRow;
         });
       }
 
@@ -211,6 +220,14 @@
       const renderGrid = () => {
         let dynamicChartNames = [...chartNames];
         if (liveSiteData) {
+          if (liveSiteData.settings && liveSiteData.settings.custom_chart_cards_json) {
+            try {
+              const customList = JSON.parse(liveSiteData.settings.custom_chart_cards_json);
+              if (Array.isArray(customList) && customList.length > 0) {
+                dynamicChartNames = customList;
+              }
+            } catch(e) {}
+          }
           const dbGames = [];
           if (liveSiteData.games) liveSiteData.games.forEach(g => { if (g.name) dbGames.push(`${g.name.toUpperCase()} SATTA KING CHART 2026`); });
           if (liveSiteData.settings && liveSiteData.settings.chart1_columns_json) {
