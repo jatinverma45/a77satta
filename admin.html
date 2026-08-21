@@ -1286,14 +1286,22 @@
       const tbody = document.getElementById('heroAdminGamesTbody');
       if (!tbody) return;
 
-      let heroList = (siteDataCache && siteDataCache.hero_games) || [];
-      if (heroList.length === 0 && siteDataCache && siteDataCache.settings && siteDataCache.settings.hero_games_json) {
-        try { heroList = JSON.parse(siteDataCache.settings.hero_games_json); } catch(e) {}
+      let heroList = null;
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.hero_games_json) {
+        try {
+          const parsed = typeof siteDataCache.settings.hero_games_json === 'string'
+            ? JSON.parse(siteDataCache.settings.hero_games_json)
+            : siteDataCache.settings.hero_games_json;
+          if (Array.isArray(parsed) && parsed.length > 0) heroList = parsed;
+        } catch(e) {}
+      }
+      if (!heroList && siteDataCache && Array.isArray(siteDataCache.hero_games) && siteDataCache.hero_games.length > 0) {
+        heroList = siteDataCache.hero_games;
       }
       if (!heroList || heroList.length === 0) {
         heroList = [
-          { name: 'RAJ SHREE', today_result: 'WAIT' },
-          { name: 'UDAIPUR CITY', today_result: 'WAIT' }
+          { name: 'DISAWAR', today_result: 'WAIT' },
+          { name: 'GALI', today_result: 'WAIT' }
         ];
       }
 
@@ -1379,8 +1387,9 @@
 
     async function saveHeroGamesList(btn) {
       if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING HERO BOX...'; }
-      const nameInputs = document.querySelectorAll('.hero-game-name');
-      const resInputs = document.querySelectorAll('.hero-game-result');
+      const tbody = document.getElementById('heroAdminGamesTbody');
+      const nameInputs = tbody ? tbody.querySelectorAll('.hero-game-name') : [];
+      const resInputs = tbody ? tbody.querySelectorAll('.hero-game-result') : [];
 
       const games = [];
       nameInputs.forEach((input, i) => {

@@ -215,7 +215,7 @@ app.get('/api/site-data', async (req, res) => {
     const backup = getBackupData();
     if (backup) {
       if (backup.settings) {
-        settings = { ...backup.settings, ...settings };
+        settings = { ...settings, ...backup.settings };
       }
       if (games.length === 0 && backup.games && backup.games.length > 0) {
         games = backup.games;
@@ -231,14 +231,22 @@ app.get('/api/site-data', async (req, res) => {
       }
     }
 
-    let heroGames = games.filter(g => g.is_hero === 1);
-    if (heroGames.length === 0 && settings.hero_games_json) {
-      try { heroGames = JSON.parse(settings.hero_games_json); } catch (e) {}
+    let heroGames = [];
+    if (settings.hero_games_json) {
+      try {
+        const parsed = typeof settings.hero_games_json === 'string'
+          ? JSON.parse(settings.hero_games_json)
+          : settings.hero_games_json;
+        if (Array.isArray(parsed) && parsed.length > 0) heroGames = parsed;
+      } catch (e) {}
+    }
+    if (!heroGames || heroGames.length === 0) {
+      heroGames = games.filter(g => g.is_hero === 1);
     }
     if (!heroGames || heroGames.length === 0) {
       heroGames = [
-        { name: 'RAJ SHREE', today_result: 'WAIT' },
-        { name: 'UDAIPUR CITY', today_result: 'WAIT' }
+        { name: 'DISAWAR', today_result: 'WAIT' },
+        { name: 'GALI', today_result: 'WAIT' }
       ];
     }
 
@@ -340,39 +348,44 @@ app.post('/api/admin/add-game', async (req, res) => {
   }
 });
 
-// Admin: Save / Update Hero Box Games List
+// Admin: Save Hero Box Games
 app.post('/api/admin/update-hero-games', async (req, res) => {
   const { games } = req.body;
   if (!Array.isArray(games)) return res.status(400).json({ error: 'Invalid games array' });
 
-  try {
-    await safeQuery('UPDATE games SET is_hero = 0');
-    const heroItems = games.map(g => ({
-      id: g.id || null,
-      name: g.name ? g.name.trim().toUpperCase() : '',
-      today_result: g.today_result ? g.today_result.trim() : 'WAIT'
-    }));
+  const heroItems = games.map(g => ({
+    id: g.id || null,
+    name: g.name ? g.name.trim().toUpperCase() : '',
+    today_result: g.today_result ? g.today_result.trim() : 'WAIT'
+  }));
 
-    const heroJsonStr = JSON.stringify(heroItems);
-    await safeQuery(
-      `INSERT INTO site_settings (key, value) VALUES ($1, $2)
-       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-      ['hero_games_json', heroJsonStr]
-    );
+  const heroJsonStr = JSON.stringify(heroItems);
 
-    for (const g of heroItems) {
+  // 1. Save locally to backup immediately
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  if (!backup.settings) backup.settings = {};
+  backup.settings.hero_games_json = heroJsonStr;
+  saveBackupDataLocally(backup);
+
+  // 2. Background DB update
+  (async () => {
+    try {
+      await safeQuery('UPDATE games SET is_hero = 0');
       await safeQuery(
-        'UPDATE games SET is_hero = 1, today_result = $1 WHERE id = $2 OR UPPER(name) = $3',
-        [g.today_result, g.id || -1, g.name]
+        `INSERT INTO site_settings (key, value) VALUES ($1, $2)
+         ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+        ['hero_games_json', heroJsonStr]
       );
-    }
+      for (const g of heroItems) {
+        await safeQuery(
+          'UPDATE games SET is_hero = 1, today_result = $1 WHERE id = $2 OR UPPER(name) = $3',
+          [g.today_result, g.id || -1, g.name]
+        );
+      }
+    } catch (e) {}
+  })();
 
-    await syncJSONBackup();
-    res.json({ success: true, message: 'Hero Box Games updated successfully' });
-  } catch (e) {
-    console.error('Error in update-hero-games:', e.message);
-    res.json({ success: true, message: 'Hero Box Games updated' });
-  }
+  res.json({ success: true, message: 'Hero Box Games updated successfully' });
 });
 
 // Admin: Batch Reorder Games (Save Custom Order)

@@ -186,14 +186,22 @@
       // Render Main Hero Box Games (Dynamic Stack)
       const heroContainer = document.getElementById('heroGamesList');
       if (heroContainer) {
-        let heroList = data.hero_games;
-        if ((!heroList || heroList.length === 0) && data.settings && data.settings.hero_games_json) {
-          try { heroList = JSON.parse(data.settings.hero_games_json); } catch(e) {}
+        let heroList = null;
+        if (data.settings && data.settings.hero_games_json) {
+          try {
+            const parsed = typeof data.settings.hero_games_json === 'string'
+              ? JSON.parse(data.settings.hero_games_json)
+              : data.settings.hero_games_json;
+            if (Array.isArray(parsed) && parsed.length > 0) heroList = parsed;
+          } catch(e) {}
+        }
+        if (!heroList && Array.isArray(data.hero_games) && data.hero_games.length > 0) {
+          heroList = data.hero_games;
         }
         if (!heroList || heroList.length === 0) {
           heroList = [
-            { name: 'RAJ SHREE', today_result: 'WAIT' },
-            { name: 'UDAIPUR CITY', today_result: 'WAIT' }
+            { name: 'DISAWAR', today_result: 'WAIT' },
+            { name: 'GALI', today_result: 'WAIT' }
           ];
         }
 
