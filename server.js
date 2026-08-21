@@ -172,10 +172,6 @@ async function initDatabase() {
         content TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-
-      DELETE FROM games WHERE table_group = 2;
-      DELETE FROM site_settings WHERE key = 'chart2_columns_json';
-      DELETE FROM chart_records WHERE record_date IN ('01-01', '15-01');
     `);
 
     // Ensure Admin User Exists
@@ -258,43 +254,20 @@ app.get('/api/site-data', async (req, res) => {
       settingsRes.rows.forEach(s => settings[s.key] = s.value);
     }
 
-    const gameMap = {};
-    if (backup.games && backup.games.length > 0) {
-      backup.games.forEach(g => {
-        if (g && g.name) {
-          const key = g.name.trim().toUpperCase();
-          gameMap[key] = { ...g };
-        }
-      });
-    }
+    let games = [];
     if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
-      gamesRes.rows.forEach(g => {
-        if (g && g.name) {
-          const key = g.name.trim().toUpperCase();
-          gameMap[key] = { ...(gameMap[key] || {}), ...g };
-        }
-      });
+      games = gamesRes.rows;
+    } else if (backup.games && backup.games.length > 0) {
+      games = backup.games;
     }
-
-    let games = Object.values(gameMap);
     games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
 
-    let chartMap = {};
-    if (backup.chart_records && backup.chart_records.length > 0) {
-      backup.chart_records.forEach(r => {
-        if (r.record_date && r.game_name) {
-          chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r;
-        }
-      });
-    }
+    let charts = [];
     if (chartsRes && chartsRes.rows && chartsRes.rows.length > 0) {
-      chartsRes.rows.forEach(r => {
-        if (r.record_date && r.game_name) {
-          chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r;
-        }
-      });
+      charts = chartsRes.rows;
+    } else if (backup.chart_records && backup.chart_records.length > 0) {
+      charts = backup.chart_records;
     }
-    let charts = Object.values(chartMap);
 
     let blogs = (blogsRes && blogsRes.rows && blogsRes.rows.length > 0) ? blogsRes.rows : (backup.blogs || []);
 
@@ -655,11 +628,6 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
              ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
             [todayStr, gNameUpper, g.today_result.trim()]
           );
-        } else {
-          await safeQuery(
-            `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
-            [todayStr, gNameUpper]
-          );
         }
 
         if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
@@ -667,11 +635,6 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
             `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
              ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
             [yestStr, gNameUpper, g.yesterday_result.trim()]
-          );
-        } else {
-          await safeQuery(
-            `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
-            [yestStr, gNameUpper]
           );
         }
       } catch (e) {}
