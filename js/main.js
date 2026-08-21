@@ -458,21 +458,30 @@
     }
   }
 
-  document.addEventListener('DOMContentLoaded', loadFullSiteData);
-  setInterval(loadFullSiteData, 15000);
+  // Trigger site data load immediately & on DOM ready
+  loadFullSiteData();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadFullSiteData);
+  }
+  setInterval(loadFullSiteData, 10000);
 
   // Floating Refresh Button Event Listener
-  document.addEventListener('DOMContentLoaded', () => {
+  function initRefreshBtn() {
     const refreshBtn = document.getElementById('refreshBtn');
     if (refreshBtn) {
-      refreshBtn.addEventListener('click', () => {
+      refreshBtn.onclick = () => {
         refreshBtn.classList.add('spinning');
         loadFullSiteData();
         setTimeout(() => {
           refreshBtn.classList.remove('spinning');
         }, 700);
-      });
+      };
     }
-  });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRefreshBtn);
+  } else {
+    initRefreshBtn();
+  }
 
 })();
