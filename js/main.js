@@ -229,12 +229,8 @@
           const sel = document.getElementById('gameSelect');
           if (sel && sel.value) {
             const val = sel.value.trim();
-            if (window.location.pathname.includes('chart.html')) {
-              if (typeof openChartForGameName === 'function') {
-                openChartForGameName(val);
-              }
-            } else {
-              window.location.href = 'chart.html?game=' + encodeURIComponent(val);
+            if (typeof window.openChartForGameName === 'function') {
+              window.openChartForGameName(val);
             }
           }
         };
