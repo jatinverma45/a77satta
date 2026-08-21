@@ -407,11 +407,6 @@ app.post('/api/admin/update-game', async (req, res) => {
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [todayStr, name, today_result.trim()]
       );
-    } else {
-      await safeQuery(
-        `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
-        [todayStr, name]
-      );
     }
 
     if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
@@ -419,11 +414,6 @@ app.post('/api/admin/update-game', async (req, res) => {
         `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [yestStr, name, yesterday_result.trim()]
-      );
-    } else {
-      await safeQuery(
-        `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
-        [yestStr, name]
       );
     }
   } catch (e) {}

@@ -39,7 +39,7 @@
   async function loadFullSiteData() {
     // 1. Instant local render from cache if available
     try {
-      const cached = localStorage.getItem('a77satta_site_cache_v5');
+      const cached = localStorage.getItem('a77satta_site_cache_v6');
       if (cached) renderSiteData(JSON.parse(cached));
     } catch(e) {}
 
@@ -48,7 +48,7 @@
       const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
-      try { localStorage.setItem('a77satta_site_cache_v5', JSON.stringify(data)); } catch(e) {}
+      try { localStorage.setItem('a77satta_site_cache_v6', JSON.stringify(data)); } catch(e) {}
       renderSiteData(data);
     } catch(e) {
       console.log('API sync offline or fallback active');
@@ -170,42 +170,6 @@
           if (s.khaiwal_cards_json) {
             try { cardList = JSON.parse(s.khaiwal_cards_json); } catch(e) {}
           }
-          if (!cardList || cardList.length === 0) {
-            cardList = [
-              {
-                header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--",
-                title: "♣ KUBER BHAI KHAIWAL ♣",
-                card_type: "standard",
-                times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
-                footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
-                whatsapp_url: s.whatsapp_url || "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
-              },
-              {
-                header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--",
-                title: "♣ JASSI BHAI KHAIWAL ♣",
-                card_type: "standard",
-                times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
-                footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
-                whatsapp_url: s.whatsapp_url || "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
-              },
-              {
-                header_subtitle: "",
-                title: "नमस्कार सपयानी Cricket ID दोनों वाले भाई नीचे दिए गए लिंक पर क्लिक करें",
-                card_type: "feature",
-                times_text: "minimum ID 500₹ maximum no limit\n*** *** *** *** *** *** *** ***\nNote इस नंबर पर पैसे क्लिक करने वाले जो भी गलत होगा फिर\nफॉल्ट के लिए payment के लिए money transfer की जगह अन्य जगह हो सकता है",
-                footer_text: "",
-                whatsapp_url: s.whatsapp_url || "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
-              },
-              {
-                header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--",
-                title: "♣ RAMAN BHAI KHAIWAL ♣",
-                card_type: "standard",
-                times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM",
-                footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें",
-                whatsapp_url: s.whatsapp_url || "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e"
-              }
-            ];
-          }
 
           let gridHtml = '';
           cardList.forEach(c => {
@@ -266,11 +230,8 @@
         if (!heroList && Array.isArray(data.hero_games) && data.hero_games.length > 0) {
           heroList = data.hero_games;
         }
-        if (!heroList || heroList.length === 0) {
-          heroList = [
-            { name: 'DISAWAR', today_result: 'WAIT' },
-            { name: 'GALI', today_result: 'WAIT' }
-          ];
+        if (!heroList) {
+          heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
         }
 
         let heroHtml = '';

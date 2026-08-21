@@ -1163,8 +1163,8 @@
       const tbody = document.getElementById('khaiwalCardsTbody');
       if (!tbody) return;
 
-      if (!currentKhaiwalCardsList || currentKhaiwalCardsList.length === 0) {
-        currentKhaiwalCardsList = getInitialKhaiwalCards();
+      if (!currentKhaiwalCardsList) {
+        currentKhaiwalCardsList = [];
       }
 
       tbody.innerHTML = '';
@@ -1195,8 +1195,8 @@
     }
 
     function openKhaiwalModal(idx = -1) {
-      if (!currentKhaiwalCardsList || currentKhaiwalCardsList.length === 0) {
-        currentKhaiwalCardsList = getInitialKhaiwalCards();
+      if (!currentKhaiwalCardsList) {
+        currentKhaiwalCardsList = [];
       }
       document.getElementById('khaiwalEditIdx').value = idx;
       if (idx >= 0 && currentKhaiwalCardsList[idx]) {
@@ -1233,8 +1233,8 @@
 
     function saveKhaiwalModalForm(e) {
       e.preventDefault();
-      if (!currentKhaiwalCardsList || currentKhaiwalCardsList.length === 0) {
-        currentKhaiwalCardsList = getInitialKhaiwalCards();
+      if (!currentKhaiwalCardsList) {
+        currentKhaiwalCardsList = [];
       }
       const idx = parseInt(document.getElementById('khaiwalEditIdx').value);
       const cardObj = {
