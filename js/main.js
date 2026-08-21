@@ -35,11 +35,28 @@
   }
 
   // Fetch Site Data & Render Homepage Dynamically
+  // Fetch Site Data & Render Homepage Dynamically
   async function loadFullSiteData() {
+    // 1. Instant local render from cache if available
+    try {
+      const cached = localStorage.getItem('a77satta_site_cache');
+      if (cached) renderSiteData(JSON.parse(cached));
+    } catch(e) {}
+
+    // 2. Fetch fresh live data from server
     try {
       const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
+      try { localStorage.setItem('a77satta_site_cache', JSON.stringify(data)); } catch(e) {}
+      renderSiteData(data);
+    } catch(e) {
+      console.log('API sync offline or fallback active');
+    }
+  }
+
+  function renderSiteData(data) {
+    if (!data) return;
 
       const chartRecords = data.chart_records || [];
       const nowDate = new Date();
@@ -452,9 +469,8 @@
           blogLayout.innerHTML = html;
         }
       }
-
-    } catch (e) {
-      console.log('API sync offline or fallback active');
+    } catch(e) {
+      console.log('Error rendering site data:', e);
     }
   }
 
