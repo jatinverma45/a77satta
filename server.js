@@ -67,19 +67,38 @@ const tmpBackupPath = process.env.VERCEL ? '/tmp/data_backup.json' : bundledBack
 
 async function syncJSONBackup() {
   try {
-    const settingsRes = await safeQuery('SELECT key, value FROM site_settings');
-    const gamesRes = await safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC');
-    const chartsRes = await safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC');
-    const blogsRes = await safeQuery('SELECT * FROM blogs ORDER BY id DESC');
+    const backup = getBackupData() || {};
+    const settingsRes = await safeQuery('SELECT key, value FROM site_settings').catch(() => null);
+    const gamesRes = await safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null);
+    const chartsRes = await safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null);
+    const blogsRes = await safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null);
 
     const fullData = {
-      settings: {},
-      games: gamesRes.rows || [],
-      chart_records: chartsRes.rows || [],
-      blogs: blogsRes.rows || []
+      settings: backup.settings || {},
+      games: backup.games || [],
+      chart_records: backup.chart_records || [],
+      blogs: backup.blogs || []
     };
 
-    (settingsRes.rows || []).forEach(s => fullData.settings[s.key] = s.value);
+    if (settingsRes && settingsRes.rows) {
+      settingsRes.rows.forEach(s => {
+        if (!fullData.settings[s.key]) fullData.settings[s.key] = s.value;
+      });
+    }
+
+    if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
+      const gameMap = {};
+      gamesRes.rows.forEach(g => {
+        const key = g.id ? `id_${g.id}` : `name_${(g.name || '').toUpperCase()}`;
+        gameMap[key] = g;
+      });
+      (backup.games || []).forEach(g => {
+        const key = g.id ? `id_${g.id}` : `name_${(g.name || '').toUpperCase()}`;
+        gameMap[key] = { ...(gameMap[key] || {}), ...g };
+      });
+      fullData.games = Object.values(gameMap);
+      fullData.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
+    }
 
     const jsonStr = JSON.stringify(fullData, null, 2);
     try {
@@ -90,7 +109,6 @@ async function syncJSONBackup() {
     } catch (e) {}
     return true;
   } catch (e) {
-    console.error('Error syncing backup file:', e.message);
     return false;
   }
 }
@@ -108,20 +126,21 @@ function saveBackupDataLocally(updatedData) {
 // Database Initialization Middleware
 let isDbReady = false;
 async function initDatabase() {
+  if (isDbReady) return;
   try {
-    await pgPool.query(`
+    await safeQuery(`
       CREATE TABLE IF NOT EXISTS admin (
         id SERIAL PRIMARY KEY,
-        username VARCHAR(255) UNIQUE NOT NULL,
-        password TEXT NOT NULL
+        username VARCHAR(100) UNIQUE NOT NULL,
+        password VARCHAR(255) NOT NULL
       );
 
       CREATE TABLE IF NOT EXISTS games (
         id SERIAL PRIMARY KEY,
-        name VARCHAR(255) UNIQUE NOT NULL,
-        open_time VARCHAR(100),
-        close_time VARCHAR(100),
-        yesterday_result VARCHAR(50) DEFAULT '',
+        name VARCHAR(100) UNIQUE NOT NULL,
+        open_time VARCHAR(50),
+        close_time VARCHAR(50),
+        yesterday_result VARCHAR(50) DEFAULT '-',
         today_result VARCHAR(50) DEFAULT 'WAIT',
         table_group INT DEFAULT 1,
         sort_order INT DEFAULT 0,
@@ -131,9 +150,9 @@ async function initDatabase() {
       CREATE TABLE IF NOT EXISTS chart_records (
         id SERIAL PRIMARY KEY,
         record_date VARCHAR(50) NOT NULL,
-        game_name VARCHAR(255) NOT NULL,
-        result_val VARCHAR(50) NOT NULL,
-        CONSTRAINT unique_date_game UNIQUE(record_date, game_name)
+        game_name VARCHAR(100) NOT NULL,
+        result_val VARCHAR(50) DEFAULT '-',
+        UNIQUE(record_date, game_name)
       );
 
       CREATE TABLE IF NOT EXISTS site_settings (
@@ -217,9 +236,19 @@ app.get('/api/site-data', async (req, res) => {
       if (backup.settings) {
         settings = { ...settings, ...backup.settings };
       }
-      if (games.length === 0 && backup.games && backup.games.length > 0) {
-        games = backup.games;
+      if (backup.games && backup.games.length > 0) {
+        const gameMap = {};
+        games.forEach(g => {
+          const key = g.id ? `id_${g.id}` : `name_${(g.name || '').toUpperCase()}`;
+          gameMap[key] = g;
+        });
+        backup.games.forEach(g => {
+          const key = g.id ? `id_${g.id}` : `name_${(g.name || '').toUpperCase()}`;
+          gameMap[key] = { ...(gameMap[key] || {}), ...g };
+        });
+        games = Object.values(gameMap);
       }
+      games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
       if (backup.chart_records && backup.chart_records.length > 0) {
         const chartMap = {};
         charts.forEach(r => { if (r.record_date && r.game_name) chartMap[`${r.record_date}_${r.game_name.toUpperCase()}`] = r; });
