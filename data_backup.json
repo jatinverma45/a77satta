@@ -37,7 +37,7 @@
       "name": "GWALIOR",
       "open_time": "04:30 PM",
       "close_time": "04:30 PM",
-      "yesterday_result": "76",
+      "yesterday_result": "22",
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 2,
@@ -1523,7 +1523,7 @@
     {
       "record_date": "20-08",
       "game_name": "GWALIOR",
-      "result_val": "25"
+      "result_val": "22"
     },
     {
       "record_date": "20-08",
@@ -1579,11 +1579,6 @@
       "record_date": "21-08",
       "game_name": "SADAR BAZAR",
       "result_val": "82"
-    },
-    {
-      "record_date": "21-08",
-      "game_name": "GWALIOR",
-      "result_val": "15"
     },
     {
       "record_date": "21-08",

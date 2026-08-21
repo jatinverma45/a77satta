@@ -395,6 +395,10 @@ app.post('/api/admin/update-game', async (req, res) => {
     } else {
       backup.chart_records.push({ record_date: todayStr, game_name: gNameUpper, result_val: today_result.trim() });
     }
+  } else {
+    backup.chart_records = backup.chart_records.filter(
+      r => !(r.record_date === todayStr && (r.game_name || '').toUpperCase() === gNameUpper)
+    );
   }
 
   if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
@@ -406,6 +410,10 @@ app.post('/api/admin/update-game', async (req, res) => {
     } else {
       backup.chart_records.push({ record_date: yestStr, game_name: gNameUpper, result_val: yesterday_result.trim() });
     }
+  } else {
+    backup.chart_records = backup.chart_records.filter(
+      r => !(r.record_date === yestStr && (r.game_name || '').toUpperCase() === gNameUpper)
+    );
   }
 
   saveBackupDataLocally(backup);
@@ -423,12 +431,23 @@ app.post('/api/admin/update-game', async (req, res) => {
            ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
           [todayStr, name, today_result.trim()]
         );
+      } else {
+        await safeQuery(
+          `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
+          [todayStr, name]
+        );
       }
+
       if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
         await safeQuery(
           `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
            ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
           [yestStr, name, yesterday_result.trim()]
+        );
+      } else {
+        await safeQuery(
+          `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
+          [yestStr, name]
         );
       }
     } catch (e) {}
@@ -595,6 +614,10 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       } else {
         backup.chart_records.push({ record_date: todayStr, game_name: gNameUpper, result_val: g.today_result.trim() });
       }
+    } else {
+      backup.chart_records = backup.chart_records.filter(
+        r => !(r.record_date === todayStr && (r.game_name || '').toUpperCase() === gNameUpper)
+      );
     }
 
     if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
@@ -606,6 +629,10 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       } else {
         backup.chart_records.push({ record_date: yestStr, game_name: gNameUpper, result_val: g.yesterday_result.trim() });
       }
+    } else {
+      backup.chart_records = backup.chart_records.filter(
+        r => !(r.record_date === yestStr && (r.game_name || '').toUpperCase() === gNameUpper)
+      );
     }
   });
 
@@ -615,23 +642,35 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
   (async () => {
     for (const g of games) {
       if (g.id || g.name) {
+        const gNameUpper = (g.name || '').trim().toUpperCase();
         try {
           await safeQuery(
             `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5 WHERE id = $6 OR UPPER(name) = UPPER($1)`,
-            [g.name || '', g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, g.id || -1]
+            [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, g.id || -1]
           );
           if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
             await safeQuery(
               `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
                ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-              [todayStr, g.name, g.today_result.trim()]
+              [todayStr, gNameUpper, g.today_result.trim()]
+            );
+          } else {
+            await safeQuery(
+              `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
+              [todayStr, gNameUpper]
             );
           }
+
           if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
             await safeQuery(
               `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
                ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-              [yestStr, g.name, g.yesterday_result.trim()]
+              [yestStr, gNameUpper, g.yesterday_result.trim()]
+            );
+          } else {
+            await safeQuery(
+              `DELETE FROM chart_records WHERE record_date = $1 AND UPPER(game_name) = UPPER($2)`,
+              [yestStr, gNameUpper]
             );
           }
         } catch (e) {}

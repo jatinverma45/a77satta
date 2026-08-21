@@ -1554,19 +1554,48 @@
       }
     }
 
-    // Render Games Manager Tables (Table 1 & Table 2)
+    function getTodayAndYesterdayDateStr() {
+      const now = new Date();
+      const dayToday = String(now.getDate()).padStart(2, '0');
+      const monthToday = String(now.getMonth() + 1).padStart(2, '0');
+      const todayStr = `${dayToday}-${monthToday}`;
+
+      const yest = new Date(now);
+      yest.setDate(now.getDate() - 1);
+      const dayYest = String(yest.getDate()).padStart(2, '0');
+      const monthYest = String(yest.getMonth() + 1).padStart(2, '0');
+      const yestStr = `${dayYest}-${monthYest}`;
+
+      return { todayStr, yestStr };
+    }
+
+    function getResultFromChartRecords(chartRecords, dateStr, gameName) {
+      if (!chartRecords || !Array.isArray(chartRecords) || !dateStr || !gameName) return null;
+      const gNameUpper = gameName.trim().toUpperCase();
+      const rec = chartRecords.find(r => {
+        if (!r || !r.record_date || !r.game_name) return false;
+        const rDate = r.record_date.trim();
+        const rGame = r.game_name.trim().toUpperCase();
+        const isMatch = (rGame === gNameUpper) ||
+          (gNameUpper === 'DISAWER' && rGame === 'DESAWAR') ||
+          (gNameUpper === 'DESAWAR' && rGame === 'DISAWER');
+        return rDate === dateStr && isMatch;
+      });
+      if (rec && rec.result_val && rec.result_val.trim() !== '' && rec.result_val.trim() !== '-') {
+        return rec.result_val.trim();
+      }
+      return null;
+    }
+
+    // Render Games Manager Table (Table 1 Main Games)
     function renderGamesTable() {
       const tbody1 = document.getElementById('table1GamesTbody');
-      const tbody2 = document.getElementById('table2GamesTbody');
       const countTitle1 = document.getElementById('table1GamesCountTitle');
-      const countTitle2 = document.getElementById('table2GamesCountTitle');
 
       const allGames = (siteDataCache && siteDataCache.games) || [];
       const group1 = allGames.filter(g => parseInt(g.table_group) === 1 || !g.table_group || String(g.table_group) === '1');
-      const group2 = allGames.filter(g => parseInt(g.table_group) === 2 || String(g.table_group) === '2');
 
       if (countTitle1) countTitle1.textContent = `📊 TABLE 1 LIVE MARKET BOARD GAMES MANAGER (${group1.length} GAMES)`;
-      if (countTitle2) countTitle2.textContent = `📋 TABLE 2 ALL GAMES RESULT MANAGER (${group2.length} GAMES)`;
 
       if (tbody1) {
         tbody1.innerHTML = '';
@@ -1574,16 +1603,18 @@
           tbody1.appendChild(createGameRowElement(game, idx + 1));
         });
       }
-
-      if (tbody2) {
-        tbody2.innerHTML = '';
-        group2.forEach((game, idx) => {
-          tbody2.appendChild(createGameRowElement(game, idx + 1));
-        });
-      }
     }
 
     function createGameRowElement(game, rowNum) {
+      const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
+      const chartRecords = (siteDataCache && siteDataCache.chart_records) ? siteDataCache.chart_records : [];
+
+      const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, game.name);
+      const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, game.name);
+
+      const yestVal = chartYestVal !== null ? chartYestVal : (game.yesterday_result || '');
+      const todayVal = chartTodayVal !== null ? chartTodayVal : (game.today_result || 'WAIT');
+
       const tr = document.createElement('tr');
       tr.setAttribute('data-game-id', game.id);
       tr.innerHTML = `
@@ -1594,10 +1625,10 @@
         </td>
         <td><input type="text" class="adm-input-cell game-name-input" id="g_name_${game.id}" value="${game.name}"></td>
         <td><input type="text" class="adm-input-cell game-time-input" id="g_time_${game.id}" value="${game.open_time || ''}"></td>
-        <td><input type="text" class="adm-input-cell game-yest-input" id="g_yest_${game.id}" value="${game.yesterday_result || ''}"></td>
+        <td><input type="text" class="adm-input-cell game-yest-input" id="g_yest_${game.id}" value="${yestVal}"></td>
         <td>
           <div class="action-row-flex">
-            <input type="text" class="adm-input-cell game-today-input" id="g_today_${game.id}" value="${game.today_result || 'WAIT'}">
+            <input type="text" class="adm-input-cell game-today-input" id="g_today_${game.id}" value="${todayVal}">
             <button class="btn-adm btn-adm-yellow" type="button" onclick="setWaitValRow(this)">SET WAIT</button>
           </div>
         </td>
