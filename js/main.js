@@ -299,47 +299,49 @@
             } catch(e) {}
           }
 
-          let gridHtml = '';
-          cardList.forEach(c => {
-            const waUrl = c.whatsapp_url || s.whatsapp_url || '#';
-            const bodyLines = (c.times_text || '').split('\n').map(line => line.trim()).filter(Boolean).join('<br>\n            ');
-            if (c.card_type === 'feature') {
-              gridHtml += `
-      <article class="schedule-panel feature-card">
-        <header class="schedule-header">
-          <div class="subtitle-text">${c.header_subtitle || ''}</div>
-          <h2 class="bold-header">${c.title || ''}</h2>
-        </header>
-        <div class="panel-body">
-          <p>
-            ${bodyLines}
-          </p>
-          ${c.footer_text ? `<div class="note-box">${c.footer_text}</div>` : ''}
-          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="cta-banner">
-            <span class="cta-glow">▶ GO TO WHATSAPP DIRECT ◀</span>
-          </a>
-        </div>
-      </article>`;
-            } else {
-              gridHtml += `
-      <article class="schedule-panel">
-        <header class="schedule-header">
-          <div class="subtitle-text">${c.header_subtitle || '--सीधी सट्टा कंपनी का No 1 शर्तावाल--'}</div>
-          <h2 class="bold-header">${c.title || ''}</h2>
-        </header>
-        <div class="panel-body">
-          <p>
-            ${bodyLines}
-          </p>
-          <div class="note-box">${c.footer_text || 'Game play करने के लिए नीचे लिंक पर क्लिक करें'}</div>
-          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="cta-banner">
-            <span class="cta-glow">▶ GO TO WHATSAPP DIRECT ◀</span>
-          </a>
-        </div>
-      </article>`;
-            }
-          });
-          khaiwalGrid.innerHTML = gridHtml;
+          if (Array.isArray(cardList) && cardList.length > 0) {
+            let gridHtml = '';
+            cardList.forEach(c => {
+              const waUrl = c.whatsapp_url || s.whatsapp_url || '#';
+              const bodyLines = (c.times_text || '').split('\n').map(line => line.trim()).filter(Boolean).join('<br>\n            ');
+              if (c.card_type === 'feature') {
+                gridHtml += `
+        <article class="schedule-panel feature-card">
+          <header class="schedule-header">
+            <div class="subtitle-text">${c.header_subtitle || ''}</div>
+            <h2 class="bold-header">${c.title || ''}</h2>
+          </header>
+          <div class="panel-body">
+            <p>
+              ${bodyLines}
+            </p>
+            ${c.footer_text ? `<div class="note-box">${c.footer_text}</div>` : ''}
+            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="cta-banner">
+              <span class="cta-glow">▶ GO TO WHATSAPP DIRECT ◀</span>
+            </a>
+          </div>
+        </article>`;
+              } else {
+                gridHtml += `
+        <article class="schedule-panel">
+          <header class="schedule-header">
+            <div class="subtitle-text">${c.header_subtitle || '--सीधी सट्टा कंपनी का No 1 शर्तावाल--'}</div>
+            <h2 class="bold-header">${c.title || ''}</h2>
+          </header>
+          <div class="panel-body">
+            <p>
+              ${bodyLines}
+            </p>
+            <div class="note-box">${c.footer_text || 'Game play करने के लिए नीचे लिंक पर क्लिक करें'}</div>
+            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="cta-banner">
+              <span class="cta-glow">▶ GO TO WHATSAPP DIRECT ◀</span>
+            </a>
+          </div>
+        </article>`;
+              }
+            });
+            khaiwalGrid.innerHTML = gridHtml;
+          }
         }
       }
 
