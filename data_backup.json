@@ -17,7 +17,8 @@
     "hero_games_json": "[{\"id\":null,\"name\":\"DISAWAR\",\"today_result\":\"49\"},{\"id\":null,\"name\":\"GALI\",\"today_result\":\"88\"},{\"id\":null,\"name\":\"FARIDABAD\",\"today_result\":\"WAIT\"}]",
     "chart1_columns_json": "[\"SADAR BAZAR\",\"GWALIOR\",\"DELHI BAZAR\",\"DELHI MATKA\",\"SHRI GANESH\",\"AGRA\",\"FARIDABAD\",\"ALWAR\",\"GAZIABAD\",\"DWARKA\",\"GALI\",\"DISAWER\"]",
     "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]",
-    "custom_chart_cards_json": "[\"DAMAN SATTA KING CHART 2026\",\"DISAWER SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\",\"KUBER SATTA KING CHART 2026\"]"
+    "custom_chart_cards_json": "[\"DAMAN SATTA KING CHART 2026\",\"DISAWER SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\",\"KUBER SATTA KING CHART 2026\"]",
+    "featured_banner_game": "DISAWER"
   },
   "games": [
     {

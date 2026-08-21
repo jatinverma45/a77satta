@@ -208,7 +208,8 @@
         let heroHtml = '';
         heroList.forEach(g => {
           const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
-          const resVal = g.today_result ? g.today_result.trim() : (g.result || 'WAIT');
+          const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
+          const resVal = chartTodayVal !== null ? chartTodayVal : (g.today_result ? g.today_result.trim() : (g.result || 'WAIT'));
           const resHtml = (!resVal || resVal === 'WAIT')
             ? `<div class="wait-starburst-badge">WAIT</div>`
             : `<div class="game-result-main">${resVal}</div>`;
@@ -221,6 +222,41 @@
           `;
         });
         heroContainer.innerHTML = heroHtml;
+      }
+
+      // Render Featured Yellow Banner Game (Bottom Disclaimer Box)
+      const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
+      if (bannerBox) {
+        const selectedBannerGameName = (data.settings && data.settings.featured_banner_game)
+          ? data.settings.featured_banner_game.trim().toUpperCase()
+          : 'DISAWER';
+
+        const gameConfig = (data.games || []).find(g => (g.name || '').trim().toUpperCase() === selectedBannerGameName) || {
+          name: selectedBannerGameName,
+          open_time: '5:15 AM',
+          yesterday_result: '16',
+          today_result: 'WAIT'
+        };
+
+        const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, selectedBannerGameName);
+        const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, selectedBannerGameName);
+
+        const finalYest = chartYestVal !== null ? chartYestVal : (gameConfig.yesterday_result || '-');
+        const finalToday = chartTodayVal !== null ? chartTodayVal : (gameConfig.today_result || 'WAIT');
+
+        const todayHtml = (!finalToday || finalToday === 'WAIT')
+          ? `<span class="wait-starburst-badge">WAIT</span>`
+          : `<span class="score-number score-number-today">${finalToday}</span>`;
+
+        bannerBox.innerHTML = `
+          <div class="bottom-title">${gameConfig.name}</div>
+          <div class="bottom-time">${gameConfig.open_time || ''}</div>
+          <div class="score-row">
+            <span class="score-number">${finalYest}</span>
+            <span class="green-arrow-pill">➡️</span>
+            ${todayHtml}
+          </div>
+        `;
       }
 
       // 2. Games Tables Sync
@@ -238,15 +274,21 @@
             </div>
           `;
           group1.forEach(g => {
-            const todayRes = g.today_result === 'WAIT' || !g.today_result
+            const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, g.name);
+            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name);
+
+            const yestRes = chartYestVal !== null ? chartYestVal : (g.yesterday_result || '-');
+            const todayRaw = chartTodayVal !== null ? chartTodayVal : (g.today_result || 'WAIT');
+
+            const todayResHtml = (!todayRaw || todayRaw === 'WAIT')
               ? `<span class="market-wait">WAIT</span>`
-              : g.today_result;
+              : todayRaw;
 
             rowsHtml += `
               <div class="a77-market-row">
                 <div class="market-title">${g.name}<br><span>${g.open_time || ''}</span></div>
-                <div class="market-cell">${g.yesterday_result || '-'}</div>
-                <div class="market-cell market-result">${todayRes}</div>
+                <div class="market-cell">${yestRes}</div>
+                <div class="market-cell market-result">${todayResHtml}</div>
               </div>
             `;
           });

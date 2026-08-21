@@ -443,10 +443,30 @@
         </div>
       </div>
 
+      <!-- 0.5. FEATURED YELLOW BANNER GAME MANAGER (BIG BOTTOM BOX) -->
+      <div class="admin-card-box" style="border: 3px solid #ffd400; background: #fffdf0; margin-top: 20px;">
+        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
+          <h3>⭐ FEATURED YELLOW BANNER GAME MANAGER (BIG YELLOW BOX)</h3>
+          <button class="btn-adm btn-adm-green" type="button" onclick="saveFeaturedBannerGame(this)">💾 SAVE FEATURED BANNER GAME</button>
+        </div>
+        <div class="admin-card-body">
+          <p style="font-weight: 800; margin-bottom: 12px; font-size: 13px; color: #111;">
+            ℹ️ Homepage ke <strong>Big Yellow Banner</strong> mein kis Game ka name, time aur live results show karne hain, use yahan se select karein:
+          </p>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <label style="font-weight: 900; font-size: 14px; color: #000;">FEATURED BANNER GAME:</label>
+            <select id="featuredBannerGameSelect" class="adm-input-cell" style="width: auto; min-width: 250px; font-size: 14px; font-weight: 900; border: 2px solid #000; background: #fff;">
+              <!-- Options populated dynamically -->
+            </select>
+            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveFeaturedBannerGame(this)">SELECT &amp; UPDATE GAME</button>
+          </div>
+        </div>
+      </div>
+
       <!-- 1. TABLE 1 LIVE MARKET BOARD GAMES MANAGER (UPPER LIVE TABLE) -->
       <div class="admin-card-box" style="border: 2px solid #ffd400;">
         <div class="admin-card-header" style="background: #000000; color: #ffd400;">
-          <h3 id="table1GamesCountTitle">📊 TABLE 1 LIVE MARKET BOARD GAMES MANAGER (7 GAMES)</h3>
+          <h3 id="table1GamesCountTitle">📊 TABLE 1 LIVE MARKET BOARD GAMES MANAGER (12 GAMES)</h3>
           <div class="action-row-flex">
             <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(1, this)">💾 SAVE TABLE 1 ALL DATA &amp; ORDER</button>
             <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(1)">+ ADD GAME TO TABLE 1</button>
@@ -469,37 +489,6 @@
                 </tr>
               </thead>
               <tbody id="table1GamesTbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. TABLE 2 ALL GAMES RESULT MANAGER (LOWER BOARD) -->
-      <div class="admin-card-box">
-        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
-          <h3 id="table2GamesCountTitle">📋 TABLE 2 ALL GAMES RESULT MANAGER (21 GAMES)</h3>
-          <div class="action-row-flex">
-            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(2, this)">💾 SAVE TABLE 2 ALL DATA &amp; ORDER</button>
-            <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(2)">+ ADD GAME TO TABLE 2</button>
-          </div>
-        </div>
-        <div class="admin-card-body">
-          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
-            ℹ️ Admin Note: <strong>⬆️ UP / ⬇️ DOWN</strong> buttons se games ka order up/down karein aur "SAVE TABLE 2 ORDER" par click karein.
-          </p>
-          <div class="adm-table-wrap">
-            <table class="adm-table">
-              <thead>
-                <tr>
-                  <th style="width: 85px;">ORDER #</th>
-                  <th style="width: 220px;">GAME NAME</th>
-                  <th style="width: 140px;">TIME</th>
-                  <th style="width: 150px;">YESTERDAY RESULT</th>
-                  <th style="width: 220px;">TODAY RESULT (WAIT)</th>
-                  <th style="width: 180px;">QUICK ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody id="table2GamesTbody"></tbody>
             </table>
           </div>
         </div>
@@ -973,6 +962,66 @@
       return dates;
     }
 
+    // Featured Yellow Banner Game Selector Logic
+    function populateFeaturedBannerGameSelect() {
+      const select = document.getElementById('featuredBannerGameSelect');
+      if (!select) return;
+
+      const games = [];
+      if (siteDataCache && siteDataCache.games) {
+        siteDataCache.games.forEach(g => { if (g.name) games.push(g.name.trim().toUpperCase()); });
+      }
+      const c1Cols = getChart1ActiveColumns();
+      const allGames = Array.from(new Set([...games, ...c1Cols])).sort();
+
+      const currentSaved = (siteDataCache && siteDataCache.settings && siteDataCache.settings.featured_banner_game)
+        ? siteDataCache.settings.featured_banner_game.trim().toUpperCase()
+        : 'DISAWER';
+
+      select.innerHTML = '';
+      allGames.forEach(g => {
+        const opt = document.createElement('option');
+        opt.value = g;
+        opt.textContent = g;
+        select.appendChild(opt);
+      });
+      if (allGames.includes(currentSaved)) {
+        select.value = currentSaved;
+      }
+    }
+
+    async function saveFeaturedBannerGame(btn) {
+      const select = document.getElementById('featuredBannerGameSelect');
+      if (!select) return;
+      const selectedVal = select.value;
+      if (!selectedVal) return;
+
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING...'; }
+      try {
+        const res = await fetch('/api/admin/update-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ featured_banner_game: selectedVal })
+        });
+        if (res.ok) {
+          showToast(`Featured Banner Game set to "${selectedVal}"!`);
+          if (btn) {
+            btn.textContent = '✅ SAVED!';
+            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE FEATURED BANNER GAME'; }, 1500);
+          }
+          if (!siteDataCache) siteDataCache = {};
+          if (!siteDataCache.settings) siteDataCache.settings = {};
+          siteDataCache.settings.featured_banner_game = selectedVal;
+        } else {
+          alert('Failed to update Featured Banner Game');
+          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE FEATURED BANNER GAME'; }
+        }
+      } catch(e) {
+        alert('Server error updating Featured Banner Game');
+        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE FEATURED BANNER GAME'; }
+      }
+    }
+
     // Load Site Data
     async function loadAdminData() {
       try {
@@ -981,6 +1030,7 @@
         if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
           try { currentKhaiwalCardsList = JSON.parse(siteDataCache.settings.khaiwal_cards_json); } catch(e) {}
         }
+        populateFeaturedBannerGameSelect();
         renderHeroGamesAdminTable();
         renderGamesTable();
         renderNoticeBannersAdminTable();
