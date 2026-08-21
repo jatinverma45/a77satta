@@ -39,7 +39,7 @@
   async function loadFullSiteData() {
     // 1. Instant local render from cache if available
     try {
-      const cached = localStorage.getItem('a77satta_site_cache_v4');
+      const cached = localStorage.getItem('a77satta_site_cache_v5');
       if (cached) renderSiteData(JSON.parse(cached));
     } catch(e) {}
 
@@ -48,7 +48,7 @@
       const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
-      try { localStorage.setItem('a77satta_site_cache_v4', JSON.stringify(data)); } catch(e) {}
+      try { localStorage.setItem('a77satta_site_cache_v5', JSON.stringify(data)); } catch(e) {}
       renderSiteData(data);
     } catch(e) {
       console.log('API sync offline or fallback active');
@@ -314,8 +314,17 @@
         const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
         const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
 
-        const finalYest = (chartYestVal !== null && chartYestVal !== undefined) ? chartYestVal : (gameConfig.yesterday_result || '-');
-        const finalToday = (chartTodayVal !== null && chartTodayVal !== undefined) ? chartTodayVal : (gameConfig.today_result || 'WAIT');
+        // Priority 1: Table 1 game config (g.yesterday_result / g.today_result)
+        // Priority 2: chart_records entry
+        let finalYest = gameConfig.yesterday_result;
+        if (!finalYest || finalYest === '-') {
+          finalYest = (chartYestVal !== null && chartYestVal !== undefined) ? chartYestVal : '-';
+        }
+
+        let finalToday = gameConfig.today_result;
+        if (!finalToday || finalToday === 'WAIT') {
+          finalToday = (chartTodayVal !== null && chartTodayVal !== undefined) ? chartTodayVal : 'WAIT';
+        }
 
         const todayHtml = (!finalToday || finalToday === 'WAIT')
           ? `<span class="wait-starburst-badge">WAIT</span>`
@@ -333,12 +342,10 @@
       }
 
       // 2. Games Tables Sync
-      if (data.games && data.games.length > 0) {
-        const group1 = data.games.filter(g => g.table_group === 1 || !g.table_group);
-
-        // Render Upper Live Table 1
-        const board1 = document.querySelector('.a77-market-board');
-        if (board1 && group1.length > 0) {
+      const board1 = document.querySelector('.a77-market-board');
+      if (board1 && data.games && data.games.length > 0) {
+        const group1 = data.games.filter(g => parseInt(g.table_group) === 1 || !g.table_group);
+        if (group1.length > 0) {
           let rowsHtml = `
             <div class="a77-market-board-header">
               <div>सट्टा का नाम</div>
