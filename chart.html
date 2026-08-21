@@ -231,7 +231,7 @@
 
     if (grid) {
       const renderGrid = () => {
-        let dynamicChartNames = [...chartNames];
+        let dynamicChartNames = [];
         if (liveSiteData) {
           if (liveSiteData.settings && liveSiteData.settings.custom_chart_cards_json) {
             try {
@@ -241,14 +241,13 @@
               }
             } catch(e) {}
           }
-          const dbGames = [];
-          if (liveSiteData.games) liveSiteData.games.forEach(g => { if (g.name) dbGames.push(`${g.name.toUpperCase()} SATTA KING CHART 2026`); });
-          if (liveSiteData.settings && liveSiteData.settings.chart1_columns_json) {
-            try {
-              JSON.parse(liveSiteData.settings.chart1_columns_json).forEach(c => dbGames.push(`${c.toUpperCase()} SATTA KING CHART 2026`));
-            } catch(e) {}
+          if (!dynamicChartNames || dynamicChartNames.length === 0) {
+            if (liveSiteData.games && liveSiteData.games.length > 0) {
+              liveSiteData.games.forEach(g => {
+                if (g.name) dynamicChartNames.push(`${g.name.trim().toUpperCase()} SATTA KING CHART 2026`);
+              });
+            }
           }
-          dynamicChartNames = Array.from(new Set([...dynamicChartNames, ...dbGames]));
 
           // Populate #gameSelect with Table 1 Games
           const gameSelect = document.getElementById('gameSelect');
@@ -266,6 +265,10 @@
               gameSelect.value = currentSelected;
             }
           }
+        }
+
+        if (!dynamicChartNames || dynamicChartNames.length === 0) {
+          dynamicChartNames = chartNames;
         }
 
         grid.innerHTML = '';
