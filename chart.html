@@ -31,6 +31,16 @@
       A77satta provides all kind of satta king results everyday.
     </div>
 
+    <div class="chart-filter-row">
+      <select class="filter-select" id="gameSelect"></select>
+      <select class="filter-select" id="yearSelect">
+        <option value="2026">2026</option>
+        <option value="2025">2025</option>
+        <option value="2024">2024</option>
+      </select>
+      <button class="filter-check-btn" type="button">Check</button>
+    </div>
+
     <div class="chart-banner-title">
       SATTA KING CHART 2026
     </div>
@@ -236,6 +246,23 @@
             } catch(e) {}
           }
           dynamicChartNames = Array.from(new Set([...dynamicChartNames, ...dbGames]));
+
+          // Populate #gameSelect with Table 1 Games
+          const gameSelect = document.getElementById('gameSelect');
+          if (gameSelect && liveSiteData.games && liveSiteData.games.length > 0) {
+            const currentSelected = gameSelect.value;
+            let optsHtml = '';
+            liveSiteData.games.forEach(g => {
+              const gName = (g.name || '').trim().toUpperCase();
+              if (gName) {
+                optsHtml += `<option value="${gName}">${gName}</option>`;
+              }
+            });
+            gameSelect.innerHTML = optsHtml;
+            if (currentSelected && Array.from(gameSelect.options).some(o => o.value === currentSelected)) {
+              gameSelect.value = currentSelected;
+            }
+          }
         }
 
         grid.innerHTML = '';
@@ -258,8 +285,40 @@
         });
       };
 
+      const openChartForGameName = (gameName) => {
+        if (!gameName) return;
+        const cleanName = gameName.trim().toUpperCase();
+        const fullName = `${cleanName} SATTA KING CHART 2026`;
+        if (modalTitle) modalTitle.textContent = fullName;
+        if (modalBody) modalBody.innerHTML = buildTableMarkup(fullName);
+        if (modal) {
+          modal.classList.add('is-open');
+          modal.setAttribute('aria-hidden', 'false');
+        }
+      };
+
       renderGrid();
-      fetchLiveSiteData().then(renderGrid);
+      fetchLiveSiteData().then(() => {
+        renderGrid();
+        const params = new URLSearchParams(window.location.search);
+        const gameParam = params.get('game');
+        if (gameParam) {
+          openChartForGameName(gameParam);
+          const gameSelect = document.getElementById('gameSelect');
+          if (gameSelect && Array.from(gameSelect.options).some(o => o.value === gameParam.trim().toUpperCase())) {
+            gameSelect.value = gameParam.trim().toUpperCase();
+          }
+        }
+      });
+
+      document.querySelectorAll('.filter-check-btn').forEach(btn => {
+        btn.onclick = () => {
+          const sel = document.getElementById('gameSelect');
+          if (sel && sel.value) {
+            openChartForGameName(sel.value);
+          }
+        };
+      });
     }
 
     if (closeBtn) {

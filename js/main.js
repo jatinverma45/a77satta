@@ -41,6 +41,52 @@
       if (!res.ok) return;
       const data = await res.json();
 
+      const chartRecords = data.chart_records || [];
+      const nowDate = new Date();
+      const currentMonthStr = String(nowDate.getMonth() + 1).padStart(2, '0');
+      const todayDay = nowDate.getDate();
+      const yestDay = todayDay - 1;
+      const todayStr = `${String(todayDay).padStart(2, '0')}-${currentMonthStr}`;
+      const yestStr = yestDay > 0 ? `${String(yestDay).padStart(2, '0')}-${currentMonthStr}` : todayStr;
+
+      function getResultFromChartRecords(records, dateStr, gameName) {
+        if (!records || !records.length || !dateStr || !gameName) return null;
+        const gUpper = gameName.trim().toUpperCase();
+        const rec = records.find(r => {
+          if (!r.record_date || !r.game_name) return false;
+          const rDate = r.record_date.trim();
+          const rGame = r.game_name.trim().toUpperCase();
+          return rDate === dateStr && (rGame === gUpper || (gUpper === 'DISAWER' && rGame === 'DESAWAR') || (gUpper === 'DESAWAR' && rGame === 'DISAWER'));
+        });
+        return rec ? rec.result_val : null;
+      }
+
+      // Populate Search Filter Dropdown (#gameSelect) with Table 1 Games
+      const gameSelectEl = document.getElementById('gameSelect');
+      if (gameSelectEl && data.games && data.games.length > 0) {
+        const currentSelected = gameSelectEl.value;
+        let optsHtml = '';
+        data.games.forEach(g => {
+          const gName = (g.name || '').trim().toUpperCase();
+          if (gName) {
+            optsHtml += `<option value="${gName}">${gName}</option>`;
+          }
+        });
+        gameSelectEl.innerHTML = optsHtml;
+        if (currentSelected && Array.from(gameSelectEl.options).some(o => o.value === currentSelected)) {
+          gameSelectEl.value = currentSelected;
+        }
+      }
+
+      document.querySelectorAll('.filter-check-btn').forEach(btn => {
+        btn.onclick = () => {
+          const sel = document.getElementById('gameSelect');
+          if (sel && sel.value) {
+            window.location.href = 'chart.html?game=' + encodeURIComponent(sel.value.trim());
+          }
+        };
+      });
+
       // 1. Settings (Ticker, Hindi tagline, Links, Notices)
       if (data.settings) {
         const s = data.settings;
@@ -297,11 +343,11 @@
       }
 
       // 3. Record Chart Tables Sync
-      if (data.chart_records) {
-        const recordsMap = {};
-        const currentMonthStr = String(new Date().getMonth() + 1).padStart(2, '0');
-        const datesSet = new Set(getAutoDatesUpToToday());
-        
+      const recordsMap = {};
+      const currentMonthStr = String(new Date().getMonth() + 1).padStart(2, '0');
+      const datesSet = new Set(getAutoDatesUpToToday());
+      
+      if (data.chart_records && Array.isArray(data.chart_records)) {
         data.chart_records.forEach(r => {
           if (r.record_date && r.game_name) {
             const key = `${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`;
@@ -312,8 +358,13 @@
             }
           }
         });
+      }
 
-        const dates = Array.from(datesSet).sort();
+      const dates = Array.from(datesSet).sort((a, b) => {
+        const dayA = parseInt(a.split('-')[0], 10) || 0;
+        const dayB = parseInt(b.split('-')[0], 10) || 0;
+        return dayA - dayB;
+      });
 
         function getVal(date, gameName) {
           const gUpper = gameName.trim().toUpperCase();
@@ -329,6 +380,14 @@
               }
             }
           }
+
+          // Direct fallback to Table 1 games data if chart_records hasn't record for today/yesterday yet
+          const gObj = (data.games || []).find(x => (x.name || '').trim().toUpperCase() === gUpper);
+          if (gObj) {
+            if (date === todayStr && gObj.today_result && gObj.today_result !== 'WAIT') return gObj.today_result;
+            if (date === yestStr && gObj.yesterday_result && gObj.yesterday_result !== '-') return gObj.yesterday_result;
+          }
+
           return '-';
         }
 
@@ -364,7 +423,6 @@
             t1Tbody.innerHTML = html;
           }
         }
-      }
 
       // 4. Blogs Sync
       if (data.blogs && data.blogs.length > 0) {
