@@ -193,43 +193,41 @@
           let gridHtml = '';
           cardList.forEach(c => {
             const waUrl = c.whatsapp_url || s.whatsapp_url || '#';
+            const bodyLines = (c.times_text || '').split('\n').map(line => line.trim()).filter(Boolean).join('<br>\n            ');
             if (c.card_type === 'feature') {
-              const rowsHtml = (c.times_text || '').split('\n').map(line => `<div class="mini-row">${line}</div>`).join('');
               gridHtml += `
-                <article class="schedule-panel schedule-panel-feature">
-                  <div class="mid-text">${c.title || ''}</div>
-                  <div class="mini-game-status">
-                    ${rowsHtml}
-                  </div>
-                  <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-cta-small whatsapp-cta-feature">
-                    <span class="whatsapp-cta-icon">☎</span>
-                    <span class="whatsapp-cta-copy">WhatsApp<br><small>Click to chat</small></span>
-                  </a>
-                </article>
-              `;
+      <article class="schedule-panel feature-card">
+        <header class="schedule-header">
+          <div class="subtitle-text">${c.header_subtitle || ''}</div>
+          <h2 class="bold-header">${c.title || ''}</h2>
+        </header>
+        <div class="panel-body">
+          <p>
+            ${bodyLines}
+          </p>
+          ${c.footer_text ? `<div class="note-box">${c.footer_text}</div>` : ''}
+          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="cta-banner">
+            <span class="cta-glow">▶ GO TO WHATSAPP DIRECT ◀</span>
+          </a>
+        </div>
+      </article>`;
             } else {
-              const timesLines = (c.times_text || '').split('\n').map(line => {
-                if (!line.trim()) return '';
-                if (line.includes('-----------')) {
-                  const parts = line.split('-----------');
-                  return `<div><span class="schedule-dot">○</span> ${parts[0].trim()} ----------- ${parts[1].trim()}</div>`;
-                }
-                return `<div><span class="schedule-dot">○</span> ${line.trim()}</div>`;
-              }).join('');
-
               gridHtml += `
-                <article class="schedule-panel">
-                  <div class="schedule-title">${c.header_subtitle || '--सीधी सट्टा कंपनी का No 1 शर्तावाल--'}<br><span>${c.title || ''}</span></div>
-                  <div class="schedule-times">
-                    ${timesLines}
-                  </div>
-                  <div class="schedule-footer">${c.footer_text || 'Game play करने के लिए नीचे लिंक पर क्लिक करें'}</div>
-                  <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="whatsapp-cta-small">
-                    <span class="whatsapp-cta-icon">☎</span>
-                    <span class="whatsapp-cta-copy">WhatsApp<br><small>Click to chat</small></span>
-                  </a>
-                </article>
-              `;
+      <article class="schedule-panel">
+        <header class="schedule-header">
+          <div class="subtitle-text">${c.header_subtitle || '--सीधी सट्टा कंपनी का No 1 शर्तावाल--'}</div>
+          <h2 class="bold-header">${c.title || ''}</h2>
+        </header>
+        <div class="panel-body">
+          <p>
+            ${bodyLines}
+          </p>
+          <div class="note-box">${c.footer_text || 'Game play करने के लिए नीचे लिंक पर क्लिक करें'}</div>
+          <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="cta-banner">
+            <span class="cta-glow">▶ GO TO WHATSAPP DIRECT ◀</span>
+          </a>
+        </div>
+      </article>`;
             }
           });
           khaiwalGrid.innerHTML = gridHtml;
