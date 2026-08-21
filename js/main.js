@@ -257,13 +257,17 @@
       // 3. Record Chart Tables Sync
       if (data.chart_records) {
         const recordsMap = {};
+        const currentMonthStr = String(new Date().getMonth() + 1).padStart(2, '0');
         const datesSet = new Set(getAutoDatesUpToToday());
         
         data.chart_records.forEach(r => {
           if (r.record_date && r.game_name) {
             const key = `${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`;
             recordsMap[key] = r.result_val;
-            datesSet.add(r.record_date.trim());
+            const parts = r.record_date.trim().split('-');
+            if (parts.length === 2 && parts[1] === currentMonthStr) {
+              datesSet.add(r.record_date.trim());
+            }
           }
         });
 

@@ -1936,9 +1936,18 @@
       const thead = document.getElementById('chartAdminThead1');
       if (!tbody) return;
 
+      const currentMonthStr = String(new Date().getMonth() + 1).padStart(2, '0');
       const doRender = (dataObj) => {
         const records = (dataObj && dataObj.chart_records) || [];
-        let dbDates = records.map(r => (r && r.record_date) ? r.record_date.trim() : null).filter(Boolean);
+        let dbDates = records.map(r => {
+          if (r && r.record_date) {
+            const parts = r.record_date.trim().split('-');
+            if (parts.length === 2 && parts[1] === currentMonthStr) {
+              return r.record_date.trim();
+            }
+          }
+          return null;
+        }).filter(Boolean);
         let defaultDates = getAutoDatesUpToToday();
         let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates])).sort();
         const gamesList = getChart1ActiveColumns();

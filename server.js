@@ -180,6 +180,7 @@ async function initDatabase() {
 
       DELETE FROM games WHERE table_group = 2;
       DELETE FROM site_settings WHERE key = 'chart2_columns_json';
+      DELETE FROM chart_records WHERE record_date IN ('01-01', '15-01');
     `);
 
     // Ensure Admin User Exists
