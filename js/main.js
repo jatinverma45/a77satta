@@ -299,25 +299,30 @@
           ? data.settings.featured_banner_game.trim().toUpperCase()
           : 'DISAWER';
 
-        const gameConfig = (data.games || []).find(g => (g.name || '').trim().toUpperCase() === selectedBannerGameName) || {
-          name: selectedBannerGameName,
+        const gameConfig = (data.games || []).find(g => {
+          const gName = (g.name || '').trim().toUpperCase();
+          return gName === selectedBannerGameName ||
+                 (selectedBannerGameName.startsWith('DISAW') && gName.startsWith('DISAW'));
+        }) || {
+          name: 'DISAWER',
           open_time: '5:15 AM',
           yesterday_result: '16',
           today_result: 'WAIT'
         };
 
-        const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, selectedBannerGameName);
-        const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, selectedBannerGameName);
+        const actualGameName = gameConfig.name || selectedBannerGameName;
+        const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
+        const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
 
-        const finalYest = chartYestVal !== null ? chartYestVal : (gameConfig.yesterday_result || '-');
-        const finalToday = chartTodayVal !== null ? chartTodayVal : (gameConfig.today_result || 'WAIT');
+        const finalYest = (chartYestVal !== null && chartYestVal !== undefined) ? chartYestVal : (gameConfig.yesterday_result || '-');
+        const finalToday = (chartTodayVal !== null && chartTodayVal !== undefined) ? chartTodayVal : (gameConfig.today_result || 'WAIT');
 
         const todayHtml = (!finalToday || finalToday === 'WAIT')
           ? `<span class="wait-starburst-badge">WAIT</span>`
           : `<span class="score-number score-number-today">${finalToday}</span>`;
 
         bannerBox.innerHTML = `
-          <div class="bottom-title">${gameConfig.name}</div>
+          <div class="bottom-title">${actualGameName}</div>
           <div class="bottom-time">${gameConfig.open_time || ''}</div>
           <div class="score-row">
             <span class="score-number">${finalYest}</span>
