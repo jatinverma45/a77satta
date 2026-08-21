@@ -192,7 +192,7 @@ async function initDatabase() {
       if (backup && backup.settings) {
         for (const [key, value] of Object.entries(backup.settings)) {
           const valStr = typeof value === 'object' ? JSON.stringify(value) : String(value);
-          await pgPool.query('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value', [key, valStr]).catch(()=>{});
+          await pgPool.query('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING', [key, valStr]).catch(()=>{});
         }
       }
     } catch(e) {}
@@ -768,6 +768,7 @@ app.post('/api/admin/update-settings', async (req, res) => {
   for (const [key, value] of Object.entries(settings)) {
     backup.settings[key] = typeof value === 'object' ? JSON.stringify(value) : String(value);
   }
+  memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   for (const [key, value] of Object.entries(settings)) {
