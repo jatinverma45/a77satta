@@ -982,6 +982,10 @@
       if (games.includes(currentSaved)) {
         select.value = currentSaved;
       }
+
+      select.onchange = () => {
+        saveFeaturedBannerGame();
+      };
     }
 
     async function saveFeaturedBannerGame(btn) {
@@ -990,6 +994,7 @@
       const selectedVal = select.value;
       if (!selectedVal) return;
 
+      const origText = btn ? btn.textContent : '';
       if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING...'; }
       try {
         const res = await fetch('/api/admin/update-settings', {
@@ -1001,18 +1006,18 @@
           showToast(`Featured Banner Game set to "${selectedVal}"!`);
           if (btn) {
             btn.textContent = '✅ SAVED!';
-            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE FEATURED BANNER GAME'; }, 1500);
+            setTimeout(() => { btn.disabled = false; btn.textContent = origText; }, 1500);
           }
           if (!siteDataCache) siteDataCache = {};
           if (!siteDataCache.settings) siteDataCache.settings = {};
           siteDataCache.settings.featured_banner_game = selectedVal;
         } else {
           alert('Failed to update Featured Banner Game');
-          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE FEATURED BANNER GAME'; }
+          if (btn) { btn.disabled = false; btn.textContent = origText; }
         }
       } catch(e) {
         alert('Server error updating Featured Banner Game');
-        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE FEATURED BANNER GAME'; }
+        if (btn) { btn.disabled = false; btn.textContent = origText; }
       }
     }
 
