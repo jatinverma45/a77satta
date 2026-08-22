@@ -395,6 +395,14 @@ app.post('/api/admin/update-game', async (req, res) => {
     );
   }
 
+  if (gNameUpper.startsWith('DISAW')) {
+    if (!backup.settings) backup.settings = {};
+    if (open_time !== undefined) backup.settings.disawer_time = open_time;
+    if (yesterday_result !== undefined) backup.settings.disawer_prev = yesterday_result;
+    if (today_result !== undefined) backup.settings.disawer_today = today_result;
+    backup.settings.featured_banner_game = 'DISAWER';
+  }
+
   saveBackupDataLocally(backup);
 
   // Synchronous Awaited DB save
@@ -403,6 +411,13 @@ app.post('/api/admin/update-game', async (req, res) => {
       `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4 WHERE id = $5 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
       [name, yesterday_result, today_result, open_time, id || -1]
     );
+
+    if (gNameUpper.startsWith('DISAW')) {
+      if (open_time !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_time', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [open_time]).catch(() => {});
+      if (yesterday_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_prev', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [yesterday_result]).catch(() => {});
+      if (today_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_today', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [today_result]).catch(() => {});
+      await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', 'DISAWER') ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`).catch(() => {});
+    }
     if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
       await safeQuery(
         `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
@@ -565,6 +580,14 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       table_group: parseInt(g.table_group) || 1,
       sort_order: parseInt(g.sort_order) || 0
     };
+
+    if (gNameUpper.startsWith('DISAW')) {
+      if (!backup.settings) backup.settings = {};
+      if (g.open_time !== undefined) backup.settings.disawer_time = g.open_time;
+      if (g.yesterday_result !== undefined) backup.settings.disawer_prev = g.yesterday_result;
+      if (g.today_result !== undefined) backup.settings.disawer_today = g.today_result;
+      backup.settings.featured_banner_game = 'DISAWER';
+    }
 
     if (existingIdx !== -1) {
       backup.games[existingIdx] = { ...backup.games[existingIdx], ...updatedGame };

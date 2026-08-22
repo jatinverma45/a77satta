@@ -404,9 +404,15 @@
         const actualGameName = 'DISAWER';
         const settings = data.settings || {};
 
-        const bannerTime = settings.disawer_time || gameConfig.open_time || '5:15 AM';
-        let finalYest = settings.disawer_prev || gameConfig.yesterday_result || '-';
-        let finalToday = settings.disawer_today || gameConfig.today_result || 'WAIT';
+        const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time : (settings.disawer_time || '5:15 AM');
+
+        let finalYest = (gameConfig.yesterday_result && gameConfig.yesterday_result !== '-' && gameConfig.yesterday_result.trim())
+          ? gameConfig.yesterday_result
+          : (settings.disawer_prev && settings.disawer_prev !== '-' ? settings.disawer_prev : '-');
+
+        let finalToday = (gameConfig.today_result && gameConfig.today_result !== 'WAIT' && gameConfig.today_result.trim())
+          ? gameConfig.today_result
+          : (settings.disawer_today && settings.disawer_today !== 'WAIT' ? settings.disawer_today : 'WAIT');
 
         if (finalYest === '-' || !finalYest) {
           const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);

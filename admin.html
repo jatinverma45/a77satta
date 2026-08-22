@@ -1701,6 +1701,20 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ id: gameId, name, open_time, yesterday_result, today_result })
         });
+
+        if (name.toUpperCase().startsWith('DISAW')) {
+          await fetch('/api/admin/update-settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              featured_banner_game: 'DISAWER',
+              disawer_time: open_time,
+              disawer_prev: yesterday_result,
+              disawer_today: today_result
+            })
+          }).catch(() => {});
+        }
+
         if (res.ok) {
           showToast(`Saved ${name}!`);
           if (btn) {
