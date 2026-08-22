@@ -1637,8 +1637,13 @@
       const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, game.name);
       const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, game.name);
 
-      const yestVal = chartYestVal !== null ? chartYestVal : (game.yesterday_result || '');
-      const todayVal = chartTodayVal !== null ? chartTodayVal : (game.today_result || 'WAIT');
+      const yestVal = (game.yesterday_result && game.yesterday_result !== '-' && game.yesterday_result.trim())
+        ? game.yesterday_result.trim()
+        : (chartYestVal !== null ? chartYestVal : '');
+
+      const todayVal = (game.today_result && game.today_result !== 'WAIT' && game.today_result.trim())
+        ? game.today_result.trim()
+        : (chartTodayVal !== null ? chartTodayVal : (game.today_result || 'WAIT'));
 
       const tr = document.createElement('tr');
       tr.setAttribute('data-game-id', game.id);

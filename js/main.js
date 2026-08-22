@@ -455,8 +455,13 @@
             const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, g.name);
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name);
 
-            const yestRes = chartYestVal !== null ? chartYestVal : (g.yesterday_result || '-');
-            const todayRaw = chartTodayVal !== null ? chartTodayVal : (g.today_result || 'WAIT');
+            const yestRes = (g.yesterday_result && g.yesterday_result !== '-' && g.yesterday_result.trim())
+              ? g.yesterday_result.trim()
+              : (chartYestVal !== null ? chartYestVal : '-');
+
+            const todayRaw = (g.today_result && g.today_result !== 'WAIT' && g.today_result.trim())
+              ? g.today_result.trim()
+              : (chartTodayVal !== null ? chartTodayVal : (g.today_result || 'WAIT'));
 
             const todayResHtml = (!todayRaw || todayRaw === 'WAIT')
               ? `<span class="market-wait">WAIT</span>`
