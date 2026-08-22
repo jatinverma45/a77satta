@@ -254,98 +254,6 @@ function getBackupData() {
     } catch (e) {}
   }
   return { settings: {}, games: [], chart_records: [], blogs: [] };
-async function checkAndPerformDailyRollover(backup) {
-  if (!backup) return false;
-  if (!backup.settings) backup.settings = {};
-
-  const { todayStr } = getTodayAndYesterdayDateStr();
-  const lastDate = backup.settings.last_result_date;
-
-  if (!lastDate) {
-    backup.settings.last_result_date = todayStr;
-    saveBackupDataLocally(backup);
-    await safeQuery(
-      `INSERT INTO site_settings (key, value) VALUES ('last_result_date', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-      [todayStr]
-    ).catch(() => {});
-    return false;
-  }
-
-  if (lastDate !== todayStr) {
-    console.log(`📅 New day detected! Automatic result rollover from ${lastDate} to ${todayStr}`);
-
-    if (Array.isArray(backup.games)) {
-      backup.games.forEach(g => {
-        if (g) {
-          if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
-            g.yesterday_result = g.today_result.trim();
-          }
-          g.today_result = 'WAIT';
-        }
-      });
-    }
-
-    if (backup.settings.disawer_today && backup.settings.disawer_today.trim() !== '' && backup.settings.disawer_today !== 'WAIT') {
-      backup.settings.disawer_prev = backup.settings.disawer_today.trim();
-    }
-    backup.settings.disawer_today = 'WAIT';
-
-    if (backup.settings.hero_games_json) {
-      try {
-        let heroList = typeof backup.settings.hero_games_json === 'string'
-          ? JSON.parse(backup.settings.hero_games_json)
-          : backup.settings.hero_games_json;
-
-        if (Array.isArray(heroList)) {
-          heroList.forEach(h => {
-            if (h) h.today_result = 'WAIT';
-          });
-          backup.settings.hero_games_json = JSON.stringify(heroList);
-        }
-      } catch (e) {}
-    }
-
-    backup.settings.last_result_date = todayStr;
-    saveBackupDataLocally(backup);
-
-    try {
-      if (Array.isArray(backup.games)) {
-        for (const g of backup.games) {
-          if (g && g.name) {
-            await safeQuery(
-              `UPDATE games SET yesterday_result = $1, today_result = 'WAIT' WHERE UPPER(name) = UPPER($2)`,
-              [g.yesterday_result || '-', g.name.trim().toUpperCase()]
-            ).catch(() => {});
-          }
-        }
-      }
-
-      await safeQuery(
-        `INSERT INTO site_settings (key, value) VALUES ('disawer_prev', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-        [backup.settings.disawer_prev || '-']
-      ).catch(() => {});
-
-      await safeQuery(
-        `INSERT INTO site_settings (key, value) VALUES ('disawer_today', 'WAIT') ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`
-      ).catch(() => {});
-
-      if (backup.settings.hero_games_json) {
-        await safeQuery(
-          `INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-          [backup.settings.hero_games_json]
-        ).catch(() => {});
-      }
-
-      await safeQuery(
-        `INSERT INTO site_settings (key, value) VALUES ('last_result_date', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
-        [todayStr]
-      ).catch(() => {});
-    } catch (e) {}
-
-    return true;
-  }
-
-  return false;
 }
 
 // Public: Get all site data for homepage & chart page
@@ -355,14 +263,12 @@ app.get('/api/site-data', async (req, res) => {
   res.setHeader('Expires', '0');
 
   try {
-    const backup = getBackupData();
-    await checkAndPerformDailyRollover(backup);
-
     let settingsRes = await safeQuery('SELECT key, value FROM site_settings').catch(() => null);
     let gamesRes = await safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null);
     let chartsRes = await safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null);
     let blogsRes = await safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null);
 
+    const backup = getBackupData();
     let settings = { ...(backup.settings || {}) };
     delete settings.chart2_columns_json;
 
