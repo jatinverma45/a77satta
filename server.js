@@ -116,6 +116,7 @@ async function syncJSONBackup() {
 }
 
 function saveBackupDataLocally(updatedData) {
+  memoryBackupCache = updatedData;
   try {
     const jsonStr = JSON.stringify(updatedData, null, 2);
     fs.writeFileSync(tmpBackupPath, jsonStr);
@@ -191,6 +192,27 @@ async function initDatabase() {
           await pgPool.query('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING', [key, valStr]).catch(()=>{});
         }
       }
+      if (backup && Array.isArray(backup.games)) {
+        for (const g of backup.games) {
+          if (g && g.name) {
+            await pgPool.query(
+              `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero)
+               VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+               ON CONFLICT (name) DO NOTHING`,
+              [
+                g.name.trim().toUpperCase(),
+                g.open_time || '',
+                g.close_time || '',
+                g.yesterday_result || '-',
+                g.today_result || 'WAIT',
+                parseInt(g.table_group) || 1,
+                parseInt(g.sort_order) || 0,
+                g.is_hero ? 1 : 0
+              ]
+            ).catch(()=>{});
+          }
+        }
+      }
     } catch(e) {}
     isDbReady = true;
   } catch (e) {
@@ -254,20 +276,35 @@ app.get('/api/site-data', async (req, res) => {
       settingsRes.rows.forEach(s => settings[s.key] = s.value);
     }
 
-    let games = [];
+    const gameMap = {};
+    (backup.games || []).forEach(g => {
+      if (g && g.name) gameMap[g.name.trim().toUpperCase()] = g;
+    });
     if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
-      games = gamesRes.rows;
-    } else if (backup.games && backup.games.length > 0) {
-      games = backup.games;
+      gamesRes.rows.forEach(g => {
+        if (g && g.name) {
+          const key = g.name.trim().toUpperCase();
+          gameMap[key] = { ...(gameMap[key] || {}), ...g };
+        }
+      });
     }
+    let games = Object.values(gameMap);
     games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
 
-    let charts = [];
+    const chartMap = {};
+    (backup.chart_records || []).forEach(r => {
+      if (r && r.record_date && r.game_name) {
+        chartMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r;
+      }
+    });
     if (chartsRes && chartsRes.rows && chartsRes.rows.length > 0) {
-      charts = chartsRes.rows;
-    } else if (backup.chart_records && backup.chart_records.length > 0) {
-      charts = backup.chart_records;
+      chartsRes.rows.forEach(r => {
+        if (r && r.record_date && r.game_name) {
+          chartMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r;
+        }
+      });
     }
+    let charts = Object.values(chartMap);
 
     let blogs = (blogsRes && blogsRes.rows && blogsRes.rows.length > 0) ? blogsRes.rows : (backup.blogs || []);
 
