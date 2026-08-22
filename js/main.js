@@ -401,20 +401,21 @@
           today_result: 'WAIT'
         };
 
-        const actualGameName = gameConfig.name || selectedBannerGameName;
-        const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
-        const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
+        const actualGameName = 'DISAWER';
+        const settings = data.settings || {};
 
-        // Priority 1: Table 1 game config (g.yesterday_result / g.today_result)
-        // Priority 2: chart_records entry
-        let finalYest = gameConfig.yesterday_result;
-        if (!finalYest || finalYest === '-') {
-          finalYest = (chartYestVal !== null && chartYestVal !== undefined) ? chartYestVal : '-';
+        const bannerTime = settings.disawer_time || gameConfig.open_time || '5:15 AM';
+        let finalYest = settings.disawer_prev || gameConfig.yesterday_result || '-';
+        let finalToday = settings.disawer_today || gameConfig.today_result || 'WAIT';
+
+        if (finalYest === '-' || !finalYest) {
+          const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
+          if (chartYestVal) finalYest = chartYestVal;
         }
 
-        let finalToday = gameConfig.today_result;
-        if (!finalToday || finalToday === 'WAIT') {
-          finalToday = (chartTodayVal !== null && chartTodayVal !== undefined) ? chartTodayVal : 'WAIT';
+        if (finalToday === 'WAIT' || !finalToday) {
+          const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
+          if (chartTodayVal) finalToday = chartTodayVal;
         }
 
         const todayHtml = (!finalToday || finalToday === 'WAIT')
@@ -423,7 +424,7 @@
 
         bannerBox.innerHTML = `
           <div class="bottom-title">${actualGameName}</div>
-          <div class="bottom-time">${gameConfig.open_time || ''}</div>
+          <div class="bottom-time">${bannerTime}</div>
           <div class="score-row">
             <span class="score-number">${finalYest}</span>
             <span class="green-arrow-pill">➡️</span>

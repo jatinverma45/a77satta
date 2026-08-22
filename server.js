@@ -351,7 +351,9 @@ app.post('/api/admin/update-game', async (req, res) => {
 
   const gNameUpper = (name || '').trim().toUpperCase();
   const existingIdx = backup.games.findIndex(
-    g => (g.id && id && g.id === id) || (g.name || '').toUpperCase() === gNameUpper
+    g => (g.id && id && g.id === id) ||
+         (g.name || '').toUpperCase() === gNameUpper ||
+         ((g.name || '').toUpperCase().startsWith('DISAW') && gNameUpper.startsWith('DISAW'))
   );
 
   if (existingIdx !== -1) {
@@ -398,7 +400,7 @@ app.post('/api/admin/update-game', async (req, res) => {
   // Synchronous Awaited DB save
   try {
     await safeQuery(
-      'UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4 WHERE id = $5 OR UPPER(name) = UPPER($1)',
+      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4 WHERE id = $5 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
       [name, yesterday_result, today_result, open_time, id || -1]
     );
     if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {

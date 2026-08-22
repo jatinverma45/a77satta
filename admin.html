@@ -990,15 +990,11 @@
         });
       }
 
-      if (disawerGame) {
-        timeInp.value = disawerGame.open_time || '5:15 AM';
-        yestInp.value = disawerGame.yesterday_result || '-';
-        todayInp.value = disawerGame.today_result || 'WAIT';
-      } else {
-        timeInp.value = '5:15 AM';
-        yestInp.value = '16';
-        todayInp.value = 'WAIT';
-      }
+      const settings = (siteDataCache && siteDataCache.settings) ? siteDataCache.settings : {};
+
+      timeInp.value = settings.disawer_time || (disawerGame ? disawerGame.open_time : '5:15 AM') || '5:15 AM';
+      yestInp.value = settings.disawer_prev || (disawerGame ? disawerGame.yesterday_result : '16') || '16';
+      todayInp.value = settings.disawer_today || (disawerGame ? disawerGame.today_result : 'WAIT') || 'WAIT';
     }
 
     async function saveDisawerBannerData(btn) {
@@ -1029,7 +1025,12 @@
         await fetch('/api/admin/update-settings', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ featured_banner_game: 'DISAWER' })
+          body: JSON.stringify({
+            featured_banner_game: 'DISAWER',
+            disawer_time: timeVal,
+            disawer_prev: yestVal,
+            disawer_today: todayVal
+          })
         }).catch(() => {});
 
         if (resGame.ok) {
