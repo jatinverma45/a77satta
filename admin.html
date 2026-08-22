@@ -449,22 +449,36 @@
         </div>
       </div>
 
-      <!-- 0.5. FEATURED YELLOW BANNER GAME MANAGER (BIG BOTTOM BOX) -->
+      <!-- 0.5. DISAWER FEATURED YELLOW BANNER GAME MANAGER (BIG YELLOW BOX) -->
       <div class="admin-card-box" style="border: 3px solid #ffd400; background: #fffdf0; margin-top: 20px;">
-        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
-          <h3>⭐ FEATURED YELLOW BANNER GAME MANAGER (BIG YELLOW BOX)</h3>
-          <button class="btn-adm btn-adm-green" type="button" onclick="saveFeaturedBannerGame(this)">💾 SAVE FEATURED BANNER GAME</button>
+        <div class="admin-card-header" style="background: #000000; color: #ffd400; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+          <h3 style="margin: 0; font-size: 15px; font-weight: 900;">⭐ DISAWER FEATURED BANNER MANAGER (BIG YELLOW BOX)</h3>
+          <button class="btn-adm btn-adm-green" type="button" onclick="saveDisawerBannerData(this)" style="font-weight: 900;">💾 SAVE DISAWER BANNER DATA</button>
         </div>
         <div class="admin-card-body">
-          <p style="font-weight: 800; margin-bottom: 12px; font-size: 13px; color: #111;">
-            ℹ️ Homepage ke <strong>Big Yellow Banner</strong> mein kis Game ka name, time aur live results show karne hain, use yahan se select karein:
+          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
+            ℹ️ Homepage ke <strong>Big Yellow Banner (DISAWER)</strong> ka <strong>Time, Yesterday Result (कल का) aur Today Result (आज का)</strong> yahan se direct edit &amp; update karein:
           </p>
-          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-            <label style="font-weight: 900; font-size: 14px; color: #000;">FEATURED BANNER GAME:</label>
-            <select id="featuredBannerGameSelect" class="adm-input-cell" style="width: auto; min-width: 250px; font-size: 14px; font-weight: 900; border: 2px solid #000; background: #fff;">
-              <!-- Options populated dynamically -->
-            </select>
-            <button class="btn-adm btn-adm-yellow" type="button" onclick="saveFeaturedBannerGame(this)">SELECT &amp; UPDATE GAME</button>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; align-items: flex-end; background: #ffffff; padding: 16px; border: 2px solid #000000; border-radius: 8px;">
+            <div>
+              <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">GAME NAME (FIXED):</label>
+              <input type="text" id="disawerBannerName" class="adm-input-cell" value="DISAWER" readonly style="font-weight: 900; background: #eee; cursor: not-allowed; text-transform: uppercase;">
+            </div>
+            <div>
+              <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">TIME (समय):</label>
+              <input type="text" id="disawerBannerTime" class="adm-input-cell" placeholder="e.g. 5:15 AM" style="font-weight: 800;">
+            </div>
+            <div>
+              <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">कल आया था (YESTERDAY RESULT):</label>
+              <input type="text" id="disawerBannerYesterday" class="adm-input-cell" placeholder="e.g. 16" style="font-weight: 800; color: #000;">
+            </div>
+            <div>
+              <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">आज का रिजल्ट (TODAY RESULT / WAIT):</label>
+              <input type="text" id="disawerBannerToday" class="adm-input-cell" placeholder="e.g. WAIT or 89" style="font-weight: 900; color: #000; border-color: #ffd400;">
+            </div>
+            <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 4px;">
+              <button class="btn-adm btn-adm-yellow" type="button" onclick="saveDisawerBannerData(this)" style="font-weight: 900; font-size: 14px; padding: 10px 24px;">🚀 UPDATE DISAWER BANNER LIVE</button>
+            </div>
           </div>
         </div>
       </div>
@@ -961,65 +975,76 @@
       return dates;
     }
 
-    // Featured Yellow Banner Game Selector Logic
-    function populateFeaturedBannerGameSelect() {
-      const select = document.getElementById('featuredBannerGameSelect');
-      if (!select) return;
+    // Disawer Featured Yellow Banner Manager Logic
+    function populateDisawerBannerFields() {
+      const timeInp = document.getElementById('disawerBannerTime');
+      const yestInp = document.getElementById('disawerBannerYesterday');
+      const todayInp = document.getElementById('disawerBannerToday');
+      if (!timeInp || !yestInp || !todayInp) return;
 
-      const games = [];
+      let disawerGame = null;
       if (siteDataCache && siteDataCache.games) {
-        siteDataCache.games.forEach(g => { if (g.name) games.push(g.name.trim().toUpperCase()); });
+        disawerGame = siteDataCache.games.find(g => {
+          const n = (g.name || '').trim().toUpperCase();
+          return n === 'DISAWER' || n.startsWith('DISAW');
+        });
       }
 
-      const currentSaved = (siteDataCache && siteDataCache.settings && siteDataCache.settings.featured_banner_game)
-        ? siteDataCache.settings.featured_banner_game.trim().toUpperCase()
-        : 'DISAWER';
-
-      select.innerHTML = '';
-      games.forEach(g => {
-        const opt = document.createElement('option');
-        opt.value = g;
-        opt.textContent = g;
-        select.appendChild(opt);
-      });
-      if (games.includes(currentSaved)) {
-        select.value = currentSaved;
+      if (disawerGame) {
+        timeInp.value = disawerGame.open_time || '5:15 AM';
+        yestInp.value = disawerGame.yesterday_result || '-';
+        todayInp.value = disawerGame.today_result || 'WAIT';
+      } else {
+        timeInp.value = '5:15 AM';
+        yestInp.value = '16';
+        todayInp.value = 'WAIT';
       }
-
-      select.onchange = () => {
-        saveFeaturedBannerGame();
-      };
     }
 
-    async function saveFeaturedBannerGame(btn) {
-      const select = document.getElementById('featuredBannerGameSelect');
-      if (!select) return;
-      const selectedVal = select.value;
-      if (!selectedVal) return;
+    async function saveDisawerBannerData(btn) {
+      const timeInp = document.getElementById('disawerBannerTime');
+      const yestInp = document.getElementById('disawerBannerYesterday');
+      const todayInp = document.getElementById('disawerBannerToday');
+      if (!timeInp || !yestInp || !todayInp) return;
+
+      const timeVal = timeInp.value.trim();
+      const yestVal = yestInp.value.trim();
+      const todayVal = todayInp.value.trim();
 
       const origText = btn ? btn.textContent : '';
-      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING...'; }
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING DISAWER...'; }
+
       try {
-        const res = await fetch('/api/admin/update-settings', {
+        const resGame = await fetch('/api/admin/update-game', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ featured_banner_game: selectedVal })
+          body: JSON.stringify({
+            name: 'DISAWER',
+            open_time: timeVal,
+            yesterday_result: yestVal,
+            today_result: todayVal
+          })
         });
-        if (res.ok) {
-          showToast(`Featured Banner Game set to "${selectedVal}"!`);
+
+        await fetch('/api/admin/update-settings', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ featured_banner_game: 'DISAWER' })
+        }).catch(() => {});
+
+        if (resGame.ok) {
+          showToast('✅ DISAWER Yellow Banner Updated Successfully!');
           if (btn) {
             btn.textContent = '✅ SAVED!';
             setTimeout(() => { btn.disabled = false; btn.textContent = origText; }, 1500);
           }
-          if (!siteDataCache) siteDataCache = {};
-          if (!siteDataCache.settings) siteDataCache.settings = {};
-          siteDataCache.settings.featured_banner_game = selectedVal;
+          loadAdminData();
         } else {
-          alert('Failed to update Featured Banner Game');
+          alert('Failed to update DISAWER banner data');
           if (btn) { btn.disabled = false; btn.textContent = origText; }
         }
       } catch(e) {
-        alert('Server error updating Featured Banner Game');
+        alert('Server error updating DISAWER banner data');
         if (btn) { btn.disabled = false; btn.textContent = origText; }
       }
     }
@@ -1032,7 +1057,7 @@
         if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
           try { currentKhaiwalCardsList = JSON.parse(siteDataCache.settings.khaiwal_cards_json); } catch(e) {}
         }
-        populateFeaturedBannerGameSelect();
+        populateDisawerBannerFields();
         renderHeroGamesAdminTable();
         renderGamesTable();
         renderNoticeBannersAdminTable();
