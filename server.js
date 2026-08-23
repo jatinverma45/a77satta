@@ -668,16 +668,27 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
   });
 
   backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
+
+  const heroGamesList = backup.games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
+    id: g.id || null,
+    name: g.name ? g.name.trim().toUpperCase() : '',
+    today_result: g.today_result ? g.today_result.trim() : 'WAIT'
+  }));
+  if (!backup.settings) backup.settings = {};
+  backup.settings.hero_games_json = JSON.stringify(heroGamesList);
+
   memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   for (const g of games) {
     if (g.id || g.name) {
       const gNameUpper = (g.name || '').trim().toUpperCase();
+      const heroVal = g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : 0;
+      const featVal = g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : 0;
       try {
         await safeQuery(
-          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5 WHERE id = $6 OR UPPER(name) = UPPER($1)`,
-          [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, g.id || -1]
+          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5, is_hero = $6, is_featured = $7 WHERE id = $8 OR UPPER(name) = UPPER($1)`,
+          [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, heroVal, featVal, g.id || -1]
         );
         if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
           await safeQuery(
