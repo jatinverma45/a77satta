@@ -1063,7 +1063,13 @@
     // Load Site Data
     async function loadAdminData() {
       try {
-        const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
+        const res = await fetch('/api/site-data?t=' + Date.now(), {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache'
+          }
+        });
         siteDataCache = await res.json();
         currentKhaiwalCardsList = getInitialKhaiwalCards();
         populateDisawerBannerFields();
