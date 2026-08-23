@@ -1678,7 +1678,7 @@
           body: JSON.stringify({ id: gameId, name, open_time, yesterday_result, today_result, is_hero, is_featured })
         });
 
-        if (is_featured === 1 || name.toUpperCase().startsWith('DISAW')) {
+        if (is_featured === 1) {
           await fetch('/api/admin/update-settings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
