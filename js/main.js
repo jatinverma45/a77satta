@@ -210,18 +210,22 @@
 
       // Populate Search Filter Dropdown (#gameSelect) with Table 1 Games
       const gameSelectEl = document.getElementById('gameSelect');
-      if (gameSelectEl && data.games && data.games.length > 0) {
-        const currentSelected = gameSelectEl.value;
-        let optsHtml = '';
-        data.games.forEach(g => {
-          const gName = (g.name || '').trim().toUpperCase();
-          if (gName) {
-            optsHtml += `<option value="${gName}">${gName}</option>`;
+      if (gameSelectEl) {
+        if (data.games && data.games.length > 0) {
+          const currentSelected = gameSelectEl.value;
+          let optsHtml = '';
+          data.games.forEach(g => {
+            const gName = (g.name || '').trim().toUpperCase();
+            if (gName) {
+              optsHtml += `<option value="${gName}">${gName}</option>`;
+            }
+          });
+          gameSelectEl.innerHTML = optsHtml;
+          if (currentSelected && Array.from(gameSelectEl.options).some(o => o.value === currentSelected)) {
+            gameSelectEl.value = currentSelected;
           }
-        });
-        gameSelectEl.innerHTML = optsHtml;
-        if (currentSelected && Array.from(gameSelectEl.options).some(o => o.value === currentSelected)) {
-          gameSelectEl.value = currentSelected;
+        } else {
+          gameSelectEl.innerHTML = '<option value="">No Games Available</option>';
         }
       }
 
@@ -528,32 +532,39 @@
 
         // Table 1 (Main Games)
         if (tableWraps.length > 0) {
-          let mainGames = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
-          if (data.games && data.games.length > 0) {
-            mainGames = data.games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
-          } else if (data.settings && data.settings.chart1_columns_json) {
-            try {
-              const parsed = JSON.parse(data.settings.chart1_columns_json);
-              if (Array.isArray(parsed) && parsed.length > 0) mainGames = parsed;
-            } catch(e) {}
-          }
+          const mainGames = (data.games && Array.isArray(data.games))
+            ? data.games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean)
+            : [];
           const t1Thead = tableWraps[0].querySelector('thead');
           const t1Tbody = tableWraps[0].querySelector('tbody');
 
-          if (t1Thead) {
-            t1Thead.innerHTML = `<tr><th>Date</th>${mainGames.map(g => `<th>${g}</th>`).join('')}</tr>`;
-          }
+          if (mainGames.length === 0) {
+            if (t1Thead) t1Thead.innerHTML = `<tr><th>Date</th><th>Status</th></tr>`;
+            if (t1Tbody) {
+              t1Tbody.innerHTML = `
+                <tr>
+                  <td colspan="2" style="text-align:center; padding: 25px; font-weight:700; color: #ffd700;">
+                    NO GAMES AVAILABLE IN TABLE 1. ADD GAMES FROM ADMIN PANEL.
+                  </td>
+                </tr>
+              `;
+            }
+          } else {
+            if (t1Thead) {
+              t1Thead.innerHTML = `<tr><th>Date</th>${mainGames.map(g => `<th>${g}</th>`).join('')}</tr>`;
+            }
 
-          if (t1Tbody) {
-            let html = '';
-            dates.forEach(d => {
-              html += `<tr><td>${d}</td>`;
-              mainGames.forEach(g => {
-                html += `<td>${getVal(d, g)}</td>`;
+            if (t1Tbody) {
+              let html = '';
+              dates.forEach(d => {
+                html += `<tr><td>${d}</td>`;
+                mainGames.forEach(g => {
+                  html += `<td>${getVal(d, g)}</td>`;
+                });
+                html += `</tr>`;
               });
-              html += `</tr>`;
-            });
-            t1Tbody.innerHTML = html;
+              t1Tbody.innerHTML = html;
+            }
           }
         }
 

@@ -1917,48 +1917,58 @@
     const defaultChart1Games = [];
 
     function getChart1ActiveColumns() {
-      if (siteDataCache && siteDataCache.games && siteDataCache.games.length > 0) {
-        chart1CustomCols = siteDataCache.games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
-        return chart1CustomCols;
+      if (siteDataCache && Array.isArray(siteDataCache.games)) {
+        return siteDataCache.games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
       }
-      if (chart1CustomCols && Array.isArray(chart1CustomCols)) {
-        return chart1CustomCols;
-      }
-      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.chart1_columns_json) {
-        try {
-          const parsed = JSON.parse(siteDataCache.settings.chart1_columns_json);
-          if (Array.isArray(parsed)) {
-            chart1CustomCols = parsed;
-            return chart1CustomCols;
-          }
-        } catch(e) {}
-      }
-      chart1CustomCols = [];
-      return chart1CustomCols;
+      return [];
     }
 
-    function addNewChartColumn1() {
-      const colName = prompt('Enter new Game/Column Name for Chart 1 (e.g. MUMBAI NIGHT):');
+    async function addNewChartColumn1() {
+      const colName = prompt('Enter new Game Name for Table 1 / Record Chart (e.g. MUMBAI NIGHT):');
       if (!colName || !colName.trim()) return;
       const formatted = colName.trim().toUpperCase();
       const cols = getChart1ActiveColumns();
-      if (!cols.includes(formatted)) {
-        cols.push(formatted);
-        chart1CustomCols = cols;
-        showToast(`Added column ${formatted} to Chart 1`);
-        renderChartTable();
-      } else {
-        alert(`Column "${formatted}" already exists!`);
+      if (cols.includes(formatted)) {
+        alert(`Game/Column "${formatted}" already exists in Table 1!`);
+        return;
+      }
+      const openTime = prompt(`Enter Open Time for "${formatted}" (e.g. 08:00 PM):`, '08:00 PM') || '08:00 PM';
+      try {
+        const res = await fetch('/api/admin/add-game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: formatted, open_time: openTime, table_group: 1 })
+        });
+        if (res.ok) {
+          showToast(`Added "${formatted}" to Table 1 & Record Chart!`);
+          await loadAdminData();
+        } else {
+          alert('Failed to add game to Table 1');
+        }
+      } catch (e) {
+        alert('Server error adding game');
       }
     }
 
-    function deleteChartColumn(tableNum, colName) {
-      if (!confirm(`Are you sure you want to delete column "${colName}"?`)) return;
-      const cols = getChart1ActiveColumns();
-      const idx = cols.indexOf(colName);
-      if (idx !== -1) cols.splice(idx, 1);
-      chart1CustomCols = cols;
-      renderChartTable();
+    async function deleteChartColumn(tableNum, colName) {
+      if (!confirm(`Are you sure you want to delete game "${colName}" from Table 1 and all charts?`)) return;
+      const targetGame = (siteDataCache.games || []).find(g => (g.name || '').trim().toUpperCase() === colName.trim().toUpperCase());
+      const gId = targetGame ? targetGame.id : null;
+      try {
+        const res = await fetch('/api/admin/delete-game', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: gId, name: colName })
+        });
+        if (res.ok) {
+          showToast(`Deleted "${colName}" from Table 1`);
+          await loadAdminData();
+        } else {
+          alert('Failed to delete game');
+        }
+      } catch(e) {
+        alert('Server error deleting game');
+      }
     }
 
     function addNewChartDateRow() {
@@ -2204,8 +2214,22 @@
           return null;
         }).filter(Boolean);
         let defaultDates = getAutoDatesUpToToday();
-        let dates = Array.from(new Set([...defaultDates, ...dbDates, ...extraChartDates])).sort();
         const gamesList = getChart1ActiveColumns();
+
+        if (gamesList.length === 0) {
+          if (thead) {
+            thead.innerHTML = `<tr><th style="width: 100px;">DATE</th><th>STATUS</th></tr>`;
+          }
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="2" style="text-align: center; padding: 30px; font-weight: 700; color: #ffd700; background: rgba(0,0,0,0.4);">
+                🚫 NO GAMES CREATED IN TABLE 1 YET.<br>
+                <span style="font-weight: 400; font-size: 13px; color: #aaa;">Add games to Table 1 above to enable the August 2026 Record Chart Editor.</span>
+              </td>
+            </tr>
+          `;
+          return;
+        }
 
         if (thead) {
           thead.innerHTML = `

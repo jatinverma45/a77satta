@@ -275,10 +275,15 @@ app.get('/api/site-data', async (req, res) => {
 
     const backup = getBackupData();
     let settings = { ...(backup.settings || {}) };
+    delete settings.chart1_columns_json;
     delete settings.chart2_columns_json;
 
     if (settingsRes && settingsRes.rows) {
-      settingsRes.rows.forEach(s => settings[s.key] = s.value);
+      settingsRes.rows.forEach(s => {
+        if (s.key !== 'chart1_columns_json' && s.key !== 'chart2_columns_json') {
+          settings[s.key] = s.value;
+        }
+      });
     }
 
     const gameMap = {};
@@ -296,19 +301,37 @@ app.get('/api/site-data', async (req, res) => {
         gameMap[key] = { ...(gameMap[key] || {}), ...g };
       }
     });
-    let games = Object.values(gameMap);
+
+    const uniqueGamesByName = {};
+    Object.values(gameMap).forEach(g => {
+      if (g && g.name) {
+        const uName = g.name.trim().toUpperCase();
+        uniqueGamesByName[uName] = g;
+      }
+    });
+    let games = Object.values(uniqueGamesByName);
     games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
+
+    // CANONICAL SINGLE SOURCE OF TRUTH FILTERING:
+    // Only return chart records for games that currently exist in Table 1 (games)
+    const activeGameNames = new Set(games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean));
 
     const chartMap = {};
     (backup.chart_records || []).forEach(r => {
       if (r && r.record_date && r.game_name) {
-        chartMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r;
+        const gNameUpper = r.game_name.trim().toUpperCase();
+        if (activeGameNames.has(gNameUpper)) {
+          chartMap[`${r.record_date.trim()}_${gNameUpper}`] = r;
+        }
       }
     });
     if (chartsRes && chartsRes.rows && chartsRes.rows.length > 0) {
       chartsRes.rows.forEach(r => {
         if (r && r.record_date && r.game_name) {
-          chartMap[`${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`] = r;
+          const gNameUpper = r.game_name.trim().toUpperCase();
+          if (activeGameNames.has(gNameUpper)) {
+            chartMap[`${r.record_date.trim()}_${gNameUpper}`] = r;
+          }
         }
       });
     }
