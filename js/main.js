@@ -40,7 +40,7 @@
   async function loadFullSiteData() {
     // 1. Instant local render from cache if available
     try {
-      const cached = localStorage.getItem('a77satta_site_cache_v6');
+      const cached = localStorage.getItem('a77satta_site_cache_v7');
       if (cached) renderSiteData(JSON.parse(cached));
     } catch(e) {}
 
@@ -49,7 +49,7 @@
       const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
-      try { localStorage.setItem('a77satta_site_cache_v6', JSON.stringify(data)); } catch(e) {}
+      try { localStorage.setItem('a77satta_site_cache_v7', JSON.stringify(data)); } catch(e) {}
       renderSiteData(data);
     } catch(e) {
       console.log('API sync offline or fallback active');
@@ -349,9 +349,6 @@
       const heroContainer = document.getElementById('heroGamesList');
       if (heroContainer && data.games && data.games.length > 0) {
         let heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
-        if (!heroList || heroList.length === 0) {
-          heroList = (data.games || []).slice(0, 3);
-        }
 
         let heroHtml = '';
         heroList.forEach(g => {

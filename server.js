@@ -284,7 +284,13 @@ app.get('/api/site-data', async (req, res) => {
       gamesRes.rows.forEach(g => {
         if (g && g.name) {
           const key = g.name.trim().toUpperCase();
-          gameMap[key] = { ...(gameMap[key] || {}), ...g };
+          const backupGame = gameMap[key] || {};
+          gameMap[key] = {
+            ...backupGame,
+            ...g,
+            is_hero: backupGame.is_hero !== undefined ? backupGame.is_hero : (g.is_hero || 0),
+            is_featured: backupGame.is_featured !== undefined ? backupGame.is_featured : (g.is_featured || 0)
+          };
         }
       });
     }
@@ -307,11 +313,7 @@ app.get('/api/site-data', async (req, res) => {
     let charts = Object.values(chartMap);
 
     let blogs = (blogsRes && blogsRes.rows && blogsRes.rows.length > 0) ? blogsRes.rows : (backup.blogs || []);
-
     let heroGames = games.filter(g => parseInt(g.is_hero) === 1);
-    if (!heroGames || heroGames.length === 0) {
-      heroGames = games.slice(0, 3);
-    }
 
     return res.json({
       settings,
