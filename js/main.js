@@ -345,23 +345,27 @@
         }
       }
 
-      // Render Main Hero Box Games (Dynamic Stack)
+      // Render Main Hero Box Games (Dynamic Stack from Table 1)
       const heroContainer = document.getElementById('heroGamesList');
       if (heroContainer) {
-        let heroList = null;
-        if (data.settings && data.settings.hero_games_json) {
-          try {
-            const parsed = typeof data.settings.hero_games_json === 'string'
-              ? JSON.parse(data.settings.hero_games_json)
-              : data.settings.hero_games_json;
-            if (Array.isArray(parsed) && parsed.length > 0) heroList = parsed;
-          } catch(e) {}
-        }
-        if (!heroList && Array.isArray(data.hero_games) && data.hero_games.length > 0) {
-          heroList = data.hero_games;
+        let heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
+        if (!heroList || heroList.length === 0) {
+          if (data.settings && data.settings.hero_games_json) {
+            try {
+              const parsed = typeof data.settings.hero_games_json === 'string'
+                ? JSON.parse(data.settings.hero_games_json)
+                : data.settings.hero_games_json;
+              if (Array.isArray(parsed) && parsed.length > 0) heroList = parsed;
+            } catch(e) {}
+          }
         }
         if (!heroList || heroList.length === 0) {
-          heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
+          if (Array.isArray(data.hero_games) && data.hero_games.length > 0) {
+            heroList = data.hero_games;
+          }
+        }
+        if (!heroList || heroList.length === 0) {
+          heroList = (data.games || []).slice(0, 2);
         }
 
         let heroHtml = '';
@@ -398,25 +402,26 @@
         heroContainer.innerHTML = heroHtml;
       }
 
-      // Render Featured Yellow Banner Game (Bottom Disclaimer Box)
+      // Render Featured Yellow Banner Game (Bottom Disclaimer Box from Table 1)
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
       if (bannerBox) {
         const selectedBannerGameName = (data.settings && data.settings.featured_banner_game)
           ? data.settings.featured_banner_game.trim().toUpperCase()
           : 'DISAWER';
 
-        const gameConfig = (data.games || []).find(g => {
-          const gName = (g.name || '').trim().toUpperCase();
-          return gName === selectedBannerGameName ||
-                 (selectedBannerGameName.startsWith('DISAW') && gName.startsWith('DISAW'));
-        }) || {
-          name: 'DISAWER',
-          open_time: '5:15 AM',
-          yesterday_result: '16',
-          today_result: 'WAIT'
-        };
+        const gameConfig = (data.games || []).find(g => parseInt(g.is_featured) === 1) ||
+                           (data.games || []).find(g => {
+                             const gName = (g.name || '').trim().toUpperCase();
+                             return gName === selectedBannerGameName ||
+                                    (selectedBannerGameName.startsWith('DISAW') && gName.startsWith('DISAW'));
+                           }) || {
+                             name: 'DISAWER',
+                             open_time: '5:15 AM',
+                             yesterday_result: '16',
+                             today_result: 'WAIT'
+                           };
 
-        const actualGameName = 'DISAWER';
+        const actualGameName = (gameConfig.name || 'DISAWER').trim().toUpperCase();
         const settings = data.settings || {};
 
         const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time : (settings.disawer_time || '5:15 AM');

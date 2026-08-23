@@ -14,13 +14,135 @@
     "notice_banners_json": "[{\"id\":1,\"text\":\"SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.\"},{\"id\":2,\"text\":\"SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM\"}]",
     "last_sync": "1786373486679.0",
     "khaiwal_cards_json": "[{\"id\":1,\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ KUBER BHAI KHAIWAL ♣\",\"card_type\":\"standard\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nघाटियाल ----------- 2:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nदिल्ली मटका ----------- 3:20 PM\\nश्री गणेश ----------- 4:20 pm\\nआगारा ----------- 5:20 pm\\nफरीदाबाद ----------- 5:50 pm\\nअलवर ----------- 7:20 pm\\nगाजियाबाद ----------- 8:50 pm\\nझारखा ----------- 10:10 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"},{\"id\":2,\"header_subtitle\":\"--सीधी सट्टा कम्पनी का No 1 शर्तावाल--\",\"title\":\"♣ JASSI BHAI KHAIWAL ♣\",\"card_type\":\"standard\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nघाटियाल ----------- 2:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nदिल्ली मटका ----------- 3:20 PM\\nश्री गणेश ----------- 4:20 pm\\nआगारा ----------- 5:20 pm\\nफरीदाबाद ----------- 5:50 pm\\nअलवर ----------- 7:20 pm\\nगाजियाबाद ----------- 8:50 pm\\nझारखा ----------- 10:10 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"},{\"id\":3,\"header_subtitle\":\"\",\"title\":\"नमस्कार सपयानी Cricket ID दोनों वाले भाई नीचे दिए गए लिंक पर क्लिक करें\",\"card_type\":\"feature\",\"times_text\":\"minimum ID 500₹ maximum no limit\\n*** *** *** *** *** *** *** ***\\nNote इस नंबर पर पैसे क्लिक करने वाले जो भी गलत होगा फिर\\nफॉल्ट के लिए payment के लिए money transfer की जगह अन्य जगह हो सकता है\",\"footer_text\":\"\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"},{\"id\":4,\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ RAMAN BHAI KHAIWAL ♣\",\"card_type\":\"standard\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nघाटियाल ----------- 2:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nदिल्ली मटका ----------- 3:20 PM\\nश्री गणेश ----------- 4:20 pm\\nआगारा ----------- 5:20 pm\\nफरीदाबाद ----------- 5:50 pm\\nअलवर ----------- 7:20 pm\\nगाजियाबाद ----------- 8:50 pm\\nझारखा ----------- 10:10 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"}]",
-    "hero_games_json": "[{\"id\":null,\"name\":\"DISAWAR\",\"today_result\":\"49\"},{\"id\":null,\"name\":\"GALI\",\"today_result\":\"88\"},{\"id\":null,\"name\":\"FARIDABAD\",\"today_result\":\"WAIT\"}]",
+    "hero_games_json": "[{\"id\":241,\"name\":\"SADAR BAZAR\",\"today_result\":\"77\"},{\"id\":207,\"name\":\"DISAWER\",\"today_result\":\"88\"}]",
     "chart1_columns_json": "[\"SADAR BAZAR\",\"GWALIOR\",\"DELHI BAZAR\",\"DELHI MATKA\",\"SHRI GANESH\",\"AGRA\",\"FARIDABAD\",\"ALWAR\",\"GAZIABAD\",\"DWARKA\",\"GALI\",\"DISAWER\"]",
     "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]",
     "custom_chart_cards_json": "[\"DAMAN SATTA KING CHART 2026\",\"DISAWER SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\",\"KUBER SATTA KING CHART 2026\"]",
-    "featured_banner_game": "DWARKA"
+    "featured_banner_game": "DISAWER",
+    "disawer_today": "88"
   },
-  "games": [],
+  "games": [
+    {
+      "id": 241,
+      "name": "SADAR BAZAR",
+      "open_time": "1:40 PM",
+      "yesterday_result": "30",
+      "today_result": "77",
+      "table_group": 1,
+      "sort_order": 1,
+      "is_hero": 1
+    },
+    {
+      "id": 230,
+      "name": "GWALIOR",
+      "open_time": "2:40 PM",
+      "yesterday_result": "87",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 2,
+      "is_hero": 0
+    },
+    {
+      "id": 231,
+      "name": "DELHI BAZAR",
+      "open_time": "3:15 PM",
+      "yesterday_result": "89",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 3,
+      "is_hero": 0
+    },
+    {
+      "id": 232,
+      "name": "DELHI MATKA",
+      "open_time": "3:40 PM",
+      "yesterday_result": "07",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 4,
+      "is_hero": 0
+    },
+    {
+      "id": 200,
+      "name": "SHRI GANESH",
+      "open_time": "4:40 PM",
+      "yesterday_result": "93",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 5,
+      "is_hero": 0
+    },
+    {
+      "id": 201,
+      "name": "AGRA",
+      "open_time": "5:30 PM",
+      "yesterday_result": "18",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 6,
+      "is_hero": 0
+    },
+    {
+      "id": 202,
+      "name": "FARIDABAD",
+      "open_time": "6:10 PM",
+      "yesterday_result": "81",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 7,
+      "is_hero": 0
+    },
+    {
+      "id": 203,
+      "name": "ALWAR",
+      "open_time": "7:35 PM",
+      "yesterday_result": "20",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 8,
+      "is_hero": 0
+    },
+    {
+      "id": 204,
+      "name": "GAZIABAD",
+      "open_time": "9:50 PM",
+      "yesterday_result": "99",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 9,
+      "is_hero": 0
+    },
+    {
+      "id": 205,
+      "name": "DWARKA",
+      "open_time": "10:35 PM",
+      "yesterday_result": "10",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 10,
+      "is_hero": 0
+    },
+    {
+      "id": 206,
+      "name": "GALI",
+      "open_time": "11:50 PM",
+      "yesterday_result": "93",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 11,
+      "is_hero": 0
+    },
+    {
+      "id": 207,
+      "name": "DISAWER",
+      "open_time": "5:15 AM",
+      "yesterday_result": "16",
+      "today_result": "88",
+      "table_group": 1,
+      "sort_order": 12,
+      "is_hero": 1
+    }
+  ],
   "chart_records": [
     {
       "record_date": "01-08",
@@ -3366,6 +3488,76 @@
       "record_date": "21-08",
       "game_name": "GWALIOR",
       "result_val": "87"
+    },
+    {
+      "record_date": "23-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "77"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "30"
+    },
+    {
+      "record_date": "23-08",
+      "game_name": "DISAWER",
+      "result_val": "88"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "DISAWER",
+      "result_val": "16"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "GWALIOR",
+      "result_val": "87"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "89"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "07"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "93"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "AGRA",
+      "result_val": "18"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "FARIDABAD",
+      "result_val": "81"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "ALWAR",
+      "result_val": "20"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "GAZIABAD",
+      "result_val": "99"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "DWARKA",
+      "result_val": "10"
+    },
+    {
+      "record_date": "22-08",
+      "game_name": "GALI",
+      "result_val": "93"
     }
   ],
   "blogs": [

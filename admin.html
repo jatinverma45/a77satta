@@ -420,68 +420,7 @@
     <!-- TAB 1: A77SATTA (HOMEPAGE ADMIN CONTROLS)                -->
     <!-- ======================================================== -->
     <div id="tab-a77satta" class="admin-main-pane active">
-      <!-- 0. HERO FEATURED LIVE GAMES MANAGER -->
-      <div class="admin-card-box" style="border: 3px solid #ffd400;">
-        <div class="admin-card-header" style="background: #000000; color: #ffd400;">
-          <h3>🔥 MAIN HERO BOX LIVE GAMES MANAGER (HOMEPAGE BLACK BOX)</h3>
-          <div class="action-row-flex">
-            <button class="btn-adm btn-adm-yellow" type="button" onclick="addHeroGameRow()">+ ADD GAME TO HERO BOX</button>
-            <button class="btn-adm btn-adm-green" type="button" onclick="saveHeroGamesList(this)">💾 SAVE HERO BOX &amp; ORDER</button>
-          </div>
-        </div>
-        <div class="admin-card-body">
-          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
-            ℹ️ Admin Note: Niche <strong>⬆️ UP / ⬇️ DOWN</strong> buttons se games ka sequence (Order) badlein aur "SAVE HERO BOX &amp; ORDER" par click karein:
-          </p>
-          <div class="adm-table-wrap">
-            <table class="adm-table">
-              <thead>
-                <tr>
-                  <th style="width: 85px;">ORDER #</th>
-                  <th style="width: 260px;">GAME NAME (CHANGE / REPLACE)</th>
-                  <th style="width: 220px;">RESULT (NUMERIC RESULT / WAIT BADGE)</th>
-                  <th style="width: 180px;">QUICK ACTIONS</th>
-                </tr>
-              </thead>
-              <tbody id="heroAdminGamesTbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
 
-      <!-- 0.5. DISAWER FEATURED YELLOW BANNER GAME MANAGER (BIG YELLOW BOX) -->
-      <div class="admin-card-box" style="border: 3px solid #ffd400; background: #fffdf0; margin-top: 20px;">
-        <div class="admin-card-header" style="background: #000000; color: #ffd400; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
-          <h3 style="margin: 0; font-size: 15px; font-weight: 900;">⭐ DISAWER FEATURED BANNER MANAGER (BIG YELLOW BOX)</h3>
-          <button class="btn-adm btn-adm-green" type="button" onclick="saveDisawerBannerData(this)" style="font-weight: 900;">💾 SAVE DISAWER BANNER DATA</button>
-        </div>
-        <div class="admin-card-body">
-          <p style="font-weight: 800; margin-bottom: 14px; font-size: 13px; color: #111;">
-            ℹ️ Homepage ke <strong>Big Yellow Banner (DISAWER)</strong> ka <strong>Time, Yesterday Result (कल का) aur Today Result (आज का)</strong> yahan se direct edit &amp; update karein:
-          </p>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; align-items: flex-end; background: #ffffff; padding: 16px; border: 2px solid #000000; border-radius: 8px;">
-            <div>
-              <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">GAME NAME (FIXED):</label>
-              <input type="text" id="disawerBannerName" class="adm-input-cell" value="DISAWER" readonly style="font-weight: 900; background: #eee; cursor: not-allowed; text-transform: uppercase;">
-            </div>
-            <div>
-              <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">TIME (समय):</label>
-              <input type="text" id="disawerBannerTime" class="adm-input-cell" placeholder="e.g. 5:15 AM" style="font-weight: 800;">
-            </div>
-            <div>
-              <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">कल आया था (YESTERDAY RESULT):</label>
-              <input type="text" id="disawerBannerYesterday" class="adm-input-cell" placeholder="e.g. 16" style="font-weight: 800; color: #000;">
-            </div>
-            <div>
-              <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">आज का रिजल्ट (TODAY RESULT / WAIT):</label>
-              <input type="text" id="disawerBannerToday" class="adm-input-cell" placeholder="e.g. WAIT or 89" style="font-weight: 900; color: #000; border-color: #ffd400;">
-            </div>
-            <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 4px;">
-              <button class="btn-adm btn-adm-yellow" type="button" onclick="saveDisawerBannerData(this)" style="font-weight: 900; font-size: 14px; padding: 10px 24px;">🚀 UPDATE DISAWER BANNER LIVE</button>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <!-- 1. TABLE 1 LIVE MARKET BOARD GAMES MANAGER (UPPER LIVE TABLE) -->
       <div class="admin-card-box" style="border: 2px solid #ffd400;">
@@ -1060,8 +999,6 @@
         if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
           try { currentKhaiwalCardsList = JSON.parse(siteDataCache.settings.khaiwal_cards_json); } catch(e) {}
         }
-        populateDisawerBannerFields();
-        renderHeroGamesAdminTable();
         renderGamesTable();
         renderNoticeBannersAdminTable();
         renderKhaiwalCardsAdminTable();
@@ -1660,6 +1597,15 @@
         ? game.today_result.trim()
         : (chartTodayVal !== null ? chartTodayVal : (game.today_result || 'WAIT'));
 
+      const isHero = parseInt(game.is_hero) === 1;
+      const featSettingName = (siteDataCache && siteDataCache.settings && siteDataCache.settings.featured_banner_game)
+        ? siteDataCache.settings.featured_banner_game.trim().toUpperCase()
+        : 'DISAWER';
+      const gNameUpper = (game.name || '').trim().toUpperCase();
+      const isFeatured = (parseInt(game.is_featured) === 1) ||
+                         (gNameUpper === featSettingName) ||
+                         (gNameUpper.startsWith('DISAW') && featSettingName.startsWith('DISAW'));
+
       const tr = document.createElement('tr');
       tr.setAttribute('data-game-id', game.id);
       tr.innerHTML = `
@@ -1676,6 +1622,12 @@
             <input type="text" class="adm-input-cell game-today-input" id="g_today_${game.id}" value="${todayVal}">
             <button class="btn-adm btn-adm-yellow" type="button" onclick="setWaitValRow(this)">SET WAIT</button>
           </div>
+        </td>
+        <td style="text-align: center;">
+          <input type="checkbox" class="game-hero-check" ${isHero ? 'checked' : ''} style="width: 20px; height: 20px; cursor: pointer;" title="Show in Hero Box">
+        </td>
+        <td style="text-align: center;">
+          <input type="radio" name="featured_game_radio" class="game-featured-radio" ${isFeatured ? 'checked' : ''} style="width: 20px; height: 20px; cursor: pointer;" title="Set as Featured Banner Game">
         </td>
         <td>
           <div class="action-row-flex">
