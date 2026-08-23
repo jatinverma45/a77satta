@@ -813,6 +813,14 @@
           <label>Today Result (Default: WAIT)</label>
           <input type="text" id="newGameToday" value="WAIT" style="color:#000; background:#fff;">
         </div>
+        <div class="admin-form-group" style="display: flex; gap: 20px; margin-top: 10px; color: #fff;">
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="newGameIsHero" style="width: 18px; height: 18px;"> 🔥 Show in Hero Box
+          </label>
+          <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+            <input type="checkbox" id="newGameIsFeatured" style="width: 18px; height: 18px;"> ⭐ Set as Featured Banner
+          </label>
+        </div>
         <div class="action-row-flex" style="justify-content: flex-end; margin-top: 20px;">
           <button type="button" class="btn-adm btn-adm-red" onclick="closeAddGameModal()">CANCEL</button>
           <button type="submit" class="btn-adm btn-adm-green">CREATE GAME</button>
@@ -1814,13 +1822,15 @@
       const open_time = document.getElementById('newGameTime').value;
       const yesterday_result = document.getElementById('newGameYesterday').value;
       const today_result = document.getElementById('newGameToday').value;
+      const is_hero = document.getElementById('newGameIsHero')?.checked ? 1 : 0;
+      const is_featured = document.getElementById('newGameIsFeatured')?.checked ? 1 : 0;
       const table_group = 1;
 
       try {
         const res = await fetch('/api/admin/add-game', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, open_time, yesterday_result, today_result, table_group })
+          body: JSON.stringify({ name, open_time, yesterday_result, today_result, table_group, is_hero, is_featured })
         });
         if (res.ok) {
           closeAddGameModal();

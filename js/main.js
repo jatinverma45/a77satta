@@ -337,14 +337,12 @@
         }
       }
 
-      // Render Main Hero Box Games (Directly softcoded from Table 1 games with is_hero === 1)
+      // Render Main Hero Box Games (Dynamic Stack from Table 1)
       const heroContainer = document.getElementById('heroGamesList');
       if (heroContainer) {
         let heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
         if (!heroList || heroList.length === 0) {
-          if (Array.isArray(data.hero_games) && data.hero_games.length > 0) {
-            heroList = data.hero_games.filter(g => parseInt(g.is_hero) === 1);
-          }
+          heroList = (data.games || []).slice(0, 3);
         }
 
         let heroHtml = '';
@@ -375,7 +373,7 @@
         heroContainer.innerHTML = heroHtml;
       }
 
-      // Render Featured Yellow Banner Game (Directly softcoded from Table 1 game with is_featured === 1)
+      // Render Featured Yellow Banner Game (Dynamic Banner from Table 1)
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
       if (bannerBox) {
         const featSettingName = (data.settings && data.settings.featured_banner_game)
@@ -383,7 +381,9 @@
           : '';
 
         const gameConfig = (data.games || []).find(g => parseInt(g.is_featured) === 1) ||
-                           (data.games || []).find(g => featSettingName && (g.name || '').trim().toUpperCase() === featSettingName);
+                           (data.games || []).find(g => featSettingName && (g.name || '').trim().toUpperCase() === featSettingName) ||
+                           (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW')) ||
+                           (data.games || [])[0];
 
         if (gameConfig) {
           const actualGameName = (gameConfig.name || '').trim().toUpperCase();
@@ -420,8 +420,6 @@
               ${todayHtml}
             </div>
           `;
-        } else {
-          bannerBox.innerHTML = '';
         }
       }
 

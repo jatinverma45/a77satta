@@ -468,7 +468,7 @@ app.post('/api/admin/update-game', async (req, res) => {
 
 // Admin: Add New Game
 app.post('/api/admin/add-game', async (req, res) => {
-  const { name, open_time, yesterday_result, today_result, table_group } = req.body;
+  const { name, open_time, yesterday_result, today_result, table_group, is_hero, is_featured } = req.body;
   const grp = parseInt(table_group) || 1;
   const gName = (name || '').trim().toUpperCase();
   if (!gName) return res.status(400).json({ error: 'Game name is required' });
@@ -479,6 +479,8 @@ app.post('/api/admin/add-game', async (req, res) => {
   const grpGames = backup.games.filter(g => parseInt(g.table_group) === grp);
   const nextOrd = grpGames.length + 1;
   const newId = Date.now();
+  const heroVal = (parseInt(is_hero) === 1) ? 1 : 0;
+  const featVal = (parseInt(is_featured) === 1) ? 1 : 0;
 
   const newGameObj = {
     id: newId,
@@ -487,7 +489,9 @@ app.post('/api/admin/add-game', async (req, res) => {
     yesterday_result: yesterday_result || '',
     today_result: today_result || 'WAIT',
     table_group: grp,
-    sort_order: nextOrd
+    sort_order: nextOrd,
+    is_hero: heroVal,
+    is_featured: featVal
   };
 
   const existingIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === gName);
@@ -502,15 +506,17 @@ app.post('/api/admin/add-game', async (req, res) => {
   // Synchronous Awaited DB save
   try {
     await safeQuery(
-      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero, is_featured)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        ON CONFLICT (name) DO UPDATE SET
          open_time = EXCLUDED.open_time,
          yesterday_result = EXCLUDED.yesterday_result,
          today_result = EXCLUDED.today_result,
          table_group = EXCLUDED.table_group,
-         sort_order = EXCLUDED.sort_order`,
-      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd]
+         sort_order = EXCLUDED.sort_order,
+         is_hero = EXCLUDED.is_hero,
+         is_featured = EXCLUDED.is_featured`,
+      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd, heroVal, featVal]
     );
   } catch (e) {}
 
