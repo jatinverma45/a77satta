@@ -86,24 +86,11 @@ async function syncJSONBackup() {
       });
     }
 
-    const gameMap = {};
-    if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
-      gamesRes.rows.forEach(g => {
-        if (g && g.name) {
-          const key = String(g.id || g.name.trim().toUpperCase());
-          gameMap[key] = g;
-        }
-      });
-    }
-    (backup.games || []).forEach(g => {
-      if (g && g.name) {
-        const key = String(g.id || g.name.trim().toUpperCase());
-        gameMap[key] = { ...(gameMap[key] || {}), ...g };
-      }
-    });
-    if (Object.keys(gameMap).length > 0) {
-      fullData.games = Object.values(gameMap);
+    if (gamesRes && gamesRes.rows) {
+      fullData.games = gamesRes.rows.filter(g => g && g.name);
       fullData.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
+    } else {
+      fullData.games = backup.games || [];
     }
 
     delete fullData.settings.chart2_columns_json;
@@ -268,10 +255,12 @@ app.get('/api/site-data', async (req, res) => {
   res.setHeader('Expires', '0');
 
   try {
-    let settingsRes = await safeQuery('SELECT key, value FROM site_settings').catch(() => null);
-    let gamesRes = await safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null);
-    let chartsRes = await safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null);
-    let blogsRes = await safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null);
+    const [settingsRes, gamesRes, chartsRes, blogsRes] = await Promise.all([
+      safeQuery('SELECT key, value FROM site_settings').catch(() => null),
+      safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null),
+      safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null),
+      safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null)
+    ]);
 
     const backup = getBackupData();
     let settings = { ...(backup.settings || {}) };
@@ -295,30 +284,21 @@ app.get('/api/site-data', async (req, res) => {
       settings.khaiwal_cards_json = JSON.stringify(DEFAULT_KHAIWAL_CARDS);
     }
 
-    const gameMap = {};
-    if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
-      gamesRes.rows.forEach(g => {
-        if (g && g.name) {
-          const key = String(g.id || g.name.trim().toUpperCase());
-          gameMap[key] = g;
-        }
-      });
+    let games = [];
+    if (gamesRes && gamesRes.rows) {
+      games = gamesRes.rows.filter(g => g && g.name);
+    } else {
+      games = (backup.games || []).filter(g => g && g.name);
     }
-    (backup.games || []).forEach(g => {
-      if (g && g.name) {
-        const key = String(g.id || g.name.trim().toUpperCase());
-        gameMap[key] = { ...(gameMap[key] || {}), ...g };
-      }
-    });
 
     const uniqueGamesByName = {};
-    Object.values(gameMap).forEach(g => {
+    games.forEach(g => {
       if (g && g.name) {
         const uName = g.name.trim().toUpperCase();
         uniqueGamesByName[uName] = g;
       }
     });
-    let games = Object.values(uniqueGamesByName);
+    games = Object.values(uniqueGamesByName);
     games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
 
     // CANONICAL SINGLE SOURCE OF TRUTH FILTERING:
@@ -803,16 +783,33 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
 // Admin: Delete Game
 app.post('/api/admin/delete-game', async (req, res) => {
   const { id, name } = req.body;
+  const nameUpper = (name || '').trim().toUpperCase();
+  const idStr = id ? String(id) : '';
 
   const backup = getBackupData();
   if (backup && backup.games) {
-    const nameUpper = (name || '').trim().toUpperCase();
-    const idStr = id ? String(id) : '';
     backup.games = backup.games.filter(g => {
       const matchId = idStr !== '' && String(g.id || '') === idStr;
       const matchName = nameUpper !== '' && (g.name || '').toUpperCase() === nameUpper;
       return !(matchId || matchName);
     });
+
+    if (backup.settings && backup.settings.hero_games_json) {
+      try {
+        const currentHero = JSON.parse(backup.settings.hero_games_json);
+        const filteredHero = currentHero.filter(h => {
+          const matchId = idStr !== '' && String(h.id || '') === idStr;
+          const matchName = nameUpper !== '' && (h.name || '').toUpperCase() === nameUpper;
+          return !(matchId || matchName);
+        });
+        backup.settings.hero_games_json = JSON.stringify(filteredHero);
+        await safeQuery(
+          `INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+          [backup.settings.hero_games_json]
+        ).catch(() => {});
+      } catch (e) {}
+    }
+
     memoryBackupCache = backup;
     saveBackupDataLocally(backup);
   }
@@ -821,7 +818,8 @@ app.post('/api/admin/delete-game', async (req, res) => {
     await safeQuery('DELETE FROM games WHERE id = $1 OR UPPER(name) = UPPER($2)', [id || -1, name || '']);
   } catch (e) {}
 
-  res.json({ success: true });
+  console.log(`🗑️ [GAME DELETED PERMANENTLY]: id=${id}, name=${name}`);
+  res.json({ success: true, message: 'Game permanently deleted' });
 });
 
 // Admin: Clear All Games
