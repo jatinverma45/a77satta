@@ -395,27 +395,36 @@ img{max-width:100%;height:auto;display:block}
 }
 
 .bottom-disclaimer {
-  margin-top: 24px;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 20px;
   background: #ffd700;
   width: 100%;
-  padding: 16px 12px 20px;
+  padding: 16px 12px 18px;
   text-align: center;
   color: #000;
+  box-sizing: border-box;
 }
 
 .bottom-disclaimer .bottom-title {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 900;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 1.5px;
   color: #000;
+  margin-bottom: 4px;
+  line-height: 1.1;
 }
 
 .bottom-disclaimer .bottom-time {
-  font-size: 18px;
-  font-weight: 700;
-  margin-top: 4px;
+  font-size: 20px;
+  font-weight: 800;
+  margin-top: 2px;
+  margin-bottom: 8px;
   color: #000;
+  line-height: 1.2;
 }
 
 .score-row {
@@ -423,25 +432,28 @@ img{max-width:100%;height:auto;display:block}
   align-items: center;
   justify-content: center;
   gap: 12px;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .score-number {
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 900;
   color: #000;
+  line-height: 1;
 }
 
 .green-arrow-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #00c853;
+  background: linear-gradient(180deg, #28a745, #1e7e34);
   color: #ffffff;
-  border-radius: 4px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
   padding: 4px 8px;
-  font-size: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  font-size: 18px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  line-height: 1;
 }
 
 .wait-starburst-badge {
@@ -2050,25 +2062,31 @@ img{max-width:100%;height:auto;display:block}
 
   /* 5. DISAWER BOTTOM SECTION */
   .bottom-disclaimer {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
     background: #ffd700 !important;
     width: 100% !important;
-    padding: 12px 8px 14px !important;
+    padding: 14px 10px 16px !important;
     text-align: center !important;
     margin-top: 14px !important;
     box-sizing: border-box !important;
   }
 
   .bottom-disclaimer .bottom-title {
-    font-size: clamp(20px, 6vw, 28px) !important;
+    font-size: clamp(24px, 7.5vw, 34px) !important;
     font-weight: 900 !important;
-    letter-spacing: 0.5px !important;
+    letter-spacing: 1px !important;
     color: #000000 !important;
+    margin-bottom: 2px !important;
   }
 
   .bottom-disclaimer .bottom-time {
-    font-size: clamp(13px, 3.8vw, 16px) !important;
-    font-weight: 900 !important;
+    font-size: clamp(16px, 4.8vw, 20px) !important;
+    font-weight: 800 !important;
     margin-top: 2px !important;
+    margin-bottom: 6px !important;
     color: #000000 !important;
   }
 
