@@ -357,52 +357,55 @@
 
       // Render Main Hero Box Games (Dynamic Stack from Table 1)
       const heroContainer = document.getElementById('heroGamesList');
-      if (heroContainer && data.games && data.games.length > 0) {
+      if (heroContainer) {
         let heroList = (data.hero_games && data.hero_games.length > 0)
           ? data.hero_games
           : (data.games || []).filter(g => parseInt(g.is_hero) === 1);
 
-        let heroHtml = '';
-        heroList.forEach(g => {
-          const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
-          const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
-          
-          let resVal = 'WAIT';
-          if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
-            resVal = g.today_result.trim();
-          } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-') {
-            resVal = chartTodayVal.trim();
-          }
+        if (heroList.length > 0) {
+          heroContainer.style.display = 'flex';
+          let heroHtml = '';
+          heroList.forEach(g => {
+            const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
+            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
+            
+            let resVal = 'WAIT';
+            if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
+              resVal = g.today_result.trim();
+            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-') {
+              resVal = chartTodayVal.trim();
+            }
 
-          const resHtml = (!resVal || resVal.toUpperCase() === 'WAIT')
-            ? `<div class="wait-starburst-badge">WAIT</div>`
-            : `<div class="game-result-main">${resVal}</div>`;
+            const resHtml = (!resVal || resVal.toUpperCase() === 'WAIT')
+              ? `<div class="wait-starburst-badge">WAIT</div>`
+              : `<div class="game-result-main">${resVal}</div>`;
 
-          heroHtml += `
-            <div class="result-block">
-              <div class="game-name-main">${name}</div>
-              ${resHtml}
-            </div>
-          `;
-        });
-        heroContainer.innerHTML = heroHtml;
+            heroHtml += `
+              <div class="result-block">
+                <div class="game-name-main">${name}</div>
+                ${resHtml}
+              </div>
+            `;
+          });
+          heroContainer.innerHTML = heroHtml;
+        } else {
+          heroContainer.innerHTML = '';
+          heroContainer.style.display = 'none';
+        }
       }
 
-      // Render Featured Yellow Banner Game
+      // Render Permanent DISAWER 1 Feature Box
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
       if (bannerBox) {
-        const featSettingName = (data.settings && data.settings.featured_banner_game) ? data.settings.featured_banner_game.trim().toUpperCase() : '';
-        const gameConfig = (data.games || []).find(g => (g.name || '').trim().toUpperCase() === featSettingName) ||
-                           (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW')) ||
-                           (data.games || []).find(g => parseInt(g.is_featured) === 1) ||
-                           (data.games || [])[0] || {
-                             name: 'DISAWER',
-                             open_time: '5:15 AM',
-                             yesterday_result: '16',
-                             today_result: '88'
-                           };
+        bannerBox.style.display = 'flex';
+        const actualGameName = 'DISAWER';
+        const gameConfig = (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW')) || {
+          name: 'DISAWER',
+          open_time: '5:15 AM',
+          yesterday_result: '16',
+          today_result: '88'
+        };
 
-        const actualGameName = gameConfig.name ? gameConfig.name.trim().toUpperCase() : 'DISAWER';
         const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time.trim() : '5:15 AM';
 
         let finalYest = (gameConfig.yesterday_result && gameConfig.yesterday_result !== '-' && gameConfig.yesterday_result.trim())
