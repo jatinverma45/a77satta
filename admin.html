@@ -1057,9 +1057,7 @@
       try {
         const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
         siteDataCache = await res.json();
-        if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
-          try { currentKhaiwalCardsList = JSON.parse(siteDataCache.settings.khaiwal_cards_json); } catch(e) {}
-        }
+        currentKhaiwalCardsList = getInitialKhaiwalCards();
         populateDisawerBannerFields();
         renderHeroGamesAdminTable();
         renderGamesTable();
@@ -1176,7 +1174,7 @@
       if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
         try {
           const list = JSON.parse(siteDataCache.settings.khaiwal_cards_json);
-          if (Array.isArray(list)) return list;
+          if (Array.isArray(list) && list.length > 0) return list;
         } catch(e) {}
       }
       return [

@@ -291,7 +291,7 @@ app.get('/api/site-data', async (req, res) => {
       });
     }
 
-    if (!settings.khaiwal_cards_json) {
+    if (!settings.khaiwal_cards_json || settings.khaiwal_cards_json === "[]") {
       settings.khaiwal_cards_json = JSON.stringify(DEFAULT_KHAIWAL_CARDS);
     }
 
