@@ -1914,26 +1914,26 @@
     let chart1CustomCols = null;
     let extraChartDates = [];
 
-    const defaultChart1Games = ['SADAR BAZAR', 'GWALIOR', 'DELHI BAZAR', 'DELHI MATKA', 'SHRI GANESH', 'AGRA', 'FARIDABAD', 'ALWAR', 'GAZIABAD', 'DWARKA', 'GALI', 'DISAWER'];
+    const defaultChart1Games = [];
 
     function getChart1ActiveColumns() {
       if (siteDataCache && siteDataCache.games && siteDataCache.games.length > 0) {
         chart1CustomCols = siteDataCache.games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
         return chart1CustomCols;
       }
-      if (chart1CustomCols && Array.isArray(chart1CustomCols) && chart1CustomCols.length > 0) {
+      if (chart1CustomCols && Array.isArray(chart1CustomCols)) {
         return chart1CustomCols;
       }
       if (siteDataCache && siteDataCache.settings && siteDataCache.settings.chart1_columns_json) {
         try {
           const parsed = JSON.parse(siteDataCache.settings.chart1_columns_json);
-          if (Array.isArray(parsed) && parsed.length > 0) {
+          if (Array.isArray(parsed)) {
             chart1CustomCols = parsed;
             return chart1CustomCols;
           }
         } catch(e) {}
       }
-      chart1CustomCols = [...defaultChart1Games];
+      chart1CustomCols = [];
       return chart1CustomCols;
     }
 
