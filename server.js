@@ -311,23 +311,9 @@ app.get('/api/site-data', async (req, res) => {
 
     let blogs = (blogsRes && blogsRes.rows && blogsRes.rows.length > 0) ? blogsRes.rows : (backup.blogs || []);
 
-    let heroGames = [];
-    if (settings.hero_games_json) {
-      try {
-        const parsed = typeof settings.hero_games_json === 'string'
-          ? JSON.parse(settings.hero_games_json)
-          : settings.hero_games_json;
-        if (Array.isArray(parsed) && parsed.length > 0) heroGames = parsed;
-      } catch (e) {}
-    }
+    let heroGames = games.filter(g => parseInt(g.is_hero) === 1);
     if (!heroGames || heroGames.length === 0) {
-      heroGames = games.filter(g => g.is_hero === 1);
-    }
-    if (!heroGames || heroGames.length === 0) {
-      heroGames = [
-        { name: 'DISAWAR', today_result: 'WAIT' },
-        { name: 'GALI', today_result: 'WAIT' }
-      ];
+      heroGames = games.slice(0, 2);
     }
 
     return res.json({
@@ -339,10 +325,11 @@ app.get('/api/site-data', async (req, res) => {
     });
   } catch (e) {
     const backup = getBackupData();
+    const bGames = backup.games || [];
     return res.json({
       settings: backup.settings || {},
-      games: backup.games || [],
-      hero_games: (backup.games || []).filter(g => g.is_hero === 1),
+      games: bGames,
+      hero_games: bGames.filter(g => parseInt(g.is_hero) === 1),
       chart_records: backup.chart_records || [],
       blogs: backup.blogs || []
     });

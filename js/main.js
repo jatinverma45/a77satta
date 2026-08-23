@@ -345,20 +345,10 @@
         }
       }
 
-      // Render Main Hero Box Games (Dynamic Stack from Table 1)
+      // Render Main Hero Box Games (Directly from Table 1 games with is_hero === 1)
       const heroContainer = document.getElementById('heroGamesList');
-      if (heroContainer) {
+      if (heroContainer && data.games && data.games.length > 0) {
         let heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
-        if (!heroList || heroList.length === 0) {
-          if (data.settings && data.settings.hero_games_json) {
-            try {
-              const parsed = typeof data.settings.hero_games_json === 'string'
-                ? JSON.parse(data.settings.hero_games_json)
-                : data.settings.hero_games_json;
-              if (Array.isArray(parsed) && parsed.length > 0) heroList = parsed;
-            } catch(e) {}
-          }
-        }
         if (!heroList || heroList.length === 0) {
           if (Array.isArray(data.hero_games) && data.hero_games.length > 0) {
             heroList = data.hero_games;
@@ -371,24 +361,16 @@
         let heroHtml = '';
         heroList.forEach(g => {
           const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
-
-          const matchedGame = (data.games || []).find(mg => {
-            const mgName = (mg.name || '').trim().toUpperCase();
-            return mgName === name || (name.startsWith('DISAW') && mgName.startsWith('DISAW'));
-          }) || {};
-
           const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
           
           let resVal = 'WAIT';
-          if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
+          if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
             resVal = g.today_result.trim();
-          } else if (matchedGame.today_result && matchedGame.today_result.trim() !== '' && matchedGame.today_result !== 'WAIT') {
-            resVal = matchedGame.today_result.trim();
-          } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '') {
+          } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-') {
             resVal = chartTodayVal.trim();
           }
 
-          const resHtml = (!resVal || resVal === 'WAIT')
+          const resHtml = (!resVal || resVal.toUpperCase() === 'WAIT')
             ? `<div class="wait-starburst-badge">WAIT</div>`
             : `<div class="game-result-main">${resVal}</div>`;
 
@@ -402,9 +384,9 @@
         heroContainer.innerHTML = heroHtml;
       }
 
-      // Render Featured Yellow Banner Game (Bottom Disclaimer Box from Table 1)
+      // Render Featured Yellow Banner Game (Directly from Table 1 game with is_featured === 1)
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
-      if (bannerBox) {
+      if (bannerBox && data.games && data.games.length > 0) {
         const selectedBannerGameName = (data.settings && data.settings.featured_banner_game)
           ? data.settings.featured_banner_game.trim().toUpperCase()
           : 'DISAWER';
@@ -414,7 +396,7 @@
                              const gName = (g.name || '').trim().toUpperCase();
                              return gName === selectedBannerGameName ||
                                     (selectedBannerGameName.startsWith('DISAW') && gName.startsWith('DISAW'));
-                           }) || {
+                           }) || (data.games || [])[0] || {
                              name: 'DISAWER',
                              open_time: '5:15 AM',
                              yesterday_result: '16',
@@ -422,17 +404,15 @@
                            };
 
         const actualGameName = (gameConfig.name || 'DISAWER').trim().toUpperCase();
-        const settings = data.settings || {};
-
-        const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time : (settings.disawer_time || '5:15 AM');
+        const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time : '5:15 AM';
 
         let finalYest = (gameConfig.yesterday_result && gameConfig.yesterday_result !== '-' && gameConfig.yesterday_result.trim())
-          ? gameConfig.yesterday_result
-          : (settings.disawer_prev && settings.disawer_prev !== '-' ? settings.disawer_prev : '-');
+          ? gameConfig.yesterday_result.trim()
+          : '-';
 
-        let finalToday = (gameConfig.today_result && gameConfig.today_result !== 'WAIT' && gameConfig.today_result.trim())
-          ? gameConfig.today_result
-          : (settings.disawer_today && settings.disawer_today !== 'WAIT' ? settings.disawer_today : 'WAIT');
+        let finalToday = (gameConfig.today_result && gameConfig.today_result.toUpperCase() !== 'WAIT' && gameConfig.today_result.trim())
+          ? gameConfig.today_result.trim()
+          : 'WAIT';
 
         if (finalYest === '-' || !finalYest) {
           const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
@@ -444,7 +424,7 @@
           if (chartTodayVal) finalToday = chartTodayVal;
         }
 
-        const todayHtml = (!finalToday || finalToday === 'WAIT')
+        const todayHtml = (!finalToday || finalToday.toUpperCase() === 'WAIT')
           ? `<span class="wait-starburst-badge">WAIT</span>`
           : `<span class="score-number score-number-today">${finalToday}</span>`;
 
