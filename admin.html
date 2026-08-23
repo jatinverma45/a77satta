@@ -888,6 +888,25 @@
       document.getElementById('adminPanel').style.display = 'none';
     }
 
+    async function loadAdminData() {
+      try {
+        const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) return;
+        const data = await res.json();
+        siteDataCache = data;
+
+        if (typeof renderGamesTable === 'function') renderGamesTable();
+        if (typeof renderSettings === 'function') renderSettings();
+        if (typeof renderBlogs === 'function') renderBlogs();
+        if (typeof renderChartCardsAdminTable === 'function') renderChartCardsAdminTable();
+        if (typeof populateMonthlyGameSelect === 'function') populateMonthlyGameSelect();
+        if (typeof loadMonthlyChartEditorData === 'function') loadMonthlyChartEditorData();
+        if (typeof populateDisawerBannerFields === 'function') populateDisawerBannerFields();
+      } catch (err) {
+        console.error('Error loading admin data:', err);
+      }
+    }
+
     if (localStorage.getItem('admin_token')) {
       showAdminPanel();
     }
