@@ -19,9 +19,9 @@ const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.ss
 const pgPool = new PgPool({
   connectionString: SUPABASE_DB_URI,
   ssl: { rejectUnauthorized: false },
-  max: 2,
-  idleTimeoutMillis: 1000,
-  connectionTimeoutMillis: 2500
+  max: 5,
+  idleTimeoutMillis: 10000,
+  connectionTimeoutMillis: 10000
 });
 
 function safeQuery(text, params = []) {
@@ -30,9 +30,9 @@ function safeQuery(text, params = []) {
     const timer = setTimeout(() => {
       if (!finished) {
         finished = true;
-        reject(new Error('PostgreSQL query timeout (5s limit)'));
+        reject(new Error('PostgreSQL query timeout (10s limit)'));
       }
-    }, 5000);
+    }, 10000);
 
     pgPool.query(text, params)
       .then(res => {
@@ -86,22 +86,22 @@ async function syncJSONBackup() {
       });
     }
 
-    if (backup.games && backup.games.length > 0) {
-      const gameMap = {};
-      if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
-        gamesRes.rows.forEach(g => {
-          if (g && g.name) {
-            const key = String(g.id || g.name.trim().toUpperCase());
-            gameMap[key] = g;
-          }
-        });
-      }
-      (backup.games || []).forEach(g => {
+    const gameMap = {};
+    if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
+      gamesRes.rows.forEach(g => {
         if (g && g.name) {
           const key = String(g.id || g.name.trim().toUpperCase());
-          gameMap[key] = { ...(gameMap[key] || {}), ...g };
+          gameMap[key] = g;
         }
       });
+    }
+    (backup.games || []).forEach(g => {
+      if (g && g.name) {
+        const key = String(g.id || g.name.trim().toUpperCase());
+        gameMap[key] = { ...(gameMap[key] || {}), ...g };
+      }
+    });
+    if (Object.keys(gameMap).length > 0) {
       fullData.games = Object.values(gameMap);
       fullData.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
     }

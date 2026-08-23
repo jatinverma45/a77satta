@@ -1,14 +1,27 @@
 {
   "settings": {
-    "featured_banner_game": "TEST BAZAR 2026",
+    "featured_banner_game": "KASHMIR BAZAR",
     "disawer_time": "04:00 PM",
     "disawer_prev": "55",
     "disawer_today": "99",
-    "hero_games_json": "[]",
+    "hero_games_json": "[{\"id\":1787508460021,\"name\":\"KASHMIR BAZAR\",\"today_result\":\"88\"}]",
     "custom_chart_cards_json": "[]",
     "khaiwal_cards_json": "[{\"card_type\":\"standard\",\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ KUBER BHAI KHAIWAL ♣\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nफरीदाबाद ----------- 5:50 pm\\nगाजियाबाद ----------- 8:50 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"},{\"id\":1787334169145,\"card_type\":\"standard\",\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ NEW BHAI KHAIWAL ♣\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nघाटियाल ----------- 2:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nफरीदाबाद ----------- 5:50 pm\\nगाजियाबाद ----------- 8:50 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"}]"
   },
-  "games": [],
+  "games": [
+    {
+      "id": 652,
+      "name": "GANDU",
+      "open_time": "06:50 PM",
+      "close_time": "06:50 PM",
+      "yesterday_result": "67",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 1,
+      "is_hero": 0,
+      "is_featured": 0
+    }
+  ],
   "chart_records": [
     {
       "record_date": "23-08",
