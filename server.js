@@ -86,14 +86,19 @@ async function syncJSONBackup() {
       });
     }
 
-    if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
+    if (backup.games && backup.games.length > 0) {
       const gameMap = {};
+      if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
+        gamesRes.rows.forEach(g => {
+          if (g && g.name) {
+            const key = String(g.id || g.name.trim().toUpperCase());
+            gameMap[key] = g;
+          }
+        });
+      }
       (backup.games || []).forEach(g => {
-        if (g && g.name) gameMap[g.id || g.name.trim().toUpperCase()] = g;
-      });
-      gamesRes.rows.forEach(g => {
         if (g && g.name) {
-          const key = g.id || g.name.trim().toUpperCase();
+          const key = String(g.id || g.name.trim().toUpperCase());
           gameMap[key] = { ...(gameMap[key] || {}), ...g };
         }
       });
@@ -277,23 +282,20 @@ app.get('/api/site-data', async (req, res) => {
     }
 
     const gameMap = {};
-    (backup.games || []).forEach(g => {
-      if (g && g.name) gameMap[g.name.trim().toUpperCase()] = g;
-    });
     if (gamesRes && gamesRes.rows && gamesRes.rows.length > 0) {
       gamesRes.rows.forEach(g => {
         if (g && g.name) {
-          const key = g.name.trim().toUpperCase();
-          const backupGame = gameMap[key] || {};
-          gameMap[key] = {
-            ...backupGame,
-            ...g,
-            is_hero: backupGame.is_hero !== undefined ? backupGame.is_hero : (g.is_hero || 0),
-            is_featured: backupGame.is_featured !== undefined ? backupGame.is_featured : (g.is_featured || 0)
-          };
+          const key = String(g.id || g.name.trim().toUpperCase());
+          gameMap[key] = g;
         }
       });
     }
+    (backup.games || []).forEach(g => {
+      if (g && g.name) {
+        const key = String(g.id || g.name.trim().toUpperCase());
+        gameMap[key] = { ...(gameMap[key] || {}), ...g };
+      }
+    });
     let games = Object.values(gameMap);
     games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
 
@@ -377,9 +379,8 @@ app.post('/api/admin/update-game', async (req, res) => {
 
   const gNameUpper = (name || '').trim().toUpperCase();
   const existingIdx = backup.games.findIndex(
-    g => (g.id && id && g.id === id) ||
-         (g.name || '').toUpperCase() === gNameUpper ||
-         ((g.name || '').toUpperCase().startsWith('DISAW') && gNameUpper.startsWith('DISAW'))
+    g => (g.id && id && String(g.id) === String(id)) ||
+         (g.name || '').toUpperCase() === gNameUpper
   );
 
   if (existingIdx !== -1) {
@@ -497,6 +498,7 @@ app.post('/api/admin/add-game', async (req, res) => {
     backup.games.push(newGameObj);
   }
 
+  memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   // Synchronous Awaited DB save
@@ -610,7 +612,7 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
     if (!g.name) return;
     const gNameUpper = g.name.trim().toUpperCase();
     const existingIdx = backup.games.findIndex(
-      bg => (bg.id && g.id && bg.id === g.id) || (bg.name || '').toUpperCase() === gNameUpper
+      bg => (bg.id && g.id && String(bg.id) === String(g.id)) || (bg.name || '').toUpperCase() === gNameUpper
     );
 
     const updatedGame = {
@@ -722,6 +724,7 @@ app.post('/api/admin/delete-game', async (req, res) => {
   if (backup && backup.games) {
     const nameUpper = (name || '').trim().toUpperCase();
     backup.games = backup.games.filter(g => g.id !== id && (nameUpper === '' || (g.name || '').toUpperCase() !== nameUpper));
+    memoryBackupCache = backup;
     saveBackupDataLocally(backup);
   }
 
