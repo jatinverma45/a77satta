@@ -461,6 +461,17 @@
             `;
           });
           board1.innerHTML = rowsHtml;
+        } else {
+          board1.innerHTML = `
+            <div class="a77-market-board-header">
+              <div>सट्टा का नाम</div>
+              <div>कल आया था</div>
+              <div>आज का रिजल्ट</div>
+            </div>
+            <div class="a77-market-row" style="justify-content: center; padding: 20px; font-weight: 700; color: #ffd700;">
+              <div style="text-align: center; width: 100%;">NO GAMES CREATED YET. ADD GAMES FROM ADMIN PANEL.</div>
+            </div>
+          `;
         }
       }
 

@@ -735,6 +735,20 @@ app.post('/api/admin/delete-game', async (req, res) => {
   res.json({ success: true });
 });
 
+// Admin: Clear All Games
+app.post('/api/admin/clear-all-games', async (req, res) => {
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  backup.games = [];
+  memoryBackupCache = backup;
+  saveBackupDataLocally(backup);
+
+  try {
+    await safeQuery('DELETE FROM games');
+  } catch (e) {}
+
+  res.json({ success: true, message: 'All games cleared successfully' });
+});
+
 // Admin: Save/Update Single Chart Cell
 app.post('/api/admin/update-chart-cell', async (req, res) => {
   const { record_date, game_name, result_val } = req.body;
