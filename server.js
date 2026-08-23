@@ -523,6 +523,19 @@ app.post('/api/admin/add-game', async (req, res) => {
   res.json({ success: true, id: newId });
 });
 
+// Admin: Clear All Games
+app.post('/api/admin/clear-all-games', async (req, res) => {
+  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  backup.games = [];
+  saveBackupDataLocally(backup);
+
+  try {
+    await safeQuery('DELETE FROM games');
+  } catch (e) {}
+
+  res.json({ success: true, message: 'All games cleared successfully' });
+});
+
 // Admin: Save Hero Box Games
 app.post('/api/admin/update-hero-games', async (req, res) => {
   const { games } = req.body;

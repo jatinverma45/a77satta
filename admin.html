@@ -429,6 +429,7 @@
           <div class="action-row-flex">
             <button class="btn-adm btn-adm-yellow" type="button" onclick="saveTableOrder(1, this)">💾 SAVE TABLE 1 ALL DATA &amp; ORDER</button>
             <button class="btn-adm btn-adm-green" type="button" onclick="openAddGameModal(1)">+ ADD GAME TO TABLE 1</button>
+            <button class="btn-adm btn-adm-red" type="button" onclick="clearAllGamesUI()">🗑️ CLEAR ALL GAMES</button>
           </div>
         </div>
         <div class="admin-card-body">
@@ -1805,8 +1806,18 @@
           showToast('Game deleted');
           loadAdminData();
         }
+    async function clearAllGamesUI() {
+      if (!confirm('Are you sure you want to delete ALL games? You can then create your own games from scratch.')) return;
+      try {
+        const res = await fetch('/api/admin/clear-all-games', { method: 'POST' });
+        if (res.ok) {
+          showToast('All games deleted successfully!');
+          await loadAdminData();
+        } else {
+          alert('Failed to clear games');
+        }
       } catch (e) {
-        alert('Error deleting game');
+        alert('Error clearing games');
       }
     }
 
