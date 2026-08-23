@@ -762,6 +762,8 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
       backup.chart_records.push({ record_date: item.record_date, game_name: item.game_name, result_val: item.result_val });
     }
   });
+
+  memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   for (const item of items) {
