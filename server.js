@@ -340,6 +340,22 @@ app.get('/api/site-data', async (req, res) => {
     let blogs = (blogsRes && blogsRes.rows && blogsRes.rows.length > 0) ? blogsRes.rows : (backup.blogs || []);
     let heroGames = games.filter(g => parseInt(g.is_hero) === 1);
 
+    if (games.length === 0) {
+      settings.hero_games_json = "[]";
+      settings.custom_chart_cards_json = "[]";
+    } else if (settings.custom_chart_cards_json) {
+      try {
+        const parsedCards = JSON.parse(settings.custom_chart_cards_json);
+        if (Array.isArray(parsedCards)) {
+          const filteredCards = parsedCards.filter(cardTitle => {
+            const uTitle = String(cardTitle || '').toUpperCase();
+            return Array.from(activeGameNames).some(gName => uTitle.includes(gName));
+          });
+          settings.custom_chart_cards_json = JSON.stringify(filteredCards);
+        }
+      } catch(e) {}
+    }
+
     return res.json({
       settings,
       games,
@@ -352,7 +368,7 @@ app.get('/api/site-data', async (req, res) => {
     return res.json({
       settings: backup.settings || {},
       games: backup.games || [],
-      hero_games: (backup.games || []).filter(g => g.is_hero === 1),
+      hero_games: (backup.games || []).filter(g => parseInt(g.is_hero) === 1),
       chart_records: backup.chart_records || [],
       blogs: backup.blogs || []
     });
@@ -762,11 +778,19 @@ app.post('/api/admin/delete-game', async (req, res) => {
 app.post('/api/admin/clear-all-games', async (req, res) => {
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   backup.games = [];
+  if (!backup.settings) backup.settings = {};
+  backup.settings.hero_games_json = "[]";
+  backup.settings.custom_chart_cards_json = "[]";
+  delete backup.settings.chart1_columns_json;
+  delete backup.settings.chart2_columns_json;
+
   memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   try {
     await safeQuery('DELETE FROM games');
+    await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', '[]') ON CONFLICT (key) DO UPDATE SET value = '[]'`).catch(() => {});
+    await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('custom_chart_cards_json', '[]') ON CONFLICT (key) DO UPDATE SET value = '[]'`).catch(() => {});
   } catch (e) {}
 
   res.json({ success: true, message: 'All games cleared successfully' });

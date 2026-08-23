@@ -1444,34 +1444,63 @@
       const tbody = document.getElementById('heroAdminGamesTbody');
       if (!tbody) return;
 
-      let heroList = null;
+      const activeGames = (siteDataCache && siteDataCache.games) ? siteDataCache.games : [];
+      const activeNamesSet = new Set(activeGames.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean));
+
+      if (activeGames.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="padding: 25px; text-align: center; background: #fffdf0; border: 2px dashed #ffd400;">
+              <div style="font-size: 15px; font-weight: 900; color: #111; margin-bottom: 6px;">📭 Abhi Main Game Table (Table 1) me koi game nahi hai</div>
+              <div style="font-size: 13px; font-weight: 700; color: #666;">Hero Box configuration ke liye pehle <strong>Main Game Table (Table 1)</strong> me game add karein.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      let heroList = [];
       if (siteDataCache && siteDataCache.settings && siteDataCache.settings.hero_games_json) {
         try {
           const parsed = typeof siteDataCache.settings.hero_games_json === 'string'
             ? JSON.parse(siteDataCache.settings.hero_games_json)
             : siteDataCache.settings.hero_games_json;
-          if (Array.isArray(parsed) && parsed.length > 0) heroList = parsed;
+          if (Array.isArray(parsed)) heroList = parsed;
         } catch(e) {}
       }
-      if (!heroList && siteDataCache && Array.isArray(siteDataCache.hero_games) && siteDataCache.hero_games.length > 0) {
+      if (heroList.length === 0 && siteDataCache && Array.isArray(siteDataCache.hero_games)) {
         heroList = siteDataCache.hero_games;
       }
-      if (!heroList || heroList.length === 0) {
-        heroList = [
-          { name: 'DISAWAR', today_result: 'WAIT' },
-          { name: 'GALI', today_result: 'WAIT' }
-        ];
+
+      // STRICT RELATIONAL FILTER: Only keep hero items that exist in Table 1
+      heroList = heroList.filter(hg => hg && hg.name && activeNamesSet.has(hg.name.trim().toUpperCase()));
+
+      // If no configured hero items, default to active Table 1 games marked as is_hero
+      if (heroList.length === 0) {
+        heroList = activeGames.filter(g => parseInt(g.is_hero) === 1).map(g => ({ name: g.name, today_result: g.today_result || 'WAIT' }));
       }
 
       tbody.innerHTML = '';
+      if (heroList.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="padding: 25px; text-align: center; background: #fffdf0; border: 2px dashed #ffd400;">
+              <div style="font-size: 15px; font-weight: 900; color: #111; margin-bottom: 6px;">📭 Koi Hero Game configured nahi hai</div>
+              <div style="font-size: 13px; font-weight: 700; color: #666;">Niche Table 1 me game ke aage <strong>🔥 HERO</strong> check box par tick karein ya "+ ADD GAME TO HERO BOX" use karein.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
       heroList.forEach((game, idx) => {
         const tr = document.createElement('tr');
         const gName = game.name ? game.name.toUpperCase() : '';
 
-        const matchedGame = (siteDataCache && siteDataCache.games) ? siteDataCache.games.find(mg => {
+        const matchedGame = activeGames.find(mg => {
           const mgName = (mg.name || '').trim().toUpperCase();
           return mgName === gName || (gName.startsWith('DISAW') && mgName.startsWith('DISAW'));
-        }) : null;
+        });
 
         let gRes = 'WAIT';
         if (game.today_result && game.today_result.trim() !== '' && game.today_result !== 'WAIT') {
@@ -1489,7 +1518,7 @@
             <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
           </td>
           <td>
-            <input type="text" class="adm-input-cell hero-game-name" value="${gName}" placeholder="e.g. RAJ SHREE, GALI">
+            <input type="text" class="adm-input-cell hero-game-name" value="${gName}" readonly style="background:#eee; font-weight:800;">
           </td>
           <td>
             <div class="action-row-flex">
@@ -1522,6 +1551,21 @@
       const tbody = document.getElementById('heroAdminGamesTbody');
       if (!tbody) return;
 
+      const activeGames = (siteDataCache && siteDataCache.games) ? siteDataCache.games : [];
+      if (activeGames.length === 0) {
+        alert('Please add games to Main Game Table (Table 1) first!');
+        return;
+      }
+
+      const existingNames = Array.from(tbody.querySelectorAll('.hero-game-name')).map(inp => inp.value.trim().toUpperCase());
+      const available = activeGames.filter(g => !existingNames.includes((g.name || '').trim().toUpperCase()));
+
+      if (available.length === 0) {
+        alert('All Table 1 games are already added to Hero Box!');
+        return;
+      }
+
+      const selectedName = available[0].name.trim().toUpperCase();
       const idx = tbody.children.length;
       const tr = document.createElement('tr');
       tr.innerHTML = `
@@ -1531,7 +1575,9 @@
           <button class="btn-adm btn-adm-yellow" type="button" style="padding: 2px 6px; font-size: 11px; margin-left: 2px;" onclick="moveRowDown(this)">⬇️</button>
         </td>
         <td>
-          <input type="text" class="adm-input-cell hero-game-name" value="NEW GAME" placeholder="e.g. FARIDABAD">
+          <select class="adm-input-cell hero-game-name" style="font-weight:800;">
+            ${available.map(g => `<option value="${g.name.trim().toUpperCase()}">${g.name.trim().toUpperCase()}</option>`).join('')}
+          </select>
         </td>
         <td>
           <div class="action-row-flex">
@@ -1982,29 +2028,30 @@
       }
     }
 
-    // Chart Cards Admin Logic
-    const defaultChartNames = [
-      'DAMAN SATTA KING CHART 2026', 'KAROL BAGH SATTA KING CHART 2026', 'RAJ SHREE SATTA KING CHART 2026',
-      'GALI SATTA KING CHART 2026', 'DWARKA SATTA KING CHART 2026', 'GAZIABAD SATTA KING CHART 2026',
-      'ALWAR SATTA KING CHART 2026', 'FARIDABAD SATTA KING CHART 2026', 'AGRA SATTA KING CHART 2026',
-      'SHRI GANESH SATTA KING CHART 2026', 'DELHI BAZAR SATTA KING CHART 2026', 'GWALIOR SATTA KING CHART 2026',
-      'SADAR BAZAR SATTA KING CHART 2026', 'DISAWER SATTA KING CHART 2026', 'HR SATTA SATTA KING CHART 2026',
-      'UJJALA SUPER SATTA KING CHART 2026', 'NEW GANGA SATTA KING CHART 2026', 'DELHI MATKA SATTA KING CHART 2026',
-      'DEHRADUN CITY SATTA KING CHART 2026', 'KKR CITY SATTA KING CHART 2026', 'DELHI DARBAR SATTA KING CHART 2026',
-      'MANDI BAZAR SATTA KING CHART 2026', 'MADHUPURI SATTA KING CHART 2026', 'FATEHABAD SATTA KING CHART 2026',
-      'LION BAZAR SATTA KING CHART 2026', 'SIALKOT SATTA KING CHART 2026', 'BHADRA BAZAR SATTA KING CHART 2026',
-      'ANMOL BAZAR SATTA KING CHART 2026', 'SKY KING SATTA KING CHART 2026', 'MOHALI-7 SATTA KING CHART 2026',
-      'UDAIPUR CITY SATTA KING CHART 2026', 'VIP AGRA SATTA KING CHART 2026', 'SHRI LAKSHMI SATTA KING CHART 2026'
-    ];
-
+    // Chart Cards Admin Logic (Strictly Derived From Table 1 Games)
     function getActiveChartCardsList() {
+      const activeGames = (siteDataCache && siteDataCache.games) ? siteDataCache.games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean) : [];
+      if (activeGames.length === 0) return [];
+
+      let customList = [];
       if (siteDataCache && siteDataCache.settings && siteDataCache.settings.custom_chart_cards_json) {
         try {
           const parsed = JSON.parse(siteDataCache.settings.custom_chart_cards_json);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+          if (Array.isArray(parsed)) customList = parsed;
         } catch(e) {}
       }
-      return [...defaultChartNames];
+
+      // Filter custom chart cards so only cards referencing active Table 1 games are kept
+      const activeNamesSet = new Set(activeGames);
+      customList = customList.filter(title => {
+        const uTitle = String(title || '').toUpperCase();
+        return Array.from(activeNamesSet).some(gName => uTitle.includes(gName));
+      });
+
+      if (customList.length > 0) return customList;
+
+      // Default: Generate chart card for each active Table 1 game
+      return activeGames.map(gName => `${gName} SATTA KING CHART 2026`);
     }
 
     function renderChartCardsAdminTable() {
@@ -2013,6 +2060,18 @@
 
       const list = getActiveChartCardsList();
       tbody.innerHTML = '';
+
+      if (list.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="3" style="padding: 25px; text-align: center; background: #fffdf0; border: 2px dashed #ffd400;">
+              <div style="font-size: 15px; font-weight: 900; color: #111; margin-bottom: 6px;">📭 Abhi Main Game Table (Table 1) me koi game nahi hai</div>
+              <div style="font-size: 13px; font-weight: 700; color: #666;">Chart Cards ke liye pehle <strong>Main Game Table (Table 1)</strong> me game add karein.</div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
       list.forEach((title, idx) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `

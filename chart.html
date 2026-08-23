@@ -80,41 +80,6 @@
   </div>
 
   <script>
-    const chartNames = [
-      'DAMAN SATTA KING CHART 2026',
-      'KAROL BAGH SATTA KING CHART 2026',
-      'RAJ SHREE SATTA KING CHART 2026',
-      'GALI SATTA KING CHART 2026',
-      'DWARKA SATTA KING CHART 2026',
-      'GAZIABAD SATTA KING CHART 2026',
-      'ALWAR SATTA KING CHART 2026',
-      'FARIDABAD SATTA KING CHART 2026',
-      'AGRA SATTA KING CHART 2026',
-      'SHRI GANESH SATTA KING CHART 2026',
-      'DELHI BAZAR SATTA KING CHART 2026',
-      'GWALIOR SATTA KING CHART 2026',
-      'SADAR BAZAR SATTA KING CHART 2026',
-      'DISAWER SATTA KING CHART 2026',
-      'HR SATTA SATTA KING CHART 2026',
-      'UJJALA SUPER SATTA KING CHART 2026',
-      'NEW GANGA SATTA KING CHART 2026',
-      'DELHI MATKA SATTA KING CHART 2026',
-      'DEHRADUN CITY SATTA KING CHART 2026',
-      'KKR CITY SATTA KING CHART 2026',
-      'DELHI DARBAR SATTA KING CHART 2026',
-      'MANDI BAZAR SATTA KING CHART 2026',
-      'MADHUPURI SATTA KING CHART 2026',
-      'FATEHABAD SATTA KING CHART 2026',
-      'LION BAZAR SATTA KING CHART 2026',
-      'SIALKOT SATTA KING CHART 2026',
-      'BHADRA BAZAR SATTA KING CHART 2026',
-      'ANMOL BAZAR SATTA KING CHART 2026',
-      'SKY KING SATTA KING CHART 2026',
-      'MOHALI-7 SATTA KING CHART 2026',
-      'UDAIPUR CITY SATTA KING CHART 2026',
-      'VIP AGRA SATTA KING CHART 2026',
-      'SHRI LAKSHMI SATTA KING CHART 2026'
-    ];
 
     const yearlySampleData = [
       [27, 79, 60, 53, 16, 76, 55, 55, '-', '-', '-', '-'],
@@ -232,7 +197,7 @@
     if (grid) {
       const renderGrid = () => {
         let dynamicChartNames = [];
-        if (liveSiteData) {
+        if (liveSiteData && liveSiteData.games && liveSiteData.games.length > 0) {
           if (liveSiteData.settings && liveSiteData.settings.custom_chart_cards_json) {
             try {
               const customList = JSON.parse(liveSiteData.settings.custom_chart_cards_json);
@@ -242,16 +207,14 @@
             } catch(e) {}
           }
           if (!dynamicChartNames || dynamicChartNames.length === 0) {
-            if (liveSiteData.games && liveSiteData.games.length > 0) {
-              liveSiteData.games.forEach(g => {
-                if (g.name) dynamicChartNames.push(`${g.name.trim().toUpperCase()} SATTA KING CHART 2026`);
-              });
-            }
+            liveSiteData.games.forEach(g => {
+              if (g.name) dynamicChartNames.push(`${g.name.trim().toUpperCase()} SATTA KING CHART 2026`);
+            });
           }
 
           // Populate #gameSelect with Table 1 Games
           const gameSelect = document.getElementById('gameSelect');
-          if (gameSelect && liveSiteData.games && liveSiteData.games.length > 0) {
+          if (gameSelect) {
             const currentSelected = gameSelect.value;
             let optsHtml = '';
             liveSiteData.games.forEach(g => {
@@ -265,13 +228,25 @@
               gameSelect.value = currentSelected;
             }
           }
-        }
-
-        if (!dynamicChartNames || dynamicChartNames.length === 0) {
-          dynamicChartNames = chartNames;
+        } else {
+          const gameSelect = document.getElementById('gameSelect');
+          if (gameSelect) {
+            gameSelect.innerHTML = '<option value="">No Games Available</option>';
+          }
         }
 
         grid.innerHTML = '';
+
+        if (!dynamicChartNames || dynamicChartNames.length === 0) {
+          grid.innerHTML = `
+            <div style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; font-weight: 800; font-size: 16px; color: #ffd700; background: rgba(0,0,0,0.6); border: 2px dashed #ffd700; border-radius: 8px;">
+              🚫 NO GAMES AVAILABLE IN MAIN GAME TABLE (TABLE 1).<br>
+              <span style="font-weight: 400; font-size: 14px; color: #ccc; margin-top: 6px; display: inline-block;">Add games to Main Game Table (Table 1) from Admin Panel to generate Chart Cards.</span>
+            </div>
+          `;
+          return;
+        }
+
         dynamicChartNames.forEach((name) => {
           const card = document.createElement('div');
           card.className = 'chart-card-item';
