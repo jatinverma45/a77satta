@@ -1465,7 +1465,20 @@
       heroList.forEach((game, idx) => {
         const tr = document.createElement('tr');
         const gName = game.name ? game.name.toUpperCase() : '';
-        const gRes = game.today_result || game.result || 'WAIT';
+
+        const matchedGame = (siteDataCache && siteDataCache.games) ? siteDataCache.games.find(mg => {
+          const mgName = (mg.name || '').trim().toUpperCase();
+          return mgName === gName || (gName.startsWith('DISAW') && mgName.startsWith('DISAW'));
+        }) : null;
+
+        let gRes = 'WAIT';
+        if (game.today_result && game.today_result.trim() !== '' && game.today_result !== 'WAIT') {
+          gRes = game.today_result.trim();
+        } else if (matchedGame && matchedGame.today_result && matchedGame.today_result.trim() !== '' && matchedGame.today_result !== 'WAIT') {
+          gRes = matchedGame.today_result.trim();
+        } else if (game.result && game.result !== 'WAIT') {
+          gRes = game.result.trim();
+        }
 
         tr.innerHTML = `
           <td style="white-space: nowrap;">

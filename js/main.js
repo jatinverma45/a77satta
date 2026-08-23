@@ -360,15 +360,30 @@
         if (!heroList && Array.isArray(data.hero_games) && data.hero_games.length > 0) {
           heroList = data.hero_games;
         }
-        if (!heroList) {
+        if (!heroList || heroList.length === 0) {
           heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
         }
 
         let heroHtml = '';
         heroList.forEach(g => {
           const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
+
+          const matchedGame = (data.games || []).find(mg => {
+            const mgName = (mg.name || '').trim().toUpperCase();
+            return mgName === name || (name.startsWith('DISAW') && mgName.startsWith('DISAW'));
+          }) || {};
+
           const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
-          const resVal = chartTodayVal !== null ? chartTodayVal : (g.today_result ? g.today_result.trim() : (g.result || 'WAIT'));
+          
+          let resVal = 'WAIT';
+          if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
+            resVal = g.today_result.trim();
+          } else if (matchedGame.today_result && matchedGame.today_result.trim() !== '' && matchedGame.today_result !== 'WAIT') {
+            resVal = matchedGame.today_result.trim();
+          } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '') {
+            resVal = chartTodayVal.trim();
+          }
+
           const resHtml = (!resVal || resVal === 'WAIT')
             ? `<div class="wait-starburst-badge">WAIT</div>`
             : `<div class="game-result-main">${resVal}</div>`;

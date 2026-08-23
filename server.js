@@ -542,6 +542,20 @@ app.post('/api/admin/update-hero-games', async (req, res) => {
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.settings) backup.settings = {};
   backup.settings.hero_games_json = heroJsonStr;
+
+  if (Array.isArray(backup.games)) {
+    heroItems.forEach(h => {
+      const hName = h.name.trim().toUpperCase();
+      const existingIdx = backup.games.findIndex(bg => {
+        const bgName = (bg.name || '').trim().toUpperCase();
+        return bgName === hName || (hName.startsWith('DISAW') && bgName.startsWith('DISAW'));
+      });
+      if (existingIdx !== -1 && h.today_result && h.today_result !== 'WAIT') {
+        backup.games[existingIdx].today_result = h.today_result;
+      }
+    });
+  }
+
   saveBackupDataLocally(backup);
 
   // Synchronous Awaited DB update
@@ -554,7 +568,7 @@ app.post('/api/admin/update-hero-games', async (req, res) => {
     );
     for (const g of heroItems) {
       await safeQuery(
-        'UPDATE games SET is_hero = 1, today_result = $1 WHERE id = $2 OR UPPER(name) = $3',
+        `UPDATE games SET is_hero = 1, today_result = $1 WHERE id = $2 OR UPPER(name) = UPPER($3) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($3) LIKE 'DISAW%')`,
         [g.today_result, g.id || -1, g.name]
       );
     }
