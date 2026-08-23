@@ -346,10 +346,20 @@ app.get('/api/site-data', async (req, res) => {
     }
     let charts = Object.values(chartMap);
 
-    let blogs = (blogsRes && blogsRes.rows && blogsRes.rows.length > 0) ? blogsRes.rows : (backup.blogs || []);
     let heroGames = games.filter(g => parseInt(g.is_hero) === 1);
+    if (heroGames.length === 0 && settings.hero_games_json) {
+      try {
+        const parsedHero = JSON.parse(settings.hero_games_json);
+        if (Array.isArray(parsedHero) && parsedHero.length > 0) {
+          const heroNames = new Set(parsedHero.map(h => (h.name || '').trim().toUpperCase()));
+          heroGames = games.filter(g => heroNames.has((g.name || '').trim().toUpperCase()));
+        }
+      } catch(e) {}
+    }
 
     if (games.length === 0) {
+      charts = [];
+      heroGames = [];
       settings.hero_games_json = "[]";
       settings.custom_chart_cards_json = "[]";
     } else if (settings.custom_chart_cards_json) {
@@ -374,11 +384,14 @@ app.get('/api/site-data', async (req, res) => {
     });
   } catch (e) {
     const backup = getBackupData();
+    const bgames = backup.games || [];
+    const bGameNames = new Set(bgames.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean));
+    const bCharts = (backup.chart_records || []).filter(r => r && r.game_name && bGameNames.has(r.game_name.trim().toUpperCase()));
     return res.json({
       settings: backup.settings || {},
-      games: backup.games || [],
-      hero_games: (backup.games || []).filter(g => parseInt(g.is_hero) === 1),
-      chart_records: backup.chart_records || [],
+      games: bgames,
+      hero_games: bgames.filter(g => parseInt(g.is_hero) === 1),
+      chart_records: bgames.length === 0 ? [] : bCharts,
       blogs: backup.blogs || []
     });
   }
@@ -472,14 +485,12 @@ app.post('/api/admin/update-game', async (req, res) => {
     if (today_result !== undefined) backup.settings.disawer_today = today_result;
   }
 
-  const heroGamesList = backup.games.filter(g => g.is_hero === 1).map(g => ({
+  const heroGamesList = backup.games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
     id: g.id || null,
     name: g.name ? g.name.trim().toUpperCase() : '',
     today_result: g.today_result ? g.today_result.trim() : 'WAIT'
   }));
-  if (heroGamesList.length > 0) {
-    backup.settings.hero_games_json = JSON.stringify(heroGamesList);
-  }
+  backup.settings.hero_games_json = JSON.stringify(heroGamesList);
 
   memoryBackupCache = backup;
   saveBackupDataLocally(backup);
@@ -517,10 +528,13 @@ app.post('/api/admin/update-game', async (req, res) => {
 
 // Admin: Add New Game
 app.post('/api/admin/add-game', async (req, res) => {
-  const { name, open_time, yesterday_result, today_result, table_group } = req.body;
+  const { name, open_time, yesterday_result, today_result, table_group, is_hero, is_featured } = req.body;
   const grp = parseInt(table_group) || 1;
   const gName = (name || '').trim().toUpperCase();
   if (!gName) return res.status(400).json({ error: 'Game name is required' });
+
+  const heroVal = is_hero ? 1 : 0;
+  const featVal = is_featured ? 1 : 0;
 
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.games) backup.games = [];
@@ -536,7 +550,9 @@ app.post('/api/admin/add-game', async (req, res) => {
     yesterday_result: yesterday_result || '',
     today_result: today_result || 'WAIT',
     table_group: grp,
-    sort_order: nextOrd
+    sort_order: nextOrd,
+    is_hero: heroVal,
+    is_featured: featVal
   };
 
   const existingIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === gName);
@@ -546,22 +562,40 @@ app.post('/api/admin/add-game', async (req, res) => {
     backup.games.push(newGameObj);
   }
 
+  if (!backup.settings) backup.settings = {};
+  if (featVal === 1) {
+    backup.settings.featured_banner_game = gName;
+  }
+
+  const heroGamesList = backup.games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
+    id: g.id || null,
+    name: g.name ? g.name.trim().toUpperCase() : '',
+    today_result: g.today_result ? g.today_result.trim() : 'WAIT'
+  }));
+  backup.settings.hero_games_json = JSON.stringify(heroGamesList);
+
   memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   // Synchronous Awaited DB save
   try {
     await safeQuery(
-      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero, is_featured)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
        ON CONFLICT (name) DO UPDATE SET
          open_time = EXCLUDED.open_time,
          yesterday_result = EXCLUDED.yesterday_result,
          today_result = EXCLUDED.today_result,
          table_group = EXCLUDED.table_group,
-         sort_order = EXCLUDED.sort_order`,
-      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd]
+         sort_order = EXCLUDED.sort_order,
+         is_hero = EXCLUDED.is_hero,
+         is_featured = EXCLUDED.is_featured`,
+      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd, heroVal, featVal]
     );
+
+    if (featVal === 1) {
+      await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [gName]).catch(() => {});
+    }
   } catch (e) {}
 
   res.json({ success: true, id: newId });
@@ -579,24 +613,25 @@ app.post('/api/admin/update-hero-games', async (req, res) => {
   }));
 
   const heroJsonStr = JSON.stringify(heroItems);
+  const heroNamesSet = new Set(heroItems.map(h => h.name.trim().toUpperCase()));
 
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.settings) backup.settings = {};
   backup.settings.hero_games_json = heroJsonStr;
 
   if (Array.isArray(backup.games)) {
-    heroItems.forEach(h => {
-      const hName = h.name.trim().toUpperCase();
-      const existingIdx = backup.games.findIndex(bg => {
-        const bgName = (bg.name || '').trim().toUpperCase();
-        return bgName === hName || (hName.startsWith('DISAW') && bgName.startsWith('DISAW'));
-      });
-      if (existingIdx !== -1 && h.today_result && h.today_result !== 'WAIT') {
-        backup.games[existingIdx].today_result = h.today_result;
+    backup.games.forEach(bg => {
+      const bgName = (bg.name || '').trim().toUpperCase();
+      const isH = heroNamesSet.has(bgName) || Array.from(heroNamesSet).some(hn => hn.startsWith('DISAW') && bgName.startsWith('DISAW'));
+      bg.is_hero = isH ? 1 : 0;
+      const matchedItem = heroItems.find(h => h.name.trim().toUpperCase() === bgName || (h.name.trim().toUpperCase().startsWith('DISAW') && bgName.startsWith('DISAW')));
+      if (matchedItem && matchedItem.today_result && matchedItem.today_result !== 'WAIT') {
+        bg.today_result = matchedItem.today_result;
       }
     });
   }
 
+  memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   // Synchronous Awaited DB update
@@ -671,7 +706,8 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       today_result: g.today_result !== undefined ? g.today_result : 'WAIT',
       table_group: parseInt(g.table_group) || 1,
       sort_order: parseInt(g.sort_order) || 0,
-      is_hero: g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_hero || 0) : 0)
+      is_hero: g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_hero || 0) : 0),
+      is_featured: g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_featured || 0) : 0)
     };
 
     if (g.is_featured === 1 || g.is_featured === true || gNameUpper.startsWith('DISAW')) {
@@ -771,7 +807,12 @@ app.post('/api/admin/delete-game', async (req, res) => {
   const backup = getBackupData();
   if (backup && backup.games) {
     const nameUpper = (name || '').trim().toUpperCase();
-    backup.games = backup.games.filter(g => g.id !== id && (nameUpper === '' || (g.name || '').toUpperCase() !== nameUpper));
+    const idStr = id ? String(id) : '';
+    backup.games = backup.games.filter(g => {
+      const matchId = idStr !== '' && String(g.id || '') === idStr;
+      const matchName = nameUpper !== '' && (g.name || '').toUpperCase() === nameUpper;
+      return !(matchId || matchName);
+    });
     memoryBackupCache = backup;
     saveBackupDataLocally(backup);
   }

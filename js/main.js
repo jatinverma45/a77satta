@@ -358,7 +358,9 @@
       // Render Main Hero Box Games (Dynamic Stack from Table 1)
       const heroContainer = document.getElementById('heroGamesList');
       if (heroContainer && data.games && data.games.length > 0) {
-        let heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
+        let heroList = (data.hero_games && data.hero_games.length > 0)
+          ? data.hero_games
+          : (data.games || []).filter(g => parseInt(g.is_hero) === 1);
 
         let heroHtml = '';
         heroList.forEach(g => {
@@ -386,10 +388,12 @@
         heroContainer.innerHTML = heroHtml;
       }
 
-      // Render Featured Yellow Banner Game (Always DISAWER as requested)
+      // Render Featured Yellow Banner Game
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
       if (bannerBox) {
-        const gameConfig = (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW')) ||
+        const featSettingName = (data.settings && data.settings.featured_banner_game) ? data.settings.featured_banner_game.trim().toUpperCase() : '';
+        const gameConfig = (data.games || []).find(g => (g.name || '').trim().toUpperCase() === featSettingName) ||
+                           (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW')) ||
                            (data.games || []).find(g => parseInt(g.is_featured) === 1) ||
                            (data.games || [])[0] || {
                              name: 'DISAWER',
@@ -398,7 +402,7 @@
                              today_result: '88'
                            };
 
-        const actualGameName = 'DISAWER';
+        const actualGameName = gameConfig.name ? gameConfig.name.trim().toUpperCase() : 'DISAWER';
         const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time.trim() : '5:15 AM';
 
         let finalYest = (gameConfig.yesterday_result && gameConfig.yesterday_result !== '-' && gameConfig.yesterday_result.trim())
