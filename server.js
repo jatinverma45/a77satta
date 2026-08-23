@@ -173,9 +173,6 @@ async function initDatabase() {
         content TEXT,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
-
-      ALTER TABLE games ADD COLUMN IF NOT EXISTS is_hero INT DEFAULT 0;
-      ALTER TABLE games ADD COLUMN IF NOT EXISTS is_featured INT DEFAULT 0;
     `);
 
     // Ensure Admin User Exists
@@ -313,7 +310,7 @@ app.get('/api/site-data', async (req, res) => {
 
     let heroGames = games.filter(g => parseInt(g.is_hero) === 1);
     if (!heroGames || heroGames.length === 0) {
-      heroGames = games.slice(0, 2);
+      heroGames = games.slice(0, 3);
     }
 
     return res.json({
@@ -325,11 +322,10 @@ app.get('/api/site-data', async (req, res) => {
     });
   } catch (e) {
     const backup = getBackupData();
-    const bGames = backup.games || [];
     return res.json({
       settings: backup.settings || {},
-      games: bGames,
-      hero_games: bGames.filter(g => parseInt(g.is_hero) === 1),
+      games: backup.games || [],
+      hero_games: (backup.games || []).filter(g => g.is_hero === 1),
       chart_records: backup.chart_records || [],
       blogs: backup.blogs || []
     });
@@ -339,25 +335,17 @@ app.get('/api/site-data', async (req, res) => {
 // Admin Login
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
-  
-  if (username === 'A77SattaOfficial' && password === 'SattaA77@77') {
-    return res.json({ success: true, token: 'admin-logged-in-session-token' });
-  }
-
   try {
-    const adminRes = await safeQuery('SELECT * FROM admin WHERE username = $1', [username]);
-    if (adminRes && adminRes.rows && adminRes.rows.length > 0) {
-      const row = adminRes.rows[0];
-      if (bcrypt.compareSync(password, row.password)) {
-        return res.json({ success: true, token: 'admin-logged-in-session-token' });
-      }
+    const adminRes = await pgPool.query('SELECT * FROM admin WHERE username = $1', [username]);
+    if (adminRes.rows.length === 0) return res.status(401).json({ error: 'Invalid username or password' });
+    const row = adminRes.rows[0];
+    if (bcrypt.compareSync(password, row.password)) {
+      res.json({ success: true, token: 'admin-logged-in-session-token' });
+    } else {
+      res.status(401).json({ error: 'Invalid username or password' });
     }
-    return res.status(401).json({ error: 'Invalid username or password' });
   } catch (e) {
-    if (username === 'A77SattaOfficial' && password === 'SattaA77@77') {
-      return res.json({ success: true, token: 'admin-logged-in-session-token' });
-    }
-    return res.status(401).json({ error: 'Invalid username or password' });
+    res.status(500).json({ error: e.message });
   }
 });
 
@@ -426,7 +414,7 @@ app.post('/api/admin/update-game', async (req, res) => {
 
   if (!backup.settings) backup.settings = {};
 
-  if (is_featured === 1 || is_featured === true) {
+  if (is_featured === 1 || is_featured === true || gNameUpper.startsWith('DISAW')) {
     backup.settings.featured_banner_game = gNameUpper;
     if (open_time !== undefined) backup.settings.disawer_time = open_time;
     if (yesterday_result !== undefined) backup.settings.disawer_prev = yesterday_result;
@@ -438,29 +426,30 @@ app.post('/api/admin/update-game', async (req, res) => {
     name: g.name ? g.name.trim().toUpperCase() : '',
     today_result: g.today_result ? g.today_result.trim() : 'WAIT'
   }));
-  backup.settings.hero_games_json = JSON.stringify(heroGamesList);
+  if (heroGamesList.length > 0) {
+    backup.settings.hero_games_json = JSON.stringify(heroGamesList);
+  }
 
   saveBackupDataLocally(backup);
 
   // Synchronous Awaited DB save
   try {
     const heroVal = is_hero !== undefined ? (is_hero ? 1 : 0) : 0;
-    const featVal = is_featured !== undefined ? (is_featured ? 1 : 0) : 0;
-
     await safeQuery(
-      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4, is_hero = $5, is_featured = $6 WHERE id = $7 OR UPPER(name) = UPPER($1)`,
-      [name, yesterday_result, today_result, open_time, heroVal, featVal, id || -1]
+      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4, is_hero = $5 WHERE id = $6 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
+      [name, yesterday_result, today_result, open_time, heroVal, id || -1]
     );
 
-    if (is_featured === 1 || is_featured === true) {
-      await safeQuery(`UPDATE games SET is_featured = 0 WHERE id != $1 AND UPPER(name) != UPPER($2)`, [id || -1, name]).catch(() => {});
+    if (is_featured === 1 || is_featured === true || gNameUpper.startsWith('DISAW')) {
       await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [gNameUpper]).catch(() => {});
       if (open_time !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_time', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [open_time]).catch(() => {});
       if (yesterday_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_prev', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [yesterday_result]).catch(() => {});
       if (today_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_today', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [today_result]).catch(() => {});
     }
 
-    await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [JSON.stringify(heroGamesList)]).catch(() => {});
+    if (heroGamesList.length > 0) {
+      await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [JSON.stringify(heroGamesList)]).catch(() => {});
+    }
 
     if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
       await safeQuery(
@@ -476,7 +465,7 @@ app.post('/api/admin/update-game', async (req, res) => {
 
 // Admin: Add New Game
 app.post('/api/admin/add-game', async (req, res) => {
-  const { name, open_time, yesterday_result, today_result, table_group, is_hero, is_featured } = req.body;
+  const { name, open_time, yesterday_result, today_result, table_group } = req.body;
   const grp = parseInt(table_group) || 1;
   const gName = (name || '').trim().toUpperCase();
   if (!gName) return res.status(400).json({ error: 'Game name is required' });
@@ -487,8 +476,6 @@ app.post('/api/admin/add-game', async (req, res) => {
   const grpGames = backup.games.filter(g => parseInt(g.table_group) === grp);
   const nextOrd = grpGames.length + 1;
   const newId = Date.now();
-  const heroVal = (parseInt(is_hero) === 1) ? 1 : 0;
-  const featVal = (parseInt(is_featured) === 1) ? 1 : 0;
 
   const newGameObj = {
     id: newId,
@@ -497,9 +484,7 @@ app.post('/api/admin/add-game', async (req, res) => {
     yesterday_result: yesterday_result || '',
     today_result: today_result || 'WAIT',
     table_group: grp,
-    sort_order: nextOrd,
-    is_hero: heroVal,
-    is_featured: featVal
+    sort_order: nextOrd
   };
 
   const existingIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === gName);
@@ -514,34 +499,19 @@ app.post('/api/admin/add-game', async (req, res) => {
   // Synchronous Awaited DB save
   try {
     await safeQuery(
-      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero, is_featured)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        ON CONFLICT (name) DO UPDATE SET
          open_time = EXCLUDED.open_time,
          yesterday_result = EXCLUDED.yesterday_result,
          today_result = EXCLUDED.today_result,
          table_group = EXCLUDED.table_group,
-         sort_order = EXCLUDED.sort_order,
-         is_hero = EXCLUDED.is_hero,
-         is_featured = EXCLUDED.is_featured`,
-      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd, heroVal, featVal]
+         sort_order = EXCLUDED.sort_order`,
+      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd]
     );
   } catch (e) {}
 
   res.json({ success: true, id: newId });
-});
-
-// Admin: Clear All Games
-app.post('/api/admin/clear-all-games', async (req, res) => {
-  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
-  backup.games = [];
-  saveBackupDataLocally(backup);
-
-  try {
-    await safeQuery('DELETE FROM games');
-  } catch (e) {}
-
-  res.json({ success: true, message: 'All games cleared successfully' });
 });
 
 // Admin: Save Hero Box Games
@@ -651,7 +621,7 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       is_hero: g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_hero || 0) : 0)
     };
 
-    if (g.is_featured === 1 || g.is_featured === true) {
+    if (g.is_featured === 1 || g.is_featured === true || gNameUpper.startsWith('DISAW')) {
       if (!backup.settings) backup.settings = {};
       backup.settings.featured_banner_game = gNameUpper;
       if (g.open_time !== undefined) backup.settings.disawer_time = g.open_time;
@@ -696,35 +666,17 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
     }
   });
 
-  const heroGamesList = backup.games.filter(g => g.is_hero === 1).map(g => ({
-    id: g.id || null,
-    name: g.name ? g.name.trim().toUpperCase() : '',
-    today_result: g.today_result ? g.today_result.trim() : 'WAIT'
-  }));
-  if (!backup.settings) backup.settings = {};
-  backup.settings.hero_games_json = JSON.stringify(heroGamesList);
-
   backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
   saveBackupDataLocally(backup);
 
   for (const g of games) {
     if (g.id || g.name) {
       const gNameUpper = (g.name || '').trim().toUpperCase();
-      const heroVal = g.is_hero ? 1 : 0;
-      const featVal = g.is_featured ? 1 : 0;
       try {
         await safeQuery(
-          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5, is_hero = $6, is_featured = $7 WHERE id = $8 OR UPPER(name) = UPPER($1)`,
-          [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, heroVal, featVal, g.id || -1]
+          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5 WHERE id = $6 OR UPPER(name) = UPPER($1)`,
+          [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, g.id || -1]
         );
-
-        if (featVal === 1) {
-          await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [gNameUpper]).catch(() => {});
-          if (g.open_time !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_time', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [g.open_time]).catch(() => {});
-          if (g.yesterday_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_prev', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [g.yesterday_result]).catch(() => {});
-          if (g.today_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_today', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [g.today_result]).catch(() => {});
-        }
-
         if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
           await safeQuery(
             `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
@@ -743,8 +695,6 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       } catch (e) {}
     }
   }
-
-  await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [JSON.stringify(heroGamesList)]).catch(() => {});
 
   res.json({ success: true, count: games.length });
 });

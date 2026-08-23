@@ -38,10 +38,18 @@
   // Fetch Site Data & Render Homepage Dynamically
   // Fetch Site Data & Render Homepage Dynamically
   async function loadFullSiteData() {
+    // 1. Instant local render from cache if available
+    try {
+      const cached = localStorage.getItem('a77satta_site_cache_v6');
+      if (cached) renderSiteData(JSON.parse(cached));
+    } catch(e) {}
+
+    // 2. Fetch fresh live data from server
     try {
       const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
       if (!res.ok) return;
       const data = await res.json();
+      try { localStorage.setItem('a77satta_site_cache_v6', JSON.stringify(data)); } catch(e) {}
       renderSiteData(data);
     } catch(e) {
       console.log('API sync offline or fallback active');
@@ -339,43 +347,41 @@
 
       // Render Main Hero Box Games (Dynamic Stack from Table 1)
       const heroContainer = document.getElementById('heroGamesList');
-      if (heroContainer) {
+      if (heroContainer && data.games && data.games.length > 0) {
         let heroList = (data.games || []).filter(g => parseInt(g.is_hero) === 1);
         if (!heroList || heroList.length === 0) {
           heroList = (data.games || []).slice(0, 3);
         }
 
         let heroHtml = '';
-        if (heroList && heroList.length > 0) {
-          heroList.forEach(g => {
-            const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
-            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
-            
-            let resVal = 'WAIT';
-            if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
-              resVal = g.today_result.trim();
-            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-') {
-              resVal = chartTodayVal.trim();
-            }
+        heroList.forEach(g => {
+          const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
+          const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
+          
+          let resVal = 'WAIT';
+          if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
+            resVal = g.today_result.trim();
+          } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-') {
+            resVal = chartTodayVal.trim();
+          }
 
-            const resHtml = (!resVal || resVal.toUpperCase() === 'WAIT')
-              ? `<div class="wait-starburst-badge">WAIT</div>`
-              : `<div class="game-result-main">${resVal}</div>`;
+          const resHtml = (!resVal || resVal.toUpperCase() === 'WAIT')
+            ? `<div class="wait-starburst-badge">WAIT</div>`
+            : `<div class="game-result-main">${resVal}</div>`;
 
-            heroHtml += `
-              <div class="result-block">
-                <div class="game-name-main">${name}</div>
-                ${resHtml}
-              </div>
-            `;
-          });
-        }
+          heroHtml += `
+            <div class="result-block">
+              <div class="game-name-main">${name}</div>
+              ${resHtml}
+            </div>
+          `;
+        });
         heroContainer.innerHTML = heroHtml;
       }
 
       // Render Featured Yellow Banner Game (Dynamic Banner from Table 1)
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
-      if (bannerBox) {
+      if (bannerBox && data.games && data.games.length > 0) {
         const featSettingName = (data.settings && data.settings.featured_banner_game)
           ? data.settings.featured_banner_game.trim().toUpperCase()
           : '';
