@@ -500,12 +500,14 @@
             <table class="adm-table">
               <thead>
                 <tr>
-                  <th style="width: 85px;">ORDER #</th>
-                  <th style="width: 220px;">सट्टा का नाम (GAME NAME)</th>
-                  <th style="width: 140px;">TIME</th>
-                  <th style="width: 150px;">कल आया था (YESTERDAY)</th>
-                  <th style="width: 220px;">आज का रिजल्ट (TODAY / WAIT)</th>
-                  <th style="width: 180px;">QUICK ACTIONS</th>
+                  <th style="width: 75px;">ORDER #</th>
+                  <th style="width: 200px;">सट्टा का नाम (GAME NAME)</th>
+                  <th style="width: 110px;">TIME</th>
+                  <th style="width: 120px;">कल आया था (YESTERDAY)</th>
+                  <th style="width: 190px;">आज का रिजल्ट (TODAY / WAIT)</th>
+                  <th style="width: 90px; text-align: center;">🔥 HERO?</th>
+                  <th style="width: 100px; text-align: center;">⭐ FEATURED?</th>
+                  <th style="width: 150px;">QUICK ACTIONS</th>
                 </tr>
               </thead>
               <tbody id="table1GamesTbody"></tbody>
@@ -1702,11 +1704,15 @@
       const timeInp = tr ? tr.querySelector('.game-time-input') : document.getElementById(`g_time_${gameId}`);
       const yestInp = tr ? tr.querySelector('.game-yest-input') : document.getElementById(`g_yest_${gameId}`);
       const todayInp = tr ? tr.querySelector('.game-today-input') : document.getElementById(`g_today_${gameId}`);
+      const heroCheck = tr ? tr.querySelector('.game-hero-check') : null;
+      const featRadio = tr ? tr.querySelector('.game-featured-radio') : null;
 
       const name = nameInp ? nameInp.value.trim() : '';
       const open_time = timeInp ? timeInp.value.trim() : '';
       const yesterday_result = yestInp ? yestInp.value.trim() : '';
       const today_result = todayInp ? todayInp.value.trim() : 'WAIT';
+      const is_hero = heroCheck ? (heroCheck.checked ? 1 : 0) : 0;
+      const is_featured = featRadio ? (featRadio.checked ? 1 : 0) : 0;
 
       if (btn) {
         btn.disabled = true;
@@ -1717,15 +1723,15 @@
         const res = await fetch('/api/admin/update-game', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ id: gameId, name, open_time, yesterday_result, today_result })
+          body: JSON.stringify({ id: gameId, name, open_time, yesterday_result, today_result, is_hero, is_featured })
         });
 
-        if (name.toUpperCase().startsWith('DISAW')) {
+        if (is_featured === 1 || name.toUpperCase().startsWith('DISAW')) {
           await fetch('/api/admin/update-settings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              featured_banner_game: 'DISAWER',
+              featured_banner_game: name,
               disawer_time: open_time,
               disawer_prev: yesterday_result,
               disawer_today: today_result
@@ -1747,6 +1753,80 @@
       } catch (e) {
         alert('Error saving game row');
         if (btn) { btn.disabled = false; btn.textContent = 'SAVE'; }
+      }
+    }
+
+    async function saveTableOrder(tableGroup, btn) {
+      const tbody = document.getElementById('table1GamesTbody');
+      if (!tbody) return;
+      const rows = Array.from(tbody.children);
+
+      const games = rows.map((tr, idx) => {
+        const gameId = tr.getAttribute('data-game-id');
+        const nameInp = tr.querySelector('.game-name-input');
+        const timeInp = tr.querySelector('.game-time-input');
+        const yestInp = tr.querySelector('.game-yest-input');
+        const todayInp = tr.querySelector('.game-today-input');
+        const heroCheck = tr.querySelector('.game-hero-check');
+        const featRadio = tr.querySelector('.game-featured-radio');
+
+        const name = nameInp ? nameInp.value.trim() : '';
+        const open_time = timeInp ? timeInp.value.trim() : '';
+        const yesterday_result = yestInp ? yestInp.value.trim() : '';
+        const today_result = todayInp ? todayInp.value.trim() : 'WAIT';
+        const is_hero = heroCheck ? (heroCheck.checked ? 1 : 0) : 0;
+        const is_featured = featRadio ? (featRadio.checked ? 1 : 0) : 0;
+
+        return {
+          id: gameId,
+          name,
+          open_time,
+          yesterday_result,
+          today_result,
+          table_group: tableGroup || 1,
+          sort_order: idx + 1,
+          is_hero,
+          is_featured
+        };
+      });
+
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING...'; }
+
+      try {
+        const res = await fetch('/api/admin/update-games-batch', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ games })
+        });
+
+        const featGame = games.find(g => g.is_featured === 1);
+        if (featGame) {
+          await fetch('/api/admin/update-settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              featured_banner_game: featGame.name,
+              disawer_time: featGame.open_time,
+              disawer_prev: featGame.yesterday_result,
+              disawer_today: featGame.today_result
+            })
+          }).catch(() => {});
+        }
+
+        if (res.ok) {
+          showToast('Table 1 Games Saved Successfully!');
+          if (btn) {
+            btn.textContent = '✅ SAVED!';
+            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE TABLE 1 ALL DATA & ORDER'; }, 1500);
+          }
+          await loadAdminData();
+        } else {
+          alert('Failed to save Table 1 games');
+          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE TABLE 1 ALL DATA & ORDER'; }
+        }
+      } catch (e) {
+        alert('Error saving Table 1 order');
+        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE TABLE 1 ALL DATA & ORDER'; }
       }
     }
 

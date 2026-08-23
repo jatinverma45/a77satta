@@ -380,9 +380,10 @@ function getTodayAndYesterdayDateStr() {
 
 // Admin: Update Game Result (Today / Yesterday)
 app.post('/api/admin/update-game', async (req, res) => {
-  const { id, name, open_time, yesterday_result, today_result } = req.body;
+  const { id, name, open_time, yesterday_result, today_result, is_hero, is_featured } = req.body;
 
-  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
+  const backup = getBackupData();
+  if (!backup) return res.status(500).json({ error: 'Backup system error' });
   if (!backup.games) backup.games = [];
   if (!backup.chart_records) backup.chart_records = [];
 
@@ -398,6 +399,7 @@ app.post('/api/admin/update-game', async (req, res) => {
     if (open_time !== undefined) backup.games[existingIdx].open_time = open_time;
     if (yesterday_result !== undefined) backup.games[existingIdx].yesterday_result = yesterday_result;
     if (today_result !== undefined) backup.games[existingIdx].today_result = today_result;
+    if (is_hero !== undefined) backup.games[existingIdx].is_hero = is_hero ? 1 : 0;
   }
 
   const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
@@ -411,10 +413,6 @@ app.post('/api/admin/update-game', async (req, res) => {
     } else {
       backup.chart_records.push({ record_date: todayStr, game_name: gNameUpper, result_val: today_result.trim() });
     }
-  } else {
-    backup.chart_records = backup.chart_records.filter(
-      r => !(r.record_date === todayStr && (r.game_name || '').toUpperCase() === gNameUpper)
-    );
   }
 
   if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
@@ -426,48 +424,52 @@ app.post('/api/admin/update-game', async (req, res) => {
     } else {
       backup.chart_records.push({ record_date: yestStr, game_name: gNameUpper, result_val: yesterday_result.trim() });
     }
-  } else {
-    backup.chart_records = backup.chart_records.filter(
-      r => !(r.record_date === yestStr && (r.game_name || '').toUpperCase() === gNameUpper)
-    );
   }
 
-  if (gNameUpper.startsWith('DISAW')) {
-    if (!backup.settings) backup.settings = {};
+  if (!backup.settings) backup.settings = {};
+
+  if (is_featured === 1 || is_featured === true || gNameUpper.startsWith('DISAW')) {
+    backup.settings.featured_banner_game = gNameUpper;
     if (open_time !== undefined) backup.settings.disawer_time = open_time;
     if (yesterday_result !== undefined) backup.settings.disawer_prev = yesterday_result;
     if (today_result !== undefined) backup.settings.disawer_today = today_result;
-    backup.settings.featured_banner_game = 'DISAWER';
+  }
+
+  const heroGamesList = backup.games.filter(g => g.is_hero === 1).map(g => ({
+    id: g.id || null,
+    name: g.name ? g.name.trim().toUpperCase() : '',
+    today_result: g.today_result ? g.today_result.trim() : 'WAIT'
+  }));
+  if (heroGamesList.length > 0) {
+    backup.settings.hero_games_json = JSON.stringify(heroGamesList);
   }
 
   saveBackupDataLocally(backup);
 
   // Synchronous Awaited DB save
   try {
+    const heroVal = is_hero !== undefined ? (is_hero ? 1 : 0) : 0;
     await safeQuery(
-      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4 WHERE id = $5 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
-      [name, yesterday_result, today_result, open_time, id || -1]
+      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4, is_hero = $5 WHERE id = $6 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
+      [name, yesterday_result, today_result, open_time, heroVal, id || -1]
     );
 
-    if (gNameUpper.startsWith('DISAW')) {
+    if (is_featured === 1 || is_featured === true || gNameUpper.startsWith('DISAW')) {
+      await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [gNameUpper]).catch(() => {});
       if (open_time !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_time', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [open_time]).catch(() => {});
       if (yesterday_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_prev', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [yesterday_result]).catch(() => {});
       if (today_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_today', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [today_result]).catch(() => {});
-      await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', 'DISAWER') ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`).catch(() => {});
     }
+
+    if (heroGamesList.length > 0) {
+      await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [JSON.stringify(heroGamesList)]).catch(() => {});
+    }
+
     if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
       await safeQuery(
         `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [todayStr, name, today_result.trim()]
-      );
-    }
-
-    if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
-      await safeQuery(
-        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [yestStr, name, yesterday_result.trim()]
       );
     }
   } catch (e) {}
@@ -629,15 +631,16 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       yesterday_result: g.yesterday_result !== undefined ? g.yesterday_result : '',
       today_result: g.today_result !== undefined ? g.today_result : 'WAIT',
       table_group: parseInt(g.table_group) || 1,
-      sort_order: parseInt(g.sort_order) || 0
+      sort_order: parseInt(g.sort_order) || 0,
+      is_hero: g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_hero || 0) : 0)
     };
 
-    if (gNameUpper.startsWith('DISAW')) {
+    if (g.is_featured === 1 || g.is_featured === true || gNameUpper.startsWith('DISAW')) {
       if (!backup.settings) backup.settings = {};
+      backup.settings.featured_banner_game = gNameUpper;
       if (g.open_time !== undefined) backup.settings.disawer_time = g.open_time;
       if (g.yesterday_result !== undefined) backup.settings.disawer_prev = g.yesterday_result;
       if (g.today_result !== undefined) backup.settings.disawer_today = g.today_result;
-      backup.settings.featured_banner_game = 'DISAWER';
     }
 
     if (existingIdx !== -1) {
