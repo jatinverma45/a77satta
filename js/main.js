@@ -412,37 +412,43 @@
         }
       }
 
-      // Render Permanent DISAWER 1 Feature Box
+      // Render Permanent DISAWER 1 Feature Box (Dynamic from DB Settings & Games)
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
       if (bannerBox) {
         bannerBox.style.display = 'flex';
         const actualGameName = 'DISAWER';
-        const gameConfig = (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW')) || {
-          name: 'DISAWER',
-          open_time: '5:15 AM',
-          yesterday_result: '16',
-          today_result: '88'
-        };
+        const s = data.settings || {};
+        const disawerGame = (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW'));
 
-        const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time.trim() : '5:15 AM';
+        const bannerTime = (s.disawer_time && s.disawer_time.trim())
+          ? s.disawer_time.trim()
+          : (disawerGame && disawerGame.open_time ? disawerGame.open_time.trim() : '');
 
-        let finalYest = (gameConfig.yesterday_result && gameConfig.yesterday_result !== '-' && gameConfig.yesterday_result.trim())
-          ? gameConfig.yesterday_result.trim()
-          : '16';
+        let finalYest = (s.disawer_prev && s.disawer_prev.trim() && s.disawer_prev !== '-')
+          ? s.disawer_prev.trim()
+          : (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-' ? disawerGame.yesterday_result.trim() : '');
 
-        let finalToday = (gameConfig.today_result && gameConfig.today_result.toUpperCase() !== 'WAIT' && gameConfig.today_result.trim())
-          ? gameConfig.today_result.trim()
-          : '88';
+        let finalToday = (s.disawer_today && s.disawer_today.trim() && s.disawer_today.toUpperCase() !== 'WAIT')
+          ? s.disawer_today.trim()
+          : (disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT' ? disawerGame.today_result.trim() : '');
 
-        if (finalYest === '-' || !finalYest) {
+        if (!finalYest || finalYest === '-') {
           const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
           if (chartYestVal) finalYest = chartYestVal;
+          else finalYest = '-';
         }
 
-        if (finalToday === 'WAIT' || !finalToday) {
+        if (!finalToday || finalToday.toUpperCase() === 'WAIT') {
           const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
           if (chartTodayVal) finalToday = chartTodayVal;
+          else finalToday = 'WAIT';
         }
+
+        console.log('📌 [DISAWER BANNER RENDERED]:', {
+          time: bannerTime,
+          yesterday: finalYest,
+          today: finalToday
+        });
 
         const todayHtml = (!finalToday || finalToday.toUpperCase() === 'WAIT')
           ? `<span class="wait-starburst-badge">WAIT</span>`
