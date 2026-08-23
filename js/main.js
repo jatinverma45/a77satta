@@ -36,42 +36,40 @@
   }
 
   // Fetch Site Data & Render Homepage Dynamically (Authoritative Live API)
+  let activeFetchPromise = null;
   async function loadFullSiteData() {
-    try {
-      const res = await fetch('/api/site-data?t=' + Date.now(), {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'Pragma': 'no-cache'
-        }
-      });
-      if (!res.ok) throw new Error(`API HTTP Error: ${res.status}`);
-      const data = await res.json();
+    if (activeFetchPromise) return activeFetchPromise;
 
-      console.log('📡 [LIVE API DATA RECEIVED]:', {
-        status: res.status,
-        games_count: (data.games || []).length,
-        game_ids: (data.games || []).map(g => g.id),
-        hero_count: (data.hero_games || []).length,
-        disawer_setting: data.settings ? data.settings.disawer_time : null
-      });
-
-      // Render fresh live API data immediately
-      renderSiteData(data);
-
-      // Save to localStorage ONLY after successful live API response for offline fallback
+    activeFetchPromise = (async () => {
       try {
-        localStorage.setItem('a77satta_site_cache_v8', JSON.stringify(data));
-      } catch(e) {}
-    } catch(err) {
-      console.warn('⚠️ API fetch failed, falling back to local cache if available:', err);
-      try {
-        const cached = localStorage.getItem('a77satta_site_cache_v8');
-        if (cached) {
-          renderSiteData(JSON.parse(cached));
-        }
-      } catch(e) {}
-    }
+        const res = await fetch('/api/site-data?t=' + Date.now(), {
+          cache: 'no-store',
+          headers: {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache'
+          }
+        });
+        if (!res.ok) throw new Error(`API HTTP Error: ${res.status}`);
+        const data = await res.json();
+
+        console.log('📡 [LIVE API DATA RECEIVED]:', {
+          status: res.status,
+          games_count: (data.games || []).length,
+          game_ids: (data.games || []).map(g => g.id),
+          hero_count: (data.hero_games || []).length,
+          disawer_setting: data.settings ? data.settings.disawer_time : null
+        });
+
+        // Render fresh live API data immediately
+        renderSiteData(data);
+      } catch(err) {
+        console.warn('⚠️ API fetch failed:', err);
+      } finally {
+        activeFetchPromise = null;
+      }
+    })();
+
+    return activeFetchPromise;
   }
 
   window.latestSiteData = null;
@@ -660,7 +658,6 @@
   }
 
   // Trigger load on page load
-  loadFullSiteData();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       initRefreshBtn();
@@ -668,6 +665,7 @@
     });
   } else {
     initRefreshBtn();
+    loadFullSiteData();
   }
 
 })();
