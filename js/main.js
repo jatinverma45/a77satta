@@ -168,7 +168,7 @@
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
     } else {
-      window.location.href = 'chart.html?game=' + encodeURIComponent(cleanName);
+      window.location.href = '/chart?game=' + encodeURIComponent(cleanName);
     }
   };
 
