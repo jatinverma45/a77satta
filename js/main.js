@@ -379,54 +379,52 @@
         heroContainer.innerHTML = heroHtml;
       }
 
-      // Render Featured Yellow Banner Game (Dynamic Banner from Table 1)
+      // Render Featured Yellow Banner Game (Always DISAWER as requested)
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
-      if (bannerBox && data.games && data.games.length > 0) {
-        const featSettingName = (data.settings && data.settings.featured_banner_game)
-          ? data.settings.featured_banner_game.trim().toUpperCase()
-          : '';
+      if (bannerBox) {
+        const gameConfig = (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW')) ||
+                           (data.games || []).find(g => parseInt(g.is_featured) === 1) ||
+                           (data.games || [])[0] || {
+                             name: 'DISAWER',
+                             open_time: '5:15 AM',
+                             yesterday_result: '16',
+                             today_result: '88'
+                           };
 
-        const gameConfig = (data.games || []).find(g => parseInt(g.is_featured) === 1) ||
-                           (data.games || []).find(g => featSettingName && (g.name || '').trim().toUpperCase() === featSettingName) ||
-                           (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW')) ||
-                           (data.games || [])[0];
+        const actualGameName = 'DISAWER';
+        const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time.trim() : '5:15 AM';
 
-        if (gameConfig) {
-          const actualGameName = (gameConfig.name || '').trim().toUpperCase();
-          const bannerTime = (gameConfig.open_time && gameConfig.open_time.trim()) ? gameConfig.open_time.trim() : '';
+        let finalYest = (gameConfig.yesterday_result && gameConfig.yesterday_result !== '-' && gameConfig.yesterday_result.trim())
+          ? gameConfig.yesterday_result.trim()
+          : '16';
 
-          let finalYest = (gameConfig.yesterday_result && gameConfig.yesterday_result !== '-' && gameConfig.yesterday_result.trim())
-            ? gameConfig.yesterday_result.trim()
-            : '-';
+        let finalToday = (gameConfig.today_result && gameConfig.today_result.toUpperCase() !== 'WAIT' && gameConfig.today_result.trim())
+          ? gameConfig.today_result.trim()
+          : '88';
 
-          let finalToday = (gameConfig.today_result && gameConfig.today_result.toUpperCase() !== 'WAIT' && gameConfig.today_result.trim())
-            ? gameConfig.today_result.trim()
-            : 'WAIT';
-
-          if (finalYest === '-' || !finalYest) {
-            const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
-            if (chartYestVal) finalYest = chartYestVal;
-          }
-
-          if (finalToday === 'WAIT' || !finalToday) {
-            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
-            if (chartTodayVal) finalToday = chartTodayVal;
-          }
-
-          const todayHtml = (!finalToday || finalToday.toUpperCase() === 'WAIT')
-            ? `<span class="wait-starburst-badge">WAIT</span>`
-            : `<span class="score-number score-number-today">${finalToday}</span>`;
-
-          bannerBox.innerHTML = `
-            <div class="bottom-title">${actualGameName}</div>
-            <div class="bottom-time">${bannerTime}</div>
-            <div class="score-row">
-              <span class="score-number">${finalYest}</span>
-              <span class="green-arrow-pill">➡️</span>
-              ${todayHtml}
-            </div>
-          `;
+        if (finalYest === '-' || !finalYest) {
+          const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
+          if (chartYestVal) finalYest = chartYestVal;
         }
+
+        if (finalToday === 'WAIT' || !finalToday) {
+          const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
+          if (chartTodayVal) finalToday = chartTodayVal;
+        }
+
+        const todayHtml = (!finalToday || finalToday.toUpperCase() === 'WAIT')
+          ? `<span class="wait-starburst-badge">WAIT</span>`
+          : `<span class="score-number score-number-today">${finalToday}</span>`;
+
+        bannerBox.innerHTML = `
+          <div class="bottom-title">${actualGameName}</div>
+          <div class="bottom-time">${bannerTime}</div>
+          <div class="score-row">
+            <span class="score-number">${finalYest}</span>
+            <span class="green-arrow-pill">➡️</span>
+            ${todayHtml}
+          </div>
+        `;
       }
 
       // 2. Games Tables Sync

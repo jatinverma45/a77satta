@@ -430,6 +430,7 @@ app.post('/api/admin/update-game', async (req, res) => {
     backup.settings.hero_games_json = JSON.stringify(heroGamesList);
   }
 
+  memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   // Synchronous Awaited DB save
@@ -667,6 +668,7 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
   });
 
   backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
+  memoryBackupCache = backup;
   saveBackupDataLocally(backup);
 
   for (const g of games) {
