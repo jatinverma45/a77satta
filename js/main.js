@@ -629,10 +629,16 @@
       };
     }
   }
+  loadFullSiteData();
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initRefreshBtn);
+    document.addEventListener('DOMContentLoaded', () => {
+      initRefreshBtn();
+      loadFullSiteData();
+    });
   } else {
     initRefreshBtn();
+    loadFullSiteData();
   }
 
 })();
