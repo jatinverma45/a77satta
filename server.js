@@ -278,12 +278,21 @@ app.get('/api/site-data', async (req, res) => {
     delete settings.chart1_columns_json;
     delete settings.chart2_columns_json;
 
+    const DEFAULT_KHAIWAL_CARDS = [
+      { id: 1, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ KUBER BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
+      { id: 2, header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--", title: "♣ NEW BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" }
+    ];
+
     if (settingsRes && settingsRes.rows) {
       settingsRes.rows.forEach(s => {
         if (s.key !== 'chart1_columns_json' && s.key !== 'chart2_columns_json') {
           settings[s.key] = s.value;
         }
       });
+    }
+
+    if (!settings.khaiwal_cards_json) {
+      settings.khaiwal_cards_json = JSON.stringify(DEFAULT_KHAIWAL_CARDS);
     }
 
     const gameMap = {};
