@@ -35,24 +35,42 @@
     return dates;
   }
 
-  // Fetch Site Data & Render Homepage Dynamically
-  // Fetch Site Data & Render Homepage Dynamically
+  // Fetch Site Data & Render Homepage Dynamically (Authoritative Live API)
   async function loadFullSiteData() {
-    // 1. Instant local render from cache if available
     try {
-      const cached = localStorage.getItem('a77satta_site_cache_v7');
-      if (cached) renderSiteData(JSON.parse(cached));
-    } catch(e) {}
-
-    // 2. Fetch fresh live data from server
-    try {
-      const res = await fetch('/api/site-data?t=' + Date.now(), { cache: 'no-store' });
-      if (!res.ok) return;
+      const res = await fetch('/api/site-data?t=' + Date.now(), {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache, no-store, must-revalidate',
+          'Pragma': 'no-cache'
+        }
+      });
+      if (!res.ok) throw new Error(`API HTTP Error: ${res.status}`);
       const data = await res.json();
-      try { localStorage.setItem('a77satta_site_cache_v7', JSON.stringify(data)); } catch(e) {}
+
+      console.log('📡 [LIVE API DATA RECEIVED]:', {
+        status: res.status,
+        games_count: (data.games || []).length,
+        game_ids: (data.games || []).map(g => g.id),
+        hero_count: (data.hero_games || []).length,
+        disawer_setting: data.settings ? data.settings.disawer_time : null
+      });
+
+      // Render fresh live API data immediately
       renderSiteData(data);
-    } catch(e) {
-      console.log('API sync offline or fallback active');
+
+      // Save to localStorage ONLY after successful live API response for offline fallback
+      try {
+        localStorage.setItem('a77satta_site_cache_v8', JSON.stringify(data));
+      } catch(e) {}
+    } catch(err) {
+      console.warn('⚠️ API fetch failed, falling back to local cache if available:', err);
+      try {
+        const cached = localStorage.getItem('a77satta_site_cache_v8');
+        if (cached) {
+          renderSiteData(JSON.parse(cached));
+        }
+      } catch(e) {}
     }
   }
 
@@ -443,8 +461,9 @@
 
       // 2. Games Tables Sync
       const board1 = document.querySelector('.a77-market-board');
-      if (board1 && data.games && data.games.length > 0) {
-        const group1 = data.games.filter(g => parseInt(g.table_group) === 1 || !g.table_group);
+      if (board1) {
+        const games = (data && Array.isArray(data.games)) ? data.games : [];
+        const group1 = games.filter(g => parseInt(g.table_group) === 1 || !g.table_group);
         if (group1.length > 0) {
           let rowsHtml = `
             <div class="a77-market-board-header">
@@ -609,12 +628,16 @@
     }
   }
 
-  // Trigger site data load immediately & on DOM ready
-  loadFullSiteData();
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadFullSiteData);
-  }
-  setInterval(loadFullSiteData, 10000);
+  // Revalidation Listeners: Window Focus & Tab Visibility
+  window.addEventListener('focus', loadFullSiteData);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      loadFullSiteData();
+    }
+  });
+
+  // 15-Second Polling Interval
+  setInterval(loadFullSiteData, 15000);
 
   // Floating Refresh Button Event Listener
   function initRefreshBtn() {
@@ -629,8 +652,9 @@
       };
     }
   }
-  loadFullSiteData();
 
+  // Trigger load on page load
+  loadFullSiteData();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       initRefreshBtn();
@@ -638,7 +662,6 @@
     });
   } else {
     initRefreshBtn();
-    loadFullSiteData();
   }
 
 })();
