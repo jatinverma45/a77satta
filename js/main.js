@@ -205,7 +205,7 @@
   function renderSiteData(data) {
     if (!data) return;
     window.latestSiteData = data;
-
+    try {
       const chartRecords = data.chart_records || [];
       const nowDate = new Date();
       const currentMonthStr = String(nowDate.getMonth() + 1).padStart(2, '0');
@@ -513,7 +513,7 @@
 
       // 3. Record Chart Tables Sync
       const recordsMap = {};
-      const currentMonthStr = String(new Date().getMonth() + 1).padStart(2, '0');
+      const recordMonthStr = String(new Date().getMonth() + 1).padStart(2, '0');
       const datesSet = new Set(getAutoDatesUpToToday());
       
       if (data.chart_records && Array.isArray(data.chart_records)) {
@@ -522,7 +522,7 @@
             const key = `${r.record_date.trim()}_${r.game_name.trim().toUpperCase()}`;
             recordsMap[key] = r.result_val;
             const parts = r.record_date.trim().split('-');
-            if (parts.length === 2 && parts[1] === currentMonthStr) {
+            if (parts.length === 2 && parts[1] === recordMonthStr) {
               datesSet.add(r.record_date.trim());
             }
           }
