@@ -209,6 +209,7 @@
   function renderSiteData(data) {
     if (!data) return;
     window.latestSiteData = data;
+    const chartRecords = (data && data.chart_records && Array.isArray(data.chart_records)) ? data.chart_records : [];
     try {
       // Calculate Asia/Kolkata dates
       const nowDate = new Date();

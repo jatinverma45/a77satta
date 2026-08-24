@@ -1,12 +1,8 @@
 {
   "settings": {
-    "featured_banner_game": "DISAWAR",
-    "disawer_time": "05:15 AM",
-    "hero_games_json": "[]",
-    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"DL BAZAR SATTA KING CHART 2026\"]",
-    "khaiwal_cards_json": "[{\"card_type\":\"standard\",\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ KUBER BHAI KHAIWAL ♣\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nफरीदाबाद ----------- 5:50 pm\\nगाजियाबाद ----------- 8:50 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"}]",
-    "ticker_text": "A77satta is an information portal which keep satta king players updated by providing real-time satta king results for gali satta king , faridabad satta and ghaziabad satta.",
-    "hindi_tagline": "हा भाई यही आती हे सबसे पहले खबर रूको और देखो",
+    "hero_games_json": "[{\"id\":765,\"name\":\"FUNC_TEST_1787600001292_1\",\"today_result\":\"77\"}]",
+    "ticker_text": "Test Ticker Text 2026",
+    "hindi_tagline": "Test Tagline Hindi",
     "main_game_name": "GALI",
     "main_game_result": "97",
     "disawer_wait": "WAIT",
@@ -16,10 +12,14 @@
     "notice_2": "SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM",
     "notice_banners_json": "[{\"id\":1,\"text\":\"SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.\"},{\"id\":2,\"text\":\"SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM\"}]",
     "last_sync": "1786373486679.0",
+    "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]",
     "chart1_columns_json": "[\"LAAL BAZAR\",\"GP\",\"SADAR BAZAR RENAMED\",\"GWALIOR\",\"DELHI BAZAR\",\"GWALI\",\"DELHI\",\"DELHI MATKA\",\"SHRI GANESH\",\"AGRA\",\"FARIDABAD\",\"ALWAR\",\"GAZIABAD\",\"DWARKA\",\"GALI\",\"TEST BAZAR 2026\",\"DGH\",\"SUPER BAZAR 2026\",\"CHAWAL BAZAR\"]",
+    "khaiwal_cards_json": "[{\"card_type\":\"standard\",\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ KUBER BHAI KHAIWAL ♣\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nफरीदाबाद ----------- 5:50 pm\\nगाजियाबाद ----------- 8:50 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"}]",
+    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"DL BAZAR SATTA KING CHART 2026\"]",
+    "featured_banner_game": "KASHMIR BAZAR",
+    "disawer_time": "04:00 PM",
     "disawer_prev": "55",
-    "disawer_today": "88",
-    "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]"
+    "disawer_today": "88"
   },
   "games": [
     {
@@ -27,8 +27,8 @@
       "name": "LAAL BAZAR",
       "open_time": "01:40 PM",
       "close_time": "01:40 PM",
-      "yesterday_result": "67",
-      "today_result": "WAIT",
+      "yesterday_result": "18",
+      "today_result": "89",
       "table_group": 1,
       "sort_order": 1,
       "is_hero": 0,
@@ -53,8 +53,8 @@
       "name": "DISAWAR",
       "open_time": "05:15 AM",
       "close_time": "",
-      "yesterday_result": "44",
-      "today_result": "99",
+      "yesterday_result": "13",
+      "today_result": "76",
       "table_group": 1,
       "sort_order": 3,
       "is_hero": 0,
@@ -153,6 +153,19 @@
       "is_permanent": 0
     },
     {
+      "id": 765,
+      "name": "FUNC_TEST_1787600001292_1",
+      "open_time": "",
+      "close_time": "02:00 PM",
+      "yesterday_result": "",
+      "today_result": "77",
+      "table_group": 1,
+      "sort_order": 10,
+      "is_hero": 1,
+      "is_featured": 0,
+      "is_permanent": 0
+    },
+    {
       "id": 690,
       "name": "DWARKA PURI",
       "open_time": "09:50 PM",
@@ -161,6 +174,19 @@
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 11,
+      "is_hero": 0,
+      "is_featured": 0,
+      "is_permanent": 0
+    },
+    {
+      "id": 750,
+      "name": "CHAWAL BAZAR",
+      "open_time": "06:50 PM",
+      "close_time": "06:50 PM",
+      "yesterday_result": "67",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 12,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -5400,6 +5426,12 @@
       "result_val": "55"
     },
     {
+      "id": 9839,
+      "record_date": "2026-08-23",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "67"
+    },
+    {
       "id": 9759,
       "record_date": "2026-08-23",
       "game_name": "DEBUG_GAME_001",
@@ -5478,6 +5510,12 @@
       "result_val": "11"
     },
     {
+      "id": 9877,
+      "record_date": "2026-08-24",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "67"
+    },
+    {
       "id": 9827,
       "record_date": "2026-08-24",
       "game_name": "DEBUG_FINAL_001",
@@ -5502,10 +5540,34 @@
       "result_val": "77"
     },
     {
+      "id": 9873,
+      "record_date": "2026-08-24",
+      "game_name": "DELHI LAXMI",
+      "result_val": "18"
+    },
+    {
       "id": 9751,
       "record_date": "2026-08-24",
       "game_name": "DISAWAR",
-      "result_val": "99"
+      "result_val": "13"
+    },
+    {
+      "id": 9865,
+      "record_date": "2026-08-24",
+      "game_name": "DL BAZAR",
+      "result_val": "87"
+    },
+    {
+      "id": 9875,
+      "record_date": "2026-08-24",
+      "game_name": "DWARKA PURI",
+      "result_val": "98"
+    },
+    {
+      "id": 9961,
+      "record_date": "2026-08-24",
+      "game_name": "FUNC_TEST_1787600001292_1",
+      "result_val": "55"
     },
     {
       "id": 9837,
@@ -5517,11 +5579,77 @@
       "id": 9793,
       "record_date": "2026-08-24",
       "game_name": "KASHMIR BAZAR",
-      "result_val": "88"
+      "result_val": "55"
+    },
+    {
+      "id": 9863,
+      "record_date": "2026-08-24",
+      "game_name": "KHATAM",
+      "result_val": "67"
+    },
+    {
+      "id": 9841,
+      "record_date": "2026-08-24",
+      "game_name": "LAAL BAZAR",
+      "result_val": "18"
+    },
+    {
+      "id": 9867,
+      "record_date": "2026-08-24",
+      "game_name": "LAAL BAZAR3",
+      "result_val": "45"
+    },
+    {
+      "id": 9869,
+      "record_date": "2026-08-24",
+      "game_name": "MATKA KING",
+      "result_val": "67"
+    },
+    {
+      "id": 9871,
+      "record_date": "2026-08-24",
+      "game_name": "SHIV PURI",
+      "result_val": "17"
     },
     {
       "id": 9785,
       "record_date": "2026-08-24",
+      "game_name": "TEST_GAME_123",
+      "result_val": "11"
+    },
+    {
+      "id": 9855,
+      "record_date": "2026-08-25",
+      "game_name": "DISAWAR",
+      "result_val": "76"
+    },
+    {
+      "id": 9959,
+      "record_date": "2026-08-25",
+      "game_name": "FUNC_TEST_1787600001292_1",
+      "result_val": "77"
+    },
+    {
+      "id": 9969,
+      "record_date": "2026-08-25",
+      "game_name": "FUNC_TEST_1787600003632_2",
+      "result_val": "88"
+    },
+    {
+      "id": 9859,
+      "record_date": "2026-08-25",
+      "game_name": "KASHMIR BAZAR",
+      "result_val": "88"
+    },
+    {
+      "id": 9843,
+      "record_date": "2026-08-25",
+      "game_name": "LAAL BAZAR",
+      "result_val": "89"
+    },
+    {
+      "id": 9851,
+      "record_date": "2026-08-25",
       "game_name": "TEST_GAME_123",
       "result_val": "22"
     },
@@ -5961,7 +6089,7 @@
       "id": 9497,
       "record_date": "23-08",
       "game_name": "CHAWAL BAZAR",
-      "result_val": "-"
+      "result_val": "67"
     },
     {
       "id": 9758,
@@ -6183,7 +6311,7 @@
       "id": 9516,
       "record_date": "24-08",
       "game_name": "CHAWAL BAZAR",
-      "result_val": "-"
+      "result_val": "67"
     },
     {
       "id": 9826,
@@ -6222,6 +6350,12 @@
       "result_val": "-"
     },
     {
+      "id": 9872,
+      "record_date": "24-08",
+      "game_name": "DELHI LAXMI",
+      "result_val": "18"
+    },
+    {
       "id": 8146,
       "record_date": "24-08",
       "game_name": "DELHI MATKA",
@@ -6237,7 +6371,7 @@
       "id": 8154,
       "record_date": "24-08",
       "game_name": "DISAWAR",
-      "result_val": "99"
+      "result_val": "13"
     },
     {
       "id": 9754,
@@ -6246,16 +6380,34 @@
       "result_val": "81"
     },
     {
+      "id": 9864,
+      "record_date": "24-08",
+      "game_name": "DL BAZAR",
+      "result_val": "87"
+    },
+    {
       "id": 8152,
       "record_date": "24-08",
       "game_name": "DWARKA",
       "result_val": "-"
     },
     {
+      "id": 9874,
+      "record_date": "24-08",
+      "game_name": "DWARKA PURI",
+      "result_val": "98"
+    },
+    {
       "id": 8149,
       "record_date": "24-08",
       "game_name": "FARIDABAD",
       "result_val": "-"
+    },
+    {
+      "id": 9960,
+      "record_date": "24-08",
+      "game_name": "FUNC_TEST_1787600001292_1",
+      "result_val": "55"
     },
     {
       "id": 8153,
@@ -6303,13 +6455,31 @@
       "id": 9792,
       "record_date": "24-08",
       "game_name": "KASHMIR BAZAR",
-      "result_val": "88"
+      "result_val": "55"
+    },
+    {
+      "id": 9862,
+      "record_date": "24-08",
+      "game_name": "KHATAM",
+      "result_val": "67"
     },
     {
       "id": 8519,
       "record_date": "24-08",
       "game_name": "LAAL BAZAR",
-      "result_val": "43"
+      "result_val": "18"
+    },
+    {
+      "id": 9866,
+      "record_date": "24-08",
+      "game_name": "LAAL BAZAR3",
+      "result_val": "45"
+    },
+    {
+      "id": 9868,
+      "record_date": "24-08",
+      "game_name": "MATKA KING",
+      "result_val": "67"
     },
     {
       "id": 7349,
@@ -6328,6 +6498,12 @@
       "record_date": "24-08",
       "game_name": "SADAR BAZAR RENAMED",
       "result_val": "-"
+    },
+    {
+      "id": 9870,
+      "record_date": "24-08",
+      "game_name": "SHIV PURI",
+      "result_val": "17"
     },
     {
       "id": 8147,
@@ -6351,7 +6527,7 @@
       "id": 9784,
       "record_date": "24-08",
       "game_name": "TEST_GAME_123",
-      "result_val": "22"
+      "result_val": "11"
     },
     {
       "id": 7215,
@@ -6399,7 +6575,7 @@
       "id": 8166,
       "record_date": "25-08",
       "game_name": "DISAWAR",
-      "result_val": "-"
+      "result_val": "76"
     },
     {
       "id": 8164,
@@ -6412,6 +6588,18 @@
       "record_date": "25-08",
       "game_name": "FARIDABAD",
       "result_val": "-"
+    },
+    {
+      "id": 9958,
+      "record_date": "25-08",
+      "game_name": "FUNC_TEST_1787600001292_1",
+      "result_val": "99"
+    },
+    {
+      "id": 9968,
+      "record_date": "25-08",
+      "game_name": "FUNC_TEST_1787600003632_2",
+      "result_val": "88"
     },
     {
       "id": 8165,
@@ -6448,6 +6636,12 @@
       "record_date": "25-08",
       "game_name": "GWALIOR",
       "result_val": "-"
+    },
+    {
+      "id": 9858,
+      "record_date": "25-08",
+      "game_name": "KASHMIR BAZAR",
+      "result_val": "88"
     },
     {
       "id": 8531,
@@ -6490,6 +6684,12 @@
       "record_date": "25-08",
       "game_name": "TEST BAZAR 2026",
       "result_val": "-"
+    },
+    {
+      "id": 9850,
+      "record_date": "25-08",
+      "game_name": "TEST_GAME_123",
+      "result_val": "22"
     },
     {
       "id": 7216,

@@ -190,37 +190,6 @@ async function initDatabase() {
         }
       }
 
-      // ONLY seed backup.games IF PostgreSQL games table is COMPLETELY EMPTY
-      const existingGamesCountRes = await pgPool.query('SELECT COUNT(*) as count FROM games').catch(() => ({ rows: [{ count: 0 }] }));
-      const gamesCount = parseInt(existingGamesCountRes.rows[0].count, 10) || 0;
-
-      if (gamesCount === 0 && backup && Array.isArray(backup.games)) {
-        console.log('🌱 Seeding games table from initial backup data (database was empty)...');
-        for (const g of backup.games) {
-          if (g && g.name) {
-            const gName = g.name.trim().toUpperCase() === 'DISAWER' ? 'DISAWAR' : g.name.trim().toUpperCase();
-            const isPerm = gName === 'DISAWAR' ? 1 : (g.is_permanent ? 1 : 0);
-            await pgPool.query(
-              `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero, is_featured, is_permanent)
-               VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-               ON CONFLICT (name) DO NOTHING`,
-              [
-                gName,
-                g.open_time || '',
-                g.close_time || '',
-                g.yesterday_result || '-',
-                g.today_result || 'WAIT',
-                parseInt(g.table_group) || 1,
-                parseInt(g.sort_order) || 0,
-                g.is_hero ? 1 : 0,
-                g.is_featured ? 1 : 0,
-                isPerm
-              ]
-            ).catch(()=>{});
-          }
-        }
-      }
-
       // Normalize DISAWER -> DISAWAR in games and chart_records
       await safeQuery(`UPDATE games SET name = 'DISAWAR', is_permanent = 1 WHERE UPPER(name) = 'DISAWER'`).catch(()=>{});
       await safeQuery(`UPDATE chart_records SET game_name = 'DISAWAR' WHERE UPPER(game_name) = 'DISAWER'`).catch(()=>{});
