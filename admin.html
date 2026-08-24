@@ -896,6 +896,7 @@
   <script src="js/main.js"></script>
   <script>
     let siteDataCache = null;
+    let adminDataFetchSeq = 0;
 
     function togglePassVisibility(inputId, btn) {
       const input = document.getElementById(inputId);
@@ -1060,7 +1061,6 @@
     }
 
     // Load Site Data (with sequence tracking to discard out-of-order race condition responses)
-    let adminDataFetchSeq = 0;
     async function loadAdminData() {
       const currentSeq = ++adminDataFetchSeq;
       try {
@@ -2312,6 +2312,7 @@
           return null;
         }).filter(Boolean);
         let defaultDates = getAutoDatesUpToToday();
+        const dates = Array.from(new Set([...defaultDates, ...dbDates, ...(extraChartDates || [])]));
         const gamesList = getChart1ActiveColumns();
 
         if (gamesList.length === 0) {
