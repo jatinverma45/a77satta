@@ -221,9 +221,6 @@ async function initDatabase() {
         }
       }
 
-      // Purge legacy deleted game GANDU if present
-      await safeQuery(`DELETE FROM games WHERE UPPER(name) = 'GANDU'`).catch(()=>{});
-
       // Normalize DISAWER -> DISAWAR in games and chart_records
       await safeQuery(`UPDATE games SET name = 'DISAWAR', is_permanent = 1 WHERE UPPER(name) = 'DISAWER'`).catch(()=>{});
       await safeQuery(`UPDATE chart_records SET game_name = 'DISAWAR' WHERE UPPER(game_name) = 'DISAWER'`).catch(()=>{});

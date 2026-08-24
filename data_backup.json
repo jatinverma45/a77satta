@@ -164,19 +164,6 @@
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
-    },
-    {
-      "id": 742,
-      "name": "DEBUG_FINAL_001",
-      "open_time": "04:00 PM",
-      "close_time": "10:00 AM",
-      "yesterday_result": null,
-      "today_result": "77",
-      "table_group": 1,
-      "sort_order": 12,
-      "is_hero": 0,
-      "is_featured": 0,
-      "is_permanent": 0
     }
   ],
   "chart_records": [
@@ -5521,6 +5508,12 @@
       "result_val": "99"
     },
     {
+      "id": 9837,
+      "record_date": "2026-08-24",
+      "game_name": "GANDU_TEST",
+      "result_val": "55"
+    },
+    {
       "id": 9793,
       "record_date": "2026-08-24",
       "game_name": "KASHMIR BAZAR",
@@ -6269,6 +6262,12 @@
       "record_date": "24-08",
       "game_name": "GALI",
       "result_val": "-"
+    },
+    {
+      "id": 9836,
+      "record_date": "24-08",
+      "game_name": "GANDU_TEST",
+      "result_val": "55"
     },
     {
       "id": 8151,
