@@ -3,8 +3,8 @@
     "featured_banner_game": "DISAWAR",
     "disawer_time": "05:15 AM",
     "hero_games_json": "[]",
-    "custom_chart_cards_json": "[]",
-    "khaiwal_cards_json": "[{\"card_type\":\"standard\",\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ KUBER BHAI KHAIWAL ♣\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nफरीदाबाद ----------- 5:50 pm\\nगाजियाबाद ----------- 8:50 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"},{\"id\":1787334169145,\"card_type\":\"standard\",\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ NEW BHAI KHAIWAL ♣\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nघाटियाल ----------- 2:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nफरीदाबाद ----------- 5:50 pm\\nगाजियाबाद ----------- 8:50 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"}]",
+    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"DL BAZAR SATTA KING CHART 2026\"]",
+    "khaiwal_cards_json": "[{\"card_type\":\"standard\",\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ KUBER BHAI KHAIWAL ♣\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nफरीदाबाद ----------- 5:50 pm\\nगाजियाबाद ----------- 8:50 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"}]",
     "ticker_text": "A77satta is an information portal which keep satta king players updated by providing real-time satta king results for gali satta king , faridabad satta and ghaziabad satta.",
     "hindi_tagline": "हा भाई यही आती हे सबसे पहले खबर रूको और देखो",
     "main_game_name": "GALI",
@@ -17,8 +17,9 @@
     "notice_banners_json": "[{\"id\":1,\"text\":\"SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.\"},{\"id\":2,\"text\":\"SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM\"}]",
     "last_sync": "1786373486679.0",
     "chart1_columns_json": "[\"LAAL BAZAR\",\"GP\",\"SADAR BAZAR RENAMED\",\"GWALIOR\",\"DELHI BAZAR\",\"GWALI\",\"DELHI\",\"DELHI MATKA\",\"SHRI GANESH\",\"AGRA\",\"FARIDABAD\",\"ALWAR\",\"GAZIABAD\",\"DWARKA\",\"GALI\",\"TEST BAZAR 2026\",\"DGH\",\"SUPER BAZAR 2026\",\"CHAWAL BAZAR\"]",
-    "disawer_prev": "18",
-    "disawer_today": "81"
+    "disawer_prev": "55",
+    "disawer_today": "88",
+    "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]"
   },
   "games": [
     {
@@ -42,7 +43,7 @@
       "yesterday_result": "11",
       "today_result": "22",
       "table_group": 1,
-      "sort_order": 1,
+      "sort_order": 2,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -50,14 +51,14 @@
     {
       "id": 682,
       "name": "DISAWAR",
-      "open_time": "04:00 PM",
+      "open_time": "05:15 AM",
       "close_time": "",
-      "yesterday_result": "18",
-      "today_result": "81",
+      "yesterday_result": "44",
+      "today_result": "99",
       "table_group": 1,
-      "sort_order": 1,
+      "sort_order": 3,
       "is_hero": 0,
-      "is_featured": 1,
+      "is_featured": 0,
       "is_permanent": 1
     },
     {
@@ -68,7 +69,7 @@
       "yesterday_result": "55",
       "today_result": "88",
       "table_group": 1,
-      "sort_order": 2,
+      "sort_order": 4,
       "is_hero": 0,
       "is_featured": 1,
       "is_permanent": 0
@@ -81,7 +82,7 @@
       "yesterday_result": "67",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 2,
+      "sort_order": 5,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -94,7 +95,7 @@
       "yesterday_result": "87",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 2,
+      "sort_order": 6,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -107,7 +108,7 @@
       "yesterday_result": "45",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 2,
+      "sort_order": 7,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -120,7 +121,7 @@
       "yesterday_result": "67",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 2,
+      "sort_order": 8,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -133,7 +134,7 @@
       "yesterday_result": "17",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 2,
+      "sort_order": 9,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -146,7 +147,7 @@
       "yesterday_result": "18",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 3,
+      "sort_order": 10,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -159,7 +160,20 @@
       "yesterday_result": "98",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 4,
+      "sort_order": 11,
+      "is_hero": 0,
+      "is_featured": 0,
+      "is_permanent": 0
+    },
+    {
+      "id": 742,
+      "name": "DEBUG_FINAL_001",
+      "open_time": "04:00 PM",
+      "close_time": "10:00 AM",
+      "yesterday_result": null,
+      "today_result": "77",
+      "table_group": 1,
+      "sort_order": 12,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -167,270 +181,7160 @@
   ],
   "chart_records": [
     {
-      "record_date": "23-08",
-      "game_name": "SADAR BAZAR",
-      "result_val": "77"
+      "id": 6522,
+      "record_date": "01-08",
+      "game_name": "AGRA",
+      "result_val": "48"
     },
     {
-      "record_date": "22-08",
-      "game_name": "SADAR BAZAR",
-      "result_val": "30"
+      "id": 6524,
+      "record_date": "01-08",
+      "game_name": "ALWAR",
+      "result_val": "25"
     },
     {
-      "record_date": "22-08",
-      "game_name": "TEST BAZAR 2026",
+      "id": 6773,
+      "record_date": "01-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "12"
+    },
+    {
+      "id": 6783,
+      "record_date": "01-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "02"
+    },
+    {
+      "id": 9079,
+      "record_date": "01-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6788,
+      "record_date": "01-08",
+      "game_name": "DAMAN",
       "result_val": "55"
     },
     {
-      "record_date": "22-08",
-      "game_name": "GWALIOR",
-      "result_val": "87"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "DELHI BAZAR",
-      "result_val": "89"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "DELHI MATKA",
-      "result_val": "07"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "SHRI GANESH",
-      "result_val": "93"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "AGRA",
-      "result_val": "18"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "FARIDABAD",
-      "result_val": "81"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "ALWAR",
-      "result_val": "20"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "GAZIABAD",
-      "result_val": "99"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "DWARKA",
-      "result_val": "10"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "GALI",
-      "result_val": "93"
-    },
-    {
-      "record_date": "23-08",
-      "game_name": "DISAWAR",
-      "result_val": "88"
-    },
-    {
-      "record_date": "22-08",
-      "game_name": "DISAWAR",
-      "result_val": "16"
-    },
-    {
+      "id": 6787,
       "record_date": "01-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "78"
+      "game_name": "DEHRADUN CITY",
+      "result_val": "27"
     },
     {
-      "record_date": "02-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "03-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "04-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "05-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "06-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "07-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "08-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "09-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "10-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "11-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "12-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "13-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "67"
-    },
-    {
-      "record_date": "14-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "15-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "16-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "17-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "18-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "19-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "20-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "21-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "23-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "99"
-    },
-    {
-      "record_date": "24-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "25-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "26-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "27-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "28-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "29-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "30-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "31-08",
-      "game_name": "TEST BAZAR 2026",
-      "result_val": "-"
-    },
-    {
-      "record_date": "23-08",
-      "game_name": "GWALIOR",
-      "result_val": "87"
-    },
-    {
-      "record_date": "23-08",
-      "game_name": "SADAR BAZAR RENAMED",
-      "result_val": "88"
-    },
-    {
+      "id": 9673,
       "record_date": "01-08",
       "game_name": "DELETED_GHOST_GAME",
       "result_val": "99"
     },
     {
-      "record_date": "23-08",
-      "game_name": "DELHI SUPER",
-      "result_val": "88"
+      "id": 7264,
+      "record_date": "01-08",
+      "game_name": "DELHI",
+      "result_val": "-"
     },
     {
+      "id": 6519,
+      "record_date": "01-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "71"
+    },
+    {
+      "id": 6775,
+      "record_date": "01-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "61"
+    },
+    {
+      "id": 6520,
+      "record_date": "01-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "21"
+    },
+    {
+      "id": 9077,
+      "record_date": "01-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6528,
+      "record_date": "01-08",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6526,
+      "record_date": "01-08",
+      "game_name": "DWARKA",
+      "result_val": "48"
+    },
+    {
+      "id": 6523,
+      "record_date": "01-08",
+      "game_name": "FARIDABAD",
+      "result_val": "57"
+    },
+    {
+      "id": 6778,
+      "record_date": "01-08",
+      "game_name": "FATEHABAD",
+      "result_val": "75"
+    },
+    {
+      "id": 6527,
+      "record_date": "01-08",
+      "game_name": "GALI",
+      "result_val": "92"
+    },
+    {
+      "id": 6525,
+      "record_date": "01-08",
+      "game_name": "GAZIABAD",
+      "result_val": "23"
+    },
+    {
+      "id": 7868,
+      "record_date": "01-08",
+      "game_name": "GB",
+      "result_val": "36"
+    },
+    {
+      "id": 9062,
+      "record_date": "01-08",
+      "game_name": "GP",
+      "result_val": "45"
+    },
+    {
+      "id": 9066,
+      "record_date": "01-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6518,
+      "record_date": "01-08",
+      "game_name": "GWALIOR",
+      "result_val": "38"
+    },
+    {
+      "id": 6769,
+      "record_date": "01-08",
+      "game_name": "HR SATTA",
+      "result_val": "31"
+    },
+    {
+      "id": 6774,
+      "record_date": "01-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "19"
+    },
+    {
+      "id": 6771,
+      "record_date": "01-08",
+      "game_name": "KKR CITY",
+      "result_val": "03"
+    },
+    {
+      "id": 9676,
       "record_date": "01-08",
       "game_name": "KUBER BAZAR",
       "result_val": "77"
     },
     {
-      "record_date": "24-08",
+      "id": 7263,
+      "record_date": "01-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "23"
+    },
+    {
+      "id": 6785,
+      "record_date": "01-08",
+      "game_name": "LION BAZAR",
+      "result_val": "19"
+    },
+    {
+      "id": 6772,
+      "record_date": "01-08",
+      "game_name": "MADHUPURI",
+      "result_val": "61"
+    },
+    {
+      "id": 6784,
+      "record_date": "01-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "57"
+    },
+    {
+      "id": 6782,
+      "record_date": "01-08",
+      "game_name": "MOHALI-7",
+      "result_val": "21"
+    },
+    {
+      "id": 6776,
+      "record_date": "01-08",
+      "game_name": "NEW GANGA",
+      "result_val": "05"
+    },
+    {
+      "id": 6780,
+      "record_date": "01-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "95"
+    },
+    {
+      "id": 7262,
+      "record_date": "01-08",
+      "game_name": "SADAR",
+      "result_val": "56"
+    },
+    {
+      "id": 6517,
+      "record_date": "01-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "82"
+    },
+    {
+      "id": 9063,
+      "record_date": "01-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6521,
+      "record_date": "01-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "26"
+    },
+    {
+      "id": 6786,
+      "record_date": "01-08",
+      "game_name": "SIALKOT",
+      "result_val": "13"
+    },
+    {
+      "id": 6777,
+      "record_date": "01-08",
+      "game_name": "SKY KING",
+      "result_val": "61"
+    },
+    {
+      "id": 9078,
+      "record_date": "01-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7265,
+      "record_date": "01-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8804,
+      "record_date": "01-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "78"
+    },
+    {
+      "id": 6779,
+      "record_date": "01-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "24"
+    },
+    {
+      "id": 6770,
+      "record_date": "01-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "15"
+    },
+    {
+      "id": 6781,
+      "record_date": "01-08",
+      "game_name": "VIP AGRA",
+      "result_val": "15"
+    },
+    {
+      "id": 6534,
+      "record_date": "02-08",
+      "game_name": "AGRA",
+      "result_val": "29"
+    },
+    {
+      "id": 6536,
+      "record_date": "02-08",
+      "game_name": "ALWAR",
+      "result_val": "42"
+    },
+    {
+      "id": 6793,
+      "record_date": "02-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "13"
+    },
+    {
+      "id": 6803,
+      "record_date": "02-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "05"
+    },
+    {
+      "id": 9098,
+      "record_date": "02-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6808,
+      "record_date": "02-08",
+      "game_name": "DAMAN",
+      "result_val": "16"
+    },
+    {
+      "id": 6807,
+      "record_date": "02-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "93"
+    },
+    {
+      "id": 7330,
+      "record_date": "02-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6531,
+      "record_date": "02-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "09"
+    },
+    {
+      "id": 6795,
+      "record_date": "02-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "36"
+    },
+    {
+      "id": 6532,
+      "record_date": "02-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "16"
+    },
+    {
+      "id": 9096,
+      "record_date": "02-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6540,
+      "record_date": "02-08",
       "game_name": "DISAWAR",
+      "result_val": "31"
+    },
+    {
+      "id": 6538,
+      "record_date": "02-08",
+      "game_name": "DWARKA",
+      "result_val": "76"
+    },
+    {
+      "id": 6535,
+      "record_date": "02-08",
+      "game_name": "FARIDABAD",
+      "result_val": "06"
+    },
+    {
+      "id": 6798,
+      "record_date": "02-08",
+      "game_name": "FATEHABAD",
+      "result_val": "08"
+    },
+    {
+      "id": 6539,
+      "record_date": "02-08",
+      "game_name": "GALI",
+      "result_val": "31"
+    },
+    {
+      "id": 6537,
+      "record_date": "02-08",
+      "game_name": "GAZIABAD",
+      "result_val": "15"
+    },
+    {
+      "id": 7880,
+      "record_date": "02-08",
+      "game_name": "GB",
+      "result_val": "75"
+    },
+    {
+      "id": 9081,
+      "record_date": "02-08",
+      "game_name": "GP",
+      "result_val": "35"
+    },
+    {
+      "id": 9085,
+      "record_date": "02-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6530,
+      "record_date": "02-08",
+      "game_name": "GWALIOR",
+      "result_val": "22"
+    },
+    {
+      "id": 6789,
+      "record_date": "02-08",
+      "game_name": "HR SATTA",
+      "result_val": "87"
+    },
+    {
+      "id": 6794,
+      "record_date": "02-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "29"
+    },
+    {
+      "id": 6791,
+      "record_date": "02-08",
+      "game_name": "KKR CITY",
+      "result_val": "01"
+    },
+    {
+      "id": 7385,
+      "record_date": "02-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "67"
+    },
+    {
+      "id": 6805,
+      "record_date": "02-08",
+      "game_name": "LION BAZAR",
+      "result_val": "06"
+    },
+    {
+      "id": 6792,
+      "record_date": "02-08",
+      "game_name": "MADHUPURI",
+      "result_val": "89"
+    },
+    {
+      "id": 6804,
+      "record_date": "02-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "22"
+    },
+    {
+      "id": 6802,
+      "record_date": "02-08",
+      "game_name": "MOHALI-7",
+      "result_val": "33"
+    },
+    {
+      "id": 6796,
+      "record_date": "02-08",
+      "game_name": "NEW GANGA",
+      "result_val": "96"
+    },
+    {
+      "id": 6800,
+      "record_date": "02-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "91"
+    },
+    {
+      "id": 7275,
+      "record_date": "02-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6529,
+      "record_date": "02-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "31"
+    },
+    {
+      "id": 9082,
+      "record_date": "02-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6533,
+      "record_date": "02-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "58"
+    },
+    {
+      "id": 6806,
+      "record_date": "02-08",
+      "game_name": "SIALKOT",
+      "result_val": "56"
+    },
+    {
+      "id": 6797,
+      "record_date": "02-08",
+      "game_name": "SKY KING",
+      "result_val": "06"
+    },
+    {
+      "id": 9097,
+      "record_date": "02-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7334,
+      "record_date": "02-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8805,
+      "record_date": "02-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6799,
+      "record_date": "02-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "22"
+    },
+    {
+      "id": 6790,
+      "record_date": "02-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "77"
+    },
+    {
+      "id": 6801,
+      "record_date": "02-08",
+      "game_name": "VIP AGRA",
+      "result_val": "00"
+    },
+    {
+      "id": 6546,
+      "record_date": "03-08",
+      "game_name": "AGRA",
+      "result_val": "73"
+    },
+    {
+      "id": 6548,
+      "record_date": "03-08",
+      "game_name": "ALWAR",
+      "result_val": "59"
+    },
+    {
+      "id": 6813,
+      "record_date": "03-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "76"
+    },
+    {
+      "id": 6823,
+      "record_date": "03-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "71"
+    },
+    {
+      "id": 9117,
+      "record_date": "03-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6828,
+      "record_date": "03-08",
+      "game_name": "DAMAN",
+      "result_val": "10"
+    },
+    {
+      "id": 6827,
+      "record_date": "03-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "60"
+    },
+    {
+      "id": 7468,
+      "record_date": "03-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6543,
+      "record_date": "03-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "53"
+    },
+    {
+      "id": 6815,
+      "record_date": "03-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "57"
+    },
+    {
+      "id": 6544,
+      "record_date": "03-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "56"
+    },
+    {
+      "id": 9115,
+      "record_date": "03-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6552,
+      "record_date": "03-08",
+      "game_name": "DISAWAR",
+      "result_val": "74"
+    },
+    {
+      "id": 6550,
+      "record_date": "03-08",
+      "game_name": "DWARKA",
+      "result_val": "79"
+    },
+    {
+      "id": 6547,
+      "record_date": "03-08",
+      "game_name": "FARIDABAD",
+      "result_val": "95"
+    },
+    {
+      "id": 6818,
+      "record_date": "03-08",
+      "game_name": "FATEHABAD",
+      "result_val": "08"
+    },
+    {
+      "id": 6551,
+      "record_date": "03-08",
+      "game_name": "GALI",
+      "result_val": "59"
+    },
+    {
+      "id": 6549,
+      "record_date": "03-08",
+      "game_name": "GAZIABAD",
+      "result_val": "60"
+    },
+    {
+      "id": 7892,
+      "record_date": "03-08",
+      "game_name": "GB",
+      "result_val": "76"
+    },
+    {
+      "id": 9100,
+      "record_date": "03-08",
+      "game_name": "GP",
+      "result_val": "57"
+    },
+    {
+      "id": 9104,
+      "record_date": "03-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6542,
+      "record_date": "03-08",
+      "game_name": "GWALIOR",
+      "result_val": "80"
+    },
+    {
+      "id": 6809,
+      "record_date": "03-08",
+      "game_name": "HR SATTA",
+      "result_val": "71"
+    },
+    {
+      "id": 6814,
+      "record_date": "03-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "59"
+    },
+    {
+      "id": 6811,
+      "record_date": "03-08",
+      "game_name": "KKR CITY",
+      "result_val": "69"
+    },
+    {
+      "id": 7413,
+      "record_date": "03-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "18"
+    },
+    {
+      "id": 6825,
+      "record_date": "03-08",
+      "game_name": "LION BAZAR",
+      "result_val": "58"
+    },
+    {
+      "id": 6812,
+      "record_date": "03-08",
+      "game_name": "MADHUPURI",
+      "result_val": "00"
+    },
+    {
+      "id": 6824,
+      "record_date": "03-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "50"
+    },
+    {
+      "id": 6822,
+      "record_date": "03-08",
+      "game_name": "MOHALI-7",
+      "result_val": "15"
+    },
+    {
+      "id": 6816,
+      "record_date": "03-08",
+      "game_name": "NEW GANGA",
+      "result_val": "08"
+    },
+    {
+      "id": 6820,
+      "record_date": "03-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "93"
+    },
+    {
+      "id": 7278,
+      "record_date": "03-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6541,
+      "record_date": "03-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "05"
+    },
+    {
+      "id": 9101,
+      "record_date": "03-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6545,
+      "record_date": "03-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "31"
+    },
+    {
+      "id": 6826,
+      "record_date": "03-08",
+      "game_name": "SIALKOT",
+      "result_val": "75"
+    },
+    {
+      "id": 6817,
+      "record_date": "03-08",
+      "game_name": "SKY KING",
+      "result_val": "06"
+    },
+    {
+      "id": 9116,
+      "record_date": "03-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7416,
+      "record_date": "03-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8806,
+      "record_date": "03-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6819,
+      "record_date": "03-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "99"
+    },
+    {
+      "id": 6810,
+      "record_date": "03-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "12"
+    },
+    {
+      "id": 6821,
+      "record_date": "03-08",
+      "game_name": "VIP AGRA",
+      "result_val": "70"
+    },
+    {
+      "id": 6558,
+      "record_date": "04-08",
+      "game_name": "AGRA",
+      "result_val": "78"
+    },
+    {
+      "id": 6560,
+      "record_date": "04-08",
+      "game_name": "ALWAR",
+      "result_val": "34"
+    },
+    {
+      "id": 6833,
+      "record_date": "04-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "42"
+    },
+    {
+      "id": 6843,
+      "record_date": "04-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "66"
+    },
+    {
+      "id": 9136,
+      "record_date": "04-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6848,
+      "record_date": "04-08",
+      "game_name": "DAMAN",
+      "result_val": "21"
+    },
+    {
+      "id": 6847,
+      "record_date": "04-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "57"
+    },
+    {
+      "id": 7479,
+      "record_date": "04-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6555,
+      "record_date": "04-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "12"
+    },
+    {
+      "id": 6835,
+      "record_date": "04-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "74"
+    },
+    {
+      "id": 6556,
+      "record_date": "04-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "67"
+    },
+    {
+      "id": 9134,
+      "record_date": "04-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6564,
+      "record_date": "04-08",
+      "game_name": "DISAWAR",
+      "result_val": "31"
+    },
+    {
+      "id": 6562,
+      "record_date": "04-08",
+      "game_name": "DWARKA",
+      "result_val": "15"
+    },
+    {
+      "id": 6559,
+      "record_date": "04-08",
+      "game_name": "FARIDABAD",
+      "result_val": "12"
+    },
+    {
+      "id": 6838,
+      "record_date": "04-08",
+      "game_name": "FATEHABAD",
+      "result_val": "52"
+    },
+    {
+      "id": 6563,
+      "record_date": "04-08",
+      "game_name": "GALI",
+      "result_val": "27"
+    },
+    {
+      "id": 6561,
+      "record_date": "04-08",
+      "game_name": "GAZIABAD",
+      "result_val": "24"
+    },
+    {
+      "id": 7904,
+      "record_date": "04-08",
+      "game_name": "GB",
+      "result_val": "98"
+    },
+    {
+      "id": 9119,
+      "record_date": "04-08",
+      "game_name": "GP",
+      "result_val": "58"
+    },
+    {
+      "id": 9123,
+      "record_date": "04-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6554,
+      "record_date": "04-08",
+      "game_name": "GWALIOR",
+      "result_val": "01"
+    },
+    {
+      "id": 6829,
+      "record_date": "04-08",
+      "game_name": "HR SATTA",
+      "result_val": "93"
+    },
+    {
+      "id": 6834,
+      "record_date": "04-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "20"
+    },
+    {
+      "id": 6831,
+      "record_date": "04-08",
+      "game_name": "KKR CITY",
+      "result_val": "88"
+    },
+    {
+      "id": 7528,
+      "record_date": "04-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "81"
+    },
+    {
+      "id": 6845,
+      "record_date": "04-08",
+      "game_name": "LION BAZAR",
+      "result_val": "68"
+    },
+    {
+      "id": 6832,
+      "record_date": "04-08",
+      "game_name": "MADHUPURI",
+      "result_val": "05"
+    },
+    {
+      "id": 6844,
+      "record_date": "04-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "69"
+    },
+    {
+      "id": 6842,
+      "record_date": "04-08",
+      "game_name": "MOHALI-7",
+      "result_val": "14"
+    },
+    {
+      "id": 6836,
+      "record_date": "04-08",
+      "game_name": "NEW GANGA",
+      "result_val": "94"
+    },
+    {
+      "id": 6840,
+      "record_date": "04-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "71"
+    },
+    {
+      "id": 7280,
+      "record_date": "04-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6553,
+      "record_date": "04-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "99"
+    },
+    {
+      "id": 9120,
+      "record_date": "04-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6557,
+      "record_date": "04-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "10"
+    },
+    {
+      "id": 6846,
+      "record_date": "04-08",
+      "game_name": "SIALKOT",
+      "result_val": "47"
+    },
+    {
+      "id": 6837,
+      "record_date": "04-08",
+      "game_name": "SKY KING",
+      "result_val": "24"
+    },
+    {
+      "id": 9135,
+      "record_date": "04-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7482,
+      "record_date": "04-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8807,
+      "record_date": "04-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6839,
+      "record_date": "04-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "13"
+    },
+    {
+      "id": 6830,
+      "record_date": "04-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "18"
+    },
+    {
+      "id": 6841,
+      "record_date": "04-08",
+      "game_name": "VIP AGRA",
+      "result_val": "11"
+    },
+    {
+      "id": 6570,
+      "record_date": "05-08",
+      "game_name": "AGRA",
+      "result_val": "76"
+    },
+    {
+      "id": 6572,
+      "record_date": "05-08",
+      "game_name": "ALWAR",
+      "result_val": "56"
+    },
+    {
+      "id": 6853,
+      "record_date": "05-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "39"
+    },
+    {
+      "id": 6863,
+      "record_date": "05-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "53"
+    },
+    {
+      "id": 9155,
+      "record_date": "05-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6868,
+      "record_date": "05-08",
+      "game_name": "DAMAN",
+      "result_val": "13"
+    },
+    {
+      "id": 6867,
+      "record_date": "05-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "05"
+    },
+    {
+      "id": 7547,
+      "record_date": "05-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6567,
+      "record_date": "05-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "47"
+    },
+    {
+      "id": 6855,
+      "record_date": "05-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "78"
+    },
+    {
+      "id": 6568,
+      "record_date": "05-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "19"
+    },
+    {
+      "id": 9153,
+      "record_date": "05-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6576,
+      "record_date": "05-08",
+      "game_name": "DISAWAR",
+      "result_val": "93"
+    },
+    {
+      "id": 6574,
+      "record_date": "05-08",
+      "game_name": "DWARKA",
+      "result_val": "01"
+    },
+    {
+      "id": 6571,
+      "record_date": "05-08",
+      "game_name": "FARIDABAD",
+      "result_val": "57"
+    },
+    {
+      "id": 6858,
+      "record_date": "05-08",
+      "game_name": "FATEHABAD",
+      "result_val": "75"
+    },
+    {
+      "id": 6575,
+      "record_date": "05-08",
+      "game_name": "GALI",
+      "result_val": "85"
+    },
+    {
+      "id": 6573,
+      "record_date": "05-08",
+      "game_name": "GAZIABAD",
+      "result_val": "22"
+    },
+    {
+      "id": 7916,
+      "record_date": "05-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9138,
+      "record_date": "05-08",
+      "game_name": "GP",
+      "result_val": "67"
+    },
+    {
+      "id": 9142,
+      "record_date": "05-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6566,
+      "record_date": "05-08",
+      "game_name": "GWALIOR",
+      "result_val": "60"
+    },
+    {
+      "id": 6849,
+      "record_date": "05-08",
+      "game_name": "HR SATTA",
+      "result_val": "73"
+    },
+    {
+      "id": 6854,
+      "record_date": "05-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "64"
+    },
+    {
+      "id": 6851,
+      "record_date": "05-08",
+      "game_name": "KKR CITY",
+      "result_val": "33"
+    },
+    {
+      "id": 7544,
+      "record_date": "05-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "39"
+    },
+    {
+      "id": 6865,
+      "record_date": "05-08",
+      "game_name": "LION BAZAR",
+      "result_val": "45"
+    },
+    {
+      "id": 6852,
+      "record_date": "05-08",
+      "game_name": "MADHUPURI",
+      "result_val": "45"
+    },
+    {
+      "id": 6864,
+      "record_date": "05-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "84"
+    },
+    {
+      "id": 6862,
+      "record_date": "05-08",
+      "game_name": "MOHALI-7",
+      "result_val": "98"
+    },
+    {
+      "id": 6856,
+      "record_date": "05-08",
+      "game_name": "NEW GANGA",
+      "result_val": "64"
+    },
+    {
+      "id": 6860,
+      "record_date": "05-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "55"
+    },
+    {
+      "id": 7283,
+      "record_date": "05-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6565,
+      "record_date": "05-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "24"
+    },
+    {
+      "id": 9139,
+      "record_date": "05-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6569,
+      "record_date": "05-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "75"
+    },
+    {
+      "id": 6866,
+      "record_date": "05-08",
+      "game_name": "SIALKOT",
+      "result_val": "99"
+    },
+    {
+      "id": 6857,
+      "record_date": "05-08",
+      "game_name": "SKY KING",
+      "result_val": "93"
+    },
+    {
+      "id": 9154,
+      "record_date": "05-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7550,
+      "record_date": "05-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8808,
+      "record_date": "05-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6859,
+      "record_date": "05-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "40"
+    },
+    {
+      "id": 6850,
+      "record_date": "05-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "92"
+    },
+    {
+      "id": 6861,
+      "record_date": "05-08",
+      "game_name": "VIP AGRA",
+      "result_val": "73"
+    },
+    {
+      "id": 6582,
+      "record_date": "06-08",
+      "game_name": "AGRA",
+      "result_val": "48"
+    },
+    {
+      "id": 6584,
+      "record_date": "06-08",
+      "game_name": "ALWAR",
+      "result_val": "24"
+    },
+    {
+      "id": 6873,
+      "record_date": "06-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "84"
+    },
+    {
+      "id": 6883,
+      "record_date": "06-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "43"
+    },
+    {
+      "id": 9174,
+      "record_date": "06-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6888,
+      "record_date": "06-08",
+      "game_name": "DAMAN",
+      "result_val": "93"
+    },
+    {
+      "id": 6887,
+      "record_date": "06-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "23"
+    },
+    {
+      "id": 7607,
+      "record_date": "06-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6579,
+      "record_date": "06-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "61"
+    },
+    {
+      "id": 6875,
+      "record_date": "06-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "18"
+    },
+    {
+      "id": 6580,
+      "record_date": "06-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "16"
+    },
+    {
+      "id": 9172,
+      "record_date": "06-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6588,
+      "record_date": "06-08",
+      "game_name": "DISAWAR",
+      "result_val": "51"
+    },
+    {
+      "id": 6586,
+      "record_date": "06-08",
+      "game_name": "DWARKA",
+      "result_val": "79"
+    },
+    {
+      "id": 6583,
+      "record_date": "06-08",
+      "game_name": "FARIDABAD",
+      "result_val": "22"
+    },
+    {
+      "id": 6878,
+      "record_date": "06-08",
+      "game_name": "FATEHABAD",
+      "result_val": "55"
+    },
+    {
+      "id": 6587,
+      "record_date": "06-08",
+      "game_name": "GALI",
+      "result_val": "80"
+    },
+    {
+      "id": 6585,
+      "record_date": "06-08",
+      "game_name": "GAZIABAD",
+      "result_val": "89"
+    },
+    {
+      "id": 7928,
+      "record_date": "06-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9157,
+      "record_date": "06-08",
+      "game_name": "GP",
+      "result_val": "69"
+    },
+    {
+      "id": 9161,
+      "record_date": "06-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6578,
+      "record_date": "06-08",
+      "game_name": "GWALIOR",
+      "result_val": "21"
+    },
+    {
+      "id": 6869,
+      "record_date": "06-08",
+      "game_name": "HR SATTA",
+      "result_val": "60"
+    },
+    {
+      "id": 6874,
+      "record_date": "06-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "25"
+    },
+    {
+      "id": 6871,
+      "record_date": "06-08",
+      "game_name": "KKR CITY",
+      "result_val": "03"
+    },
+    {
+      "id": 7604,
+      "record_date": "06-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "89"
+    },
+    {
+      "id": 6885,
+      "record_date": "06-08",
+      "game_name": "LION BAZAR",
+      "result_val": "19"
+    },
+    {
+      "id": 6872,
+      "record_date": "06-08",
+      "game_name": "MADHUPURI",
+      "result_val": "71"
+    },
+    {
+      "id": 6884,
+      "record_date": "06-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "44"
+    },
+    {
+      "id": 6882,
+      "record_date": "06-08",
+      "game_name": "MOHALI-7",
+      "result_val": "65"
+    },
+    {
+      "id": 6876,
+      "record_date": "06-08",
+      "game_name": "NEW GANGA",
+      "result_val": "18"
+    },
+    {
+      "id": 6880,
+      "record_date": "06-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "78"
+    },
+    {
+      "id": 7286,
+      "record_date": "06-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6577,
+      "record_date": "06-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "95"
+    },
+    {
+      "id": 9158,
+      "record_date": "06-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6581,
+      "record_date": "06-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "97"
+    },
+    {
+      "id": 6886,
+      "record_date": "06-08",
+      "game_name": "SIALKOT",
+      "result_val": "17"
+    },
+    {
+      "id": 6877,
+      "record_date": "06-08",
+      "game_name": "SKY KING",
+      "result_val": "93"
+    },
+    {
+      "id": 9173,
+      "record_date": "06-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7610,
+      "record_date": "06-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8809,
+      "record_date": "06-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6879,
+      "record_date": "06-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "45"
+    },
+    {
+      "id": 6870,
+      "record_date": "06-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "31"
+    },
+    {
+      "id": 6881,
+      "record_date": "06-08",
+      "game_name": "VIP AGRA",
+      "result_val": "02"
+    },
+    {
+      "id": 6594,
+      "record_date": "07-08",
+      "game_name": "AGRA",
+      "result_val": "02"
+    },
+    {
+      "id": 6596,
+      "record_date": "07-08",
+      "game_name": "ALWAR",
+      "result_val": "09"
+    },
+    {
+      "id": 6893,
+      "record_date": "07-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "67"
+    },
+    {
+      "id": 6903,
+      "record_date": "07-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "19"
+    },
+    {
+      "id": 9193,
+      "record_date": "07-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6908,
+      "record_date": "07-08",
+      "game_name": "DAMAN",
       "result_val": "63"
     },
     {
-      "record_date": "2026-08-24",
+      "id": 6907,
+      "record_date": "07-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "64"
+    },
+    {
+      "id": 7667,
+      "record_date": "07-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6591,
+      "record_date": "07-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "52"
+    },
+    {
+      "id": 6895,
+      "record_date": "07-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "69"
+    },
+    {
+      "id": 6592,
+      "record_date": "07-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "27"
+    },
+    {
+      "id": 9191,
+      "record_date": "07-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6600,
+      "record_date": "07-08",
       "game_name": "DISAWAR",
+      "result_val": "83"
+    },
+    {
+      "id": 6598,
+      "record_date": "07-08",
+      "game_name": "DWARKA",
+      "result_val": "58"
+    },
+    {
+      "id": 6595,
+      "record_date": "07-08",
+      "game_name": "FARIDABAD",
+      "result_val": "26"
+    },
+    {
+      "id": 6898,
+      "record_date": "07-08",
+      "game_name": "FATEHABAD",
+      "result_val": "43"
+    },
+    {
+      "id": 6599,
+      "record_date": "07-08",
+      "game_name": "GALI",
+      "result_val": "35"
+    },
+    {
+      "id": 6597,
+      "record_date": "07-08",
+      "game_name": "GAZIABAD",
+      "result_val": "60"
+    },
+    {
+      "id": 7940,
+      "record_date": "07-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9176,
+      "record_date": "07-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9180,
+      "record_date": "07-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6590,
+      "record_date": "07-08",
+      "game_name": "GWALIOR",
+      "result_val": "15"
+    },
+    {
+      "id": 6889,
+      "record_date": "07-08",
+      "game_name": "HR SATTA",
+      "result_val": "59"
+    },
+    {
+      "id": 6894,
+      "record_date": "07-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "99"
+    },
+    {
+      "id": 6891,
+      "record_date": "07-08",
+      "game_name": "KKR CITY",
+      "result_val": "86"
+    },
+    {
+      "id": 7664,
+      "record_date": "07-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "45"
+    },
+    {
+      "id": 6905,
+      "record_date": "07-08",
+      "game_name": "LION BAZAR",
+      "result_val": "05"
+    },
+    {
+      "id": 6892,
+      "record_date": "07-08",
+      "game_name": "MADHUPURI",
+      "result_val": "21"
+    },
+    {
+      "id": 6904,
+      "record_date": "07-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "47"
+    },
+    {
+      "id": 6902,
+      "record_date": "07-08",
+      "game_name": "MOHALI-7",
+      "result_val": "00"
+    },
+    {
+      "id": 6896,
+      "record_date": "07-08",
+      "game_name": "NEW GANGA",
+      "result_val": "54"
+    },
+    {
+      "id": 6900,
+      "record_date": "07-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "13"
+    },
+    {
+      "id": 7288,
+      "record_date": "07-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6589,
+      "record_date": "07-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "48"
+    },
+    {
+      "id": 9177,
+      "record_date": "07-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6593,
+      "record_date": "07-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "80"
+    },
+    {
+      "id": 6906,
+      "record_date": "07-08",
+      "game_name": "SIALKOT",
+      "result_val": "06"
+    },
+    {
+      "id": 6897,
+      "record_date": "07-08",
+      "game_name": "SKY KING",
+      "result_val": "48"
+    },
+    {
+      "id": 9192,
+      "record_date": "07-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7670,
+      "record_date": "07-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8810,
+      "record_date": "07-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6899,
+      "record_date": "07-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "00"
+    },
+    {
+      "id": 6890,
+      "record_date": "07-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "45"
+    },
+    {
+      "id": 6901,
+      "record_date": "07-08",
+      "game_name": "VIP AGRA",
+      "result_val": "42"
+    },
+    {
+      "id": 6606,
+      "record_date": "08-08",
+      "game_name": "AGRA",
+      "result_val": "18"
+    },
+    {
+      "id": 6608,
+      "record_date": "08-08",
+      "game_name": "ALWAR",
+      "result_val": "20"
+    },
+    {
+      "id": 6913,
+      "record_date": "08-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "17"
+    },
+    {
+      "id": 6923,
+      "record_date": "08-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "00"
+    },
+    {
+      "id": 9212,
+      "record_date": "08-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6928,
+      "record_date": "08-08",
+      "game_name": "DAMAN",
+      "result_val": "55"
+    },
+    {
+      "id": 6927,
+      "record_date": "08-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "78"
+    },
+    {
+      "id": 7727,
+      "record_date": "08-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6603,
+      "record_date": "08-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "91"
+    },
+    {
+      "id": 6915,
+      "record_date": "08-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "13"
+    },
+    {
+      "id": 6604,
+      "record_date": "08-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "45"
+    },
+    {
+      "id": 9210,
+      "record_date": "08-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6612,
+      "record_date": "08-08",
+      "game_name": "DISAWAR",
+      "result_val": "96"
+    },
+    {
+      "id": 6610,
+      "record_date": "08-08",
+      "game_name": "DWARKA",
+      "result_val": "10"
+    },
+    {
+      "id": 6607,
+      "record_date": "08-08",
+      "game_name": "FARIDABAD",
+      "result_val": "81"
+    },
+    {
+      "id": 6918,
+      "record_date": "08-08",
+      "game_name": "FATEHABAD",
+      "result_val": "98"
+    },
+    {
+      "id": 6611,
+      "record_date": "08-08",
+      "game_name": "GALI",
+      "result_val": "93"
+    },
+    {
+      "id": 6609,
+      "record_date": "08-08",
+      "game_name": "GAZIABAD",
+      "result_val": "99"
+    },
+    {
+      "id": 7952,
+      "record_date": "08-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9195,
+      "record_date": "08-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9199,
+      "record_date": "08-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6602,
+      "record_date": "08-08",
+      "game_name": "GWALIOR",
+      "result_val": "47"
+    },
+    {
+      "id": 6909,
+      "record_date": "08-08",
+      "game_name": "HR SATTA",
+      "result_val": "54"
+    },
+    {
+      "id": 6914,
+      "record_date": "08-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "71"
+    },
+    {
+      "id": 6911,
+      "record_date": "08-08",
+      "game_name": "KKR CITY",
+      "result_val": "78"
+    },
+    {
+      "id": 7724,
+      "record_date": "08-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "65"
+    },
+    {
+      "id": 6925,
+      "record_date": "08-08",
+      "game_name": "LION BAZAR",
+      "result_val": "56"
+    },
+    {
+      "id": 6912,
+      "record_date": "08-08",
+      "game_name": "MADHUPURI",
+      "result_val": "29"
+    },
+    {
+      "id": 6924,
+      "record_date": "08-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "66"
+    },
+    {
+      "id": 6922,
+      "record_date": "08-08",
+      "game_name": "MOHALI-7",
+      "result_val": "18"
+    },
+    {
+      "id": 6916,
+      "record_date": "08-08",
+      "game_name": "NEW GANGA",
+      "result_val": "51"
+    },
+    {
+      "id": 6920,
+      "record_date": "08-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "33"
+    },
+    {
+      "id": 7292,
+      "record_date": "08-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6601,
+      "record_date": "08-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "30"
+    },
+    {
+      "id": 9196,
+      "record_date": "08-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6605,
+      "record_date": "08-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "93"
+    },
+    {
+      "id": 6926,
+      "record_date": "08-08",
+      "game_name": "SIALKOT",
+      "result_val": "65"
+    },
+    {
+      "id": 6917,
+      "record_date": "08-08",
+      "game_name": "SKY KING",
+      "result_val": "04"
+    },
+    {
+      "id": 9211,
+      "record_date": "08-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7730,
+      "record_date": "08-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8811,
+      "record_date": "08-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6919,
+      "record_date": "08-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "72"
+    },
+    {
+      "id": 6910,
+      "record_date": "08-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "10"
+    },
+    {
+      "id": 6921,
+      "record_date": "08-08",
+      "game_name": "VIP AGRA",
+      "result_val": "81"
+    },
+    {
+      "id": 6618,
+      "record_date": "09-08",
+      "game_name": "AGRA",
+      "result_val": "39"
+    },
+    {
+      "id": 6620,
+      "record_date": "09-08",
+      "game_name": "ALWAR",
+      "result_val": "82"
+    },
+    {
+      "id": 6933,
+      "record_date": "09-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "01"
+    },
+    {
+      "id": 6943,
+      "record_date": "09-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "17"
+    },
+    {
+      "id": 9231,
+      "record_date": "09-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6948,
+      "record_date": "09-08",
+      "game_name": "DAMAN",
+      "result_val": "43"
+    },
+    {
+      "id": 6947,
+      "record_date": "09-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "18"
+    },
+    {
+      "id": 7787,
+      "record_date": "09-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6615,
+      "record_date": "09-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "89"
+    },
+    {
+      "id": 6935,
+      "record_date": "09-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "92"
+    },
+    {
+      "id": 6616,
+      "record_date": "09-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "07"
+    },
+    {
+      "id": 9229,
+      "record_date": "09-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6624,
+      "record_date": "09-08",
+      "game_name": "DISAWAR",
+      "result_val": "18"
+    },
+    {
+      "id": 6622,
+      "record_date": "09-08",
+      "game_name": "DWARKA",
+      "result_val": "95"
+    },
+    {
+      "id": 6619,
+      "record_date": "09-08",
+      "game_name": "FARIDABAD",
       "result_val": "63"
     },
     {
-      "record_date": "2026-08-23",
+      "id": 6938,
+      "record_date": "09-08",
+      "game_name": "FATEHABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 6623,
+      "record_date": "09-08",
+      "game_name": "GALI",
+      "result_val": "97"
+    },
+    {
+      "id": 6621,
+      "record_date": "09-08",
+      "game_name": "GAZIABAD",
+      "result_val": "53"
+    },
+    {
+      "id": 7964,
+      "record_date": "09-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9214,
+      "record_date": "09-08",
+      "game_name": "GP",
+      "result_val": "78"
+    },
+    {
+      "id": 9218,
+      "record_date": "09-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6614,
+      "record_date": "09-08",
+      "game_name": "GWALIOR",
+      "result_val": "87"
+    },
+    {
+      "id": 6929,
+      "record_date": "09-08",
+      "game_name": "HR SATTA",
+      "result_val": "66"
+    },
+    {
+      "id": 6934,
+      "record_date": "09-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "70"
+    },
+    {
+      "id": 6931,
+      "record_date": "09-08",
+      "game_name": "KKR CITY",
+      "result_val": "52"
+    },
+    {
+      "id": 7224,
+      "record_date": "09-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "14"
+    },
+    {
+      "id": 6945,
+      "record_date": "09-08",
+      "game_name": "LION BAZAR",
+      "result_val": "77"
+    },
+    {
+      "id": 6932,
+      "record_date": "09-08",
+      "game_name": "MADHUPURI",
+      "result_val": "01"
+    },
+    {
+      "id": 6944,
+      "record_date": "09-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "74"
+    },
+    {
+      "id": 6942,
+      "record_date": "09-08",
+      "game_name": "MOHALI-7",
+      "result_val": "22"
+    },
+    {
+      "id": 6936,
+      "record_date": "09-08",
+      "game_name": "NEW GANGA",
+      "result_val": "74"
+    },
+    {
+      "id": 6940,
+      "record_date": "09-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "78"
+    },
+    {
+      "id": 7296,
+      "record_date": "09-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6613,
+      "record_date": "09-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "78"
+    },
+    {
+      "id": 9215,
+      "record_date": "09-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6617,
+      "record_date": "09-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "74"
+    },
+    {
+      "id": 6946,
+      "record_date": "09-08",
+      "game_name": "SIALKOT",
+      "result_val": "03"
+    },
+    {
+      "id": 6937,
+      "record_date": "09-08",
+      "game_name": "SKY KING",
+      "result_val": "08"
+    },
+    {
+      "id": 9230,
+      "record_date": "09-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7790,
+      "record_date": "09-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8812,
+      "record_date": "09-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6939,
+      "record_date": "09-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "79"
+    },
+    {
+      "id": 6930,
+      "record_date": "09-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "82"
+    },
+    {
+      "id": 6941,
+      "record_date": "09-08",
+      "game_name": "VIP AGRA",
+      "result_val": "63"
+    },
+    {
+      "id": 6630,
+      "record_date": "10-08",
+      "game_name": "AGRA",
+      "result_val": "28"
+    },
+    {
+      "id": 6632,
+      "record_date": "10-08",
+      "game_name": "ALWAR",
+      "result_val": "50"
+    },
+    {
+      "id": 6953,
+      "record_date": "10-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "61"
+    },
+    {
+      "id": 6963,
+      "record_date": "10-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "10"
+    },
+    {
+      "id": 9250,
+      "record_date": "10-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6968,
+      "record_date": "10-08",
+      "game_name": "DAMAN",
+      "result_val": "96"
+    },
+    {
+      "id": 6967,
+      "record_date": "10-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "29"
+    },
+    {
+      "id": 9238,
+      "record_date": "10-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6627,
+      "record_date": "10-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "85"
+    },
+    {
+      "id": 6955,
+      "record_date": "10-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "73"
+    },
+    {
+      "id": 6628,
+      "record_date": "10-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "59"
+    },
+    {
+      "id": 9248,
+      "record_date": "10-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6636,
+      "record_date": "10-08",
+      "game_name": "DISAWAR",
+      "result_val": "64"
+    },
+    {
+      "id": 6634,
+      "record_date": "10-08",
+      "game_name": "DWARKA",
+      "result_val": "97"
+    },
+    {
+      "id": 6631,
+      "record_date": "10-08",
+      "game_name": "FARIDABAD",
+      "result_val": "58"
+    },
+    {
+      "id": 6958,
+      "record_date": "10-08",
+      "game_name": "FATEHABAD",
+      "result_val": "84"
+    },
+    {
+      "id": 6635,
+      "record_date": "10-08",
+      "game_name": "GALI",
+      "result_val": "57"
+    },
+    {
+      "id": 6633,
+      "record_date": "10-08",
+      "game_name": "GAZIABAD",
+      "result_val": "69"
+    },
+    {
+      "id": 7976,
+      "record_date": "10-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9233,
+      "record_date": "10-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9237,
+      "record_date": "10-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6626,
+      "record_date": "10-08",
+      "game_name": "GWALIOR",
+      "result_val": "61"
+    },
+    {
+      "id": 6949,
+      "record_date": "10-08",
+      "game_name": "HR SATTA",
+      "result_val": "80"
+    },
+    {
+      "id": 6954,
+      "record_date": "10-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "69"
+    },
+    {
+      "id": 6951,
+      "record_date": "10-08",
+      "game_name": "KKR CITY",
+      "result_val": "30"
+    },
+    {
+      "id": 8351,
+      "record_date": "10-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "90"
+    },
+    {
+      "id": 6965,
+      "record_date": "10-08",
+      "game_name": "LION BAZAR",
+      "result_val": "91"
+    },
+    {
+      "id": 6952,
+      "record_date": "10-08",
+      "game_name": "MADHUPURI",
+      "result_val": "36"
+    },
+    {
+      "id": 6964,
+      "record_date": "10-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "80"
+    },
+    {
+      "id": 6962,
+      "record_date": "10-08",
+      "game_name": "MOHALI-7",
+      "result_val": "17"
+    },
+    {
+      "id": 6956,
+      "record_date": "10-08",
+      "game_name": "NEW GANGA",
+      "result_val": "24"
+    },
+    {
+      "id": 6960,
+      "record_date": "10-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "80"
+    },
+    {
+      "id": 7299,
+      "record_date": "10-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6625,
+      "record_date": "10-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "48"
+    },
+    {
+      "id": 9234,
+      "record_date": "10-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6629,
+      "record_date": "10-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "64"
+    },
+    {
+      "id": 6966,
+      "record_date": "10-08",
+      "game_name": "SIALKOT",
+      "result_val": "55"
+    },
+    {
+      "id": 6957,
+      "record_date": "10-08",
+      "game_name": "SKY KING",
+      "result_val": "53"
+    },
+    {
+      "id": 9249,
+      "record_date": "10-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8813,
+      "record_date": "10-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6959,
+      "record_date": "10-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "12"
+    },
+    {
+      "id": 6950,
+      "record_date": "10-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "81"
+    },
+    {
+      "id": 6961,
+      "record_date": "10-08",
+      "game_name": "VIP AGRA",
+      "result_val": "87"
+    },
+    {
+      "id": 6642,
+      "record_date": "11-08",
+      "game_name": "AGRA",
+      "result_val": "24"
+    },
+    {
+      "id": 6644,
+      "record_date": "11-08",
+      "game_name": "ALWAR",
+      "result_val": "74"
+    },
+    {
+      "id": 6973,
+      "record_date": "11-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "61"
+    },
+    {
+      "id": 6983,
+      "record_date": "11-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "87"
+    },
+    {
+      "id": 9269,
+      "record_date": "11-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6988,
+      "record_date": "11-08",
+      "game_name": "DAMAN",
+      "result_val": "86"
+    },
+    {
+      "id": 6987,
+      "record_date": "11-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "16"
+    },
+    {
+      "id": 9257,
+      "record_date": "11-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6639,
+      "record_date": "11-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "78"
+    },
+    {
+      "id": 6975,
+      "record_date": "11-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "41"
+    },
+    {
+      "id": 6640,
+      "record_date": "11-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "82"
+    },
+    {
+      "id": 9267,
+      "record_date": "11-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6648,
+      "record_date": "11-08",
       "game_name": "DISAWAR",
       "result_val": "88"
+    },
+    {
+      "id": 6646,
+      "record_date": "11-08",
+      "game_name": "DWARKA",
+      "result_val": "41"
+    },
+    {
+      "id": 6643,
+      "record_date": "11-08",
+      "game_name": "FARIDABAD",
+      "result_val": "58"
+    },
+    {
+      "id": 6978,
+      "record_date": "11-08",
+      "game_name": "FATEHABAD",
+      "result_val": "85"
+    },
+    {
+      "id": 6647,
+      "record_date": "11-08",
+      "game_name": "GALI",
+      "result_val": "92"
+    },
+    {
+      "id": 6645,
+      "record_date": "11-08",
+      "game_name": "GAZIABAD",
+      "result_val": "31"
+    },
+    {
+      "id": 7988,
+      "record_date": "11-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9252,
+      "record_date": "11-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9256,
+      "record_date": "11-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6638,
+      "record_date": "11-08",
+      "game_name": "GWALIOR",
+      "result_val": "89"
+    },
+    {
+      "id": 6969,
+      "record_date": "11-08",
+      "game_name": "HR SATTA",
+      "result_val": "11"
+    },
+    {
+      "id": 6974,
+      "record_date": "11-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "55"
+    },
+    {
+      "id": 6971,
+      "record_date": "11-08",
+      "game_name": "KKR CITY",
+      "result_val": "01"
+    },
+    {
+      "id": 8363,
+      "record_date": "11-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "71"
+    },
+    {
+      "id": 6985,
+      "record_date": "11-08",
+      "game_name": "LION BAZAR",
+      "result_val": "85"
+    },
+    {
+      "id": 6972,
+      "record_date": "11-08",
+      "game_name": "MADHUPURI",
+      "result_val": "36"
+    },
+    {
+      "id": 6984,
+      "record_date": "11-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "01"
+    },
+    {
+      "id": 6982,
+      "record_date": "11-08",
+      "game_name": "MOHALI-7",
+      "result_val": "00"
+    },
+    {
+      "id": 6976,
+      "record_date": "11-08",
+      "game_name": "NEW GANGA",
+      "result_val": "95"
+    },
+    {
+      "id": 6980,
+      "record_date": "11-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "83"
+    },
+    {
+      "id": 7303,
+      "record_date": "11-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6637,
+      "record_date": "11-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "22"
+    },
+    {
+      "id": 9253,
+      "record_date": "11-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6641,
+      "record_date": "11-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "30"
+    },
+    {
+      "id": 6986,
+      "record_date": "11-08",
+      "game_name": "SIALKOT",
+      "result_val": "70"
+    },
+    {
+      "id": 6977,
+      "record_date": "11-08",
+      "game_name": "SKY KING",
+      "result_val": "67"
+    },
+    {
+      "id": 9268,
+      "record_date": "11-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8814,
+      "record_date": "11-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6979,
+      "record_date": "11-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "92"
+    },
+    {
+      "id": 6970,
+      "record_date": "11-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "43"
+    },
+    {
+      "id": 6981,
+      "record_date": "11-08",
+      "game_name": "VIP AGRA",
+      "result_val": "65"
+    },
+    {
+      "id": 6654,
+      "record_date": "12-08",
+      "game_name": "AGRA",
+      "result_val": "25"
+    },
+    {
+      "id": 6656,
+      "record_date": "12-08",
+      "game_name": "ALWAR",
+      "result_val": "90"
+    },
+    {
+      "id": 6993,
+      "record_date": "12-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "51"
+    },
+    {
+      "id": 7003,
+      "record_date": "12-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "76"
+    },
+    {
+      "id": 9288,
+      "record_date": "12-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7008,
+      "record_date": "12-08",
+      "game_name": "DAMAN",
+      "result_val": "49"
+    },
+    {
+      "id": 7007,
+      "record_date": "12-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "70"
+    },
+    {
+      "id": 9276,
+      "record_date": "12-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6651,
+      "record_date": "12-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "94"
+    },
+    {
+      "id": 6995,
+      "record_date": "12-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "50"
+    },
+    {
+      "id": 6652,
+      "record_date": "12-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "14"
+    },
+    {
+      "id": 9286,
+      "record_date": "12-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6660,
+      "record_date": "12-08",
+      "game_name": "DISAWAR",
+      "result_val": "19"
+    },
+    {
+      "id": 6658,
+      "record_date": "12-08",
+      "game_name": "DWARKA",
+      "result_val": "21"
+    },
+    {
+      "id": 6655,
+      "record_date": "12-08",
+      "game_name": "FARIDABAD",
+      "result_val": "75"
+    },
+    {
+      "id": 6998,
+      "record_date": "12-08",
+      "game_name": "FATEHABAD",
+      "result_val": "57"
+    },
+    {
+      "id": 6659,
+      "record_date": "12-08",
+      "game_name": "GALI",
+      "result_val": "36"
+    },
+    {
+      "id": 6657,
+      "record_date": "12-08",
+      "game_name": "GAZIABAD",
+      "result_val": "63"
+    },
+    {
+      "id": 8000,
+      "record_date": "12-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9271,
+      "record_date": "12-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9275,
+      "record_date": "12-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6650,
+      "record_date": "12-08",
+      "game_name": "GWALIOR",
+      "result_val": "29"
+    },
+    {
+      "id": 6989,
+      "record_date": "12-08",
+      "game_name": "HR SATTA",
+      "result_val": "81"
+    },
+    {
+      "id": 6994,
+      "record_date": "12-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "13"
+    },
+    {
+      "id": 6991,
+      "record_date": "12-08",
+      "game_name": "KKR CITY",
+      "result_val": "11"
+    },
+    {
+      "id": 8375,
+      "record_date": "12-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "28"
+    },
+    {
+      "id": 7005,
+      "record_date": "12-08",
+      "game_name": "LION BAZAR",
+      "result_val": "68"
+    },
+    {
+      "id": 6992,
+      "record_date": "12-08",
+      "game_name": "MADHUPURI",
+      "result_val": "21"
+    },
+    {
+      "id": 7004,
+      "record_date": "12-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "08"
+    },
+    {
+      "id": 7002,
+      "record_date": "12-08",
+      "game_name": "MOHALI-7",
+      "result_val": "38"
+    },
+    {
+      "id": 6996,
+      "record_date": "12-08",
+      "game_name": "NEW GANGA",
+      "result_val": "44"
+    },
+    {
+      "id": 7000,
+      "record_date": "12-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "10"
+    },
+    {
+      "id": 6649,
+      "record_date": "12-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "74"
+    },
+    {
+      "id": 9272,
+      "record_date": "12-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6653,
+      "record_date": "12-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "41"
+    },
+    {
+      "id": 7006,
+      "record_date": "12-08",
+      "game_name": "SIALKOT",
+      "result_val": "49"
+    },
+    {
+      "id": 6997,
+      "record_date": "12-08",
+      "game_name": "SKY KING",
+      "result_val": "34"
+    },
+    {
+      "id": 9287,
+      "record_date": "12-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8815,
+      "record_date": "12-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 6999,
+      "record_date": "12-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "61"
+    },
+    {
+      "id": 6990,
+      "record_date": "12-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "10"
+    },
+    {
+      "id": 7001,
+      "record_date": "12-08",
+      "game_name": "VIP AGRA",
+      "result_val": "61"
+    },
+    {
+      "id": 6666,
+      "record_date": "13-08",
+      "game_name": "AGRA",
+      "result_val": "30"
+    },
+    {
+      "id": 6668,
+      "record_date": "13-08",
+      "game_name": "ALWAR",
+      "result_val": "51"
+    },
+    {
+      "id": 7013,
+      "record_date": "13-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "21"
+    },
+    {
+      "id": 7023,
+      "record_date": "13-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "62"
+    },
+    {
+      "id": 9307,
+      "record_date": "13-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7028,
+      "record_date": "13-08",
+      "game_name": "DAMAN",
+      "result_val": "12"
+    },
+    {
+      "id": 7027,
+      "record_date": "13-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "93"
+    },
+    {
+      "id": 9295,
+      "record_date": "13-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6663,
+      "record_date": "13-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "40"
+    },
+    {
+      "id": 7015,
+      "record_date": "13-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "52"
+    },
+    {
+      "id": 6664,
+      "record_date": "13-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "34"
+    },
+    {
+      "id": 9305,
+      "record_date": "13-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6672,
+      "record_date": "13-08",
+      "game_name": "DISAWAR",
+      "result_val": "79"
+    },
+    {
+      "id": 6670,
+      "record_date": "13-08",
+      "game_name": "DWARKA",
+      "result_val": "52"
+    },
+    {
+      "id": 6667,
+      "record_date": "13-08",
+      "game_name": "FARIDABAD",
+      "result_val": "54"
+    },
+    {
+      "id": 7018,
+      "record_date": "13-08",
+      "game_name": "FATEHABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 6671,
+      "record_date": "13-08",
+      "game_name": "GALI",
+      "result_val": "61"
+    },
+    {
+      "id": 6669,
+      "record_date": "13-08",
+      "game_name": "GAZIABAD",
+      "result_val": "79"
+    },
+    {
+      "id": 8012,
+      "record_date": "13-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9290,
+      "record_date": "13-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9294,
+      "record_date": "13-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6662,
+      "record_date": "13-08",
+      "game_name": "GWALIOR",
+      "result_val": "98"
+    },
+    {
+      "id": 7009,
+      "record_date": "13-08",
+      "game_name": "HR SATTA",
+      "result_val": "35"
+    },
+    {
+      "id": 7014,
+      "record_date": "13-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "10"
+    },
+    {
+      "id": 7011,
+      "record_date": "13-08",
+      "game_name": "KKR CITY",
+      "result_val": "92"
+    },
+    {
+      "id": 8387,
+      "record_date": "13-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "09"
+    },
+    {
+      "id": 7025,
+      "record_date": "13-08",
+      "game_name": "LION BAZAR",
+      "result_val": "39"
+    },
+    {
+      "id": 7012,
+      "record_date": "13-08",
+      "game_name": "MADHUPURI",
+      "result_val": "91"
+    },
+    {
+      "id": 7024,
+      "record_date": "13-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "61"
+    },
+    {
+      "id": 7022,
+      "record_date": "13-08",
+      "game_name": "MOHALI-7",
+      "result_val": "40"
+    },
+    {
+      "id": 7016,
+      "record_date": "13-08",
+      "game_name": "NEW GANGA",
+      "result_val": "92"
+    },
+    {
+      "id": 7020,
+      "record_date": "13-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "50"
+    },
+    {
+      "id": 7307,
+      "record_date": "13-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6661,
+      "record_date": "13-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "75"
+    },
+    {
+      "id": 9291,
+      "record_date": "13-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6665,
+      "record_date": "13-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "34"
+    },
+    {
+      "id": 7026,
+      "record_date": "13-08",
+      "game_name": "SIALKOT",
+      "result_val": "10"
+    },
+    {
+      "id": 7017,
+      "record_date": "13-08",
+      "game_name": "SKY KING",
+      "result_val": "73"
+    },
+    {
+      "id": 9306,
+      "record_date": "13-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8816,
+      "record_date": "13-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "67"
+    },
+    {
+      "id": 7019,
+      "record_date": "13-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "28"
+    },
+    {
+      "id": 7010,
+      "record_date": "13-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "59"
+    },
+    {
+      "id": 7021,
+      "record_date": "13-08",
+      "game_name": "VIP AGRA",
+      "result_val": "08"
+    },
+    {
+      "id": 6678,
+      "record_date": "14-08",
+      "game_name": "AGRA",
+      "result_val": "38"
+    },
+    {
+      "id": 6680,
+      "record_date": "14-08",
+      "game_name": "ALWAR",
+      "result_val": "87"
+    },
+    {
+      "id": 7033,
+      "record_date": "14-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "43"
+    },
+    {
+      "id": 7043,
+      "record_date": "14-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "05"
+    },
+    {
+      "id": 9326,
+      "record_date": "14-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7048,
+      "record_date": "14-08",
+      "game_name": "DAMAN",
+      "result_val": "64"
+    },
+    {
+      "id": 7047,
+      "record_date": "14-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "60"
+    },
+    {
+      "id": 9314,
+      "record_date": "14-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6675,
+      "record_date": "14-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "69"
+    },
+    {
+      "id": 7035,
+      "record_date": "14-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "20"
+    },
+    {
+      "id": 6676,
+      "record_date": "14-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "81"
+    },
+    {
+      "id": 9324,
+      "record_date": "14-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6684,
+      "record_date": "14-08",
+      "game_name": "DISAWAR",
+      "result_val": "12"
+    },
+    {
+      "id": 6682,
+      "record_date": "14-08",
+      "game_name": "DWARKA",
+      "result_val": "32"
+    },
+    {
+      "id": 6679,
+      "record_date": "14-08",
+      "game_name": "FARIDABAD",
+      "result_val": "49"
+    },
+    {
+      "id": 7038,
+      "record_date": "14-08",
+      "game_name": "FATEHABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 6683,
+      "record_date": "14-08",
+      "game_name": "GALI",
+      "result_val": "71"
+    },
+    {
+      "id": 6681,
+      "record_date": "14-08",
+      "game_name": "GAZIABAD",
+      "result_val": "38"
+    },
+    {
+      "id": 8024,
+      "record_date": "14-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9309,
+      "record_date": "14-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9313,
+      "record_date": "14-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6674,
+      "record_date": "14-08",
+      "game_name": "GWALIOR",
+      "result_val": "03"
+    },
+    {
+      "id": 7029,
+      "record_date": "14-08",
+      "game_name": "HR SATTA",
+      "result_val": "47"
+    },
+    {
+      "id": 7034,
+      "record_date": "14-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "62"
+    },
+    {
+      "id": 7031,
+      "record_date": "14-08",
+      "game_name": "KKR CITY",
+      "result_val": "90"
+    },
+    {
+      "id": 8399,
+      "record_date": "14-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "52"
+    },
+    {
+      "id": 7045,
+      "record_date": "14-08",
+      "game_name": "LION BAZAR",
+      "result_val": "96"
+    },
+    {
+      "id": 7032,
+      "record_date": "14-08",
+      "game_name": "MADHUPURI",
+      "result_val": "96"
+    },
+    {
+      "id": 7044,
+      "record_date": "14-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "74"
+    },
+    {
+      "id": 7042,
+      "record_date": "14-08",
+      "game_name": "MOHALI-7",
+      "result_val": "28"
+    },
+    {
+      "id": 7036,
+      "record_date": "14-08",
+      "game_name": "NEW GANGA",
+      "result_val": "48"
+    },
+    {
+      "id": 7040,
+      "record_date": "14-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "42"
+    },
+    {
+      "id": 7310,
+      "record_date": "14-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6673,
+      "record_date": "14-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "04"
+    },
+    {
+      "id": 9310,
+      "record_date": "14-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6677,
+      "record_date": "14-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "02"
+    },
+    {
+      "id": 7046,
+      "record_date": "14-08",
+      "game_name": "SIALKOT",
+      "result_val": "55"
+    },
+    {
+      "id": 7037,
+      "record_date": "14-08",
+      "game_name": "SKY KING",
+      "result_val": "13"
+    },
+    {
+      "id": 9325,
+      "record_date": "14-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8817,
+      "record_date": "14-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7039,
+      "record_date": "14-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "42"
+    },
+    {
+      "id": 7030,
+      "record_date": "14-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "17"
+    },
+    {
+      "id": 7041,
+      "record_date": "14-08",
+      "game_name": "VIP AGRA",
+      "result_val": "30"
+    },
+    {
+      "id": 6690,
+      "record_date": "15-08",
+      "game_name": "AGRA",
+      "result_val": "88"
+    },
+    {
+      "id": 6692,
+      "record_date": "15-08",
+      "game_name": "ALWAR",
+      "result_val": "29"
+    },
+    {
+      "id": 7053,
+      "record_date": "15-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "01"
+    },
+    {
+      "id": 7063,
+      "record_date": "15-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "91"
+    },
+    {
+      "id": 9345,
+      "record_date": "15-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7068,
+      "record_date": "15-08",
+      "game_name": "DAMAN",
+      "result_val": "25"
+    },
+    {
+      "id": 7067,
+      "record_date": "15-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "48"
+    },
+    {
+      "id": 9333,
+      "record_date": "15-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6687,
+      "record_date": "15-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "10"
+    },
+    {
+      "id": 7055,
+      "record_date": "15-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "53"
+    },
+    {
+      "id": 6688,
+      "record_date": "15-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "70"
+    },
+    {
+      "id": 9343,
+      "record_date": "15-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6696,
+      "record_date": "15-08",
+      "game_name": "DISAWAR",
+      "result_val": "49"
+    },
+    {
+      "id": 6694,
+      "record_date": "15-08",
+      "game_name": "DWARKA",
+      "result_val": "85"
+    },
+    {
+      "id": 6691,
+      "record_date": "15-08",
+      "game_name": "FARIDABAD",
+      "result_val": "58"
+    },
+    {
+      "id": 7058,
+      "record_date": "15-08",
+      "game_name": "FATEHABAD",
+      "result_val": "80"
+    },
+    {
+      "id": 6695,
+      "record_date": "15-08",
+      "game_name": "GALI",
+      "result_val": "71"
+    },
+    {
+      "id": 6693,
+      "record_date": "15-08",
+      "game_name": "GAZIABAD",
+      "result_val": "40"
+    },
+    {
+      "id": 8036,
+      "record_date": "15-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9328,
+      "record_date": "15-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9332,
+      "record_date": "15-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6686,
+      "record_date": "15-08",
+      "game_name": "GWALIOR",
+      "result_val": "43"
+    },
+    {
+      "id": 7049,
+      "record_date": "15-08",
+      "game_name": "HR SATTA",
+      "result_val": "55"
+    },
+    {
+      "id": 7054,
+      "record_date": "15-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "65"
+    },
+    {
+      "id": 7051,
+      "record_date": "15-08",
+      "game_name": "KKR CITY",
+      "result_val": "68"
+    },
+    {
+      "id": 8411,
+      "record_date": "15-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "17"
+    },
+    {
+      "id": 7065,
+      "record_date": "15-08",
+      "game_name": "LION BAZAR",
+      "result_val": "14"
+    },
+    {
+      "id": 7052,
+      "record_date": "15-08",
+      "game_name": "MADHUPURI",
+      "result_val": "26"
+    },
+    {
+      "id": 7064,
+      "record_date": "15-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "41"
+    },
+    {
+      "id": 7062,
+      "record_date": "15-08",
+      "game_name": "MOHALI-7",
+      "result_val": "31"
+    },
+    {
+      "id": 7056,
+      "record_date": "15-08",
+      "game_name": "NEW GANGA",
+      "result_val": "57"
+    },
+    {
+      "id": 7060,
+      "record_date": "15-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "57"
+    },
+    {
+      "id": 7314,
+      "record_date": "15-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6685,
+      "record_date": "15-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "79"
+    },
+    {
+      "id": 9329,
+      "record_date": "15-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6689,
+      "record_date": "15-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "23"
+    },
+    {
+      "id": 7066,
+      "record_date": "15-08",
+      "game_name": "SIALKOT",
+      "result_val": "95"
+    },
+    {
+      "id": 7057,
+      "record_date": "15-08",
+      "game_name": "SKY KING",
+      "result_val": "53"
+    },
+    {
+      "id": 9344,
+      "record_date": "15-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8818,
+      "record_date": "15-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7059,
+      "record_date": "15-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "53"
+    },
+    {
+      "id": 7050,
+      "record_date": "15-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "74"
+    },
+    {
+      "id": 7061,
+      "record_date": "15-08",
+      "game_name": "VIP AGRA",
+      "result_val": "51"
+    },
+    {
+      "id": 6702,
+      "record_date": "16-08",
+      "game_name": "AGRA",
+      "result_val": "40"
+    },
+    {
+      "id": 6704,
+      "record_date": "16-08",
+      "game_name": "ALWAR",
+      "result_val": "23"
+    },
+    {
+      "id": 7073,
+      "record_date": "16-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "29"
+    },
+    {
+      "id": 7083,
+      "record_date": "16-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "92"
+    },
+    {
+      "id": 9364,
+      "record_date": "16-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7088,
+      "record_date": "16-08",
+      "game_name": "DAMAN",
+      "result_val": "55"
+    },
+    {
+      "id": 7087,
+      "record_date": "16-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "29"
+    },
+    {
+      "id": 9352,
+      "record_date": "16-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6699,
+      "record_date": "16-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "34"
+    },
+    {
+      "id": 7075,
+      "record_date": "16-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "62"
+    },
+    {
+      "id": 6700,
+      "record_date": "16-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "21"
+    },
+    {
+      "id": 9362,
+      "record_date": "16-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6708,
+      "record_date": "16-08",
+      "game_name": "DISAWAR",
+      "result_val": "57"
+    },
+    {
+      "id": 6706,
+      "record_date": "16-08",
+      "game_name": "DWARKA",
+      "result_val": "19"
+    },
+    {
+      "id": 6703,
+      "record_date": "16-08",
+      "game_name": "FARIDABAD",
+      "result_val": "90"
+    },
+    {
+      "id": 7078,
+      "record_date": "16-08",
+      "game_name": "FATEHABAD",
+      "result_val": "92"
+    },
+    {
+      "id": 6707,
+      "record_date": "16-08",
+      "game_name": "GALI",
+      "result_val": "59"
+    },
+    {
+      "id": 6705,
+      "record_date": "16-08",
+      "game_name": "GAZIABAD",
+      "result_val": "99"
+    },
+    {
+      "id": 8048,
+      "record_date": "16-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9347,
+      "record_date": "16-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9351,
+      "record_date": "16-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6698,
+      "record_date": "16-08",
+      "game_name": "GWALIOR",
+      "result_val": "70"
+    },
+    {
+      "id": 7069,
+      "record_date": "16-08",
+      "game_name": "HR SATTA",
+      "result_val": "10"
+    },
+    {
+      "id": 7074,
+      "record_date": "16-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "26"
+    },
+    {
+      "id": 7071,
+      "record_date": "16-08",
+      "game_name": "KKR CITY",
+      "result_val": "57"
+    },
+    {
+      "id": 8423,
+      "record_date": "16-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "16"
+    },
+    {
+      "id": 7085,
+      "record_date": "16-08",
+      "game_name": "LION BAZAR",
+      "result_val": "89"
+    },
+    {
+      "id": 7072,
+      "record_date": "16-08",
+      "game_name": "MADHUPURI",
+      "result_val": "36"
+    },
+    {
+      "id": 7084,
+      "record_date": "16-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "54"
+    },
+    {
+      "id": 7082,
+      "record_date": "16-08",
+      "game_name": "MOHALI-7",
+      "result_val": "01"
+    },
+    {
+      "id": 7076,
+      "record_date": "16-08",
+      "game_name": "NEW GANGA",
+      "result_val": "74"
+    },
+    {
+      "id": 7080,
+      "record_date": "16-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "01"
+    },
+    {
+      "id": 7319,
+      "record_date": "16-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6697,
+      "record_date": "16-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "36"
+    },
+    {
+      "id": 9348,
+      "record_date": "16-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6701,
+      "record_date": "16-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "53"
+    },
+    {
+      "id": 7086,
+      "record_date": "16-08",
+      "game_name": "SIALKOT",
+      "result_val": "03"
+    },
+    {
+      "id": 7077,
+      "record_date": "16-08",
+      "game_name": "SKY KING",
+      "result_val": "99"
+    },
+    {
+      "id": 9363,
+      "record_date": "16-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8819,
+      "record_date": "16-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7079,
+      "record_date": "16-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "94"
+    },
+    {
+      "id": 7070,
+      "record_date": "16-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "89"
+    },
+    {
+      "id": 7081,
+      "record_date": "16-08",
+      "game_name": "VIP AGRA",
+      "result_val": "49"
+    },
+    {
+      "id": 6714,
+      "record_date": "17-08",
+      "game_name": "AGRA",
+      "result_val": "74"
+    },
+    {
+      "id": 6716,
+      "record_date": "17-08",
+      "game_name": "ALWAR",
+      "result_val": "55"
+    },
+    {
+      "id": 7093,
+      "record_date": "17-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "24"
+    },
+    {
+      "id": 7103,
+      "record_date": "17-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "17"
+    },
+    {
+      "id": 9383,
+      "record_date": "17-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7108,
+      "record_date": "17-08",
+      "game_name": "DAMAN",
+      "result_val": "35"
+    },
+    {
+      "id": 7107,
+      "record_date": "17-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "49"
+    },
+    {
+      "id": 9371,
+      "record_date": "17-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6711,
+      "record_date": "17-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "01"
+    },
+    {
+      "id": 7095,
+      "record_date": "17-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "57"
+    },
+    {
+      "id": 6712,
+      "record_date": "17-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "24"
+    },
+    {
+      "id": 9381,
+      "record_date": "17-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6720,
+      "record_date": "17-08",
+      "game_name": "DISAWAR",
+      "result_val": "40"
+    },
+    {
+      "id": 6718,
+      "record_date": "17-08",
+      "game_name": "DWARKA",
+      "result_val": "96"
+    },
+    {
+      "id": 6715,
+      "record_date": "17-08",
+      "game_name": "FARIDABAD",
+      "result_val": "46"
+    },
+    {
+      "id": 7098,
+      "record_date": "17-08",
+      "game_name": "FATEHABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 6719,
+      "record_date": "17-08",
+      "game_name": "GALI",
+      "result_val": "15"
+    },
+    {
+      "id": 6717,
+      "record_date": "17-08",
+      "game_name": "GAZIABAD",
+      "result_val": "20"
+    },
+    {
+      "id": 8060,
+      "record_date": "17-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9366,
+      "record_date": "17-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9370,
+      "record_date": "17-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6710,
+      "record_date": "17-08",
+      "game_name": "GWALIOR",
+      "result_val": "15"
+    },
+    {
+      "id": 7089,
+      "record_date": "17-08",
+      "game_name": "HR SATTA",
+      "result_val": "00"
+    },
+    {
+      "id": 7094,
+      "record_date": "17-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "66"
+    },
+    {
+      "id": 7091,
+      "record_date": "17-08",
+      "game_name": "KKR CITY",
+      "result_val": "63"
+    },
+    {
+      "id": 8435,
+      "record_date": "17-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "18"
+    },
+    {
+      "id": 7105,
+      "record_date": "17-08",
+      "game_name": "LION BAZAR",
+      "result_val": "58"
+    },
+    {
+      "id": 7092,
+      "record_date": "17-08",
+      "game_name": "MADHUPURI",
+      "result_val": "78"
+    },
+    {
+      "id": 7104,
+      "record_date": "17-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "50"
+    },
+    {
+      "id": 7102,
+      "record_date": "17-08",
+      "game_name": "MOHALI-7",
+      "result_val": "24"
+    },
+    {
+      "id": 7096,
+      "record_date": "17-08",
+      "game_name": "NEW GANGA",
+      "result_val": "81"
+    },
+    {
+      "id": 7100,
+      "record_date": "17-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "90"
+    },
+    {
+      "id": 7323,
+      "record_date": "17-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6709,
+      "record_date": "17-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "61"
+    },
+    {
+      "id": 9367,
+      "record_date": "17-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6713,
+      "record_date": "17-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "12"
+    },
+    {
+      "id": 7106,
+      "record_date": "17-08",
+      "game_name": "SIALKOT",
+      "result_val": "00"
+    },
+    {
+      "id": 7097,
+      "record_date": "17-08",
+      "game_name": "SKY KING",
+      "result_val": "59"
+    },
+    {
+      "id": 9382,
+      "record_date": "17-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8820,
+      "record_date": "17-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7099,
+      "record_date": "17-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "08"
+    },
+    {
+      "id": 7090,
+      "record_date": "17-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "34"
+    },
+    {
+      "id": 7101,
+      "record_date": "17-08",
+      "game_name": "VIP AGRA",
+      "result_val": "35"
+    },
+    {
+      "id": 6726,
+      "record_date": "18-08",
+      "game_name": "AGRA",
+      "result_val": "61"
+    },
+    {
+      "id": 6728,
+      "record_date": "18-08",
+      "game_name": "ALWAR",
+      "result_val": "51"
+    },
+    {
+      "id": 7113,
+      "record_date": "18-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "69"
+    },
+    {
+      "id": 7123,
+      "record_date": "18-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "10"
+    },
+    {
+      "id": 9402,
+      "record_date": "18-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7128,
+      "record_date": "18-08",
+      "game_name": "DAMAN",
+      "result_val": "65"
+    },
+    {
+      "id": 7127,
+      "record_date": "18-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "16"
+    },
+    {
+      "id": 9390,
+      "record_date": "18-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6723,
+      "record_date": "18-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "01"
+    },
+    {
+      "id": 7115,
+      "record_date": "18-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "41"
+    },
+    {
+      "id": 6724,
+      "record_date": "18-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "76"
+    },
+    {
+      "id": 9400,
+      "record_date": "18-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6732,
+      "record_date": "18-08",
+      "game_name": "DISAWAR",
+      "result_val": "29"
+    },
+    {
+      "id": 6730,
+      "record_date": "18-08",
+      "game_name": "DWARKA",
+      "result_val": "33"
+    },
+    {
+      "id": 6727,
+      "record_date": "18-08",
+      "game_name": "FARIDABAD",
+      "result_val": "22"
+    },
+    {
+      "id": 7118,
+      "record_date": "18-08",
+      "game_name": "FATEHABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 6731,
+      "record_date": "18-08",
+      "game_name": "GALI",
+      "result_val": "88"
+    },
+    {
+      "id": 6729,
+      "record_date": "18-08",
+      "game_name": "GAZIABAD",
+      "result_val": "32"
+    },
+    {
+      "id": 8072,
+      "record_date": "18-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9385,
+      "record_date": "18-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9389,
+      "record_date": "18-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6722,
+      "record_date": "18-08",
+      "game_name": "GWALIOR",
+      "result_val": "73"
+    },
+    {
+      "id": 7109,
+      "record_date": "18-08",
+      "game_name": "HR SATTA",
+      "result_val": "29"
+    },
+    {
+      "id": 7114,
+      "record_date": "18-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "81"
+    },
+    {
+      "id": 7111,
+      "record_date": "18-08",
+      "game_name": "KKR CITY",
+      "result_val": "21"
+    },
+    {
+      "id": 8447,
+      "record_date": "18-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "89"
+    },
+    {
+      "id": 7125,
+      "record_date": "18-08",
+      "game_name": "LION BAZAR",
+      "result_val": "13"
+    },
+    {
+      "id": 7112,
+      "record_date": "18-08",
+      "game_name": "MADHUPURI",
+      "result_val": "73"
+    },
+    {
+      "id": 7124,
+      "record_date": "18-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "92"
+    },
+    {
+      "id": 7122,
+      "record_date": "18-08",
+      "game_name": "MOHALI-7",
+      "result_val": "99"
+    },
+    {
+      "id": 7116,
+      "record_date": "18-08",
+      "game_name": "NEW GANGA",
+      "result_val": "72"
+    },
+    {
+      "id": 7120,
+      "record_date": "18-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "11"
+    },
+    {
+      "id": 7327,
+      "record_date": "18-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 6721,
+      "record_date": "18-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "14"
+    },
+    {
+      "id": 9386,
+      "record_date": "18-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6725,
+      "record_date": "18-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "87"
+    },
+    {
+      "id": 7126,
+      "record_date": "18-08",
+      "game_name": "SIALKOT",
+      "result_val": "15"
+    },
+    {
+      "id": 7117,
+      "record_date": "18-08",
+      "game_name": "SKY KING",
+      "result_val": "15"
+    },
+    {
+      "id": 9401,
+      "record_date": "18-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8821,
+      "record_date": "18-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7119,
+      "record_date": "18-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "86"
+    },
+    {
+      "id": 7110,
+      "record_date": "18-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "43"
+    },
+    {
+      "id": 7121,
+      "record_date": "18-08",
+      "game_name": "VIP AGRA",
+      "result_val": "09"
+    },
+    {
+      "id": 6738,
+      "record_date": "19-08",
+      "game_name": "AGRA",
+      "result_val": "19"
+    },
+    {
+      "id": 6740,
+      "record_date": "19-08",
+      "game_name": "ALWAR",
+      "result_val": "77"
+    },
+    {
+      "id": 7133,
+      "record_date": "19-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "13"
+    },
+    {
+      "id": 7143,
+      "record_date": "19-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "56"
+    },
+    {
+      "id": 9421,
+      "record_date": "19-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7148,
+      "record_date": "19-08",
+      "game_name": "DAMAN",
+      "result_val": "12"
+    },
+    {
+      "id": 7147,
+      "record_date": "19-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "75"
+    },
+    {
+      "id": 9409,
+      "record_date": "19-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 6735,
+      "record_date": "19-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "05"
+    },
+    {
+      "id": 7135,
+      "record_date": "19-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "46"
+    },
+    {
+      "id": 6736,
+      "record_date": "19-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "11"
+    },
+    {
+      "id": 9419,
+      "record_date": "19-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6744,
+      "record_date": "19-08",
+      "game_name": "DISAWAR",
+      "result_val": "40"
+    },
+    {
+      "id": 6742,
+      "record_date": "19-08",
+      "game_name": "DWARKA",
+      "result_val": "31"
+    },
+    {
+      "id": 6739,
+      "record_date": "19-08",
+      "game_name": "FARIDABAD",
+      "result_val": "59"
+    },
+    {
+      "id": 7138,
+      "record_date": "19-08",
+      "game_name": "FATEHABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 6743,
+      "record_date": "19-08",
+      "game_name": "GALI",
+      "result_val": "56"
+    },
+    {
+      "id": 6741,
+      "record_date": "19-08",
+      "game_name": "GAZIABAD",
+      "result_val": "58"
+    },
+    {
+      "id": 8084,
+      "record_date": "19-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9404,
+      "record_date": "19-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9408,
+      "record_date": "19-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6734,
+      "record_date": "19-08",
+      "game_name": "GWALIOR",
+      "result_val": "72"
+    },
+    {
+      "id": 7129,
+      "record_date": "19-08",
+      "game_name": "HR SATTA",
+      "result_val": "45"
+    },
+    {
+      "id": 7134,
+      "record_date": "19-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "23"
+    },
+    {
+      "id": 7131,
+      "record_date": "19-08",
+      "game_name": "KKR CITY",
+      "result_val": "89"
+    },
+    {
+      "id": 8459,
+      "record_date": "19-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "50"
+    },
+    {
+      "id": 7145,
+      "record_date": "19-08",
+      "game_name": "LION BAZAR",
+      "result_val": "48"
+    },
+    {
+      "id": 7132,
+      "record_date": "19-08",
+      "game_name": "MADHUPURI",
+      "result_val": "23"
+    },
+    {
+      "id": 7144,
+      "record_date": "19-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "74"
+    },
+    {
+      "id": 7142,
+      "record_date": "19-08",
+      "game_name": "MOHALI-7",
+      "result_val": "01"
+    },
+    {
+      "id": 7136,
+      "record_date": "19-08",
+      "game_name": "NEW GANGA",
+      "result_val": "54"
+    },
+    {
+      "id": 7140,
+      "record_date": "19-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "20"
+    },
+    {
+      "id": 6733,
+      "record_date": "19-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "30"
+    },
+    {
+      "id": 9405,
+      "record_date": "19-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 6737,
+      "record_date": "19-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "02"
+    },
+    {
+      "id": 7146,
+      "record_date": "19-08",
+      "game_name": "SIALKOT",
+      "result_val": "31"
+    },
+    {
+      "id": 7137,
+      "record_date": "19-08",
+      "game_name": "SKY KING",
+      "result_val": "99"
+    },
+    {
+      "id": 9420,
+      "record_date": "19-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8822,
+      "record_date": "19-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7139,
+      "record_date": "19-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "92"
+    },
+    {
+      "id": 7130,
+      "record_date": "19-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "42"
+    },
+    {
+      "id": 7141,
+      "record_date": "19-08",
+      "game_name": "VIP AGRA",
+      "result_val": "18"
+    },
+    {
+      "id": 6750,
+      "record_date": "20-08",
+      "game_name": "AGRA",
+      "result_val": "18"
+    },
+    {
+      "id": 6752,
+      "record_date": "20-08",
+      "game_name": "ALWAR",
+      "result_val": "20"
+    },
+    {
+      "id": 7153,
+      "record_date": "20-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "68"
+    },
+    {
+      "id": 7163,
+      "record_date": "20-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "43"
+    },
+    {
+      "id": 9440,
+      "record_date": "20-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7168,
+      "record_date": "20-08",
+      "game_name": "DAMAN",
+      "result_val": "50"
+    },
+    {
+      "id": 7167,
+      "record_date": "20-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "70"
+    },
+    {
+      "id": 7246,
+      "record_date": "20-08",
+      "game_name": "DELHI",
+      "result_val": "36"
+    },
+    {
+      "id": 6747,
+      "record_date": "20-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "91"
+    },
+    {
+      "id": 7155,
+      "record_date": "20-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "65"
+    },
+    {
+      "id": 6748,
+      "record_date": "20-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "45"
+    },
+    {
+      "id": 9438,
+      "record_date": "20-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 6756,
+      "record_date": "20-08",
+      "game_name": "DISAWAR",
+      "result_val": "16"
+    },
+    {
+      "id": 6754,
+      "record_date": "20-08",
+      "game_name": "DWARKA",
+      "result_val": "10"
+    },
+    {
+      "id": 6751,
+      "record_date": "20-08",
+      "game_name": "FARIDABAD",
+      "result_val": "81"
+    },
+    {
+      "id": 7158,
+      "record_date": "20-08",
+      "game_name": "FATEHABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 6755,
+      "record_date": "20-08",
+      "game_name": "GALI",
+      "result_val": "93"
+    },
+    {
+      "id": 6753,
+      "record_date": "20-08",
+      "game_name": "GAZIABAD",
+      "result_val": "99"
+    },
+    {
+      "id": 7850,
+      "record_date": "20-08",
+      "game_name": "GB",
+      "result_val": "47"
+    },
+    {
+      "id": 9423,
+      "record_date": "20-08",
+      "game_name": "GP",
+      "result_val": "45"
+    },
+    {
+      "id": 9427,
+      "record_date": "20-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 6746,
+      "record_date": "20-08",
+      "game_name": "GWALIOR",
+      "result_val": "47"
+    },
+    {
+      "id": 7244,
+      "record_date": "20-08",
+      "game_name": "GWarrkji",
+      "result_val": "22"
+    },
+    {
+      "id": 7149,
+      "record_date": "20-08",
+      "game_name": "HR SATTA",
+      "result_val": "70"
+    },
+    {
+      "id": 7154,
+      "record_date": "20-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "60"
+    },
+    {
+      "id": 7151,
+      "record_date": "20-08",
+      "game_name": "KKR CITY",
+      "result_val": "68"
+    },
+    {
+      "id": 7229,
+      "record_date": "20-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "48"
+    },
+    {
+      "id": 7165,
+      "record_date": "20-08",
+      "game_name": "LION BAZAR",
+      "result_val": "07"
+    },
+    {
+      "id": 7152,
+      "record_date": "20-08",
+      "game_name": "MADHUPURI",
+      "result_val": "34"
+    },
+    {
+      "id": 7164,
+      "record_date": "20-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "12"
+    },
+    {
+      "id": 7162,
+      "record_date": "20-08",
+      "game_name": "MOHALI-7",
+      "result_val": "56"
+    },
+    {
+      "id": 7156,
+      "record_date": "20-08",
+      "game_name": "NEW GANGA",
+      "result_val": "48"
+    },
+    {
+      "id": 7160,
+      "record_date": "20-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "82"
+    },
+    {
+      "id": 7253,
+      "record_date": "20-08",
+      "game_name": "SADAR",
+      "result_val": "76"
+    },
+    {
+      "id": 6745,
+      "record_date": "20-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "30"
+    },
+    {
+      "id": 9424,
+      "record_date": "20-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 7249,
+      "record_date": "20-08",
+      "game_name": "SADAR KING",
+      "result_val": "76"
+    },
+    {
+      "id": 6749,
+      "record_date": "20-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "93"
+    },
+    {
+      "id": 7166,
+      "record_date": "20-08",
+      "game_name": "SIALKOT",
+      "result_val": "39"
+    },
+    {
+      "id": 7157,
+      "record_date": "20-08",
+      "game_name": "SKY KING",
+      "result_val": "35"
+    },
+    {
+      "id": 9439,
+      "record_date": "20-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7247,
+      "record_date": "20-08",
+      "game_name": "SUPER GWALIOR",
+      "result_val": "22"
+    },
+    {
+      "id": 8823,
+      "record_date": "20-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7159,
+      "record_date": "20-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "79"
+    },
+    {
+      "id": 7150,
+      "record_date": "20-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "53"
+    },
+    {
+      "id": 7161,
+      "record_date": "20-08",
+      "game_name": "VIP AGRA",
+      "result_val": "55"
+    },
+    {
+      "id": 9759,
+      "record_date": "2026-08-23",
+      "game_name": "DEBUG_GAME_001",
+      "result_val": "12"
+    },
+    {
+      "id": 9821,
+      "record_date": "2026-08-23",
+      "game_name": "DEBUG_SAVE_2026_002",
+      "result_val": "33"
+    },
+    {
+      "id": 9807,
+      "record_date": "2026-08-23",
+      "game_name": "DELHI LAXMI",
+      "result_val": "18"
+    },
+    {
+      "id": 9753,
+      "record_date": "2026-08-23",
+      "game_name": "DISAWAR",
+      "result_val": "44"
+    },
+    {
+      "id": 9799,
+      "record_date": "2026-08-23",
+      "game_name": "DL BAZAR",
+      "result_val": "87"
+    },
+    {
+      "id": 9809,
+      "record_date": "2026-08-23",
+      "game_name": "DWARKA PURI",
+      "result_val": "98"
+    },
+    {
+      "id": 9795,
+      "record_date": "2026-08-23",
+      "game_name": "KASHMIR BAZAR",
+      "result_val": "55"
+    },
+    {
+      "id": 9797,
+      "record_date": "2026-08-23",
+      "game_name": "KHATAM",
+      "result_val": "67"
+    },
+    {
+      "id": 9781,
+      "record_date": "2026-08-23",
+      "game_name": "LAAL BAZAR",
+      "result_val": "67"
+    },
+    {
+      "id": 9801,
+      "record_date": "2026-08-23",
+      "game_name": "LAAL BAZAR3",
+      "result_val": "45"
+    },
+    {
+      "id": 9803,
+      "record_date": "2026-08-23",
+      "game_name": "MATKA KING",
+      "result_val": "67"
+    },
+    {
+      "id": 9805,
+      "record_date": "2026-08-23",
+      "game_name": "SHIV PURI",
+      "result_val": "17"
+    },
+    {
+      "id": 9787,
+      "record_date": "2026-08-23",
+      "game_name": "TEST_GAME_123",
+      "result_val": "11"
+    },
+    {
+      "id": 9827,
+      "record_date": "2026-08-24",
+      "game_name": "DEBUG_FINAL_001",
+      "result_val": "77"
+    },
+    {
+      "id": 9829,
+      "record_date": "2026-08-24",
+      "game_name": "DEBUG_FINAL_002",
+      "result_val": "22"
+    },
+    {
+      "id": 9757,
+      "record_date": "2026-08-24",
+      "game_name": "DEBUG_GAME_001",
+      "result_val": "34"
+    },
+    {
+      "id": 9819,
+      "record_date": "2026-08-24",
+      "game_name": "DEBUG_SAVE_2026_002",
+      "result_val": "77"
+    },
+    {
+      "id": 9751,
+      "record_date": "2026-08-24",
+      "game_name": "DISAWAR",
+      "result_val": "99"
+    },
+    {
+      "id": 9793,
+      "record_date": "2026-08-24",
+      "game_name": "KASHMIR BAZAR",
+      "result_val": "88"
+    },
+    {
+      "id": 9785,
+      "record_date": "2026-08-24",
+      "game_name": "TEST_GAME_123",
+      "result_val": "22"
+    },
+    {
+      "id": 8112,
+      "record_date": "21-08",
+      "game_name": "AGRA",
+      "result_val": "18"
+    },
+    {
+      "id": 8114,
+      "record_date": "21-08",
+      "game_name": "ALWAR",
+      "result_val": "20"
+    },
+    {
+      "id": 7173,
+      "record_date": "21-08",
+      "game_name": "ANMOL BAZAR",
+      "result_val": "21"
+    },
+    {
+      "id": 7183,
+      "record_date": "21-08",
+      "game_name": "BHADRA BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9459,
+      "record_date": "21-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7188,
+      "record_date": "21-08",
+      "game_name": "DAMAN",
+      "result_val": "-"
+    },
+    {
+      "id": 7187,
+      "record_date": "21-08",
+      "game_name": "DEHRADUN CITY",
+      "result_val": "-"
+    },
+    {
+      "id": 7245,
+      "record_date": "21-08",
+      "game_name": "DELHI",
+      "result_val": "35"
+    },
+    {
+      "id": 7829,
+      "record_date": "21-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "89"
+    },
+    {
+      "id": 7175,
+      "record_date": "21-08",
+      "game_name": "DELHI DARBAR",
+      "result_val": "39"
+    },
+    {
+      "id": 7839,
+      "record_date": "21-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "07"
+    },
+    {
+      "id": 9457,
+      "record_date": "21-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8118,
+      "record_date": "21-08",
+      "game_name": "DISAWAR",
+      "result_val": "16"
+    },
+    {
+      "id": 8116,
+      "record_date": "21-08",
+      "game_name": "DWARKA",
+      "result_val": "10"
+    },
+    {
+      "id": 8113,
+      "record_date": "21-08",
+      "game_name": "FARIDABAD",
+      "result_val": "81"
+    },
+    {
+      "id": 7178,
+      "record_date": "21-08",
+      "game_name": "FATEHABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8117,
+      "record_date": "21-08",
+      "game_name": "GALI",
+      "result_val": "93"
+    },
+    {
+      "id": 8115,
+      "record_date": "21-08",
+      "game_name": "GAZIABAD",
+      "result_val": "99"
+    },
+    {
+      "id": 7849,
+      "record_date": "21-08",
+      "game_name": "GB",
+      "result_val": "07"
+    },
+    {
+      "id": 9442,
+      "record_date": "21-08",
+      "game_name": "GP",
+      "result_val": "07"
+    },
+    {
+      "id": 9446,
+      "record_date": "21-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 7835,
+      "record_date": "21-08",
+      "game_name": "GWALIOR",
+      "result_val": "87"
+    },
+    {
+      "id": 7169,
+      "record_date": "21-08",
+      "game_name": "HR SATTA",
+      "result_val": "67"
+    },
+    {
+      "id": 7174,
+      "record_date": "21-08",
+      "game_name": "KAROL BAGH",
+      "result_val": "16"
+    },
+    {
+      "id": 7171,
+      "record_date": "21-08",
+      "game_name": "KKR CITY",
+      "result_val": "10"
+    },
+    {
+      "id": 7228,
+      "record_date": "21-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "18"
+    },
+    {
+      "id": 7185,
+      "record_date": "21-08",
+      "game_name": "LION BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7172,
+      "record_date": "21-08",
+      "game_name": "MADHUPURI",
+      "result_val": "84"
+    },
+    {
+      "id": 7184,
+      "record_date": "21-08",
+      "game_name": "MANDI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 7182,
+      "record_date": "21-08",
+      "game_name": "MOHALI-7",
+      "result_val": "-"
+    },
+    {
+      "id": 7176,
+      "record_date": "21-08",
+      "game_name": "NEW GANGA",
+      "result_val": "08"
+    },
+    {
+      "id": 7180,
+      "record_date": "21-08",
+      "game_name": "RAJ SHREE",
+      "result_val": "-"
+    },
+    {
+      "id": 7252,
+      "record_date": "21-08",
+      "game_name": "SADAR",
+      "result_val": "80"
+    },
+    {
+      "id": 6757,
+      "record_date": "21-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "35"
+    },
+    {
+      "id": 9443,
+      "record_date": "21-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 7248,
+      "record_date": "21-08",
+      "game_name": "SADAR KING",
+      "result_val": "82"
+    },
+    {
+      "id": 8111,
+      "record_date": "21-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "93"
+    },
+    {
+      "id": 7186,
+      "record_date": "21-08",
+      "game_name": "SIALKOT",
+      "result_val": "-"
+    },
+    {
+      "id": 7177,
+      "record_date": "21-08",
+      "game_name": "SKY KING",
+      "result_val": "-"
+    },
+    {
+      "id": 9458,
+      "record_date": "21-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8824,
+      "record_date": "21-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7179,
+      "record_date": "21-08",
+      "game_name": "UDAIPUR CITY",
+      "result_val": "-"
+    },
+    {
+      "id": 7170,
+      "record_date": "21-08",
+      "game_name": "UJJALA SUPER",
+      "result_val": "75"
+    },
+    {
+      "id": 7181,
+      "record_date": "21-08",
+      "game_name": "VIP AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 7212,
+      "record_date": "22-08",
+      "game_name": "AGRA",
+      "result_val": "18"
+    },
+    {
+      "id": 8126,
+      "record_date": "22-08",
+      "game_name": "ALWAR",
+      "result_val": "20"
+    },
+    {
+      "id": 8960,
+      "record_date": "22-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "67"
+    },
+    {
+      "id": 8993,
+      "record_date": "22-08",
+      "game_name": "DELHI",
+      "result_val": "89"
+    },
+    {
+      "id": 8121,
+      "record_date": "22-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "89"
+    },
+    {
+      "id": 8122,
+      "record_date": "22-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "07"
+    },
+    {
+      "id": 9059,
+      "record_date": "22-08",
+      "game_name": "DGH",
+      "result_val": "66"
+    },
+    {
+      "id": 8130,
+      "record_date": "22-08",
+      "game_name": "DISAWAR",
+      "result_val": "16"
+    },
+    {
+      "id": 8128,
+      "record_date": "22-08",
+      "game_name": "DWARKA",
+      "result_val": "10"
+    },
+    {
+      "id": 8125,
+      "record_date": "22-08",
+      "game_name": "FARIDABAD",
+      "result_val": "81"
+    },
+    {
+      "id": 8129,
+      "record_date": "22-08",
+      "game_name": "GALI",
+      "result_val": "93"
+    },
+    {
+      "id": 9695,
+      "record_date": "22-08",
+      "game_name": "GANDU",
+      "result_val": "67"
+    },
+    {
+      "id": 8127,
+      "record_date": "22-08",
+      "game_name": "GAZIABAD",
+      "result_val": "99"
+    },
+    {
+      "id": 8120,
+      "record_date": "22-08",
+      "game_name": "GB",
+      "result_val": "07"
+    },
+    {
+      "id": 9461,
+      "record_date": "22-08",
+      "game_name": "GP",
+      "result_val": "89"
+    },
+    {
+      "id": 8991,
+      "record_date": "22-08",
+      "game_name": "GWALI",
+      "result_val": "87"
+    },
+    {
+      "id": 8496,
+      "record_date": "22-08",
+      "game_name": "GWALIOR",
+      "result_val": "87"
+    },
+    {
+      "id": 9654,
+      "record_date": "22-08",
+      "game_name": "LAAL",
+      "result_val": "30"
+    },
+    {
+      "id": 8495,
+      "record_date": "22-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "87"
+    },
+    {
+      "id": 7341,
+      "record_date": "22-08",
+      "game_name": "SADAR",
+      "result_val": "30"
+    },
+    {
+      "id": 8987,
+      "record_date": "22-08",
+      "game_name": "SADAR BAZ",
+      "result_val": "30"
+    },
+    {
+      "id": 8119,
+      "record_date": "22-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "30"
+    },
+    {
+      "id": 9462,
+      "record_date": "22-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8123,
+      "record_date": "22-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "93"
+    },
+    {
+      "id": 9477,
+      "record_date": "22-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8791,
+      "record_date": "22-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "55"
+    },
+    {
+      "id": 7213,
+      "record_date": "23-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8138,
+      "record_date": "23-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9497,
+      "record_date": "23-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9758,
+      "record_date": "23-08",
+      "game_name": "DEBUG_GAME_001",
+      "result_val": "12"
+    },
+    {
+      "id": 9820,
+      "record_date": "23-08",
+      "game_name": "DEBUG_SAVE_2026_002",
+      "result_val": "33"
+    },
+    {
+      "id": 9485,
+      "record_date": "23-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8133,
+      "record_date": "23-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9806,
+      "record_date": "23-08",
+      "game_name": "DELHI LAXMI",
+      "result_val": "18"
+    },
+    {
+      "id": 8134,
+      "record_date": "23-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9674,
+      "record_date": "23-08",
+      "game_name": "DELHI SUPER",
+      "result_val": "88"
+    },
+    {
+      "id": 9035,
+      "record_date": "23-08",
+      "game_name": "DGH",
+      "result_val": "92"
+    },
+    {
+      "id": 8142,
+      "record_date": "23-08",
+      "game_name": "DISAWAR",
+      "result_val": "44"
+    },
+    {
+      "id": 9798,
+      "record_date": "23-08",
+      "game_name": "DL BAZAR",
+      "result_val": "87"
+    },
+    {
+      "id": 8140,
+      "record_date": "23-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9808,
+      "record_date": "23-08",
+      "game_name": "DWARKA PURI",
+      "result_val": "98"
+    },
+    {
+      "id": 8137,
+      "record_date": "23-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8141,
+      "record_date": "23-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8139,
+      "record_date": "23-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8132,
+      "record_date": "23-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9480,
+      "record_date": "23-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 8983,
+      "record_date": "23-08",
+      "game_name": "GWALI",
+      "result_val": "87"
+    },
+    {
+      "id": 8508,
+      "record_date": "23-08",
+      "game_name": "GWALIOR",
+      "result_val": "87"
+    },
+    {
+      "id": 9794,
+      "record_date": "23-08",
+      "game_name": "KASHMIR BAZAR",
+      "result_val": "55"
+    },
+    {
+      "id": 9796,
+      "record_date": "23-08",
+      "game_name": "KHATAM",
+      "result_val": "67"
+    },
+    {
+      "id": 9650,
+      "record_date": "23-08",
+      "game_name": "LAAL",
+      "result_val": "77"
+    },
+    {
+      "id": 8507,
+      "record_date": "23-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "67"
+    },
+    {
+      "id": 9800,
+      "record_date": "23-08",
+      "game_name": "LAAL BAZAR3",
+      "result_val": "45"
+    },
+    {
+      "id": 9802,
+      "record_date": "23-08",
+      "game_name": "MATKA KING",
+      "result_val": "67"
+    },
+    {
+      "id": 7345,
+      "record_date": "23-08",
+      "game_name": "SADAR",
+      "result_val": "77"
+    },
+    {
+      "id": 8982,
+      "record_date": "23-08",
+      "game_name": "SADAR BAZ",
+      "result_val": "77"
+    },
+    {
+      "id": 8131,
+      "record_date": "23-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "77"
+    },
+    {
+      "id": 9007,
+      "record_date": "23-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "88"
+    },
+    {
+      "id": 9804,
+      "record_date": "23-08",
+      "game_name": "SHIV PURI",
+      "result_val": "17"
+    },
+    {
+      "id": 8135,
+      "record_date": "23-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9496,
+      "record_date": "23-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8826,
+      "record_date": "23-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "99"
+    },
+    {
+      "id": 9786,
+      "record_date": "23-08",
+      "game_name": "TEST_GAME_123",
+      "result_val": "11"
+    },
+    {
+      "id": 7214,
+      "record_date": "24-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8150,
+      "record_date": "24-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9516,
+      "record_date": "24-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9826,
+      "record_date": "24-08",
+      "game_name": "DEBUG_FINAL_001",
+      "result_val": "77"
+    },
+    {
+      "id": 9828,
+      "record_date": "24-08",
+      "game_name": "DEBUG_FINAL_002",
+      "result_val": "22"
+    },
+    {
+      "id": 9756,
+      "record_date": "24-08",
+      "game_name": "DEBUG_GAME_001",
+      "result_val": "34"
+    },
+    {
+      "id": 9818,
+      "record_date": "24-08",
+      "game_name": "DEBUG_SAVE_2026_002",
+      "result_val": "77"
+    },
+    {
+      "id": 9504,
+      "record_date": "24-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8145,
+      "record_date": "24-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8146,
+      "record_date": "24-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9514,
+      "record_date": "24-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8154,
+      "record_date": "24-08",
+      "game_name": "DISAWAR",
+      "result_val": "99"
+    },
+    {
+      "id": 9754,
+      "record_date": "24-08",
+      "game_name": "DISAWER",
+      "result_val": "81"
+    },
+    {
+      "id": 8152,
+      "record_date": "24-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 8149,
+      "record_date": "24-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8153,
+      "record_date": "24-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8151,
+      "record_date": "24-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8144,
+      "record_date": "24-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9499,
+      "record_date": "24-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9503,
+      "record_date": "24-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8520,
+      "record_date": "24-08",
+      "game_name": "GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 9792,
+      "record_date": "24-08",
+      "game_name": "KASHMIR BAZAR",
+      "result_val": "88"
+    },
+    {
+      "id": 8519,
+      "record_date": "24-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "43"
+    },
+    {
+      "id": 7349,
+      "record_date": "24-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8143,
+      "record_date": "24-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9500,
+      "record_date": "24-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8147,
+      "record_date": "24-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9515,
+      "record_date": "24-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8827,
+      "record_date": "24-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 9784,
+      "record_date": "24-08",
+      "game_name": "TEST_GAME_123",
+      "result_val": "22"
+    },
+    {
+      "id": 7215,
+      "record_date": "25-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8162,
+      "record_date": "25-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9535,
+      "record_date": "25-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9523,
+      "record_date": "25-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8157,
+      "record_date": "25-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8158,
+      "record_date": "25-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9533,
+      "record_date": "25-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8166,
+      "record_date": "25-08",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8164,
+      "record_date": "25-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 8161,
+      "record_date": "25-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8165,
+      "record_date": "25-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8163,
+      "record_date": "25-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8156,
+      "record_date": "25-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9518,
+      "record_date": "25-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9522,
+      "record_date": "25-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8532,
+      "record_date": "25-08",
+      "game_name": "GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8531,
+      "record_date": "25-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "89"
+    },
+    {
+      "id": 7353,
+      "record_date": "25-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8155,
+      "record_date": "25-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9519,
+      "record_date": "25-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8159,
+      "record_date": "25-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9534,
+      "record_date": "25-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8828,
+      "record_date": "25-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7216,
+      "record_date": "26-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8174,
+      "record_date": "26-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9554,
+      "record_date": "26-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9542,
+      "record_date": "26-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8169,
+      "record_date": "26-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8170,
+      "record_date": "26-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9552,
+      "record_date": "26-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8178,
+      "record_date": "26-08",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8176,
+      "record_date": "26-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 8173,
+      "record_date": "26-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8177,
+      "record_date": "26-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8175,
+      "record_date": "26-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8168,
+      "record_date": "26-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9537,
+      "record_date": "26-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9541,
+      "record_date": "26-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8544,
+      "record_date": "26-08",
+      "game_name": "GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8543,
+      "record_date": "26-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "34"
+    },
+    {
+      "id": 7357,
+      "record_date": "26-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8167,
+      "record_date": "26-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9538,
+      "record_date": "26-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8171,
+      "record_date": "26-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9553,
+      "record_date": "26-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8829,
+      "record_date": "26-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7217,
+      "record_date": "27-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8186,
+      "record_date": "27-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9573,
+      "record_date": "27-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9561,
+      "record_date": "27-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8181,
+      "record_date": "27-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8182,
+      "record_date": "27-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9571,
+      "record_date": "27-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8190,
+      "record_date": "27-08",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8188,
+      "record_date": "27-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 8185,
+      "record_date": "27-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8189,
+      "record_date": "27-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8187,
+      "record_date": "27-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8180,
+      "record_date": "27-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9556,
+      "record_date": "27-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9560,
+      "record_date": "27-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8558,
+      "record_date": "27-08",
+      "game_name": "GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8557,
+      "record_date": "27-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "18"
+    },
+    {
+      "id": 7362,
+      "record_date": "27-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8179,
+      "record_date": "27-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9557,
+      "record_date": "27-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8183,
+      "record_date": "27-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9572,
+      "record_date": "27-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8830,
+      "record_date": "27-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7218,
+      "record_date": "28-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8198,
+      "record_date": "28-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9592,
+      "record_date": "28-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9580,
+      "record_date": "28-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8193,
+      "record_date": "28-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8194,
+      "record_date": "28-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9590,
+      "record_date": "28-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8202,
+      "record_date": "28-08",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8200,
+      "record_date": "28-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 8197,
+      "record_date": "28-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8201,
+      "record_date": "28-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8199,
+      "record_date": "28-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8192,
+      "record_date": "28-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9575,
+      "record_date": "28-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9579,
+      "record_date": "28-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8570,
+      "record_date": "28-08",
+      "game_name": "GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8569,
+      "record_date": "28-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "00"
+    },
+    {
+      "id": 7366,
+      "record_date": "28-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8191,
+      "record_date": "28-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9576,
+      "record_date": "28-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8195,
+      "record_date": "28-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9591,
+      "record_date": "28-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8831,
+      "record_date": "28-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7219,
+      "record_date": "29-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8210,
+      "record_date": "29-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9611,
+      "record_date": "29-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9599,
+      "record_date": "29-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8205,
+      "record_date": "29-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8206,
+      "record_date": "29-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9609,
+      "record_date": "29-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8214,
+      "record_date": "29-08",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8212,
+      "record_date": "29-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 8209,
+      "record_date": "29-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8213,
+      "record_date": "29-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8211,
+      "record_date": "29-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8204,
+      "record_date": "29-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9594,
+      "record_date": "29-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9598,
+      "record_date": "29-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8582,
+      "record_date": "29-08",
+      "game_name": "GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8581,
+      "record_date": "29-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "90"
+    },
+    {
+      "id": 8203,
+      "record_date": "29-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9595,
+      "record_date": "29-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8207,
+      "record_date": "29-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9610,
+      "record_date": "29-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8832,
+      "record_date": "29-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7220,
+      "record_date": "30-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8222,
+      "record_date": "30-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9630,
+      "record_date": "30-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9618,
+      "record_date": "30-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8217,
+      "record_date": "30-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8218,
+      "record_date": "30-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9628,
+      "record_date": "30-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8226,
+      "record_date": "30-08",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8224,
+      "record_date": "30-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 8221,
+      "record_date": "30-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8225,
+      "record_date": "30-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8223,
+      "record_date": "30-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8216,
+      "record_date": "30-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9613,
+      "record_date": "30-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9617,
+      "record_date": "30-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8594,
+      "record_date": "30-08",
+      "game_name": "GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8593,
+      "record_date": "30-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "81"
+    },
+    {
+      "id": 7370,
+      "record_date": "30-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8215,
+      "record_date": "30-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9614,
+      "record_date": "30-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8219,
+      "record_date": "30-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9629,
+      "record_date": "30-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8833,
+      "record_date": "30-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 7221,
+      "record_date": "31-08",
+      "game_name": "AGRA",
+      "result_val": "-"
+    },
+    {
+      "id": 8234,
+      "record_date": "31-08",
+      "game_name": "ALWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9649,
+      "record_date": "31-08",
+      "game_name": "CHAWAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9637,
+      "record_date": "31-08",
+      "game_name": "DELHI",
+      "result_val": "-"
+    },
+    {
+      "id": 8229,
+      "record_date": "31-08",
+      "game_name": "DELHI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8230,
+      "record_date": "31-08",
+      "game_name": "DELHI MATKA",
+      "result_val": "-"
+    },
+    {
+      "id": 9647,
+      "record_date": "31-08",
+      "game_name": "DGH",
+      "result_val": "-"
+    },
+    {
+      "id": 8238,
+      "record_date": "31-08",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8236,
+      "record_date": "31-08",
+      "game_name": "DWARKA",
+      "result_val": "-"
+    },
+    {
+      "id": 8233,
+      "record_date": "31-08",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8237,
+      "record_date": "31-08",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8235,
+      "record_date": "31-08",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 8228,
+      "record_date": "31-08",
+      "game_name": "GB",
+      "result_val": "-"
+    },
+    {
+      "id": 9632,
+      "record_date": "31-08",
+      "game_name": "GP",
+      "result_val": "-"
+    },
+    {
+      "id": 9636,
+      "record_date": "31-08",
+      "game_name": "GWALI",
+      "result_val": "-"
+    },
+    {
+      "id": 8606,
+      "record_date": "31-08",
+      "game_name": "GWALIOR",
+      "result_val": "-"
+    },
+    {
+      "id": 8605,
+      "record_date": "31-08",
+      "game_name": "LAAL BAZAR",
+      "result_val": "17"
+    },
+    {
+      "id": 7374,
+      "record_date": "31-08",
+      "game_name": "SADAR",
+      "result_val": "-"
+    },
+    {
+      "id": 8227,
+      "record_date": "31-08",
+      "game_name": "SADAR BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 9633,
+      "record_date": "31-08",
+      "game_name": "SADAR BAZAR RENAMED",
+      "result_val": "-"
+    },
+    {
+      "id": 8231,
+      "record_date": "31-08",
+      "game_name": "SHRI GANESH",
+      "result_val": "-"
+    },
+    {
+      "id": 9648,
+      "record_date": "31-08",
+      "game_name": "SUPER BAZAR 2026",
+      "result_val": "-"
+    },
+    {
+      "id": 8834,
+      "record_date": "31-08",
+      "game_name": "TEST BAZAR 2026",
+      "result_val": "-"
     }
   ],
-  "blogs": []
+  "blogs": [
+    {
+      "id": 2,
+      "title": "what is shri ganesh satta king ?",
+      "slug": "what-is-shri-ganesh-satta-king",
+      "image": "/images/shri_ganesh_blog.png",
+      "post_date": "Posted on May 9",
+      "tags": "#shriganeshsattaking #playbajar #playbazaar #sattaking",
+      "content": "Shri Ganesh Satta King is widely followed for its timely 4:40 PM result declaration everyday...",
+      "created_at": "2026-08-10T14:29:15.279Z"
+    },
+    {
+      "id": 1,
+      "title": "WHY IS THE DELHI BAZAR SATTA KING SO POPULAR ?",
+      "slug": "why-is-the-delhi-bazar-satta-king-so-popular",
+      "image": "/images/delhi_bazar_blog.png",
+      "post_date": "Posted on Jul 27",
+      "tags": "#delhibazarsattaking #delhibazarsatta #sattaking #delhibajarsattaking",
+      "content": "Delhi Bazar Satta King has become one of the most famous games in the Satta King market...",
+      "created_at": "2026-08-10T14:29:15.419Z"
+    }
+  ]
 }

@@ -67,35 +67,36 @@ const tmpBackupPath = process.env.VERCEL ? '/tmp/data_backup.json' : bundledBack
 
 async function syncJSONBackup() {
   try {
-    const backup = getBackupData() || {};
-    const settingsRes = await safeQuery('SELECT key, value FROM site_settings').catch(() => null);
-    const gamesRes = await safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null);
-    const chartsRes = await safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null);
-    const blogsRes = await safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null);
+    const [settingsRes, gamesRes, chartsRes, blogsRes] = await Promise.all([
+      safeQuery('SELECT key, value FROM site_settings').catch(() => null),
+      safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null),
+      safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null),
+      safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null)
+    ]);
+
+    // ABSOLUTE RULE: Never update memory cache or disk file if PostgreSQL query failed
+    if (!gamesRes || !gamesRes.rows) {
+      console.warn('⚠️ syncJSONBackup: PostgreSQL query failed, aborting backup sync.');
+      return false;
+    }
 
     const fullData = {
-      settings: backup.settings || {},
-      games: backup.games || [],
-      chart_records: backup.chart_records || [],
-      blogs: backup.blogs || []
+      settings: (memoryBackupCache && memoryBackupCache.settings) ? memoryBackupCache.settings : {},
+      games: gamesRes.rows.filter(g => g && g.name),
+      chart_records: (chartsRes && chartsRes.rows) ? chartsRes.rows : [],
+      blogs: (blogsRes && blogsRes.rows) ? blogsRes.rows : []
     };
 
     if (settingsRes && settingsRes.rows) {
       settingsRes.rows.forEach(s => {
-        if (!fullData.settings[s.key]) fullData.settings[s.key] = s.value;
+        fullData.settings[s.key] = s.value;
       });
     }
 
-    if (gamesRes && gamesRes.rows) {
-      fullData.games = gamesRes.rows.filter(g => g && g.name);
-      fullData.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
-    } else {
-      fullData.games = backup.games || [];
-    }
+    memoryBackupCache = fullData;
 
-    delete fullData.settings.chart2_columns_json;
-    const jsonStr = JSON.stringify(fullData, null, 2);
     try {
+      const jsonStr = JSON.stringify(fullData, null, 2);
       fs.writeFileSync(tmpBackupPath, jsonStr);
       if (tmpBackupPath !== bundledBackupPath) {
         try { fs.writeFileSync(bundledBackupPath, jsonStr); } catch (e) {}
@@ -220,6 +221,9 @@ async function initDatabase() {
         }
       }
 
+      // Purge legacy deleted game GANDU if present
+      await safeQuery(`DELETE FROM games WHERE UPPER(name) = 'GANDU'`).catch(()=>{});
+
       // Normalize DISAWER -> DISAWAR in games and chart_records
       await safeQuery(`UPDATE games SET name = 'DISAWAR', is_permanent = 1 WHERE UPPER(name) = 'DISAWER'`).catch(()=>{});
       await safeQuery(`UPDATE chart_records SET game_name = 'DISAWAR' WHERE UPPER(game_name) = 'DISAWER'`).catch(()=>{});
@@ -231,7 +235,7 @@ async function initDatabase() {
          ON CONFLICT (name) DO UPDATE SET is_permanent = 1, table_group = 1`
       ).catch(() => {});
 
-      await syncJSONBackup();
+      syncJSONBackup().catch(() => {});
     } catch(e) {}
     isDbReady = true;
   } catch (e) {
@@ -319,8 +323,8 @@ app.get('/api/site-data', async (req, res) => {
     let games = [];
     if (gamesRes && gamesRes.rows) {
       games = gamesRes.rows.filter(g => g && g.name);
-    } else {
-      games = (backup.games || []).filter(g => g && g.name);
+    } else if (memoryBackupCache && Array.isArray(memoryBackupCache.games)) {
+      games = memoryBackupCache.games.filter(g => g && g.name);
     }
 
     const uniqueGamesByName = {};
@@ -678,8 +682,20 @@ app.post('/api/admin/add-game', async (req, res) => {
     console.error('Error inserting game into Supabase:', e);
   }
 
-  memoryBackupCache = null;
-  await syncJSONBackup();
+  if (dbInsertedGame) {
+    if (!memoryBackupCache) memoryBackupCache = { settings: {}, games: [], chart_records: [], blogs: [] };
+    if (!memoryBackupCache.games) memoryBackupCache.games = [];
+    const idx = memoryBackupCache.games.findIndex(g => String(g.id) === String(dbInsertedGame.id) || (g.name || '').toUpperCase() === gName);
+    if (idx !== -1) {
+      memoryBackupCache.games[idx] = dbInsertedGame;
+    } else {
+      memoryBackupCache.games.push(dbInsertedGame);
+    }
+  } else {
+    memoryBackupCache = null;
+  }
+
+  syncJSONBackup().catch(() => {});
 
   const finalId = dbInsertedGame ? dbInsertedGame.id : Date.now();
   console.log(`➕ [GAME CREATED IN DB]: id=${finalId}, name=${gName}`);
@@ -936,7 +952,15 @@ app.post('/api/admin/delete-game', async (req, res) => {
     await safeQuery('DELETE FROM games WHERE (id = $1 OR UPPER(name) = UPPER($2)) AND UPPER(name) NOT LIKE \'DISAW%\' AND COALESCE(is_permanent, 0) = 0', [id || -1, name || '']);
   } catch (e) {}
 
-  memoryBackupCache = null;
+  if (memoryBackupCache && Array.isArray(memoryBackupCache.games)) {
+    memoryBackupCache.games = memoryBackupCache.games.filter(g => {
+      const matchId = idStr !== '' && String(g.id || '') === idStr;
+      const matchName = nameUpper !== '' && (g.name || '').toUpperCase() === nameUpper;
+      return !(matchId || matchName);
+    });
+  }
+
+  syncJSONBackup().catch(() => {});
   console.log(`🗑️ [GAME DELETED PERMANENTLY]: id=${id}, name=${name}`);
   res.json({ success: true, message: 'Game permanently deleted' });
 });
