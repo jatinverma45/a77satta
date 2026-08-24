@@ -139,8 +139,12 @@ async function initDatabase() {
         today_result VARCHAR(50) DEFAULT 'WAIT',
         table_group INT DEFAULT 1,
         sort_order INT DEFAULT 0,
-        is_hero INT DEFAULT 0
+        is_hero INT DEFAULT 0,
+        is_featured INT DEFAULT 0,
+        is_permanent INT DEFAULT 0
       );
+      ALTER TABLE games ADD COLUMN IF NOT EXISTS is_permanent INT DEFAULT 0;
+      ALTER TABLE games ADD COLUMN IF NOT EXISTS is_featured INT DEFAULT 0;
 
       CREATE TABLE IF NOT EXISTS chart_records (
         id SERIAL PRIMARY KEY,
@@ -184,27 +188,50 @@ async function initDatabase() {
           await pgPool.query('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING', [key, valStr]).catch(()=>{});
         }
       }
-      if (backup && Array.isArray(backup.games)) {
+
+      // ONLY seed backup.games IF PostgreSQL games table is COMPLETELY EMPTY
+      const existingGamesCountRes = await pgPool.query('SELECT COUNT(*) as count FROM games').catch(() => ({ rows: [{ count: 0 }] }));
+      const gamesCount = parseInt(existingGamesCountRes.rows[0].count, 10) || 0;
+
+      if (gamesCount === 0 && backup && Array.isArray(backup.games)) {
+        console.log('🌱 Seeding games table from initial backup data (database was empty)...');
         for (const g of backup.games) {
           if (g && g.name) {
+            const gName = g.name.trim().toUpperCase() === 'DISAWER' ? 'DISAWAR' : g.name.trim().toUpperCase();
+            const isPerm = gName === 'DISAWAR' ? 1 : (g.is_permanent ? 1 : 0);
             await pgPool.query(
-              `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero)
-               VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+              `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero, is_featured, is_permanent)
+               VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
                ON CONFLICT (name) DO NOTHING`,
               [
-                g.name.trim().toUpperCase(),
+                gName,
                 g.open_time || '',
                 g.close_time || '',
                 g.yesterday_result || '-',
                 g.today_result || 'WAIT',
                 parseInt(g.table_group) || 1,
                 parseInt(g.sort_order) || 0,
-                g.is_hero ? 1 : 0
+                g.is_hero ? 1 : 0,
+                g.is_featured ? 1 : 0,
+                isPerm
               ]
             ).catch(()=>{});
           }
         }
       }
+
+      // Normalize DISAWER -> DISAWAR in games and chart_records
+      await safeQuery(`UPDATE games SET name = 'DISAWAR', is_permanent = 1 WHERE UPPER(name) = 'DISAWER'`).catch(()=>{});
+      await safeQuery(`UPDATE chart_records SET game_name = 'DISAWAR' WHERE UPPER(game_name) = 'DISAWER'`).catch(()=>{});
+
+      // Ensure permanent single canonical DISAWAR system game exists in Table 1
+      await safeQuery(
+        `INSERT INTO games (name, open_time, yesterday_result, today_result, table_group, sort_order, is_hero, is_featured, is_permanent)
+         VALUES ('DISAWAR', '05:15 AM', '-', 'WAIT', 1, 0, 0, 1, 1)
+         ON CONFLICT (name) DO UPDATE SET is_permanent = 1, table_group = 1`
+      ).catch(() => {});
+
+      await syncJSONBackup();
     } catch(e) {}
     isDbReady = true;
   } catch (e) {
@@ -299,37 +326,81 @@ app.get('/api/site-data', async (req, res) => {
     const uniqueGamesByName = {};
     games.forEach(g => {
       if (g && g.name) {
-        const uName = g.name.trim().toUpperCase();
+        let uName = g.name.trim().toUpperCase();
+        if (uName === 'DISAWER') uName = 'DISAWAR';
+        g.name = uName;
+        if (uName === 'DISAWAR') g.is_permanent = 1;
         uniqueGamesByName[uName] = g;
       }
     });
+
+    if (!uniqueGamesByName['DISAWAR']) {
+      uniqueGamesByName['DISAWAR'] = {
+        id: 99999,
+        name: 'DISAWAR',
+        open_time: '05:15 AM',
+        yesterday_result: '-',
+        today_result: 'WAIT',
+        table_group: 1,
+        sort_order: 0,
+        is_hero: 0,
+        is_featured: 1,
+        is_permanent: 1
+      };
+    }
+
     games = Object.values(uniqueGamesByName);
     games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
 
     // CANONICAL SINGLE SOURCE OF TRUTH FILTERING:
-    // Only return chart records for games that currently exist in Table 1 (games)
     const activeGameNames = new Set(games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean));
 
     const chartMap = {};
     (backup.chart_records || []).forEach(r => {
       if (r && r.record_date && r.game_name) {
-        const gNameUpper = r.game_name.trim().toUpperCase();
+        let gNameUpper = r.game_name.trim().toUpperCase();
+        if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
         if (activeGameNames.has(gNameUpper)) {
-          chartMap[`${r.record_date.trim()}_${gNameUpper}`] = r;
+          chartMap[`${r.record_date.trim()}_${gNameUpper}`] = { ...r, game_name: gNameUpper };
         }
       }
     });
     if (chartsRes && chartsRes.rows && chartsRes.rows.length > 0) {
       chartsRes.rows.forEach(r => {
         if (r && r.record_date && r.game_name) {
-          const gNameUpper = r.game_name.trim().toUpperCase();
+          let gNameUpper = r.game_name.trim().toUpperCase();
+          if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
           if (activeGameNames.has(gNameUpper)) {
-            chartMap[`${r.record_date.trim()}_${gNameUpper}`] = r;
+            chartMap[`${r.record_date.trim()}_${gNameUpper}`] = { ...r, game_name: gNameUpper };
           }
         }
       });
     }
     let charts = Object.values(chartMap);
+
+    // Compute dynamic today_result and yesterday_result for games based on Asia/Kolkata dates
+    const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
+    games.forEach(g => {
+      const gName = (g.name || '').trim().toUpperCase();
+
+      const yestRec = charts.find(r => {
+        if (!r || !r.record_date || !r.game_name) return false;
+        const rGame = r.game_name.trim().toUpperCase();
+        const isGameMatch = rGame === gName || (gName === 'DISAWAR' && rGame === 'DISAWER');
+        const rDate = r.record_date.trim();
+        return isGameMatch && (rDate === yestFull || rDate === yestStr);
+      });
+      g.yesterday_result = (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '') ? yestRec.result_val.trim() : '-';
+
+      const todayRec = charts.find(r => {
+        if (!r || !r.record_date || !r.game_name) return false;
+        const rGame = r.game_name.trim().toUpperCase();
+        const isGameMatch = rGame === gName || (gName === 'DISAWAR' && rGame === 'DISAWER');
+        const rDate = r.record_date.trim();
+        return isGameMatch && (rDate === todayFull || rDate === todayStr);
+      });
+      g.today_result = (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val.toUpperCase() !== 'WAIT') ? todayRec.result_val.trim() : 'WAIT';
+    });
 
     let heroGames = games.filter(g => parseInt(g.is_hero) === 1);
     if (heroGames.length === 0 && settings.hero_games_json) {
@@ -401,17 +472,27 @@ app.post('/api/admin/login', async (req, res) => {
 
 function getTodayAndYesterdayDateStr() {
   const now = new Date();
-  const dayToday = String(now.getDate()).padStart(2, '0');
-  const monthToday = String(now.getMonth() + 1).padStart(2, '0');
-  const todayStr = `${dayToday}-${monthToday}`;
+  const kolkataFormatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  const todayFull = kolkataFormatter.format(now); // e.g. "2026-08-24"
+  const [tY, tM, tD] = todayFull.split('-');
+  const todayStr = `${tD}-${tM}`; // e.g. "24-08"
 
-  const yest = new Date(now);
-  yest.setDate(now.getDate() - 1);
-  const dayYest = String(yest.getDate()).padStart(2, '0');
-  const monthYest = String(yest.getMonth() + 1).padStart(2, '0');
-  const yestStr = `${dayYest}-${monthYest}`;
+  const kolkataNowParts = kolkataFormatter.formatToParts(now);
+  let kYear = parseInt(kolkataNowParts.find(p => p.type === 'year').value, 10);
+  let kMonth = parseInt(kolkataNowParts.find(p => p.type === 'month').value, 10) - 1;
+  let kDay = parseInt(kolkataNowParts.find(p => p.type === 'day').value, 10);
 
-  return { todayStr, yestStr };
+  const kDateObj = new Date(Date.UTC(kYear, kMonth, kDay - 1));
+  const yestFull = kolkataFormatter.format(kDateObj); // e.g. "2026-08-23"
+  const [yY, yM, yD] = yestFull.split('-');
+  const yestStr = `${yD}-${yM}`; // e.g. "23-08"
+
+  return { todayStr, yestStr, todayFull, yestFull };
 }
 
 // Admin: Update Game Result (Today / Yesterday)
@@ -423,10 +504,13 @@ app.post('/api/admin/update-game', async (req, res) => {
   if (!backup.games) backup.games = [];
   if (!backup.chart_records) backup.chart_records = [];
 
-  const gNameUpper = (name || '').trim().toUpperCase();
+  let gNameUpper = (name || '').trim().toUpperCase();
+  if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
+
   const existingIdx = backup.games.findIndex(
     g => (g.id && id && String(g.id) === String(id)) ||
-         (g.name || '').toUpperCase() === gNameUpper
+         (g.name || '').toUpperCase() === gNameUpper ||
+         (gNameUpper === 'DISAWAR' && (g.name || '').toUpperCase().startsWith('DISAW'))
   );
 
   if (existingIdx !== -1) {
@@ -435,30 +519,30 @@ app.post('/api/admin/update-game', async (req, res) => {
     if (yesterday_result !== undefined) backup.games[existingIdx].yesterday_result = yesterday_result;
     if (today_result !== undefined) backup.games[existingIdx].today_result = today_result;
     if (is_hero !== undefined) backup.games[existingIdx].is_hero = is_hero ? 1 : 0;
+    if (gNameUpper === 'DISAWAR') backup.games[existingIdx].is_permanent = 1;
   }
 
-  const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
+  const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
 
-  if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
+  const updateChartBackup = (dateKey, gameName, val) => {
     const cIdx = backup.chart_records.findIndex(
-      r => r.record_date === todayStr && (r.game_name || '').toUpperCase() === gNameUpper
+      r => (r.record_date === dateKey) && (r.game_name || '').toUpperCase() === gameName
     );
     if (cIdx !== -1) {
-      backup.chart_records[cIdx].result_val = today_result.trim();
+      backup.chart_records[cIdx].result_val = val;
     } else {
-      backup.chart_records.push({ record_date: todayStr, game_name: gNameUpper, result_val: today_result.trim() });
+      backup.chart_records.push({ record_date: dateKey, game_name: gameName, result_val: val });
     }
+  };
+
+  if (today_result && today_result.trim() !== '' && today_result.toUpperCase() !== 'WAIT') {
+    updateChartBackup(todayStr, gNameUpper, today_result.trim());
+    updateChartBackup(todayFull, gNameUpper, today_result.trim());
   }
 
   if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
-    const cIdx = backup.chart_records.findIndex(
-      r => r.record_date === yestStr && (r.game_name || '').toUpperCase() === gNameUpper
-    );
-    if (cIdx !== -1) {
-      backup.chart_records[cIdx].result_val = yesterday_result.trim();
-    } else {
-      backup.chart_records.push({ record_date: yestStr, game_name: gNameUpper, result_val: yesterday_result.trim() });
-    }
+    updateChartBackup(yestStr, gNameUpper, yesterday_result.trim());
+    updateChartBackup(yestFull, gNameUpper, yesterday_result.trim());
   }
 
   if (!backup.settings) backup.settings = {};
@@ -466,8 +550,6 @@ app.post('/api/admin/update-game', async (req, res) => {
   if (is_featured === 1 || is_featured === true || gNameUpper.startsWith('DISAW')) {
     backup.settings.featured_banner_game = gNameUpper;
     if (open_time !== undefined) backup.settings.disawer_time = open_time;
-    if (yesterday_result !== undefined) backup.settings.disawer_prev = yesterday_result;
-    if (today_result !== undefined) backup.settings.disawer_today = today_result;
   }
 
   const heroGamesList = backup.games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
@@ -483,27 +565,44 @@ app.post('/api/admin/update-game', async (req, res) => {
   // Synchronous Awaited DB save
   try {
     const heroVal = is_hero !== undefined ? (is_hero ? 1 : 0) : 0;
+    const isPermVal = gNameUpper === 'DISAWAR' ? 1 : 0;
     await safeQuery(
-      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4, is_hero = $5 WHERE id = $6 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
-      [name, yesterday_result, today_result, open_time, heroVal, id || -1]
+      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4, is_hero = $5, is_permanent = GREATEST(is_permanent, $6) WHERE id = $7 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
+      [gNameUpper, yesterday_result, today_result, open_time, heroVal, isPermVal, id || -1]
     );
 
     if (is_featured === 1 || is_featured === true || gNameUpper.startsWith('DISAW')) {
       await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [gNameUpper]).catch(() => {});
       if (open_time !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_time', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [open_time]).catch(() => {});
-      if (yesterday_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_prev', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [yesterday_result]).catch(() => {});
-      if (today_result !== undefined) await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_today', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [today_result]).catch(() => {});
     }
 
     if (heroGamesList.length > 0) {
       await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [JSON.stringify(heroGamesList)]).catch(() => {});
     }
 
-    if (today_result && today_result.trim() !== '' && today_result !== 'WAIT') {
+    if (today_result && today_result.trim() !== '' && today_result.toUpperCase() !== 'WAIT') {
       await safeQuery(
         `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [todayStr, name, today_result.trim()]
+        [todayStr, gNameUpper, today_result.trim()]
+      );
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [todayFull, gNameUpper, today_result.trim()]
+      );
+    }
+
+    if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [yestStr, gNameUpper, yesterday_result.trim()]
+      );
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [yestFull, gNameUpper, yesterday_result.trim()]
       );
     }
   } catch (e) {}
@@ -516,76 +615,75 @@ app.post('/api/admin/update-game', async (req, res) => {
 app.post('/api/admin/add-game', async (req, res) => {
   const { name, open_time, yesterday_result, today_result, table_group, is_hero, is_featured } = req.body;
   const grp = parseInt(table_group) || 1;
-  const gName = (name || '').trim().toUpperCase();
+  let gName = (name || '').trim().toUpperCase();
+  if (gName === 'DISAWER') gName = 'DISAWAR';
   if (!gName) return res.status(400).json({ error: 'Game name is required' });
 
   const heroVal = is_hero ? 1 : 0;
   const featVal = is_featured ? 1 : 0;
+  const isPermVal = gName === 'DISAWAR' ? 1 : 0;
 
-  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
-  if (!backup.games) backup.games = [];
+  const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
 
-  const grpGames = backup.games.filter(g => parseInt(g.table_group) === grp);
-  const nextOrd = grpGames.length + 1;
-  const newId = Date.now();
-
-  const newGameObj = {
-    id: newId,
-    name: gName,
-    open_time: open_time || '',
-    yesterday_result: yesterday_result || '',
-    today_result: today_result || 'WAIT',
-    table_group: grp,
-    sort_order: nextOrd,
-    is_hero: heroVal,
-    is_featured: featVal
-  };
-
-  const existingIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === gName);
-  if (existingIdx !== -1) {
-    backup.games[existingIdx] = { ...backup.games[existingIdx], ...newGameObj };
-  } else {
-    backup.games.push(newGameObj);
-  }
-
-  if (!backup.settings) backup.settings = {};
-  if (featVal === 1) {
-    backup.settings.featured_banner_game = gName;
-  }
-
-  const heroGamesList = backup.games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
-    id: g.id || null,
-    name: g.name ? g.name.trim().toUpperCase() : '',
-    today_result: g.today_result ? g.today_result.trim() : 'WAIT'
-  }));
-  backup.settings.hero_games_json = JSON.stringify(heroGamesList);
-
-  memoryBackupCache = backup;
-  saveBackupDataLocally(backup);
-
-  // Synchronous Awaited DB save
+  let dbInsertedGame = null;
   try {
-    await safeQuery(
-      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero, is_featured)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    const dbRes = await safeQuery(
+      `INSERT INTO games (name, open_time, close_time, yesterday_result, today_result, table_group, sort_order, is_hero, is_featured, is_permanent)
+       VALUES ($1, $2, $3, $4, $5, $6, COALESCE((SELECT MAX(sort_order) + 1 FROM games WHERE table_group = $6), 1), $7, $8, $9)
        ON CONFLICT (name) DO UPDATE SET
          open_time = EXCLUDED.open_time,
          yesterday_result = EXCLUDED.yesterday_result,
          today_result = EXCLUDED.today_result,
          table_group = EXCLUDED.table_group,
-         sort_order = EXCLUDED.sort_order,
          is_hero = EXCLUDED.is_hero,
-         is_featured = EXCLUDED.is_featured`,
-      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, nextOrd, heroVal, featVal]
+         is_featured = EXCLUDED.is_featured,
+         is_permanent = GREATEST(games.is_permanent, EXCLUDED.is_permanent)
+       RETURNING *`,
+      [gName, open_time || '', open_time || '', yesterday_result || '', today_result || 'WAIT', grp, heroVal, featVal, isPermVal]
     );
+    if (dbRes && dbRes.rows && dbRes.rows.length > 0) {
+      dbInsertedGame = dbRes.rows[0];
+    }
 
-    if (featVal === 1) {
+    if (featVal === 1 || gName.startsWith('DISAW')) {
       await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [gName]).catch(() => {});
     }
-  } catch (e) {}
+
+    if (today_result && today_result.trim() !== '' && today_result.toUpperCase() !== 'WAIT') {
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [todayStr, gName, today_result.trim()]
+      );
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [todayFull, gName, today_result.trim()]
+      );
+    }
+
+    if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [yestStr, gName, yesterday_result.trim()]
+      );
+      await safeQuery(
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+        [yestFull, gName, yesterday_result.trim()]
+      );
+    }
+  } catch (e) {
+    console.error('Error inserting game into Supabase:', e);
+  }
 
   memoryBackupCache = null;
-  res.json({ success: true, id: newId });
+  await syncJSONBackup();
+
+  const finalId = dbInsertedGame ? dbInsertedGame.id : Date.now();
+  console.log(`➕ [GAME CREATED IN DB]: id=${finalId}, name=${gName}`);
+  res.json({ success: true, game: dbInsertedGame, id: finalId });
 });
 
 // Admin: Save Hero Box Games
@@ -677,13 +775,27 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
   if (!backup.games) backup.games = [];
   if (!backup.chart_records) backup.chart_records = [];
 
-  const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
+  const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
+
+  const updateChartBackup = (dateKey, gameName, val) => {
+    const cIdx = backup.chart_records.findIndex(
+      r => (r.record_date === dateKey) && (r.game_name || '').toUpperCase() === gameName
+    );
+    if (cIdx !== -1) {
+      backup.chart_records[cIdx].result_val = val;
+    } else {
+      backup.chart_records.push({ record_date: dateKey, game_name: gameName, result_val: val });
+    }
+  };
 
   games.forEach(g => {
     if (!g.name) return;
-    const gNameUpper = g.name.trim().toUpperCase();
+    let gNameUpper = g.name.trim().toUpperCase();
+    if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
+    const isPermVal = gNameUpper === 'DISAWAR' ? 1 : 0;
+
     const existingIdx = backup.games.findIndex(
-      bg => (bg.id && g.id && String(bg.id) === String(g.id)) || (bg.name || '').toUpperCase() === gNameUpper
+      bg => (bg.id && g.id && String(bg.id) === String(g.id)) || (bg.name || '').toUpperCase() === gNameUpper || (gNameUpper === 'DISAWAR' && (bg.name || '').toUpperCase().startsWith('DISAW'))
     );
 
     const updatedGame = {
@@ -695,15 +807,14 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       table_group: parseInt(g.table_group) || 1,
       sort_order: parseInt(g.sort_order) || 0,
       is_hero: g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_hero || 0) : 0),
-      is_featured: g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_featured || 0) : 0)
+      is_featured: g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_featured || 0) : 0),
+      is_permanent: isPermVal || (existingIdx !== -1 ? (backup.games[existingIdx].is_permanent || 0) : 0)
     };
 
     if (g.is_featured === 1 || g.is_featured === true || gNameUpper.startsWith('DISAW')) {
       if (!backup.settings) backup.settings = {};
       backup.settings.featured_banner_game = gNameUpper;
       if (g.open_time !== undefined) backup.settings.disawer_time = g.open_time;
-      if (g.yesterday_result !== undefined) backup.settings.disawer_prev = g.yesterday_result;
-      if (g.today_result !== undefined) backup.settings.disawer_today = g.today_result;
     }
 
     if (existingIdx !== -1) {
@@ -712,34 +823,14 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
       backup.games.push(updatedGame);
     }
 
-    if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
-      const cIdx = backup.chart_records.findIndex(
-        r => r.record_date === todayStr && (r.game_name || '').toUpperCase() === gNameUpper
-      );
-      if (cIdx !== -1) {
-        backup.chart_records[cIdx].result_val = g.today_result.trim();
-      } else {
-        backup.chart_records.push({ record_date: todayStr, game_name: gNameUpper, result_val: g.today_result.trim() });
-      }
-    } else {
-      backup.chart_records = backup.chart_records.filter(
-        r => !(r.record_date === todayStr && (r.game_name || '').toUpperCase() === gNameUpper)
-      );
+    if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
+      updateChartBackup(todayStr, gNameUpper, g.today_result.trim());
+      updateChartBackup(todayFull, gNameUpper, g.today_result.trim());
     }
 
     if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
-      const cIdx = backup.chart_records.findIndex(
-        r => r.record_date === yestStr && (r.game_name || '').toUpperCase() === gNameUpper
-      );
-      if (cIdx !== -1) {
-        backup.chart_records[cIdx].result_val = g.yesterday_result.trim();
-      } else {
-        backup.chart_records.push({ record_date: yestStr, game_name: gNameUpper, result_val: g.yesterday_result.trim() });
-      }
-    } else {
-      backup.chart_records = backup.chart_records.filter(
-        r => !(r.record_date === yestStr && (r.game_name || '').toUpperCase() === gNameUpper)
-      );
+      updateChartBackup(yestStr, gNameUpper, g.yesterday_result.trim());
+      updateChartBackup(yestFull, gNameUpper, g.yesterday_result.trim());
     }
   });
 
@@ -758,19 +849,27 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
 
   for (const g of games) {
     if (g.id || g.name) {
-      const gNameUpper = (g.name || '').trim().toUpperCase();
+      let gNameUpper = (g.name || '').trim().toUpperCase();
+      if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
       const heroVal = g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : 0;
       const featVal = g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : 0;
+      const isPermVal = gNameUpper === 'DISAWAR' ? 1 : 0;
+
       try {
         await safeQuery(
-          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5, is_hero = $6, is_featured = $7 WHERE id = $8 OR UPPER(name) = UPPER($1)`,
-          [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, heroVal, featVal, g.id || -1]
+          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5, is_hero = $6, is_featured = $7, is_permanent = GREATEST(is_permanent, $8) WHERE id = $9 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
+          [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, heroVal, featVal, isPermVal, g.id || -1]
         );
-        if (g.today_result && g.today_result.trim() !== '' && g.today_result !== 'WAIT') {
+        if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
           await safeQuery(
             `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
              ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
             [todayStr, gNameUpper, g.today_result.trim()]
+          );
+          await safeQuery(
+            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+            [todayFull, gNameUpper, g.today_result.trim()]
           );
         }
 
@@ -779,6 +878,11 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
             `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
              ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
             [yestStr, gNameUpper, g.yesterday_result.trim()]
+          );
+          await safeQuery(
+            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+            [yestFull, gNameUpper, g.yesterday_result.trim()]
           );
         }
       } catch (e) {}
@@ -795,6 +899,12 @@ app.post('/api/admin/delete-game', async (req, res) => {
   const idStr = id ? String(id) : '';
 
   const backup = getBackupData();
+  const targetBackupGame = backup && backup.games ? backup.games.find(g => (idStr !== '' && String(g.id || '') === idStr) || ((g.name || '').toUpperCase() === nameUpper)) : null;
+
+  if (nameUpper === 'DISAWAR' || nameUpper === 'DISAWER' || nameUpper.startsWith('DISAW') || (targetBackupGame && (targetBackupGame.is_permanent || (targetBackupGame.name || '').toUpperCase().startsWith('DISAW')))) {
+    return res.status(400).json({ error: 'DISAWAR is a permanent system game and cannot be deleted.' });
+  }
+
   if (backup && backup.games) {
     backup.games = backup.games.filter(g => {
       const matchId = idStr !== '' && String(g.id || '') === idStr;
@@ -823,7 +933,7 @@ app.post('/api/admin/delete-game', async (req, res) => {
   }
 
   try {
-    await safeQuery('DELETE FROM games WHERE id = $1 OR UPPER(name) = UPPER($2)', [id || -1, name || '']);
+    await safeQuery('DELETE FROM games WHERE (id = $1 OR UPPER(name) = UPPER($2)) AND UPPER(name) NOT LIKE \'DISAW%\' AND COALESCE(is_permanent, 0) = 0', [id || -1, name || '']);
   } catch (e) {}
 
   memoryBackupCache = null;
@@ -831,10 +941,10 @@ app.post('/api/admin/delete-game', async (req, res) => {
   res.json({ success: true, message: 'Game permanently deleted' });
 });
 
-// Admin: Clear All Games
+// Admin: Clear All Games (Preserves Permanent DISAWER)
 app.post('/api/admin/clear-all-games', async (req, res) => {
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
-  backup.games = [];
+  backup.games = (backup.games || []).filter(g => (g.name || '').toUpperCase().startsWith('DISAW'));
   if (!backup.settings) backup.settings = {};
   backup.settings.hero_games_json = "[]";
   backup.settings.custom_chart_cards_json = "[]";
@@ -845,12 +955,12 @@ app.post('/api/admin/clear-all-games', async (req, res) => {
   saveBackupDataLocally(backup);
 
   try {
-    await safeQuery('DELETE FROM games');
+    await safeQuery("DELETE FROM games WHERE UPPER(name) NOT LIKE 'DISAW%'");
     await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', '[]') ON CONFLICT (key) DO UPDATE SET value = '[]'`).catch(() => {});
     await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('custom_chart_cards_json', '[]') ON CONFLICT (key) DO UPDATE SET value = '[]'`).catch(() => {});
   } catch (e) {}
 
-  res.json({ success: true, message: 'All games cleared successfully' });
+  res.json({ success: true, message: 'All custom games cleared successfully (Permanent DISAWER preserved)' });
 });
 
 // Admin: Save/Update Single Chart Cell

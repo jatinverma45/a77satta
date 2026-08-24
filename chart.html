@@ -137,7 +137,7 @@
           if (!r || !r.record_date || !r.game_name) return;
           const gUpper = r.game_name.trim().toUpperCase();
           const cUpper = cleanName.trim().toUpperCase();
-          if (gUpper === cUpper || (gUpper === 'DISAWER' && cUpper === 'DESAWAR') || (gUpper === 'DESAWAR' && cUpper === 'DISAWER')) {
+          if (gUpper === cUpper || (gUpper.startsWith('DISAW') && cUpper.startsWith('DISAW'))) {
             const parts = r.record_date.trim().split('-');
             if (parts.length === 2) {
               const dayNum = parseInt(parts[0], 10);

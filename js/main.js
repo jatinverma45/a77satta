@@ -37,8 +37,10 @@
 
   // Fetch Site Data & Render Homepage Dynamically (Authoritative Live API)
   let activeFetchPromise = null;
+  let mainFetchSeq = 0;
   async function loadFullSiteData() {
     if (activeFetchPromise) return activeFetchPromise;
+    const currentSeq = ++mainFetchSeq;
 
     activeFetchPromise = (async () => {
       try {
@@ -51,6 +53,10 @@
         });
         if (!res.ok) throw new Error(`API HTTP Error: ${res.status}`);
         const data = await res.json();
+        if (currentSeq < mainFetchSeq) {
+          console.log(`⚠️ Discarding stale main fetch #${currentSeq} (latest is #${mainFetchSeq})`);
+          return;
+        }
 
         console.log('📡 [LIVE API DATA RECEIVED]:', {
           status: res.status,
@@ -204,13 +210,26 @@
     if (!data) return;
     window.latestSiteData = data;
     try {
-      const chartRecords = data.chart_records || [];
+      // Calculate Asia/Kolkata dates
       const nowDate = new Date();
-      const currentMonthStr = String(nowDate.getMonth() + 1).padStart(2, '0');
-      const todayDay = nowDate.getDate();
-      const yestDay = todayDay - 1;
-      const todayStr = `${String(todayDay).padStart(2, '0')}-${currentMonthStr}`;
-      const yestStr = yestDay > 0 ? `${String(yestDay).padStart(2, '0')}-${currentMonthStr}` : todayStr;
+      const kolkataFormatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      const todayFull = kolkataFormatter.format(nowDate);
+      const [tY, tM, tD] = todayFull.split('-');
+      const todayStr = `${tD}-${tM}`;
+
+      const kolkataNowParts = kolkataFormatter.formatToParts(nowDate);
+      let kYear = parseInt(kolkataNowParts.find(p => p.type === 'year').value, 10);
+      let kMonth = parseInt(kolkataNowParts.find(p => p.type === 'month').value, 10) - 1;
+      let kDay = parseInt(kolkataNowParts.find(p => p.type === 'day').value, 10);
+      const kDateObj = new Date(Date.UTC(kYear, kMonth, kDay - 1));
+      const yestFull = kolkataFormatter.format(kDateObj);
+      const [yY, yM, yD] = yestFull.split('-');
+      const yestStr = `${yD}-${yM}`;
 
       function getResultFromChartRecords(records, dateStr, gameName) {
         if (!records || !records.length || !dateStr || !gameName) return null;
@@ -219,7 +238,7 @@
           if (!r.record_date || !r.game_name) return false;
           const rDate = r.record_date.trim();
           const rGame = r.game_name.trim().toUpperCase();
-          return rDate === dateStr && (rGame === gUpper || (gUpper === 'DISAWER' && rGame === 'DESAWAR') || (gUpper === 'DESAWAR' && rGame === 'DISAWER'));
+          return rDate === dateStr && (rGame === gUpper || (gUpper === 'DISAWAR' && rGame === 'DISAWER') || (gUpper === 'DISAWER' && rGame === 'DISAWAR'));
         });
         return rec ? rec.result_val : null;
       }
@@ -383,7 +402,7 @@
           let heroHtml = '';
           heroList.forEach(g => {
             const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
-            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
+            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name) || getResultFromChartRecords(chartRecords, todayFull, name);
             
             let resVal = 'WAIT';
             if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
@@ -410,39 +429,27 @@
         }
       }
 
-      // Render Permanent DISAWER 1 Feature Box (Dynamic from DB Settings & Games)
+      // Render Permanent DISAWAR Feature Box (Dynamic from DB Games & Date Records)
       const bannerBox = document.getElementById('featuredBannerBox') || document.querySelector('.bottom-disclaimer');
       if (bannerBox) {
         bannerBox.style.display = 'flex';
-        const actualGameName = 'DISAWER';
+        const actualGameName = 'DISAWAR';
         const s = data.settings || {};
         const disawerGame = (data.games || []).find(g => (g.name || '').trim().toUpperCase().startsWith('DISAW'));
 
-        const bannerTime = (s.disawer_time && s.disawer_time.trim())
-          ? s.disawer_time.trim()
-          : (disawerGame && disawerGame.open_time ? disawerGame.open_time.trim() : '');
+        const bannerTime = (disawerGame && disawerGame.open_time && disawerGame.open_time.trim())
+          ? disawerGame.open_time.trim()
+          : (s.disawer_time ? s.disawer_time.trim() : '05:15 AM');
 
-        let finalYest = (s.disawer_prev && s.disawer_prev.trim() && s.disawer_prev !== '-')
-          ? s.disawer_prev.trim()
-          : (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-' ? disawerGame.yesterday_result.trim() : '');
+        let finalYest = (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-')
+          ? disawerGame.yesterday_result.trim()
+          : (getResultFromChartRecords(chartRecords, yestFull, actualGameName) || getResultFromChartRecords(chartRecords, yestStr, actualGameName) || '-');
 
-        let finalToday = (s.disawer_today && s.disawer_today.trim() && s.disawer_today.toUpperCase() !== 'WAIT')
-          ? s.disawer_today.trim()
-          : (disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT' ? disawerGame.today_result.trim() : '');
+        let finalToday = (disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT')
+          ? disawerGame.today_result.trim()
+          : (getResultFromChartRecords(chartRecords, todayFull, actualGameName) || getResultFromChartRecords(chartRecords, todayStr, actualGameName) || 'WAIT');
 
-        if (!finalYest || finalYest === '-') {
-          const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
-          if (chartYestVal) finalYest = chartYestVal;
-          else finalYest = '-';
-        }
-
-        if (!finalToday || finalToday.toUpperCase() === 'WAIT') {
-          const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
-          if (chartTodayVal) finalToday = chartTodayVal;
-          else finalToday = 'WAIT';
-        }
-
-        console.log('📌 [DISAWER BANNER RENDERED]:', {
+        console.log('📌 [DISAWAR BANNER RENDERED]:', {
           time: bannerTime,
           yesterday: finalYest,
           today: finalToday
