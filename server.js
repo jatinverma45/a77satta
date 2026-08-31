@@ -233,36 +233,39 @@ async function ensureMonthlyChartRecordsInDb() {
     if (!gamesRes || !gamesRes.rows || gamesRes.rows.length === 0) return;
 
     const gameNames = gamesRes.rows.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
+    if (gameNames.length === 0) return;
 
     // Clean up any orphan chart records not matching active games
     await safeQuery(`DELETE FROM chart_records WHERE UPPER(game_name) NOT IN (SELECT UPPER(name) FROM games)`).catch(() => {});
+
+    // Fast Single-Query Batch Insert
+    const valuesArr = [];
+    const params = [];
+    let pIdx = 1;
 
     for (let day = 1; day <= kDay; day++) {
       const dayStr = String(day).padStart(2, '0');
       const dateKeyDDMM = `${dayStr}-${kMonth}`;
 
       for (const gName of gameNames) {
-        await safeQuery(
-          `INSERT INTO chart_records (record_date, game_name, result_val)
-           VALUES ($1, $2, '-')
-           ON CONFLICT (record_date, game_name) DO NOTHING`,
-          [dateKeyDDMM, gName]
-        ).catch(() => {});
+        valuesArr.push(`($${pIdx}, $${pIdx + 1}, '-')`);
+        params.push(dateKeyDDMM, gName);
+        pIdx += 2;
       }
     }
-    console.log(`📅 Chart records auto-synced in DB for all active games up to ${kDay}-${kMonth}`);
+
+    if (valuesArr.length > 0) {
+      const batchSql = `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ${valuesArr.join(', ')} ON CONFLICT (record_date, game_name) DO NOTHING`;
+      await safeQuery(batchSql, params).catch(() => {});
+    }
   } catch (e) {
     console.error('Error ensuring monthly chart records in DB:', e.message);
   }
 }
 
-const dbReadyPromise = initDatabase();
-
-app.use(async (req, res, next) => {
-  if (!isDbReady) {
-    await dbReadyPromise;
-  }
-  next();
+// Run DB initialization in background without blocking serverless requests
+initDatabase().catch(err => {
+  console.error('Background initDatabase error:', err);
 });
 
 // Serve sitemap.xml with explicit XML content-type header for Google Search Console
