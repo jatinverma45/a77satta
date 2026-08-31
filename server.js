@@ -265,6 +265,49 @@ app.use(async (req, res, next) => {
   next();
 });
 
+// Serve sitemap.xml with explicit XML content-type header for Google Search Console
+app.get('/sitemap.xml', (req, res) => {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  const sitemapPath = path.join(__dirname, 'sitemap.xml');
+  if (fs.existsSync(sitemapPath)) {
+    return res.sendFile(sitemapPath);
+  }
+  const defaultSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://a77satta.online/</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>always</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://a77satta.online/chart</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://a77satta.online/contact</loc>
+    <lastmod>2026-08-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>`;
+  res.send(defaultSitemap);
+});
+
+// Serve robots.txt with plaintext header
+app.get('/robots.txt', (req, res) => {
+  res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=3600');
+  const robotsPath = path.join(__dirname, 'robots.txt');
+  if (fs.existsSync(robotsPath)) {
+    return res.sendFile(robotsPath);
+  }
+  res.send(`User-agent: *\nAllow: /\nAllow: /chart\nAllow: /contact\nAllow: /login\nDisallow: /admin\nDisallow: /api/\n\nSitemap: https://a77satta.online/sitemap.xml\n`);
+});
+
 // ========================================
 // REST API ROUTES (DIRECT POSTGRESQL DRIVEN)
 // ========================================

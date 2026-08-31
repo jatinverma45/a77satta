@@ -43,6 +43,14 @@
   ],
   "routes": [
     {
+      "src": "/sitemap.xml",
+      "dest": "server.js"
+    },
+    {
+      "src": "/robots.txt",
+      "dest": "server.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "server.js"
     },
