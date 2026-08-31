@@ -474,7 +474,10 @@
             </div>
             <div>
               <label style="display: block; font-weight: 900; font-size: 12px; color: #000; margin-bottom: 6px;">आज का रिजल्ट (TODAY RESULT / WAIT):</label>
-              <input type="text" id="disawerBannerToday" class="adm-input-cell" placeholder="e.g. WAIT or 63" style="font-weight: 900; color: #000; border-color: #ffd400;">
+              <div class="action-row-flex">
+                <input type="text" id="disawerBannerToday" class="adm-input-cell" placeholder="e.g. WAIT or 63" style="font-weight: 900; color: #000; border-color: #ffd400;">
+                <button class="btn-adm btn-adm-yellow" type="button" onclick="setDisawerWait(this)">SET WAIT</button>
+              </div>
             </div>
             <div style="grid-column: 1 / -1; display: flex; justify-content: flex-end; margin-top: 4px;">
               <button class="btn-adm btn-adm-yellow" type="button" onclick="saveDisawerBannerData(this)" style="font-weight: 900; font-size: 14px; padding: 10px 24px;">🚀 UPDATE DISAWAR BANNER LIVE</button>
@@ -792,8 +795,8 @@
     <!-- FOOTER -->
     <section class="a77-footer" style="margin-top: 30px;">
       <div class="a77-privacy-row">
-        <a href="https://a77satta.com/privacy-policy">Privacy Policy</a>
-        <a href="https://a77satta.com/terms-and-conditions">Terms &amp; Conditions</a>
+        <a href="https://a77satta.online/privacy-policy">Privacy Policy</a>
+        <a href="https://a77satta.online/terms-and-conditions">Terms &amp; Conditions</a>
       </div>
       <div class="a77-copyright-row">
         <span>© 2026 A77SATTA Admin Control Panel. All Rights Reserved.</span>
@@ -1008,6 +1011,16 @@
       todayInp.value = (disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT') ? disawerGame.today_result : 'WAIT';
     }
 
+    async function setDisawerWait(btn) {
+      const todayInp = document.getElementById('disawerBannerToday');
+      if (todayInp) {
+        todayInp.value = 'WAIT';
+        todayInp.style.backgroundColor = '#fff8e1';
+        todayInp.style.borderColor = '#ff9800';
+      }
+      await saveDisawerBannerData(btn);
+    }
+
     async function saveDisawerBannerData(btn) {
       const timeInp = document.getElementById('disawerBannerTime');
       const yestInp = document.getElementById('disawerBannerYesterday');
@@ -1108,7 +1121,7 @@
         const n2 = siteDataCache && siteDataCache.settings ? siteDataCache.settings.notice_2 : null;
         noticeList = [
           { text: n1 || 'SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.' },
-          { text: n2 || 'SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM' }
+          { text: n2 || 'SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE' }
         ];
       }
 
@@ -1552,15 +1565,25 @@
       });
     }
 
-    function setHeroWaitRow(btn) {
+    async function setHeroWaitRow(btn) {
       const tr = btn ? btn.closest('tr') : null;
       const el = tr ? tr.querySelector('.hero-game-result') : null;
-      if (el) el.value = 'WAIT';
+      if (el) {
+        el.value = 'WAIT';
+        el.style.backgroundColor = '#fff8e1';
+        el.style.borderColor = '#ff9800';
+      }
+      await saveHeroGamesList(btn);
     }
 
-    function setHeroWait(idx) {
+    async function setHeroWait(idx) {
       const el = document.getElementById(`hero_res_${idx}`);
-      if (el) el.value = 'WAIT';
+      if (el) {
+        el.value = 'WAIT';
+        el.style.backgroundColor = '#fff8e1';
+        el.style.borderColor = '#ff9800';
+      }
+      await saveHeroGamesList(null);
     }
 
     function addHeroGameRow() {
@@ -1729,9 +1752,13 @@
         ? game.yesterday_result.trim()
         : (chartYestVal !== null ? chartYestVal : '');
 
-      const todayVal = (game.today_result && game.today_result !== 'WAIT' && game.today_result.trim())
-        ? game.today_result.trim()
-        : (chartTodayVal !== null ? chartTodayVal : (game.today_result || 'WAIT'));
+      let todayVal = 'WAIT';
+      const rawToday = (game.today_result !== undefined && game.today_result !== null) ? String(game.today_result).trim() : '';
+      if (rawToday && rawToday.toUpperCase() !== 'WAIT' && rawToday !== '-') {
+        todayVal = rawToday;
+      } else {
+        todayVal = 'WAIT';
+      }
 
       const isHero = parseInt(game.is_hero) === 1;
       const featSettingName = (siteDataCache && siteDataCache.settings && siteDataCache.settings.featured_banner_game)
@@ -1782,19 +1809,32 @@
       return tr;
     }
 
-    function setWaitValRow(btn) {
+    async function setWaitValRow(btn) {
       const tr = btn ? btn.closest('tr') : null;
       const el = tr ? tr.querySelector('.game-today-input') : null;
-      if (el) el.value = 'WAIT';
+      if (el) {
+        el.value = 'WAIT';
+        el.style.backgroundColor = '#fff8e1';
+        el.style.borderColor = '#ff9800';
+      }
+      const gameIdStr = tr ? tr.getAttribute('data-game-id') : null;
+      if (gameIdStr) {
+        await saveGameRow(parseInt(gameIdStr), btn);
+      }
     }
 
-    function setWaitVal(gameId) {
+    async function setWaitVal(gameId) {
       const el = document.getElementById(`g_today_${gameId}`);
-      if (el) el.value = 'WAIT';
+      if (el) {
+        el.value = 'WAIT';
+        el.style.backgroundColor = '#fff8e1';
+        el.style.borderColor = '#ff9800';
+      }
+      await saveGameRow(gameId, null);
     }
 
     async function saveGameRow(gameId, btn) {
-      const tr = btn ? btn.closest('tr') : null;
+      const tr = (btn && btn.closest('tr')) ? btn.closest('tr') : document.querySelector(`tr[data-game-id="${gameId}"]`);
       const nameInp = tr ? tr.querySelector('.game-name-input') : document.getElementById(`g_name_${gameId}`);
       const timeInp = tr ? tr.querySelector('.game-time-input') : document.getElementById(`g_time_${gameId}`);
       const yestInp = tr ? tr.querySelector('.game-yest-input') : document.getElementById(`g_yest_${gameId}`);
@@ -1809,6 +1849,7 @@
       const is_hero = heroCheck ? (heroCheck.checked ? 1 : 0) : 0;
       const is_featured = featRadio ? (featRadio.checked ? 1 : 0) : 0;
 
+      const origText = btn ? btn.textContent : '';
       if (btn) {
         btn.disabled = true;
         btn.textContent = '⏳';
@@ -1835,19 +1876,47 @@
         }
 
         if (res.ok) {
-          showToast(`Saved ${name}!`);
+          if (siteDataCache && Array.isArray(siteDataCache.games)) {
+            const gIdx = siteDataCache.games.findIndex(g => g.id === gameId || (g.name || '').toUpperCase() === name.toUpperCase());
+            if (gIdx !== -1) {
+              siteDataCache.games[gIdx].today_result = today_result;
+              siteDataCache.games[gIdx].yesterday_result = yesterday_result;
+              siteDataCache.games[gIdx].open_time = open_time;
+            }
+            if (today_result.toUpperCase() === 'WAIT') {
+              const { todayStr } = getTodayAndYesterdayDateStr();
+              if (siteDataCache.chart_records) {
+                siteDataCache.chart_records = siteDataCache.chart_records.filter(r => {
+                  if (!r || !r.game_name || !r.record_date) return true;
+                  return !(r.game_name.toUpperCase() === name.toUpperCase() && (r.record_date === todayStr || r.record_date.includes(todayStr)));
+                });
+              }
+            }
+          }
+          showToast(`✅ ${name} saved as ${today_result}!`);
           if (btn) {
             btn.textContent = '✅';
-            setTimeout(() => { btn.disabled = false; btn.textContent = 'SAVE'; }, 1500);
+            setTimeout(() => {
+              if (btn) {
+                btn.disabled = false;
+                btn.textContent = origText || 'SAVE';
+              }
+            }, 1500);
           }
           await loadAdminData();
         } else {
           alert('Failed to save game row');
-          if (btn) { btn.disabled = false; btn.textContent = 'SAVE'; }
+          if (btn) {
+            btn.disabled = false;
+            btn.textContent = origText || 'SAVE';
+          }
         }
       } catch (e) {
         alert('Error saving game row');
-        if (btn) { btn.disabled = false; btn.textContent = 'SAVE'; }
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = origText || 'SAVE';
+        }
       }
     }
 

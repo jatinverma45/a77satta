@@ -314,7 +314,7 @@
           if (!noticeList || noticeList.length === 0) {
             noticeList = [
               { text: s.notice_1 || 'SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.' },
-              { text: s.notice_2 || 'SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM' }
+              { text: s.notice_2 || 'SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE' }
             ];
           }
           let noticeHtml = '';
@@ -372,14 +372,14 @@
               gridHtml += `
         <article class="schedule-panel">
           <header class="schedule-header">
-            <div class="subtitle-text">${c.header_subtitle || '--सीधी सट्टा कंपनी का No 1 शर्तावाल--'}</div>
+            <div class="subtitle-text">${c.header_subtitle || '--सीधी सट्टा कंपनी का No 1 खाईवाल--'}</div>
             <h2 class="bold-header">${c.title || ''}</h2>
           </header>
           <div class="panel-body">
             <p>
               ${bodyLines}
             </p>
-            <div class="note-box">${c.footer_text || 'Game play करने के लिए नीचे लिंक पर क्लिक करें'}</div>
+            ${c.footer_text ? `<div class="note-box">${c.footer_text}</div>` : ''}
             <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="cta-banner">
               <span class="cta-glow">▶ GO TO WHATSAPP DIRECT ◀</span>
             </a>
@@ -406,9 +406,11 @@
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name) || getResultFromChartRecords(chartRecords, todayFull, name);
             
             let resVal = 'WAIT';
-            if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT') {
+            if (g.today_result && g.today_result.trim().toUpperCase() === 'WAIT') {
+              resVal = 'WAIT';
+            } else if (g.today_result && g.today_result.trim() !== '') {
               resVal = g.today_result.trim();
-            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-') {
+            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               resVal = chartTodayVal.trim();
             }
 
@@ -446,9 +448,15 @@
           ? disawerGame.yesterday_result.trim()
           : (getResultFromChartRecords(chartRecords, yestFull, actualGameName) || getResultFromChartRecords(chartRecords, yestStr, actualGameName) || '-');
 
-        let finalToday = (disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT')
-          ? disawerGame.today_result.trim()
-          : (getResultFromChartRecords(chartRecords, todayFull, actualGameName) || getResultFromChartRecords(chartRecords, todayStr, actualGameName) || 'WAIT');
+        let finalToday = 'WAIT';
+        if (disawerGame && disawerGame.today_result && disawerGame.today_result.trim().toUpperCase() === 'WAIT') {
+          finalToday = 'WAIT';
+        } else if (disawerGame && disawerGame.today_result && disawerGame.today_result.trim() !== '') {
+          finalToday = disawerGame.today_result.trim();
+        } else {
+          const chartVal = getResultFromChartRecords(chartRecords, todayFull, actualGameName) || getResultFromChartRecords(chartRecords, todayStr, actualGameName);
+          finalToday = (chartVal && chartVal.toUpperCase() !== 'WAIT') ? chartVal : 'WAIT';
+        }
 
         console.log('📌 [DISAWAR BANNER RENDERED]:', {
           time: bannerTime,
@@ -492,11 +500,16 @@
               ? g.yesterday_result.trim()
               : (chartYestVal !== null ? chartYestVal : '-');
 
-            const todayRaw = (g.today_result && g.today_result !== 'WAIT' && g.today_result.trim())
-              ? g.today_result.trim()
-              : (chartTodayVal !== null ? chartTodayVal : (g.today_result || 'WAIT'));
+            let todayRaw = 'WAIT';
+            if (g.today_result && g.today_result.trim().toUpperCase() === 'WAIT') {
+              todayRaw = 'WAIT';
+            } else if (g.today_result && g.today_result.trim() !== '') {
+              todayRaw = g.today_result.trim();
+            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+              todayRaw = chartTodayVal.trim();
+            }
 
-            const todayResHtml = (!todayRaw || todayRaw === 'WAIT')
+            const todayResHtml = (!todayRaw || todayRaw.toUpperCase() === 'WAIT')
               ? `<span class="market-wait">WAIT</span>`
               : todayRaw;
 
