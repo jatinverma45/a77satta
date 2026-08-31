@@ -201,6 +201,9 @@ async function initDatabase() {
          ON CONFLICT (name) DO UPDATE SET is_permanent = 1, table_group = 1`
       ).catch(() => {});
 
+      // Clean up any orphan chart records for games that no longer exist in the games table
+      await safeQuery(`DELETE FROM chart_records WHERE UPPER(game_name) NOT IN (SELECT UPPER(name) FROM games)`).catch(() => {});
+
       // Ensure all chart dates up to today are present in DB for all active games
       await ensureMonthlyChartRecordsInDb();
 
@@ -230,6 +233,9 @@ async function ensureMonthlyChartRecordsInDb() {
     if (!gamesRes || !gamesRes.rows || gamesRes.rows.length === 0) return;
 
     const gameNames = gamesRes.rows.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
+
+    // Clean up any orphan chart records not matching active games
+    await safeQuery(`DELETE FROM chart_records WHERE UPPER(game_name) NOT IN (SELECT UPPER(name) FROM games)`).catch(() => {});
 
     for (let day = 1; day <= kDay; day++) {
       const dayStr = String(day).padStart(2, '0');
@@ -1050,9 +1056,18 @@ app.post('/api/admin/delete-game', async (req, res) => {
     saveBackupDataLocally(backup);
   }
 
+  const gameNameToDelete = nameUpper || (targetBackupGame ? targetBackupGame.name : '');
+
   try {
     await safeQuery('DELETE FROM games WHERE (id = $1 OR UPPER(name) = UPPER($2)) AND UPPER(name) NOT LIKE \'DISAW%\' AND COALESCE(is_permanent, 0) = 0', [id || -1, name || '']);
+    if (gameNameToDelete) {
+      await safeQuery('DELETE FROM chart_records WHERE UPPER(game_name) = UPPER($1) OR UPPER(game_name) = UPPER($2)', [gameNameToDelete, name || '']).catch(() => {});
+    }
   } catch (e) {}
+
+  if (backup && backup.chart_records && gameNameToDelete) {
+    backup.chart_records = backup.chart_records.filter(r => (r.game_name || '').toUpperCase() !== gameNameToDelete.toUpperCase());
+  }
 
   if (memoryBackupCache && Array.isArray(memoryBackupCache.games)) {
     memoryBackupCache.games = memoryBackupCache.games.filter(g => {
@@ -1060,17 +1075,21 @@ app.post('/api/admin/delete-game', async (req, res) => {
       const matchName = nameUpper !== '' && (g.name || '').toUpperCase() === nameUpper;
       return !(matchId || matchName);
     });
+    if (memoryBackupCache.chart_records && gameNameToDelete) {
+      memoryBackupCache.chart_records = memoryBackupCache.chart_records.filter(r => (r.game_name || '').toUpperCase() !== gameNameToDelete.toUpperCase());
+    }
   }
 
   syncJSONBackup().catch(() => {});
-  console.log(`🗑️ [GAME DELETED PERMANENTLY]: id=${id}, name=${name}`);
-  res.json({ success: true, message: 'Game permanently deleted' });
+  console.log(`🗑️ [GAME DELETED PERMANENTLY WITH CHART DATA]: id=${id}, name=${name}`);
+  res.json({ success: true, message: 'Game and associated chart records permanently deleted' });
 });
 
 // Admin: Clear All Games (Preserves Permanent DISAWER)
 app.post('/api/admin/clear-all-games', async (req, res) => {
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   backup.games = (backup.games || []).filter(g => (g.name || '').toUpperCase().startsWith('DISAW'));
+  backup.chart_records = (backup.chart_records || []).filter(r => (r.game_name || '').toUpperCase().startsWith('DISAW'));
   if (!backup.settings) backup.settings = {};
   backup.settings.hero_games_json = "[]";
   backup.settings.custom_chart_cards_json = "[]";
@@ -1082,11 +1101,12 @@ app.post('/api/admin/clear-all-games', async (req, res) => {
 
   try {
     await safeQuery("DELETE FROM games WHERE UPPER(name) NOT LIKE 'DISAW%'");
+    await safeQuery("DELETE FROM chart_records WHERE UPPER(game_name) NOT LIKE 'DISAW%'").catch(() => {});
     await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', '[]') ON CONFLICT (key) DO UPDATE SET value = '[]'`).catch(() => {});
     await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('custom_chart_cards_json', '[]') ON CONFLICT (key) DO UPDATE SET value = '[]'`).catch(() => {});
   } catch (e) {}
 
-  res.json({ success: true, message: 'All custom games cleared successfully (Permanent DISAWER preserved)' });
+  res.json({ success: true, message: 'All custom games and their chart records cleared successfully (Permanent DISAWER preserved)' });
 });
 
 // Admin: Save/Update Single Chart Cell
