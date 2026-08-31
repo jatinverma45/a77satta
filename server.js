@@ -440,35 +440,25 @@ app.get('/api/site-data', async (req, res) => {
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
-      const yestRec = charts.find(r => {
-        if (!r || !r.record_date || !r.game_name) return false;
-        const rGame = r.game_name.trim().toUpperCase();
-        const isGameMatch = rGame === gName || (gName === 'DISAWAR' && rGame === 'DISAWER');
-        const rDate = r.record_date.trim();
-        return isGameMatch && (rDate === yestFull || rDate === yestStr);
-      });
-      g.yesterday_result = (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '') ? yestRec.result_val.trim() : '-';
-
-      const todayRec = charts.find(r => {
-        if (!r || !r.record_date || !r.game_name) return false;
-        const rGame = r.game_name.trim().toUpperCase();
-        const isGameMatch = rGame === gName || (gName === 'DISAWAR' && rGame === 'DISAWER');
-        const rDate = r.record_date.trim();
-        return isGameMatch && (rDate === todayFull || rDate === todayStr);
-      });
-
-      const dbTodayVal = (g.today_result !== undefined && g.today_result !== null) ? String(g.today_result).trim() : '';
-      if (!dbTodayVal || dbTodayVal.toUpperCase() === 'WAIT' || dbTodayVal === '-') {
-        g.today_result = 'WAIT';
-        charts = charts.filter(r => {
-          if (!r || !r.record_date || !r.game_name) return true;
+      // If yesterday_result is not explicitly set on game row, fallback to charts
+      if (!g.yesterday_result || g.yesterday_result === '-') {
+        const yestRec = charts.find(r => {
+          if (!r || !r.record_date || !r.game_name) return false;
           const rGame = r.game_name.trim().toUpperCase();
           const isGameMatch = rGame === gName || (gName === 'DISAWAR' && rGame === 'DISAWER');
           const rDate = r.record_date.trim();
-          return !(isGameMatch && (rDate === todayFull || rDate === todayStr));
+          return isGameMatch && (rDate === yestFull || rDate === yestStr);
         });
-      } else {
-        g.today_result = dbTodayVal;
+        if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '') {
+          g.yesterday_result = yestRec.result_val.trim();
+        } else {
+          g.yesterday_result = '-';
+        }
+      }
+
+      // If today_result is not set, default to WAIT
+      if (!g.today_result || g.today_result.trim() === '') {
+        g.today_result = 'WAIT';
       }
     });
 
