@@ -1,25 +1,25 @@
 {
   "settings": {
-    "hero_games_json": "[{\"id\":765,\"name\":\"FUNC_TEST_1787600001292_1\",\"today_result\":\"77\"}]",
-    "ticker_text": "Test Ticker Text 2026",
-    "hindi_tagline": "Test Tagline Hindi",
+    "hero_games_json": "[{\"id\":665,\"name\":\"LAAL BAZAR\",\"today_result\":\"WAIT\",\"yesterday_result\":\"-\",\"open_time\":\"12:30 PM\",\"close_time\":\"01:40 PM\"}]",
+    "ticker_text": "A77satta official website welcomes you. Get informed about satta king's history, rules, and valuable winning news and all satta news about games. Explore the intriguing world of satta king with informative details and real time sattaking result.",
+    "hindi_tagline": "हा भाई यही आती हे सबसे पहले खबर रूको और देखो",
     "main_game_name": "GALI",
     "main_game_result": "97",
+    "disawer_prev": "00",
+    "disawer_time": "05:15 AM",
+    "disawer_today": "WAIT",
     "disawer_wait": "WAIT",
+    "featured_banner_game": "DISAWAR",
     "telegram_url": "https://t.me/+Mcnw6vRvig0wNDI1",
     "whatsapp_url": "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e",
-    "notice_1": "SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.",
-    "notice_2": "SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE",
-    "notice_banners_json": "[{\"id\":1,\"text\":\"SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.\"},{\"id\":2,\"text\":\"SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE\"}]",
+    "notice_1": "FARIDABAD SATTA KING RESULT IS UPDATED EVERYDAY AT 6:10 PM.",
+    "notice_2": "LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE",
+    "notice_banners_json": "[{\"id\":1,\"text\":\"FARIDABAD SATTA KING RESULT IS UPDATED EVERYDAY AT 6:10 PM.\"},{\"id\":2,\"text\":\"LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE\"}]",
     "last_sync": "1786373486679.0",
-    "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]",
     "chart1_columns_json": "[\"KASHMIRI BAZAR\",\"LAAL BAZAR\",\"DISAWAR\",\"MATKA KING\",\"DELHI LAXMI\",\"SHIV PURI\",\"DWARKA PURI\",\"GALI\",\"GAZIABAD\",\"FARIDABAD\"]",
-    "khaiwal_cards_json": "[{\"card_type\":\"standard\",\"header_subtitle\":\"--सीधी सट्टा कंपनी का No 1 शर्तावाल--\",\"title\":\"♣ KUBER BHAI KHAIWAL ♣\",\"times_text\":\"सट्टे बाजार ----------- 1:30 pm\\nदिल्ली बाजार ----------- 2:50 pm\\nफरीदाबाद ----------- 5:50 pm\\nगाजियाबाद ----------- 8:50 pm\\nगली ----------- 11:20 pm\\nडिसावर ----------- 1:30 AM\",\"footer_text\":\"Game play करने के लिए नीचे लिंक पर क्लिक करें\",\"whatsapp_url\":\"https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e\"}]",
-    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"DL BAZAR SATTA KING CHART 2026\"]",
-    "featured_banner_game": "KASHMIRI BAZAR",
-    "disawer_time": "04:00 PM",
-    "disawer_prev": "55",
-    "disawer_today": "88"
+    "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]",
+    "khaiwal_cards_json": "[]",
+    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\"]"
   },
   "games": [
     {

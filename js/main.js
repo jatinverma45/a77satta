@@ -281,13 +281,21 @@
       if (data.settings) {
         const s = data.settings;
         
-        // Marquee ticker
-        const marquee = document.querySelector('.sub-nav-ticker marquee');
-        if (marquee && s.ticker_text) marquee.textContent = s.ticker_text;
+        // Marquee ticker (all pages)
+        const marquees = document.querySelectorAll('.sub-nav-ticker marquee, marquee');
+        if (s.ticker_text) {
+          marquees.forEach(m => {
+            m.textContent = s.ticker_text;
+          });
+        }
 
         // Hindi tagline
-        const tagline = document.querySelector('.result-text');
-        if (tagline && s.hindi_tagline) tagline.textContent = s.hindi_tagline;
+        const taglines = document.querySelectorAll('.result-text, .hindi-tagline');
+        if (s.hindi_tagline) {
+          taglines.forEach(t => {
+            t.textContent = s.hindi_tagline;
+          });
+        }
 
         // Notices
         const notice1 = document.querySelector('.a77-status-row:not(.a77-status-row-large) span');
