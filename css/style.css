@@ -2298,3 +2298,84 @@ img{max-width:100%;height:auto;display:block}
   }
 }
 
+/* ========================================================
+   SEO KEYWORDS CLOUD & FAQ ACCORDION STYLES
+   ======================================================== */
+.seo-keyword-section {
+  background: #111;
+  border: 2px solid #ffd400;
+  border-radius: 8px;
+  margin: 25px 0 15px;
+  padding: 18px 14px;
+  color: #ddd;
+}
+.seo-keyword-header {
+  font-size: 16px;
+  font-weight: 900;
+  color: #ffd400;
+  text-align: center;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.seo-keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  max-height: 320px;
+  overflow-y: auto;
+  padding: 10px;
+  background: #000;
+  border-radius: 6px;
+  border: 1px solid #333;
+}
+.seo-keyword-cloud::-webkit-scrollbar {
+  width: 6px;
+}
+.seo-keyword-cloud::-webkit-scrollbar-thumb {
+  background: #ffd400;
+  border-radius: 4px;
+}
+.seo-tag {
+  display: inline-block;
+  background: #1a1a1a;
+  color: #bbb;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid #2e2e2e;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.seo-tag:hover {
+  background: #ffd400;
+  color: #000;
+  border-color: #ffd400;
+}
+.seo-faq-box {
+  background: #161616;
+  border: 1px solid #333;
+  border-radius: 8px;
+  margin-top: 15px;
+  padding: 16px;
+}
+.seo-faq-item {
+  border-bottom: 1px solid #282828;
+  padding: 10px 0;
+}
+.seo-faq-item:last-child {
+  border-bottom: none;
+}
+.seo-faq-q {
+  font-weight: 800;
+  font-size: 14px;
+  color: #ffd400;
+  margin-bottom: 4px;
+}
+.seo-faq-a {
+  font-size: 12.5px;
+  color: #ccc;
+  line-height: 1.5;
+}
+
