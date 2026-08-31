@@ -312,36 +312,43 @@
           document.querySelectorAll('.whatsapp-button, .whatsapp-cta-small').forEach(el => el.href = s.whatsapp_url);
         }
 
-        // Render Dynamic Notice Banners
+        // Render Dynamic Notice Banners (Strictly from Database)
         const noticeWrap = document.getElementById('noticeBannersContainer');
         if (noticeWrap) {
           let noticeList = [];
-          if (s.notice_banners_json) {
-            try { noticeList = JSON.parse(s.notice_banners_json); } catch(e) {}
+          if (s.notice_banners_json !== undefined && s.notice_banners_json !== null) {
+            try {
+              const parsed = JSON.parse(s.notice_banners_json);
+              if (Array.isArray(parsed)) noticeList = parsed;
+            } catch(e) {}
+          } else if (s.notice_1 || s.notice_2) {
+            if (s.notice_1) noticeList.push({ id: 1, text: s.notice_1 });
+            if (s.notice_2) noticeList.push({ id: 2, text: s.notice_2 });
           }
-          if (!noticeList || noticeList.length === 0) {
-            noticeList = [
-              { text: s.notice_1 || 'SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.' },
-              { text: s.notice_2 || 'SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE' }
-            ];
+
+          if (noticeList.length === 0) {
+            noticeWrap.innerHTML = '';
+            noticeWrap.style.display = 'none';
+          } else {
+            noticeWrap.style.display = '';
+            let noticeHtml = '';
+            noticeList.forEach((n, idx) => {
+              const isLarge = idx % 2 === 1 ? 'a77-status-row-large' : '';
+              noticeHtml += `
+                <section class="a77-status-row ${isLarge}">
+                  <span>${n.text}</span>
+                </section>
+              `;
+            });
+            noticeWrap.innerHTML = noticeHtml;
           }
-          let noticeHtml = '';
-          noticeList.forEach((n, idx) => {
-            const isLarge = idx % 2 === 1 ? 'a77-status-row-large' : '';
-            noticeHtml += `
-              <section class="a77-status-row ${isLarge}">
-                <span>${n.text}</span>
-              </section>
-            `;
-          });
-          noticeWrap.innerHTML = noticeHtml;
         }
 
-        // Render Dynamic Khaiwal Cards Grid (Directly from Admin DB Settings)
+        // Render Dynamic Khaiwal Cards Grid (Strictly from Database)
         const khaiwalGrid = document.getElementById('khaiwalGridContainer');
         if (khaiwalGrid) {
-          let cardList = null;
-          if (s.khaiwal_cards_json) {
+          let cardList = [];
+          if (s.khaiwal_cards_json !== undefined && s.khaiwal_cards_json !== null) {
             try {
               const parsed = typeof s.khaiwal_cards_json === 'string' ? JSON.parse(s.khaiwal_cards_json) : s.khaiwal_cards_json;
               if (Array.isArray(parsed)) cardList = parsed;
@@ -349,13 +356,11 @@
           }
 
           if (!cardList || !Array.isArray(cardList) || cardList.length === 0) {
-            cardList = [
-              { id: 1, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ KUBER BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
-              { id: 2, header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--", title: "♣ NEW BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" }
-            ];
-          }
-
-          let gridHtml = '';
+            khaiwalGrid.innerHTML = '';
+            khaiwalGrid.style.display = 'none';
+          } else {
+            khaiwalGrid.style.display = '';
+            let gridHtml = '';
           cardList.forEach(c => {
             const waUrl = c.whatsapp_url || s.whatsapp_url || '#';
             const bodyLines = (c.times_text || '').split('\n').map(line => line.trim()).filter(Boolean).join('<br>\n            ');

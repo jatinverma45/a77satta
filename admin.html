@@ -1114,16 +1114,14 @@
       if (!tbody) return;
 
       let noticeList = [];
-      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.notice_banners_json) {
-        try { noticeList = JSON.parse(siteDataCache.settings.notice_banners_json); } catch(e) {}
-      }
-      if (!noticeList || noticeList.length === 0) {
-        const n1 = siteDataCache && siteDataCache.settings ? siteDataCache.settings.notice_1 : null;
-        const n2 = siteDataCache && siteDataCache.settings ? siteDataCache.settings.notice_2 : null;
-        noticeList = [
-          { text: n1 || 'SHRI GANESH SATTA KING RESULT IS UPDATED EVERYDAY AT 4:40 PM.' },
-          { text: n2 || 'SADAR BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE' }
-        ];
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.notice_banners_json !== undefined && siteDataCache.settings.notice_banners_json !== null) {
+        try {
+          const parsed = JSON.parse(siteDataCache.settings.notice_banners_json);
+          if (Array.isArray(parsed)) noticeList = parsed;
+        } catch(e) {}
+      } else if (siteDataCache && siteDataCache.settings && (siteDataCache.settings.notice_1 || siteDataCache.settings.notice_2)) {
+        if (siteDataCache.settings.notice_1) noticeList.push({ id: 1, text: siteDataCache.settings.notice_1 });
+        if (siteDataCache.settings.notice_2) noticeList.push({ id: 2, text: siteDataCache.settings.notice_2 });
       }
 
       tbody.innerHTML = '';
@@ -1193,6 +1191,11 @@
           })
         });
         if (res.ok) {
+          if (siteDataCache && siteDataCache.settings) {
+            siteDataCache.settings.notice_banners_json = jsonStr;
+            siteDataCache.settings.notice_1 = list[0] ? list[0].text : '';
+            siteDataCache.settings.notice_2 = list[1] ? list[1].text : '';
+          }
           showToast('Notice Banners Saved Successfully!');
           loadAdminData();
         }
@@ -1205,16 +1208,13 @@
     let currentKhaiwalCardsList = [];
 
     function getInitialKhaiwalCards() {
-      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json) {
+      if (siteDataCache && siteDataCache.settings && siteDataCache.settings.khaiwal_cards_json !== undefined && siteDataCache.settings.khaiwal_cards_json !== null) {
         try {
           const list = JSON.parse(siteDataCache.settings.khaiwal_cards_json);
-          if (Array.isArray(list) && list.length > 0) return list;
+          if (Array.isArray(list)) return list;
         } catch(e) {}
       }
-      return [
-        { id: 1, header_subtitle: "--सीधी सट्टा कंपनी का No 1 शर्तावाल--", title: "♣ KUBER BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" },
-        { id: 2, header_subtitle: "--सीधी सट्टा कम्पनी का No 1 शर्तावाल--", title: "♣ NEW BHAI KHAIWAL ♣", card_type: "standard", times_text: "सट्टे बाजार ----------- 1:30 pm\nघाटियाल ----------- 2:30 pm\nदिल्ली बाजार ----------- 2:50 pm\nदिल्ली मटका ----------- 3:20 PM\nश्री गणेश ----------- 4:20 pm\nआगारा ----------- 5:20 pm\nफरीदाबाद ----------- 5:50 pm\nअलवर ----------- 7:20 pm\nगाजियाबाद ----------- 8:50 pm\nझारखा ----------- 10:10 pm\nगली ----------- 11:20 pm\nडिसावर ----------- 1:30 AM", footer_text: "Game play करने के लिए नीचे लिंक पर क्लिक करें", whatsapp_url: "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e" }
-      ];
+      return [];
     }
 
     function renderKhaiwalCardsAdminTable() {
