@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Allow: /chart
+Allow: /contact
+Allow: /login
+Disallow: /admin
+Disallow: /api/
+
+Sitemap: https://a77satta.online/sitemap.xml
