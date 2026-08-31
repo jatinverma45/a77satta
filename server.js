@@ -201,12 +201,52 @@ async function initDatabase() {
          ON CONFLICT (name) DO UPDATE SET is_permanent = 1, table_group = 1`
       ).catch(() => {});
 
+      // Ensure all chart dates up to today are present in DB for all active games
+      await ensureMonthlyChartRecordsInDb();
+
       syncJSONBackup().catch(() => {});
     } catch(e) {}
     isDbReady = true;
   } catch (e) {
     console.error('❌ Supabase PostgreSQL initialization error:', e.message);
     isDbReady = true;
+  }
+}
+
+async function ensureMonthlyChartRecordsInDb() {
+  try {
+    const now = new Date();
+    const kolkataFormatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+    const todayParts = kolkataFormatter.formatToParts(now);
+    const kMonth = todayParts.find(p => p.type === 'month').value;
+    const kDay = parseInt(todayParts.find(p => p.type === 'day').value, 10);
+
+    const gamesRes = await safeQuery('SELECT name FROM games WHERE name IS NOT NULL AND name != \'\'').catch(() => null);
+    if (!gamesRes || !gamesRes.rows || gamesRes.rows.length === 0) return;
+
+    const gameNames = gamesRes.rows.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean);
+
+    for (let day = 1; day <= kDay; day++) {
+      const dayStr = String(day).padStart(2, '0');
+      const dateKeyDDMM = `${dayStr}-${kMonth}`;
+
+      for (const gName of gameNames) {
+        await safeQuery(
+          `INSERT INTO chart_records (record_date, game_name, result_val)
+           VALUES ($1, $2, '-')
+           ON CONFLICT (record_date, game_name) DO NOTHING`,
+          [dateKeyDDMM, gName]
+        ).catch(() => {});
+      }
+    }
+    console.log(`📅 Chart records auto-synced in DB for all active games up to ${kDay}-${kMonth}`);
+  } catch (e) {
+    console.error('Error ensuring monthly chart records in DB:', e.message);
   }
 }
 
