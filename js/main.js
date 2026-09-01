@@ -419,9 +419,7 @@
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name) || getResultFromChartRecords(chartRecords, todayFull, name);
             
             let resVal = 'WAIT';
-            if (g.today_result && g.today_result.trim().toUpperCase() === 'WAIT') {
-              resVal = 'WAIT';
-            } else if (g.today_result && g.today_result.trim() !== '') {
+            if (g.today_result && g.today_result.trim() !== '' && g.today_result.trim().toUpperCase() !== 'WAIT' && g.today_result.trim() !== '-') {
               resVal = g.today_result.trim();
             } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               resVal = chartTodayVal.trim();
@@ -462,13 +460,11 @@
           : (getResultFromChartRecords(chartRecords, yestFull, actualGameName) || getResultFromChartRecords(chartRecords, yestStr, actualGameName) || '-');
 
         let finalToday = 'WAIT';
-        if (disawerGame && disawerGame.today_result && disawerGame.today_result.trim().toUpperCase() === 'WAIT') {
-          finalToday = 'WAIT';
-        } else if (disawerGame && disawerGame.today_result && disawerGame.today_result.trim() !== '') {
+        if (disawerGame && disawerGame.today_result && disawerGame.today_result.trim() !== '' && disawerGame.today_result.trim().toUpperCase() !== 'WAIT' && disawerGame.today_result.trim() !== '-') {
           finalToday = disawerGame.today_result.trim();
         } else {
           const chartVal = getResultFromChartRecords(chartRecords, todayFull, actualGameName) || getResultFromChartRecords(chartRecords, todayStr, actualGameName);
-          finalToday = (chartVal && chartVal.toUpperCase() !== 'WAIT') ? chartVal : 'WAIT';
+          finalToday = (chartVal && chartVal.toUpperCase() !== 'WAIT' && chartVal !== '-') ? chartVal : 'WAIT';
         }
 
         console.log('📌 [DISAWAR BANNER RENDERED]:', {
@@ -506,17 +502,15 @@
             </div>
           `;
           group1.forEach(g => {
-            const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, g.name);
-            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name);
+            const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, g.name) || getResultFromChartRecords(chartRecords, yestFull, g.name);
+            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name) || getResultFromChartRecords(chartRecords, todayFull, g.name);
 
             const yestRes = (g.yesterday_result && g.yesterday_result !== '-' && g.yesterday_result.trim())
               ? g.yesterday_result.trim()
-              : (chartYestVal !== null ? chartYestVal : '-');
+              : (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' ? chartYestVal : '-');
 
             let todayRaw = 'WAIT';
-            if (g.today_result && g.today_result.trim().toUpperCase() === 'WAIT') {
-              todayRaw = 'WAIT';
-            } else if (g.today_result && g.today_result.trim() !== '') {
+            if (g.today_result && g.today_result.trim() !== '' && g.today_result.trim().toUpperCase() !== 'WAIT' && g.today_result.trim() !== '-') {
               todayRaw = g.today_result.trim();
             } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               todayRaw = chartTodayVal.trim();
@@ -547,6 +541,15 @@
             </div>
           `;
         }
+      }
+
+      // Dynamic Month Name Header
+      const monthNames = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+      const nowMonthIdx = new Date().getMonth();
+      const nowYear = new Date().getFullYear();
+      const chartHeaderEl = document.querySelector('.chart-main-header');
+      if (chartHeaderEl) {
+        chartHeaderEl.textContent = `SATTA RESULT CHART ${monthNames[nowMonthIdx]} ${nowYear}`;
       }
 
       // 3. Record Chart Tables Sync
