@@ -403,6 +403,7 @@
           khaiwalGrid.innerHTML = gridHtml;
         }
       }
+    }
 
       // Render Main Hero Box Games (Dynamic Stack from Table 1)
       const heroContainer = document.getElementById('heroGamesList');
