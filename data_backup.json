@@ -1,24 +1,24 @@
 {
   "settings": {
-    "hindi_tagline": "हा भाई यही आती हे सबसे पहले खबर रूको और देखो",
+    "disawer_prev": "68",
+    "disawer_today": "WAIT",
+    "chart1_columns_json": "[\"LAAL BAZAR\",\"KASHMIRI BAZAR\",\"MATKA KING\",\"DELHI LAXMI\",\"FARIDABAD\",\"SHIV PURI\",\"GAZIABAD\",\"DWARKA PURI\",\"DISAWAR\",\"GALI\"]",
     "main_game_name": "GALI",
     "main_game_result": "97",
-    "ticker_text": "A77satta official website welcomes you. Get informed about satta king's history, rules, and valuable winning news and all satta news about games.Explore the intriguing world of satta king with informative details and real time sattaking results\n",
-    "whatsapp_url": "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e",
     "disawer_wait": "WAIT",
     "notice_banners_json": "[{\"id\":1,\"text\":\"FARIDABAD SATTA KING RESULT IS UPDATED EVERYDAY AT 6:10 PM.\"},{\"id\":2,\"text\":\"LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM\"}]",
+    "khaiwal_cards_json": "[]",
+    "featured_banner_game": "DISAWAR",
+    "last_sync": "1786373486679.0",
+    "disawer_time": "05:15 AM",
+    "hero_games_json": "[{\"id\":null,\"name\":\"LAAL BAZAR\",\"today_result\":\"WAIT\"}]",
+    "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]",
+    "hindi_tagline": "हा भाई यही आती हे सबसे पहले खबर रूको और देखो",
+    "ticker_text": "A77satta official website welcomes you. Get informed about satta king's history, rules, and valuable winning news and all satta news about games.Explore the intriguing world of satta king with informative details and real time sattaking results\n",
+    "whatsapp_url": "https://whatsapp.com/channel/0029Vb8fAasLSmbdQvgy8f0e",
     "telegram_url": "https://t.me/+Mcnw6vRvig0wNDI1",
     "notice_1": "FARIDABAD SATTA KING RESULT IS UPDATED EVERYDAY AT 6:10 PM.",
     "notice_2": "LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE",
-    "khaiwal_cards_json": "[]",
-    "last_sync": "1786373486679.0",
-    "chart1_columns_json": "[\"LAAL BAZAR\",\"KASHMIRI BAZAR\",\"MATKA KING\",\"DELHI LAXMI\",\"FARIDABAD\",\"SHIV PURI\",\"GAZIABAD\",\"DWARKA PURI\",\"GALI\",\"DISAWAR\"]",
-    "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]",
-    "hero_games_json": "[{\"id\":665,\"name\":\"LAAL BAZAR\",\"today_result\":\"WAIT\"}]",
-    "featured_banner_game": "DISAWAR",
-    "disawer_time": "05:15 AM",
-    "disawer_prev": "00",
-    "disawer_today": "WAIT",
     "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"DL BAZAR SATTA KING CHART 2026\"]"
   },
   "games": [
@@ -27,7 +27,7 @@
       "name": "LAAL BAZAR",
       "open_time": "12:30 PM",
       "close_time": "01:40 PM",
-      "yesterday_result": "00",
+      "yesterday_result": "71",
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 1,
@@ -40,8 +40,8 @@
       "name": "KASHMIRI BAZAR",
       "open_time": "1:00 PM",
       "close_time": "04:00 PM",
-      "yesterday_result": "00",
-      "today_result": "WAIT",
+      "yesterday_result": "32",
+      "today_result": "-",
       "table_group": 1,
       "sort_order": 2,
       "is_hero": 0,
@@ -53,8 +53,8 @@
       "name": "MATKA KING",
       "open_time": "02:40 PM",
       "close_time": "02:40 PM",
-      "yesterday_result": "00",
-      "today_result": "WAIT",
+      "yesterday_result": "23",
+      "today_result": "-",
       "table_group": 1,
       "sort_order": 3,
       "is_hero": 0,
@@ -66,8 +66,8 @@
       "name": "DELHI LAXMI",
       "open_time": "02:00 PM",
       "close_time": "03:50 PM",
-      "yesterday_result": "00",
-      "today_result": "WAIT",
+      "yesterday_result": "87",
+      "today_result": "-",
       "table_group": 1,
       "sort_order": 4,
       "is_hero": 0,
@@ -79,8 +79,8 @@
       "name": "FARIDABAD",
       "open_time": "06:10 PM",
       "close_time": "06:10 PM",
-      "yesterday_result": "00",
-      "today_result": "WAIT",
+      "yesterday_result": "30",
+      "today_result": "-",
       "table_group": 1,
       "sort_order": 5,
       "is_hero": 0,
@@ -92,8 +92,8 @@
       "name": "SHIV PURI",
       "open_time": "07:00 PM",
       "close_time": "07:30 PM",
-      "yesterday_result": "00",
-      "today_result": "WAIT",
+      "yesterday_result": "87",
+      "today_result": "-",
       "table_group": 1,
       "sort_order": 6,
       "is_hero": 0,
@@ -105,8 +105,8 @@
       "name": "GAZIABAD",
       "open_time": "09:50 PM",
       "close_time": "09:50 PM",
-      "yesterday_result": "00",
-      "today_result": "WAIT",
+      "yesterday_result": "68",
+      "today_result": "-",
       "table_group": 1,
       "sort_order": 7,
       "is_hero": 0,
@@ -118,8 +118,8 @@
       "name": "DWARKA PURI",
       "open_time": "10:30 PM",
       "close_time": "09:50 PM",
-      "yesterday_result": "00",
-      "today_result": "WAIT",
+      "yesterday_result": "49",
+      "today_result": "-",
       "table_group": 1,
       "sort_order": 8,
       "is_hero": 0,
@@ -131,7 +131,7 @@
       "name": "DISAWAR",
       "open_time": "05:15 AM",
       "close_time": "",
-      "yesterday_result": "00",
+      "yesterday_result": "87",
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 9,
@@ -144,10 +144,10 @@
       "name": "GALI",
       "open_time": "11:50 PM",
       "close_time": "11:50 PM",
-      "yesterday_result": "00",
-      "today_result": "WAIT",
+      "yesterday_result": "37",
+      "today_result": "-",
       "table_group": 1,
-      "sort_order": 9,
+      "sort_order": 10,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
@@ -177,6 +177,12 @@
       "record_date": "01-08",
       "game_name": "FARIDABAD",
       "result_val": "57"
+    },
+    {
+      "id": 19549,
+      "record_date": "01-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6525,
@@ -209,6 +215,66 @@
       "result_val": "45"
     },
     {
+      "id": 21544,
+      "record_date": "01-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "34"
+    },
+    {
+      "id": 21581,
+      "record_date": "01-09",
+      "game_name": "DISAWAR",
+      "result_val": "67"
+    },
+    {
+      "id": 21579,
+      "record_date": "01-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "74"
+    },
+    {
+      "id": 21576,
+      "record_date": "01-09",
+      "game_name": "FARIDABAD",
+      "result_val": "33"
+    },
+    {
+      "id": 21580,
+      "record_date": "01-09",
+      "game_name": "GALI",
+      "result_val": "94"
+    },
+    {
+      "id": 21578,
+      "record_date": "01-09",
+      "game_name": "GAZIABAD",
+      "result_val": "78"
+    },
+    {
+      "id": 21573,
+      "record_date": "01-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "67"
+    },
+    {
+      "id": 21572,
+      "record_date": "01-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "50"
+    },
+    {
+      "id": 21574,
+      "record_date": "01-09",
+      "game_name": "MATKA KING",
+      "result_val": "43"
+    },
+    {
+      "id": 21577,
+      "record_date": "01-09",
+      "game_name": "SHIV PURI",
+      "result_val": "18"
+    },
+    {
       "id": 11199,
       "record_date": "02-08",
       "game_name": "DELHI LAXMI",
@@ -231,6 +297,12 @@
       "record_date": "02-08",
       "game_name": "FARIDABAD",
       "result_val": "06"
+    },
+    {
+      "id": 19559,
+      "record_date": "02-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6537,
@@ -263,6 +335,66 @@
       "result_val": "76"
     },
     {
+      "id": 22903,
+      "record_date": "02-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "12"
+    },
+    {
+      "id": 23233,
+      "record_date": "02-09",
+      "game_name": "DISAWAR",
+      "result_val": "54"
+    },
+    {
+      "id": 23231,
+      "record_date": "02-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "83"
+    },
+    {
+      "id": 23166,
+      "record_date": "02-09",
+      "game_name": "FARIDABAD",
+      "result_val": "56"
+    },
+    {
+      "id": 23232,
+      "record_date": "02-09",
+      "game_name": "GALI",
+      "result_val": "34"
+    },
+    {
+      "id": 22906,
+      "record_date": "02-09",
+      "game_name": "GAZIABAD",
+      "result_val": "31"
+    },
+    {
+      "id": 22902,
+      "record_date": "02-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "87"
+    },
+    {
+      "id": 21639,
+      "record_date": "02-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "06"
+    },
+    {
+      "id": 22905,
+      "record_date": "02-09",
+      "game_name": "MATKA KING",
+      "result_val": "23"
+    },
+    {
+      "id": 23170,
+      "record_date": "02-09",
+      "game_name": "SHIV PURI",
+      "result_val": "75"
+    },
+    {
       "id": 11219,
       "record_date": "03-08",
       "game_name": "DELHI LAXMI",
@@ -285,6 +417,12 @@
       "record_date": "03-08",
       "game_name": "FARIDABAD",
       "result_val": "95"
+    },
+    {
+      "id": 19569,
+      "record_date": "03-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6549,
@@ -317,6 +455,66 @@
       "result_val": "96"
     },
     {
+      "id": 21546,
+      "record_date": "03-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "76"
+    },
+    {
+      "id": 21705,
+      "record_date": "03-09",
+      "game_name": "DISAWAR",
+      "result_val": "42"
+    },
+    {
+      "id": 23460,
+      "record_date": "03-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "57"
+    },
+    {
+      "id": 21700,
+      "record_date": "03-09",
+      "game_name": "FARIDABAD",
+      "result_val": "34"
+    },
+    {
+      "id": 23491,
+      "record_date": "03-09",
+      "game_name": "GALI",
+      "result_val": "32"
+    },
+    {
+      "id": 21702,
+      "record_date": "03-09",
+      "game_name": "GAZIABAD",
+      "result_val": "12"
+    },
+    {
+      "id": 21697,
+      "record_date": "03-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "46"
+    },
+    {
+      "id": 21696,
+      "record_date": "03-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "73"
+    },
+    {
+      "id": 21698,
+      "record_date": "03-09",
+      "game_name": "MATKA KING",
+      "result_val": "99"
+    },
+    {
+      "id": 21701,
+      "record_date": "03-09",
+      "game_name": "SHIV PURI",
+      "result_val": "34"
+    },
+    {
       "id": 11239,
       "record_date": "04-08",
       "game_name": "DELHI LAXMI",
@@ -339,6 +537,12 @@
       "record_date": "04-08",
       "game_name": "FARIDABAD",
       "result_val": "12"
+    },
+    {
+      "id": 19579,
+      "record_date": "04-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6561,
@@ -371,6 +575,66 @@
       "result_val": "91"
     },
     {
+      "id": 21547,
+      "record_date": "04-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "21"
+    },
+    {
+      "id": 21715,
+      "record_date": "04-09",
+      "game_name": "DISAWAR",
+      "result_val": "68"
+    },
+    {
+      "id": 21713,
+      "record_date": "04-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "18"
+    },
+    {
+      "id": 21710,
+      "record_date": "04-09",
+      "game_name": "FARIDABAD",
+      "result_val": "02"
+    },
+    {
+      "id": 21714,
+      "record_date": "04-09",
+      "game_name": "GALI",
+      "result_val": "59"
+    },
+    {
+      "id": 21712,
+      "record_date": "04-09",
+      "game_name": "GAZIABAD",
+      "result_val": "95"
+    },
+    {
+      "id": 21707,
+      "record_date": "04-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "37"
+    },
+    {
+      "id": 21706,
+      "record_date": "04-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "18"
+    },
+    {
+      "id": 21708,
+      "record_date": "04-09",
+      "game_name": "MATKA KING",
+      "result_val": "41"
+    },
+    {
+      "id": 21711,
+      "record_date": "04-09",
+      "game_name": "SHIV PURI",
+      "result_val": "64"
+    },
+    {
       "id": 11259,
       "record_date": "05-08",
       "game_name": "DELHI LAXMI",
@@ -393,6 +657,12 @@
       "record_date": "05-08",
       "game_name": "FARIDABAD",
       "result_val": "57"
+    },
+    {
+      "id": 19589,
+      "record_date": "05-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6573,
@@ -425,6 +695,66 @@
       "result_val": "18"
     },
     {
+      "id": 24077,
+      "record_date": "05-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "87"
+    },
+    {
+      "id": 24083,
+      "record_date": "05-09",
+      "game_name": "DISAWAR",
+      "result_val": "87"
+    },
+    {
+      "id": 24081,
+      "record_date": "05-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "49"
+    },
+    {
+      "id": 24078,
+      "record_date": "05-09",
+      "game_name": "FARIDABAD",
+      "result_val": "30"
+    },
+    {
+      "id": 24082,
+      "record_date": "05-09",
+      "game_name": "GALI",
+      "result_val": "37"
+    },
+    {
+      "id": 24080,
+      "record_date": "05-09",
+      "game_name": "GAZIABAD",
+      "result_val": "68"
+    },
+    {
+      "id": 24075,
+      "record_date": "05-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "32"
+    },
+    {
+      "id": 24074,
+      "record_date": "05-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "71"
+    },
+    {
+      "id": 24076,
+      "record_date": "05-09",
+      "game_name": "MATKA KING",
+      "result_val": "23"
+    },
+    {
+      "id": 24079,
+      "record_date": "05-09",
+      "game_name": "SHIV PURI",
+      "result_val": "87"
+    },
+    {
       "id": 11279,
       "record_date": "06-08",
       "game_name": "DELHI LAXMI",
@@ -447,6 +777,12 @@
       "record_date": "06-08",
       "game_name": "FARIDABAD",
       "result_val": "22"
+    },
+    {
+      "id": 19599,
+      "record_date": "06-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6585,
@@ -479,6 +815,54 @@
       "result_val": "99"
     },
     {
+      "id": 21549,
+      "record_date": "06-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21733,
+      "record_date": "06-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21730,
+      "record_date": "06-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21734,
+      "record_date": "06-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21732,
+      "record_date": "06-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21727,
+      "record_date": "06-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21728,
+      "record_date": "06-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21731,
+      "record_date": "06-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11299,
       "record_date": "07-08",
       "game_name": "DELHI LAXMI",
@@ -501,6 +885,12 @@
       "record_date": "07-08",
       "game_name": "FARIDABAD",
       "result_val": "26"
+    },
+    {
+      "id": 19609,
+      "record_date": "07-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6597,
@@ -533,6 +923,66 @@
       "result_val": "74"
     },
     {
+      "id": 21550,
+      "record_date": "07-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21745,
+      "record_date": "07-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21743,
+      "record_date": "07-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21740,
+      "record_date": "07-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21744,
+      "record_date": "07-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21742,
+      "record_date": "07-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21737,
+      "record_date": "07-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21736,
+      "record_date": "07-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21738,
+      "record_date": "07-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21741,
+      "record_date": "07-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11318,
       "record_date": "08-08",
       "game_name": "DELHI LAXMI",
@@ -555,6 +1005,12 @@
       "record_date": "08-08",
       "game_name": "FARIDABAD",
       "result_val": "81"
+    },
+    {
+      "id": 19619,
+      "record_date": "08-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6609,
@@ -587,6 +1043,66 @@
       "result_val": "78"
     },
     {
+      "id": 21551,
+      "record_date": "08-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21755,
+      "record_date": "08-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21753,
+      "record_date": "08-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21750,
+      "record_date": "08-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21754,
+      "record_date": "08-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21752,
+      "record_date": "08-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21747,
+      "record_date": "08-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21746,
+      "record_date": "08-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21748,
+      "record_date": "08-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21751,
+      "record_date": "08-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11338,
       "record_date": "09-08",
       "game_name": "DELHI LAXMI",
@@ -609,6 +1125,12 @@
       "record_date": "09-08",
       "game_name": "FARIDABAD",
       "result_val": "63"
+    },
+    {
+      "id": 19629,
+      "record_date": "09-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6621,
@@ -641,6 +1163,66 @@
       "result_val": "77"
     },
     {
+      "id": 21552,
+      "record_date": "09-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21765,
+      "record_date": "09-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21763,
+      "record_date": "09-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21760,
+      "record_date": "09-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21764,
+      "record_date": "09-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21762,
+      "record_date": "09-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21757,
+      "record_date": "09-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21756,
+      "record_date": "09-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21758,
+      "record_date": "09-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21761,
+      "record_date": "09-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11358,
       "record_date": "10-08",
       "game_name": "DELHI LAXMI",
@@ -663,6 +1245,12 @@
       "record_date": "10-08",
       "game_name": "FARIDABAD",
       "result_val": "58"
+    },
+    {
+      "id": 19639,
+      "record_date": "10-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6633,
@@ -695,6 +1283,66 @@
       "result_val": "17"
     },
     {
+      "id": 21553,
+      "record_date": "10-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21775,
+      "record_date": "10-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21773,
+      "record_date": "10-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21770,
+      "record_date": "10-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21774,
+      "record_date": "10-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21772,
+      "record_date": "10-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21767,
+      "record_date": "10-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21766,
+      "record_date": "10-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21768,
+      "record_date": "10-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21771,
+      "record_date": "10-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11378,
       "record_date": "11-08",
       "game_name": "DELHI LAXMI",
@@ -717,6 +1365,12 @@
       "record_date": "11-08",
       "game_name": "FARIDABAD",
       "result_val": "58"
+    },
+    {
+      "id": 19649,
+      "record_date": "11-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6645,
@@ -749,6 +1403,66 @@
       "result_val": "24"
     },
     {
+      "id": 21554,
+      "record_date": "11-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21785,
+      "record_date": "11-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21783,
+      "record_date": "11-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21780,
+      "record_date": "11-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21784,
+      "record_date": "11-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21782,
+      "record_date": "11-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21777,
+      "record_date": "11-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21776,
+      "record_date": "11-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21778,
+      "record_date": "11-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21781,
+      "record_date": "11-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11398,
       "record_date": "12-08",
       "game_name": "DELHI LAXMI",
@@ -771,6 +1485,12 @@
       "record_date": "12-08",
       "game_name": "FARIDABAD",
       "result_val": "75"
+    },
+    {
+      "id": 19659,
+      "record_date": "12-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6657,
@@ -803,6 +1523,66 @@
       "result_val": "78"
     },
     {
+      "id": 21555,
+      "record_date": "12-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21795,
+      "record_date": "12-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21793,
+      "record_date": "12-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21790,
+      "record_date": "12-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21794,
+      "record_date": "12-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21792,
+      "record_date": "12-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21787,
+      "record_date": "12-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21786,
+      "record_date": "12-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21788,
+      "record_date": "12-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21791,
+      "record_date": "12-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11417,
       "record_date": "13-08",
       "game_name": "DELHI LAXMI",
@@ -825,6 +1605,12 @@
       "record_date": "13-08",
       "game_name": "FARIDABAD",
       "result_val": "54"
+    },
+    {
+      "id": 19669,
+      "record_date": "13-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6669,
@@ -857,6 +1643,66 @@
       "result_val": "36"
     },
     {
+      "id": 21556,
+      "record_date": "13-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21805,
+      "record_date": "13-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21803,
+      "record_date": "13-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21800,
+      "record_date": "13-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21804,
+      "record_date": "13-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21802,
+      "record_date": "13-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21797,
+      "record_date": "13-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21796,
+      "record_date": "13-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21798,
+      "record_date": "13-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21801,
+      "record_date": "13-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11437,
       "record_date": "14-08",
       "game_name": "DELHI LAXMI",
@@ -879,6 +1725,12 @@
       "record_date": "14-08",
       "game_name": "FARIDABAD",
       "result_val": "49"
+    },
+    {
+      "id": 19679,
+      "record_date": "14-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6681,
@@ -911,6 +1763,66 @@
       "result_val": "12"
     },
     {
+      "id": 21557,
+      "record_date": "14-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21820,
+      "record_date": "14-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21817,
+      "record_date": "14-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21813,
+      "record_date": "14-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21819,
+      "record_date": "14-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21816,
+      "record_date": "14-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21808,
+      "record_date": "14-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21806,
+      "record_date": "14-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21810,
+      "record_date": "14-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21814,
+      "record_date": "14-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11457,
       "record_date": "15-08",
       "game_name": "DELHI LAXMI",
@@ -933,6 +1845,12 @@
       "record_date": "15-08",
       "game_name": "FARIDABAD",
       "result_val": "58"
+    },
+    {
+      "id": 19689,
+      "record_date": "15-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6693,
@@ -965,6 +1883,66 @@
       "result_val": "55"
     },
     {
+      "id": 21558,
+      "record_date": "15-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21835,
+      "record_date": "15-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21832,
+      "record_date": "15-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21828,
+      "record_date": "15-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21834,
+      "record_date": "15-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21831,
+      "record_date": "15-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21823,
+      "record_date": "15-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21822,
+      "record_date": "15-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21825,
+      "record_date": "15-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21829,
+      "record_date": "15-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11477,
       "record_date": "16-08",
       "game_name": "DELHI LAXMI",
@@ -987,6 +1965,12 @@
       "record_date": "16-08",
       "game_name": "FARIDABAD",
       "result_val": "45"
+    },
+    {
+      "id": 19699,
+      "record_date": "16-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6705,
@@ -1019,6 +2003,66 @@
       "result_val": "74"
     },
     {
+      "id": 21559,
+      "record_date": "16-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21850,
+      "record_date": "16-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21847,
+      "record_date": "16-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21843,
+      "record_date": "16-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21849,
+      "record_date": "16-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21846,
+      "record_date": "16-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21838,
+      "record_date": "16-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21837,
+      "record_date": "16-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21840,
+      "record_date": "16-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21844,
+      "record_date": "16-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11497,
       "record_date": "17-08",
       "game_name": "DELHI LAXMI",
@@ -1041,6 +2085,12 @@
       "record_date": "17-08",
       "game_name": "FARIDABAD",
       "result_val": "46"
+    },
+    {
+      "id": 19709,
+      "record_date": "17-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6717,
@@ -1073,6 +2123,66 @@
       "result_val": "25"
     },
     {
+      "id": 21560,
+      "record_date": "17-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21865,
+      "record_date": "17-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21862,
+      "record_date": "17-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21858,
+      "record_date": "17-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21864,
+      "record_date": "17-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21861,
+      "record_date": "17-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21853,
+      "record_date": "17-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21852,
+      "record_date": "17-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21855,
+      "record_date": "17-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21859,
+      "record_date": "17-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11516,
       "record_date": "18-08",
       "game_name": "DELHI LAXMI",
@@ -1095,6 +2205,12 @@
       "record_date": "18-08",
       "game_name": "FARIDABAD",
       "result_val": "22"
+    },
+    {
+      "id": 19719,
+      "record_date": "18-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6729,
@@ -1127,6 +2243,66 @@
       "result_val": "14"
     },
     {
+      "id": 21561,
+      "record_date": "18-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21885,
+      "record_date": "18-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21881,
+      "record_date": "18-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21875,
+      "record_date": "18-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21883,
+      "record_date": "18-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21879,
+      "record_date": "18-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21869,
+      "record_date": "18-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21867,
+      "record_date": "18-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21871,
+      "record_date": "18-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21877,
+      "record_date": "18-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11536,
       "record_date": "19-08",
       "game_name": "DELHI LAXMI",
@@ -1149,6 +2325,12 @@
       "record_date": "19-08",
       "game_name": "FARIDABAD",
       "result_val": "59"
+    },
+    {
+      "id": 19729,
+      "record_date": "19-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6741,
@@ -1181,6 +2363,66 @@
       "result_val": "85"
     },
     {
+      "id": 21562,
+      "record_date": "19-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21906,
+      "record_date": "19-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21902,
+      "record_date": "19-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21895,
+      "record_date": "19-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21904,
+      "record_date": "19-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21900,
+      "record_date": "19-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21889,
+      "record_date": "19-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21887,
+      "record_date": "19-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21891,
+      "record_date": "19-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21897,
+      "record_date": "19-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11556,
       "record_date": "20-08",
       "game_name": "DELHI LAXMI",
@@ -1203,6 +2445,12 @@
       "record_date": "20-08",
       "game_name": "FARIDABAD",
       "result_val": "81"
+    },
+    {
+      "id": 19739,
+      "record_date": "20-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 6753,
@@ -1233,6 +2481,66 @@
       "record_date": "20-08",
       "game_name": "SHIV PURI",
       "result_val": "03"
+    },
+    {
+      "id": 21563,
+      "record_date": "20-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21926,
+      "record_date": "20-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21922,
+      "record_date": "20-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21916,
+      "record_date": "20-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21924,
+      "record_date": "20-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21920,
+      "record_date": "20-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21910,
+      "record_date": "20-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21908,
+      "record_date": "20-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21912,
+      "record_date": "20-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21918,
+      "record_date": "20-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
     },
     {
       "id": 9807,
@@ -1478,12 +2786,18 @@
       "id": 14486,
       "record_date": "2026-08-30",
       "game_name": "DWARKA PURI",
-      "result_val": "00"
+      "result_val": "66"
     },
     {
       "id": 15194,
       "record_date": "2026-08-30",
       "game_name": "FARIDABAD",
+      "result_val": "00"
+    },
+    {
+      "id": 19861,
+      "record_date": "2026-08-30",
+      "game_name": "GALI",
       "result_val": "00"
     },
     {
@@ -1496,13 +2810,13 @@
       "id": 14474,
       "record_date": "2026-08-30",
       "game_name": "KASHMIRI BAZAR",
-      "result_val": "00"
+      "result_val": "55"
     },
     {
       "id": 11164,
       "record_date": "2026-08-30",
       "game_name": "LAAL BAZAR",
-      "result_val": "00"
+      "result_val": "39"
     },
     {
       "id": 14490,
@@ -1515,6 +2829,204 @@
       "record_date": "2026-08-30",
       "game_name": "SHIV PURI",
       "result_val": "00"
+    },
+    {
+      "id": 22885,
+      "record_date": "2026-09-01",
+      "game_name": "DELHI LAXMI",
+      "result_val": "42"
+    },
+    {
+      "id": 22737,
+      "record_date": "2026-09-01",
+      "game_name": "DISAWAR",
+      "result_val": "69"
+    },
+    {
+      "id": 23139,
+      "record_date": "2026-09-01",
+      "game_name": "DWARKA PURI",
+      "result_val": "92"
+    },
+    {
+      "id": 23135,
+      "record_date": "2026-09-01",
+      "game_name": "FARIDABAD",
+      "result_val": "45"
+    },
+    {
+      "id": 23141,
+      "record_date": "2026-09-01",
+      "game_name": "GALI",
+      "result_val": "81"
+    },
+    {
+      "id": 22889,
+      "record_date": "2026-09-01",
+      "game_name": "GAZIABAD",
+      "result_val": "86"
+    },
+    {
+      "id": 22883,
+      "record_date": "2026-09-01",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "71"
+    },
+    {
+      "id": 23125,
+      "record_date": "2026-09-01",
+      "game_name": "LAAL BAZAR",
+      "result_val": "18"
+    },
+    {
+      "id": 23129,
+      "record_date": "2026-09-01",
+      "game_name": "MATKA KING",
+      "result_val": "37"
+    },
+    {
+      "id": 23137,
+      "record_date": "2026-09-01",
+      "game_name": "SHIV PURI",
+      "result_val": "81"
+    },
+    {
+      "id": 23119,
+      "record_date": "2026-09-02",
+      "game_name": "DELHI LAXMI",
+      "result_val": "79"
+    },
+    {
+      "id": 23455,
+      "record_date": "2026-09-02",
+      "game_name": "DISAWAR",
+      "result_val": "69"
+    },
+    {
+      "id": 23447,
+      "record_date": "2026-09-02",
+      "game_name": "DWARKA PURI",
+      "result_val": "92"
+    },
+    {
+      "id": 23167,
+      "record_date": "2026-09-02",
+      "game_name": "FARIDABAD",
+      "result_val": "19"
+    },
+    {
+      "id": 23451,
+      "record_date": "2026-09-02",
+      "game_name": "GALI",
+      "result_val": "81"
+    },
+    {
+      "id": 23131,
+      "record_date": "2026-09-02",
+      "game_name": "GAZIABAD",
+      "result_val": "85"
+    },
+    {
+      "id": 23115,
+      "record_date": "2026-09-02",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "81"
+    },
+    {
+      "id": 22183,
+      "record_date": "2026-09-02",
+      "game_name": "LAAL BAZAR",
+      "result_val": "12"
+    },
+    {
+      "id": 23127,
+      "record_date": "2026-09-02",
+      "game_name": "MATKA KING",
+      "result_val": "67"
+    },
+    {
+      "id": 23171,
+      "record_date": "2026-09-02",
+      "game_name": "SHIV PURI",
+      "result_val": "09"
+    },
+    {
+      "id": 23453,
+      "record_date": "2026-09-03",
+      "game_name": "DISAWAR",
+      "result_val": "57"
+    },
+    {
+      "id": 23461,
+      "record_date": "2026-09-03",
+      "game_name": "DWARKA PURI",
+      "result_val": "71"
+    },
+    {
+      "id": 24021,
+      "record_date": "2026-09-04",
+      "game_name": "DELHI LAXMI",
+      "result_val": "71"
+    },
+    {
+      "id": 24031,
+      "record_date": "2026-09-04",
+      "game_name": "DISAWAR",
+      "result_val": "68"
+    },
+    {
+      "id": 24029,
+      "record_date": "2026-09-04",
+      "game_name": "DWARKA PURI",
+      "result_val": "18"
+    },
+    {
+      "id": 24023,
+      "record_date": "2026-09-04",
+      "game_name": "FARIDABAD",
+      "result_val": "02"
+    },
+    {
+      "id": 24033,
+      "record_date": "2026-09-04",
+      "game_name": "GALI",
+      "result_val": "59"
+    },
+    {
+      "id": 24027,
+      "record_date": "2026-09-04",
+      "game_name": "GAZIABAD",
+      "result_val": "95"
+    },
+    {
+      "id": 24017,
+      "record_date": "2026-09-04",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "37"
+    },
+    {
+      "id": 24015,
+      "record_date": "2026-09-04",
+      "game_name": "LAAL BAZAR",
+      "result_val": "18"
+    },
+    {
+      "id": 24019,
+      "record_date": "2026-09-04",
+      "game_name": "MATKA KING",
+      "result_val": "41"
+    },
+    {
+      "id": 24025,
+      "record_date": "2026-09-04",
+      "game_name": "SHIV PURI",
+      "result_val": "64"
+    },
+    {
+      "id": 24925,
+      "record_date": "2026-09-05",
+      "game_name": "DISAWAR",
+      "result_val": "87"
     },
     {
       "id": 11576,
@@ -1539,6 +3051,12 @@
       "record_date": "21-08",
       "game_name": "FARIDABAD",
       "result_val": "81"
+    },
+    {
+      "id": 19749,
+      "record_date": "21-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8115,
@@ -1571,6 +3089,66 @@
       "result_val": "45"
     },
     {
+      "id": 21564,
+      "record_date": "21-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21946,
+      "record_date": "21-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21942,
+      "record_date": "21-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21936,
+      "record_date": "21-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21944,
+      "record_date": "21-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21940,
+      "record_date": "21-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21930,
+      "record_date": "21-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21928,
+      "record_date": "21-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21932,
+      "record_date": "21-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21938,
+      "record_date": "21-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11596,
       "record_date": "22-08",
       "game_name": "DELHI LAXMI",
@@ -1593,6 +3171,12 @@
       "record_date": "22-08",
       "game_name": "FARIDABAD",
       "result_val": "81"
+    },
+    {
+      "id": 19759,
+      "record_date": "22-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8127,
@@ -1625,6 +3209,66 @@
       "result_val": "74"
     },
     {
+      "id": 21565,
+      "record_date": "22-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21966,
+      "record_date": "22-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21962,
+      "record_date": "22-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21956,
+      "record_date": "22-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21964,
+      "record_date": "22-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21960,
+      "record_date": "22-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21950,
+      "record_date": "22-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21948,
+      "record_date": "22-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21952,
+      "record_date": "22-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21958,
+      "record_date": "22-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 9806,
       "record_date": "23-08",
       "game_name": "DELHI LAXMI",
@@ -1647,6 +3291,12 @@
       "record_date": "23-08",
       "game_name": "FARIDABAD",
       "result_val": "89"
+    },
+    {
+      "id": 19769,
+      "record_date": "23-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8139,
@@ -1679,6 +3329,66 @@
       "result_val": "17"
     },
     {
+      "id": 21566,
+      "record_date": "23-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 21986,
+      "record_date": "23-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21982,
+      "record_date": "23-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21976,
+      "record_date": "23-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21984,
+      "record_date": "23-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 21980,
+      "record_date": "23-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21970,
+      "record_date": "23-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21968,
+      "record_date": "23-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21972,
+      "record_date": "23-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21978,
+      "record_date": "23-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 9872,
       "record_date": "24-08",
       "game_name": "DELHI LAXMI",
@@ -1701,6 +3411,12 @@
       "record_date": "24-08",
       "game_name": "FARIDABAD",
       "result_val": "23"
+    },
+    {
+      "id": 19779,
+      "record_date": "24-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8151,
@@ -1733,6 +3449,66 @@
       "result_val": "17"
     },
     {
+      "id": 21567,
+      "record_date": "24-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 22006,
+      "record_date": "24-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22002,
+      "record_date": "24-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 21996,
+      "record_date": "24-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22004,
+      "record_date": "24-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 22000,
+      "record_date": "24-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 21990,
+      "record_date": "24-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21988,
+      "record_date": "24-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 21992,
+      "record_date": "24-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 21998,
+      "record_date": "24-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 10251,
       "record_date": "25-08",
       "game_name": "DELHI LAXMI",
@@ -1755,6 +3531,12 @@
       "record_date": "25-08",
       "game_name": "FARIDABAD",
       "result_val": "56"
+    },
+    {
+      "id": 19789,
+      "record_date": "25-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8163,
@@ -1787,6 +3569,66 @@
       "result_val": "71"
     },
     {
+      "id": 21568,
+      "record_date": "25-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 22026,
+      "record_date": "25-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22022,
+      "record_date": "25-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 22016,
+      "record_date": "25-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22024,
+      "record_date": "25-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 22020,
+      "record_date": "25-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22010,
+      "record_date": "25-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22008,
+      "record_date": "25-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22012,
+      "record_date": "25-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 22018,
+      "record_date": "25-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11675,
       "record_date": "26-08",
       "game_name": "DELHI LAXMI",
@@ -1809,6 +3651,12 @@
       "record_date": "26-08",
       "game_name": "FARIDABAD",
       "result_val": "52"
+    },
+    {
+      "id": 19799,
+      "record_date": "26-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8175,
@@ -1841,6 +3689,66 @@
       "result_val": "47"
     },
     {
+      "id": 21569,
+      "record_date": "26-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 22045,
+      "record_date": "26-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22041,
+      "record_date": "26-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 22036,
+      "record_date": "26-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22043,
+      "record_date": "26-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 22039,
+      "record_date": "26-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22030,
+      "record_date": "26-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22028,
+      "record_date": "26-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22032,
+      "record_date": "26-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 22038,
+      "record_date": "26-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11139,
       "record_date": "27-08",
       "game_name": "DELHI LAXMI",
@@ -1863,6 +3771,12 @@
       "record_date": "27-08",
       "game_name": "FARIDABAD",
       "result_val": "18"
+    },
+    {
+      "id": 19809,
+      "record_date": "27-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8187,
@@ -1895,6 +3809,66 @@
       "result_val": "81"
     },
     {
+      "id": 21570,
+      "record_date": "27-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 22065,
+      "record_date": "27-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22061,
+      "record_date": "27-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 22055,
+      "record_date": "27-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22063,
+      "record_date": "27-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 22059,
+      "record_date": "27-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22049,
+      "record_date": "27-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22047,
+      "record_date": "27-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22051,
+      "record_date": "27-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 22057,
+      "record_date": "27-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11137,
       "record_date": "28-08",
       "game_name": "DELHI LAXMI",
@@ -1917,6 +3891,12 @@
       "record_date": "28-08",
       "game_name": "FARIDABAD",
       "result_val": "87"
+    },
+    {
+      "id": 19819,
+      "record_date": "28-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8199,
@@ -1949,6 +3929,66 @@
       "result_val": "97"
     },
     {
+      "id": 21571,
+      "record_date": "28-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 22086,
+      "record_date": "28-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22082,
+      "record_date": "28-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 22075,
+      "record_date": "28-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22084,
+      "record_date": "28-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 22080,
+      "record_date": "28-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22069,
+      "record_date": "28-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22067,
+      "record_date": "28-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22071,
+      "record_date": "28-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 22077,
+      "record_date": "28-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11734,
       "record_date": "29-08",
       "game_name": "DELHI LAXMI",
@@ -1971,6 +4011,12 @@
       "record_date": "29-08",
       "game_name": "FARIDABAD",
       "result_val": "90"
+    },
+    {
+      "id": 19829,
+      "record_date": "29-08",
+      "game_name": "GALI",
+      "result_val": "-"
     },
     {
       "id": 8211,
@@ -2003,6 +4049,66 @@
       "result_val": "70"
     },
     {
+      "id": 21582,
+      "record_date": "29-09",
+      "game_name": "DELHI LAXMI",
+      "result_val": "-"
+    },
+    {
+      "id": 22106,
+      "record_date": "29-09",
+      "game_name": "DISAWAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22102,
+      "record_date": "29-09",
+      "game_name": "DWARKA PURI",
+      "result_val": "-"
+    },
+    {
+      "id": 22096,
+      "record_date": "29-09",
+      "game_name": "FARIDABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22104,
+      "record_date": "29-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 22100,
+      "record_date": "29-09",
+      "game_name": "GAZIABAD",
+      "result_val": "-"
+    },
+    {
+      "id": 22090,
+      "record_date": "29-09",
+      "game_name": "KASHMIRI BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22088,
+      "record_date": "29-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22092,
+      "record_date": "29-09",
+      "game_name": "MATKA KING",
+      "result_val": "-"
+    },
+    {
+      "id": 22098,
+      "record_date": "29-09",
+      "game_name": "SHIV PURI",
+      "result_val": "-"
+    },
+    {
       "id": 11754,
       "record_date": "30-08",
       "game_name": "DELHI LAXMI",
@@ -2018,12 +4124,18 @@
       "id": 11764,
       "record_date": "30-08",
       "game_name": "DWARKA PURI",
-      "result_val": "00"
+      "result_val": "66"
     },
     {
       "id": 8221,
       "record_date": "30-08",
       "game_name": "FARIDABAD",
+      "result_val": "00"
+    },
+    {
+      "id": 19839,
+      "record_date": "30-08",
+      "game_name": "GALI",
       "result_val": "00"
     },
     {
@@ -2036,13 +4148,13 @@
       "id": 11752,
       "record_date": "30-08",
       "game_name": "KASHMIRI BAZAR",
-      "result_val": "00"
+      "result_val": "55"
     },
     {
       "id": 8593,
       "record_date": "30-08",
       "game_name": "LAAL BAZAR",
-      "result_val": "00"
+      "result_val": "39"
     },
     {
       "id": 11756,
@@ -2057,50 +4169,62 @@
       "result_val": "00"
     },
     {
-      "id": 18970,
-      "record_date": "31-08",
+      "id": 21583,
+      "record_date": "30-09",
       "game_name": "DELHI LAXMI",
       "result_val": "-"
     },
     {
-      "id": 18975,
-      "record_date": "31-08",
+      "id": 22126,
+      "record_date": "30-09",
       "game_name": "DISAWAR",
       "result_val": "-"
     },
     {
-      "id": 18974,
-      "record_date": "31-08",
+      "id": 22122,
+      "record_date": "30-09",
       "game_name": "DWARKA PURI",
       "result_val": "-"
     },
     {
-      "id": 18971,
-      "record_date": "31-08",
+      "id": 22116,
+      "record_date": "30-09",
       "game_name": "FARIDABAD",
       "result_val": "-"
     },
     {
-      "id": 18973,
-      "record_date": "31-08",
+      "id": 22124,
+      "record_date": "30-09",
+      "game_name": "GALI",
+      "result_val": "-"
+    },
+    {
+      "id": 22120,
+      "record_date": "30-09",
       "game_name": "GAZIABAD",
       "result_val": "-"
     },
     {
-      "id": 18968,
-      "record_date": "31-08",
+      "id": 22110,
+      "record_date": "30-09",
       "game_name": "KASHMIRI BAZAR",
       "result_val": "-"
     },
     {
-      "id": 18969,
-      "record_date": "31-08",
+      "id": 22108,
+      "record_date": "30-09",
+      "game_name": "LAAL BAZAR",
+      "result_val": "-"
+    },
+    {
+      "id": 22112,
+      "record_date": "30-09",
       "game_name": "MATKA KING",
       "result_val": "-"
     },
     {
-      "id": 18972,
-      "record_date": "31-08",
+      "id": 22118,
+      "record_date": "30-09",
       "game_name": "SHIV PURI",
       "result_val": "-"
     }
