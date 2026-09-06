@@ -1411,64 +1411,6 @@
       });
     }
 
-    async function saveTableOrder(tableGroupId, btn) {
-      const tbody = document.getElementById(tableGroupId === 1 ? 'table1GamesTbody' : 'table2GamesTbody');
-      if (!tbody) return;
-
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = '⏳ SAVING...';
-      }
-
-      const games = [];
-      Array.from(tbody.children).forEach((tr, idx) => {
-        const gameIdStr = tr.getAttribute('data-game-id');
-        const nameInp = tr.querySelector('.game-name-input');
-        const timeInp = tr.querySelector('.game-time-input');
-        const yestInp = tr.querySelector('.game-yest-input');
-        const todayInp = tr.querySelector('.game-today-input');
-
-        if (nameInp) {
-          games.push({
-            id: gameIdStr ? parseInt(gameIdStr) : null,
-            name: nameInp.value.trim(),
-            open_time: timeInp ? timeInp.value.trim() : '',
-            yesterday_result: yestInp ? yestInp.value.trim() : '',
-            today_result: todayInp ? todayInp.value.trim() : 'WAIT',
-            table_group: tableGroupId,
-            sort_order: idx + 1
-          });
-        }
-      });
-
-      if (games.length === 0) {
-        if (btn) { btn.disabled = false; btn.textContent = `💾 SAVE TABLE ${tableGroupId} ALL DATA & ORDER`; }
-        return;
-      }
-
-      try {
-        const res = await fetch('/api/admin/update-games-batch', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ games })
-        });
-        if (res.ok) {
-          showToast(`Table ${tableGroupId} All Data & Order Saved Successfully!`);
-          if (btn) {
-            btn.textContent = '✅ SAVED!';
-            setTimeout(() => { btn.disabled = false; btn.textContent = `💾 SAVE TABLE ${tableGroupId} ALL DATA & ORDER`; }, 1500);
-          }
-          await loadAdminData();
-        } else {
-          alert('Failed to save Table games');
-          if (btn) { btn.disabled = false; btn.textContent = `💾 SAVE TABLE ${tableGroupId} ALL DATA & ORDER`; }
-        }
-      } catch (e) {
-        alert('Server error saving table games');
-        if (btn) { btn.disabled = false; btn.textContent = `💾 SAVE TABLE ${tableGroupId} ALL DATA & ORDER`; }
-      }
-    }
-
     // Render Hero Games Admin Table
     function renderHeroGamesAdminTable() {
       const tbody = document.getElementById('heroAdminGamesTbody');
@@ -1943,7 +1885,7 @@
         const is_featured = featRadio ? (featRadio.checked ? 1 : 0) : 0;
 
         return {
-          id: gameId,
+          id: gameId ? parseInt(gameId, 10) : null,
           name,
           open_time,
           yesterday_result,

@@ -883,24 +883,17 @@ app.post('/api/admin/reorder-games', async (req, res) => {
   const { order } = req.body;
   if (!Array.isArray(order)) return res.status(400).json({ error: 'Invalid order array' });
 
-  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
-  if (!backup.games) backup.games = [];
-
-  order.forEach(item => {
-    const existingIdx = backup.games.findIndex(g => g.id === item.id || (g.name || '').toUpperCase() === (item.name || '').toUpperCase());
-    if (existingIdx !== -1) {
-      backup.games[existingIdx].sort_order = parseInt(item.sort_order) || 0;
-    }
-  });
-
-  backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
-  saveBackupDataLocally(backup);
-
-  for (const item of order) {
+  for (let i = 0; i < order.length; i++) {
+    const item = order[i];
+    const sortVal = (item.sort_order !== undefined && !isNaN(parseInt(item.sort_order, 10))) ? parseInt(item.sort_order, 10) : (i + 1);
+    const gameId = (item.id && parseInt(item.id, 10) > 0) ? parseInt(item.id, 10) : -1;
     try {
-      await safeQuery('UPDATE games SET sort_order = $1 WHERE id = $2 OR UPPER(name) = UPPER($3)', [item.sort_order, item.id || -1, item.name || '']);
+      await safeQuery('UPDATE games SET sort_order = $1 WHERE id = $2 OR UPPER(name) = UPPER($3)', [sortVal, gameId, item.name || '']);
     } catch (e) {}
   }
+
+  memoryBackupCache = null;
+  await syncJSONBackup().catch(() => {});
 
   res.json({ success: true, message: 'Games reordered successfully' });
 });
@@ -910,139 +903,84 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
   const { games } = req.body;
   if (!Array.isArray(games) || games.length === 0) return res.json({ success: true, count: 0 });
 
-  const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
-  if (!backup.games) backup.games = [];
-  if (!backup.chart_records) backup.chart_records = [];
-
   const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
 
-  const updateChartBackup = (dateKey, gameName, val) => {
-    const cIdx = backup.chart_records.findIndex(
-      r => (r.record_date === dateKey) && (r.game_name || '').toUpperCase() === gameName
-    );
-    if (cIdx !== -1) {
-      backup.chart_records[cIdx].result_val = val;
-    } else {
-      backup.chart_records.push({ record_date: dateKey, game_name: gameName, result_val: val });
-    }
-  };
-
-  games.forEach(g => {
-    if (!g.name) return;
+  for (let i = 0; i < games.length; i++) {
+    const g = games[i];
+    if (!g || !g.name) continue;
     let gNameUpper = g.name.trim().toUpperCase();
     if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
+    const heroVal = g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : 0;
+    const featVal = g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : 0;
     const isPermVal = gNameUpper === 'DISAWAR' ? 1 : 0;
-
-    const existingIdx = backup.games.findIndex(
-      bg => (bg.id && g.id && String(bg.id) === String(g.id)) || (bg.name || '').toUpperCase() === gNameUpper || (gNameUpper === 'DISAWAR' && (bg.name || '').toUpperCase().startsWith('DISAW'))
-    );
-
-    const updatedGame = {
-      id: g.id || (existingIdx !== -1 ? backup.games[existingIdx].id : Date.now()),
-      name: gNameUpper,
-      open_time: g.open_time !== undefined ? g.open_time : '',
-      yesterday_result: g.yesterday_result !== undefined ? g.yesterday_result : '',
-      today_result: g.today_result !== undefined ? g.today_result : 'WAIT',
-      table_group: parseInt(g.table_group) || 1,
-      sort_order: parseInt(g.sort_order) || 0,
-      is_hero: g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_hero || 0) : 0),
-      is_featured: g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : (existingIdx !== -1 ? (backup.games[existingIdx].is_featured || 0) : 0),
-      is_permanent: isPermVal || (existingIdx !== -1 ? (backup.games[existingIdx].is_permanent || 0) : 0)
-    };
-
-    if (g.is_featured === 1 || g.is_featured === true || gNameUpper.startsWith('DISAW')) {
-      if (!backup.settings) backup.settings = {};
-      backup.settings.featured_banner_game = gNameUpper;
-      if (g.open_time !== undefined) backup.settings.disawer_time = g.open_time;
-    }
-
-    if (existingIdx !== -1) {
-      backup.games[existingIdx] = { ...backup.games[existingIdx], ...updatedGame };
-    } else {
-      backup.games.push(updatedGame);
-    }
-
     const isWaitToday = !g.today_result || g.today_result.trim() === '' || g.today_result.toUpperCase() === 'WAIT';
-    if (!isWaitToday) {
-      updateChartBackup(todayStr, gNameUpper, g.today_result.trim());
-      updateChartBackup(todayFull, gNameUpper, g.today_result.trim());
-    } else {
-      backup.chart_records = (backup.chart_records || []).filter(r => {
-        if (!r || !r.record_date || !r.game_name) return true;
-        const rDate = r.record_date.trim();
-        const rGame = r.game_name.trim().toUpperCase();
-        const isGameMatch = rGame === gNameUpper || (gNameUpper.startsWith('DISAW') && rGame.startsWith('DISAW'));
-        const isDateMatch = rDate === todayStr || rDate === todayFull;
-        return !(isGameMatch && isDateMatch);
-      });
+    const sortOrderVal = (g.sort_order !== undefined && !isNaN(parseInt(g.sort_order, 10))) ? parseInt(g.sort_order, 10) : (i + 1);
+    const gameId = (g.id && parseInt(g.id, 10) > 0) ? parseInt(g.id, 10) : -1;
+
+    try {
+      await safeQuery(
+        `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5, is_hero = $6, is_featured = $7, is_permanent = GREATEST(is_permanent, $8) WHERE id = $9 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
+        [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', sortOrderVal, heroVal, featVal, isPermVal, gameId]
+      );
+
+      if (featVal === 1 || gNameUpper.startsWith('DISAW')) {
+        await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('featured_banner_game', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [gNameUpper]).catch(() => {});
+        if (g.open_time !== undefined) {
+          await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_time', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [g.open_time]).catch(() => {});
+        }
+      }
+
+      if (!isWaitToday) {
+        await safeQuery(
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+          [todayStr, gNameUpper, g.today_result.trim()]
+        ).catch(() => {});
+        await safeQuery(
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+          [todayFull, gNameUpper, g.today_result.trim()]
+        ).catch(() => {});
+      } else {
+        await safeQuery(
+          `DELETE FROM chart_records WHERE (record_date = $1 OR record_date = $2) AND (UPPER(game_name) = UPPER($3) OR (UPPER(game_name) LIKE 'DISAW%' AND UPPER($3) LIKE 'DISAW%'))`,
+          [todayStr, todayFull, gNameUpper]
+        ).catch(() => {});
+      }
+
+      if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
+        await safeQuery(
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+          [yestStr, gNameUpper, g.yesterday_result.trim()]
+        ).catch(() => {});
+        await safeQuery(
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+          [yestFull, gNameUpper, g.yesterday_result.trim()]
+        ).catch(() => {});
+      }
+    } catch (e) {
+      console.error('Error updating game in batch:', e.message);
     }
+  }
 
-    if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
-      updateChartBackup(yestStr, gNameUpper, g.yesterday_result.trim());
-      updateChartBackup(yestFull, gNameUpper, g.yesterday_result.trim());
-    }
-  });
-
-  backup.games.sort((a, b) => (parseInt(a.sort_order) || 0) - (parseInt(b.sort_order) || 0));
-
-  const heroGamesList = backup.games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
+  // Update Hero box JSON in site_settings
+  const heroGamesList = games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
     id: g.id || null,
     name: g.name ? g.name.trim().toUpperCase() : '',
     today_result: g.today_result ? g.today_result.trim() : 'WAIT'
   }));
-  if (!backup.settings) backup.settings = {};
-  backup.settings.hero_games_json = JSON.stringify(heroGamesList);
-
-  memoryBackupCache = backup;
-  saveBackupDataLocally(backup);
-
-  for (const g of games) {
-    if (g.id || g.name) {
-      let gNameUpper = (g.name || '').trim().toUpperCase();
-      if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
-      const heroVal = g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : 0;
-      const featVal = g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : 0;
-      const isPermVal = gNameUpper === 'DISAWAR' ? 1 : 0;
-      const isWaitToday = !g.today_result || g.today_result.trim() === '' || g.today_result.toUpperCase() === 'WAIT';
-
-      try {
-        await safeQuery(
-          `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5, is_hero = $6, is_featured = $7, is_permanent = GREATEST(is_permanent, $8) WHERE id = $9 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
-          [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', g.sort_order || 0, heroVal, featVal, isPermVal, g.id || -1]
-        );
-        if (!isWaitToday) {
-          await safeQuery(
-            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-            [todayStr, gNameUpper, g.today_result.trim()]
-          );
-          await safeQuery(
-            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-            [todayFull, gNameUpper, g.today_result.trim()]
-          );
-        } else {
-          await safeQuery(
-            `DELETE FROM chart_records WHERE (record_date = $1 OR record_date = $2) AND (UPPER(game_name) = UPPER($3) OR (UPPER(game_name) LIKE 'DISAW%' AND UPPER($3) LIKE 'DISAW%'))`,
-            [todayStr, todayFull, gNameUpper]
-          ).catch(() => {});
-        }
-
-        if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
-          await safeQuery(
-            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-            [yestStr, gNameUpper, g.yesterday_result.trim()]
-          );
-          await safeQuery(
-            `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-             ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-            [yestFull, gNameUpper, g.yesterday_result.trim()]
-          );
-        }
-      } catch (e) {}
-    }
+  if (heroGamesList.length > 0) {
+    await safeQuery(
+      `INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1)
+       ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`,
+      [JSON.stringify(heroGamesList)]
+    ).catch(() => {});
   }
+
+  memoryBackupCache = null;
+  await syncJSONBackup().catch(() => {});
 
   res.json({ success: true, count: games.length });
 });
