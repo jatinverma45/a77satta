@@ -433,8 +433,6 @@ app.get('/api/site-data', async (req, res) => {
         }
       });
     }
-    let charts = Object.values(chartMap);
-
     // Compute dynamic today_result and yesterday_result for games based on Asia/Kolkata dates
     const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
     games.forEach(g => {
@@ -442,25 +440,35 @@ app.get('/api/site-data', async (req, res) => {
 
       // If yesterday_result is not explicitly set on game row, fallback to charts
       if (!g.yesterday_result || g.yesterday_result === '-') {
-        const yestRec = charts.find(r => {
-          if (!r || !r.record_date || !r.game_name) return false;
-          const rGame = r.game_name.trim().toUpperCase();
-          const isGameMatch = rGame === gName || (gName === 'DISAWAR' && rGame === 'DISAWER');
-          const rDate = r.record_date.trim();
-          return isGameMatch && (rDate === yestFull || rDate === yestStr);
-        });
-        if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '') {
+        const yestRec = chartMap[`${yestStr}_${gName}`] || chartMap[`${yestFull}_${gName}`];
+        if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
           g.yesterday_result = yestRec.result_val.trim();
         } else {
           g.yesterday_result = '-';
+        }
+      } else if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
+        // Sync to chartMap if chartMap is empty or '-'
+        const existingYest = chartMap[`${yestStr}_${gName}`];
+        if (!existingYest || !existingYest.result_val || existingYest.result_val === '-' || existingYest.result_val === '') {
+          chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result.trim() };
         }
       }
 
       // If today_result is not set, default to WAIT
       if (!g.today_result || g.today_result.trim() === '') {
-        g.today_result = 'WAIT';
+        const todayRec = chartMap[`${todayStr}_${gName}`] || chartMap[`${todayFull}_${gName}`];
+        if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
+          g.today_result = todayRec.result_val.trim();
+        } else {
+          g.today_result = 'WAIT';
+        }
+      } else if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
+        // If today_result has a result in games table, ensure chartMap has it!
+        chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result.trim() };
       }
     });
+
+    let charts = Object.values(chartMap);
 
     let heroGames = games.filter(g => parseInt(g.is_hero) === 1);
     if (heroGames.length === 0 && settings.hero_games_json) {
@@ -653,11 +661,6 @@ app.post('/api/admin/update-game', async (req, res) => {
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [todayFull, gNameUpper, today_result.trim()]
       );
-    } else {
-      await safeQuery(
-        `DELETE FROM chart_records WHERE (record_date = $1 OR record_date = $2) AND (UPPER(game_name) = UPPER($3) OR (UPPER(game_name) LIKE 'DISAW%' AND UPPER($3) LIKE 'DISAW%'))`,
-        [todayStr, todayFull, gNameUpper]
-      ).catch(() => {});
     }
 
     if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {

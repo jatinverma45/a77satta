@@ -233,10 +233,19 @@
               // Aug 2026: Actual database records
               row.push((dbVal && dbVal !== '') ? dbVal : getDeterministicResult(cleanName, 2026, 8, day));
             } else if (month === 9) {
-              // Sep 2026: Actual database records (days with record show result, remaining show -)
-              if (dbVal !== undefined && dbVal !== null && dbVal !== '' && dbVal !== 'WAIT') {
-                row.push(dbVal);
-              } else if (dbVal === 'WAIT') {
+              // Sep 2026: Strictly admin data only (no random numbers)
+              const gObj = ((liveSiteData && liveSiteData.games) || []).find(x => {
+                const n = (x.name || '').trim().toUpperCase();
+                return n === cUpper || (cUpper === 'DISAWAR' && n.startsWith('DISAW')) || (n === 'DISAWAR' && cUpper.startsWith('DISAW'));
+              });
+
+              if (dbVal !== undefined && dbVal !== null && dbVal.trim() !== '' && dbVal.trim() !== '-' && dbVal.trim().toUpperCase() !== 'WAIT') {
+                row.push(dbVal.trim());
+              } else if (day === 7 && gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
+                row.push(gObj.today_result.trim());
+              } else if (day === 6 && gObj && gObj.yesterday_result && gObj.yesterday_result !== '-' && gObj.yesterday_result.toUpperCase() !== 'WAIT') {
+                row.push(gObj.yesterday_result.trim());
+              } else if (day === 7 && gObj && gObj.today_result && gObj.today_result.toUpperCase() === 'WAIT') {
                 row.push('WAIT');
               } else {
                 row.push('-');
