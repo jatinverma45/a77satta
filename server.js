@@ -413,17 +413,18 @@ app.get('/api/site-data', async (req, res) => {
     const activeGameNames = new Set(games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean));
 
     const chartMap = {};
-    (backup.chart_records || []).forEach(r => {
-      if (r && r.record_date && r.game_name) {
-        let gNameUpper = r.game_name.trim().toUpperCase();
-        if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
-        if (activeGameNames.has(gNameUpper)) {
-          chartMap[`${r.record_date.trim()}_${gNameUpper}`] = { ...r, game_name: gNameUpper };
-        }
-      }
-    });
     if (chartsRes && chartsRes.rows && chartsRes.rows.length > 0) {
       chartsRes.rows.forEach(r => {
+        if (r && r.record_date && r.game_name) {
+          let gNameUpper = r.game_name.trim().toUpperCase();
+          if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
+          if (activeGameNames.has(gNameUpper)) {
+            chartMap[`${r.record_date.trim()}_${gNameUpper}`] = { ...r, game_name: gNameUpper };
+          }
+        }
+      });
+    } else if (backup && Array.isArray(backup.chart_records)) {
+      backup.chart_records.forEach(r => {
         if (r && r.record_date && r.game_name) {
           let gNameUpper = r.game_name.trim().toUpperCase();
           if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
