@@ -438,32 +438,31 @@ app.get('/api/site-data', async (req, res) => {
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
-      // If yesterday_result is not explicitly set on game row, fallback to charts
-      if (!g.yesterday_result || g.yesterday_result === '-') {
-        const yestRec = chartMap[`${yestStr}_${gName}`];
-        if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
-          g.yesterday_result = yestRec.result_val.trim();
-        } else {
-          g.yesterday_result = '-';
-        }
-      } else if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
-        // Sync to chartMap if chartMap is empty or '-'
-        const existingYest = chartMap[`${yestStr}_${gName}`];
-        if (!existingYest || !existingYest.result_val || existingYest.result_val === '-' || existingYest.result_val === '') {
+      // Yesterday Result Sync
+      const yestRec = chartMap[`${yestStr}_${gName}`];
+      if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
+        if (!yestRec || !yestRec.result_val || yestRec.result_val === '-' || yestRec.result_val === '') {
           chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result.trim() };
         }
+      } else if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
+        g.yesterday_result = yestRec.result_val.trim();
+      } else {
+        g.yesterday_result = '-';
       }
 
-      // If today_result is not set or is WAIT, ensure it is WAIT and chart entry is '-'
-      if (!g.today_result || g.today_result.trim() === '' || g.today_result.toUpperCase() === 'WAIT') {
-        g.today_result = 'WAIT';
-        const existingToday = chartMap[`${todayStr}_${gName}`];
-        if (existingToday && existingToday.result_val && existingToday.result_val !== '-') {
-          existingToday.result_val = '-';
-        }
-      } else if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
-        // If today_result has a result in games table, ensure chartMap has it!
+      // Today Result Sync
+      const todayRec = chartMap[`${todayStr}_${gName}`];
+      if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
         chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result.trim() };
+      } else if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
+        g.today_result = todayRec.result_val.trim();
+      } else {
+        g.today_result = 'WAIT';
+        if (todayRec) {
+          todayRec.result_val = '-';
+        } else {
+          chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: '-' };
+        }
       }
     });
 
@@ -479,6 +478,13 @@ app.get('/api/site-data', async (req, res) => {
         }
       } catch(e) {}
     }
+
+    heroGames.forEach(hg => {
+      const match = games.find(g => (g.name || '').trim().toUpperCase() === (hg.name || '').trim().toUpperCase());
+      if (match) {
+        hg.today_result = match.today_result;
+      }
+    });
 
     if (games.length === 0) {
       charts = [];

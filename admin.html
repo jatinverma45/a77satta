@@ -1475,11 +1475,11 @@
         });
 
         let gRes = 'WAIT';
-        if (game.today_result && game.today_result.trim() !== '' && game.today_result !== 'WAIT') {
-          gRes = game.today_result.trim();
-        } else if (matchedGame && matchedGame.today_result && matchedGame.today_result.trim() !== '' && matchedGame.today_result !== 'WAIT') {
+        if (matchedGame && matchedGame.today_result && matchedGame.today_result.trim() !== '' && matchedGame.today_result !== 'WAIT' && matchedGame.today_result !== '-') {
           gRes = matchedGame.today_result.trim();
-        } else if (game.result && game.result !== 'WAIT') {
+        } else if (game.today_result && game.today_result.trim() !== '' && game.today_result !== 'WAIT' && game.today_result !== '-') {
+          gRes = game.today_result.trim();
+        } else if (game.result && game.result !== 'WAIT' && game.result !== '-') {
           gRes = game.result.trim();
         }
 
@@ -1699,6 +1699,8 @@
       const rawToday = (game.today_result !== undefined && game.today_result !== null) ? String(game.today_result).trim() : '';
       if (rawToday && rawToday.toUpperCase() !== 'WAIT' && rawToday !== '-') {
         todayVal = rawToday;
+      } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+        todayVal = chartTodayVal;
       } else {
         todayVal = 'WAIT';
       }
