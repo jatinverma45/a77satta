@@ -473,7 +473,7 @@
           let heroHtml = '';
           heroList.forEach(g => {
             const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
-            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name) || getResultFromChartRecords(chartRecords, todayFull, name);
+            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
             
             let resVal = 'WAIT';
             if (g.today_result && g.today_result.trim() !== '' && g.today_result.trim().toUpperCase() !== 'WAIT' && g.today_result.trim() !== '-') {
@@ -514,13 +514,13 @@
 
         let finalYest = (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-')
           ? disawerGame.yesterday_result.trim()
-          : (getResultFromChartRecords(chartRecords, yestFull, actualGameName) || getResultFromChartRecords(chartRecords, yestStr, actualGameName) || '-');
+          : (getResultFromChartRecords(chartRecords, yestStr, actualGameName) || '-');
 
         let finalToday = 'WAIT';
         if (disawerGame && disawerGame.today_result && disawerGame.today_result.trim() !== '' && disawerGame.today_result.trim().toUpperCase() !== 'WAIT' && disawerGame.today_result.trim() !== '-') {
           finalToday = disawerGame.today_result.trim();
         } else {
-          const chartVal = getResultFromChartRecords(chartRecords, todayFull, actualGameName) || getResultFromChartRecords(chartRecords, todayStr, actualGameName);
+          const chartVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
           finalToday = (chartVal && chartVal.toUpperCase() !== 'WAIT' && chartVal !== '-') ? chartVal : 'WAIT';
         }
 
@@ -559,8 +559,8 @@
             </div>
           `;
           group1.forEach(g => {
-            const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, g.name) || getResultFromChartRecords(chartRecords, yestFull, g.name);
-            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name) || getResultFromChartRecords(chartRecords, todayFull, g.name);
+            const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, g.name);
+            const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name);
 
             const yestRes = (g.yesterday_result && g.yesterday_result !== '-' && g.yesterday_result.trim())
               ? g.yesterday_result.trim()

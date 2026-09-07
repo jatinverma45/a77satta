@@ -434,13 +434,13 @@ app.get('/api/site-data', async (req, res) => {
       });
     }
     // Compute dynamic today_result and yesterday_result for games based on Asia/Kolkata dates
-    const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
+    const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
       // If yesterday_result is not explicitly set on game row, fallback to charts
       if (!g.yesterday_result || g.yesterday_result === '-') {
-        const yestRec = chartMap[`${yestStr}_${gName}`] || chartMap[`${yestFull}_${gName}`];
+        const yestRec = chartMap[`${yestStr}_${gName}`];
         if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
           g.yesterday_result = yestRec.result_val.trim();
         } else {
@@ -454,13 +454,12 @@ app.get('/api/site-data', async (req, res) => {
         }
       }
 
-      // If today_result is not set, default to WAIT
-      if (!g.today_result || g.today_result.trim() === '') {
-        const todayRec = chartMap[`${todayStr}_${gName}`] || chartMap[`${todayFull}_${gName}`];
-        if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
-          g.today_result = todayRec.result_val.trim();
-        } else {
-          g.today_result = 'WAIT';
+      // If today_result is not set or is WAIT, ensure it is WAIT and chart entry is '-'
+      if (!g.today_result || g.today_result.trim() === '' || g.today_result.toUpperCase() === 'WAIT') {
+        g.today_result = 'WAIT';
+        const existingToday = chartMap[`${todayStr}_${gName}`];
+        if (existingToday && existingToday.result_val && existingToday.result_val !== '-') {
+          existingToday.result_val = '-';
         }
       } else if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
         // If today_result has a result in games table, ensure chartMap has it!
@@ -546,9 +545,9 @@ function getTodayAndYesterdayDateStr() {
     month: '2-digit',
     day: '2-digit'
   });
-  const todayFull = kolkataFormatter.format(now); // e.g. "2026-08-24"
+  const todayFull = kolkataFormatter.format(now); // e.g. "2026-09-07"
   const [tY, tM, tD] = todayFull.split('-');
-  const todayStr = `${tD}-${tM}`; // e.g. "24-08"
+  const todayStr = `${tD}-${tM}`; // e.g. "07-09"
 
   const kolkataNowParts = kolkataFormatter.formatToParts(now);
   let kYear = parseInt(kolkataNowParts.find(p => p.type === 'year').value, 10);
@@ -556,11 +555,11 @@ function getTodayAndYesterdayDateStr() {
   let kDay = parseInt(kolkataNowParts.find(p => p.type === 'day').value, 10);
 
   const kDateObj = new Date(Date.UTC(kYear, kMonth, kDay - 1));
-  const yestFull = kolkataFormatter.format(kDateObj); // e.g. "2026-08-23"
+  const yestFull = kolkataFormatter.format(kDateObj); // e.g. "2026-09-06"
   const [yY, yM, yD] = yestFull.split('-');
-  const yestStr = `${yD}-${yM}`; // e.g. "23-08"
+  const yestStr = `${yD}-${yM}`; // e.g. "06-09"
 
-  return { todayStr, yestStr, todayFull, yestFull };
+  return { todayStr, yestStr };
 }
 
 // Admin: Update Game Result (Today / Yesterday)
@@ -590,7 +589,7 @@ app.post('/api/admin/update-game', async (req, res) => {
     if (gNameUpper === 'DISAWAR') backup.games[existingIdx].is_permanent = 1;
   }
 
-  const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
+  const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
 
   const updateChartBackup = (dateKey, gameName, val) => {
     const cIdx = backup.chart_records.findIndex(
@@ -607,12 +606,12 @@ app.post('/api/admin/update-game', async (req, res) => {
 
   if (!isWaitToday) {
     updateChartBackup(todayStr, gNameUpper, today_result.trim());
-    updateChartBackup(todayFull, gNameUpper, today_result.trim());
+  } else {
+    updateChartBackup(todayStr, gNameUpper, '-');
   }
 
   if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
     updateChartBackup(yestStr, gNameUpper, yesterday_result.trim());
-    updateChartBackup(yestFull, gNameUpper, yesterday_result.trim());
   }
 
   if (!backup.settings) backup.settings = {};
@@ -656,11 +655,12 @@ app.post('/api/admin/update-game', async (req, res) => {
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [todayStr, gNameUpper, today_result.trim()]
       );
+    } else {
       await safeQuery(
-        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [todayFull, gNameUpper, today_result.trim()]
-      );
+        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, '-')
+         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = '-'`,
+        [todayStr, gNameUpper]
+      ).catch(() => {});
     }
 
     if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
@@ -668,11 +668,6 @@ app.post('/api/admin/update-game', async (req, res) => {
         `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [yestStr, gNameUpper, yesterday_result.trim()]
-      );
-      await safeQuery(
-        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [yestFull, gNameUpper, yesterday_result.trim()]
       );
     }
   } catch (e) {}
@@ -693,7 +688,7 @@ app.post('/api/admin/add-game', async (req, res) => {
   const featVal = is_featured ? 1 : 0;
   const isPermVal = gName === 'DISAWAR' ? 1 : 0;
 
-  const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
+  const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
 
   let dbInsertedGame = null;
   try {
@@ -725,11 +720,6 @@ app.post('/api/admin/add-game', async (req, res) => {
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [todayStr, gName, today_result.trim()]
       );
-      await safeQuery(
-        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [todayFull, gName, today_result.trim()]
-      );
     }
 
     if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
@@ -737,11 +727,6 @@ app.post('/api/admin/add-game', async (req, res) => {
         `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [yestStr, gName, yesterday_result.trim()]
-      );
-      await safeQuery(
-        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-         ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [yestFull, gName, yesterday_result.trim()]
       );
     }
   } catch (e) {
@@ -786,7 +771,7 @@ app.post('/api/admin/update-hero-games', async (req, res) => {
   if (!backup.settings) backup.settings = {};
   backup.settings.hero_games_json = heroJsonStr;
 
-  const { todayStr, todayFull } = getTodayAndYesterdayDateStr();
+  const { todayStr } = getTodayAndYesterdayDateStr();
 
   if (Array.isArray(backup.games)) {
     backup.games.forEach(bg => {
@@ -804,30 +789,18 @@ app.post('/api/admin/update-hero-games', async (req, res) => {
   heroItems.forEach(h => {
     const hNameUpper = h.name ? h.name.trim().toUpperCase() : '';
     const isWait = !h.today_result || h.today_result.trim() === '' || h.today_result.toUpperCase() === 'WAIT';
-    if (isWait) {
-      backup.chart_records = (backup.chart_records || []).filter(r => {
-        if (!r || !r.record_date || !r.game_name) return true;
-        const rDate = r.record_date.trim();
-        const rGame = r.game_name.trim().toUpperCase();
-        const isGameMatch = rGame === hNameUpper || (hNameUpper.startsWith('DISAW') && rGame.startsWith('DISAW'));
-        const isDateMatch = rDate === todayStr || rDate === todayFull;
-        return !(isGameMatch && isDateMatch);
-      });
-    } else {
-      const updateChartBackup = (dateKey, val) => {
-        if (!backup.chart_records) backup.chart_records = [];
-        const cIdx = backup.chart_records.findIndex(
-          r => (r.record_date === dateKey) && (r.game_name || '').toUpperCase() === hNameUpper
-        );
-        if (cIdx !== -1) {
-          backup.chart_records[cIdx].result_val = val;
-        } else {
-          backup.chart_records.push({ record_date: dateKey, game_name: hNameUpper, result_val: val });
-        }
-      };
-      updateChartBackup(todayStr, h.today_result.trim());
-      updateChartBackup(todayFull, h.today_result.trim());
-    }
+    const updateChartBackup = (dateKey, val) => {
+      if (!backup.chart_records) backup.chart_records = [];
+      const cIdx = backup.chart_records.findIndex(
+        r => (r.record_date === dateKey) && (r.game_name || '').toUpperCase() === hNameUpper
+      );
+      if (cIdx !== -1) {
+        backup.chart_records[cIdx].result_val = val;
+      } else {
+        backup.chart_records.push({ record_date: dateKey, game_name: hNameUpper, result_val: val });
+      }
+    };
+    updateChartBackup(todayStr, isWait ? '-' : h.today_result.trim());
   });
 
   memoryBackupCache = backup;
@@ -850,19 +823,15 @@ app.post('/api/admin/update-hero-games', async (req, res) => {
       );
       if (isWait) {
         await safeQuery(
-          `DELETE FROM chart_records WHERE (record_date = $1 OR record_date = $2) AND (UPPER(game_name) = UPPER($3) OR (UPPER(game_name) LIKE 'DISAW%' AND UPPER($3) LIKE 'DISAW%'))`,
-          [todayStr, todayFull, gNameUpper]
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, '-')
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = '-'`,
+          [todayStr, gNameUpper]
         ).catch(() => {});
       } else {
         await safeQuery(
           `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
            ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
           [todayStr, gNameUpper, g.today_result.trim()]
-        ).catch(() => {});
-        await safeQuery(
-          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-          [todayFull, gNameUpper, g.today_result.trim()]
         ).catch(() => {});
       }
     }
@@ -897,7 +866,7 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
   const { games } = req.body;
   if (!Array.isArray(games) || games.length === 0) return res.json({ success: true, count: 0 });
 
-  const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
+  const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
 
   for (let i = 0; i < games.length; i++) {
     const g = games[i];
@@ -930,10 +899,11 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
            ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
           [todayStr, gNameUpper, g.today_result.trim()]
         ).catch(() => {});
+      } else {
         await safeQuery(
-          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-          [todayFull, gNameUpper, g.today_result.trim()]
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, '-')
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = '-'`,
+          [todayStr, gNameUpper]
         ).catch(() => {});
       }
 
@@ -942,11 +912,6 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
           `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
            ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
           [yestStr, gNameUpper, g.yesterday_result.trim()]
-        ).catch(() => {});
-        await safeQuery(
-          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
-           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-          [yestFull, gNameUpper, g.yesterday_result.trim()]
         ).catch(() => {});
       }
     } catch (e) {
@@ -1069,7 +1034,7 @@ app.post('/api/admin/clear-all-games', async (req, res) => {
 // Admin: Save/Update Single Chart Cell
 app.post('/api/admin/update-chart-cell', async (req, res) => {
   const { record_date, game_name, result_val } = req.body;
-  const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
+  const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
   const gNameUpper = (game_name || '').trim().toUpperCase();
 
   try {
@@ -1079,9 +1044,9 @@ app.post('/api/admin/update-chart-cell', async (req, res) => {
       [record_date, gNameUpper, result_val]
     );
 
-    if (record_date === todayStr || record_date === todayFull) {
+    if (record_date === todayStr) {
       await safeQuery(`UPDATE games SET today_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [result_val || 'WAIT', gNameUpper]).catch(() => {});
-    } else if (record_date === yestStr || record_date === yestFull) {
+    } else if (record_date === yestStr) {
       await safeQuery(`UPDATE games SET yesterday_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [result_val || '-', gNameUpper]).catch(() => {});
     }
 
@@ -1097,8 +1062,8 @@ app.post('/api/admin/update-chart-cell', async (req, res) => {
     if (backup.games) {
       const gIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === gNameUpper);
       if (gIdx !== -1) {
-        if (record_date === todayStr || record_date === todayFull) backup.games[gIdx].today_result = result_val || 'WAIT';
-        if (record_date === yestStr || record_date === yestFull) backup.games[gIdx].yesterday_result = result_val || '-';
+        if (record_date === todayStr) backup.games[gIdx].today_result = result_val || 'WAIT';
+        if (record_date === yestStr) backup.games[gIdx].yesterday_result = result_val || '-';
       }
     }
 
@@ -1116,7 +1081,7 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
   const { items } = req.body;
   if (!Array.isArray(items) || items.length === 0) return res.json({ success: true, count: 0 });
 
-  const { todayStr, yestStr, todayFull, yestFull } = getTodayAndYesterdayDateStr();
+  const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.chart_records) backup.chart_records = [];
 
@@ -1134,8 +1099,8 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
     if (backup.games) {
       const gIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === gNameUpper);
       if (gIdx !== -1) {
-        if (item.record_date === todayStr || item.record_date === todayFull) backup.games[gIdx].today_result = item.result_val || 'WAIT';
-        if (item.record_date === yestStr || item.record_date === yestFull) backup.games[gIdx].yesterday_result = item.result_val || '-';
+        if (item.record_date === todayStr) backup.games[gIdx].today_result = item.result_val || 'WAIT';
+        if (item.record_date === yestStr) backup.games[gIdx].yesterday_result = item.result_val || '-';
       }
     }
   });
@@ -1151,9 +1116,9 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [item.record_date, gNameUpper, item.result_val]
       );
-      if (item.record_date === todayStr || item.record_date === todayFull) {
+      if (item.record_date === todayStr) {
         await safeQuery(`UPDATE games SET today_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [item.result_val || 'WAIT', gNameUpper]).catch(() => {});
-      } else if (item.record_date === yestStr || item.record_date === yestFull) {
+      } else if (item.record_date === yestStr) {
         await safeQuery(`UPDATE games SET yesterday_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [item.result_val || '-', gNameUpper]).catch(() => {});
       }
     } catch (e) {}
