@@ -113,6 +113,23 @@
       .replace('CHART', '')
       .trim();
 
+    const nowKolkata = new Date();
+    const kFormatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+    const parts = kFormatter.formatToParts(nowKolkata);
+    const currKYear = parseInt(parts.find(p => p.type === 'year').value, 10);
+    const currKMonth = parseInt(parts.find(p => p.type === 'month').value, 10);
+    const currKDay = parseInt(parts.find(p => p.type === 'day').value, 10);
+
+    const yestDateObj = new Date(Date.UTC(currKYear, currKMonth - 1, currKDay - 1));
+    const yestParts = kFormatter.formatToParts(yestDateObj);
+    const yestKMonth = parseInt(yestParts.find(p => p.type === 'month').value, 10);
+    const yestKDay = parseInt(yestParts.find(p => p.type === 'day').value, 10);
+
     const targetYear = parseInt(year, 10) || 2026;
     const cUpper = cleanName.trim().toUpperCase();
 
@@ -183,11 +200,11 @@
 
             if (dbVal !== undefined && dbVal !== null && dbVal.trim() !== '' && dbVal.trim() !== '-' && dbVal.trim().toUpperCase() !== 'WAIT') {
               row.push(dbVal.trim());
-            } else if (day === 7 && gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
+            } else if (day === currKDay && month === currKMonth && gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
               row.push(gObj.today_result.trim());
-            } else if (day === 6 && gObj && gObj.yesterday_result && gObj.yesterday_result !== '-' && gObj.yesterday_result.toUpperCase() !== 'WAIT') {
+            } else if (day === yestKDay && month === yestKMonth && gObj && gObj.yesterday_result && gObj.yesterday_result !== '-' && gObj.yesterday_result.toUpperCase() !== 'WAIT') {
               row.push(gObj.yesterday_result.trim());
-            } else if (day === 7 && gObj && gObj.today_result && gObj.today_result.toUpperCase() === 'WAIT') {
+            } else if (day === currKDay && month === currKMonth && gObj && gObj.today_result && gObj.today_result.toUpperCase() === 'WAIT') {
               row.push('WAIT');
             } else {
               row.push('-');
@@ -230,8 +247,9 @@
     `;
   }
 
-  window.openChartForGameName = function(gameName, year) {
+  window.openChartForGameName = async function(gameName, year) {
     if (!gameName) return;
+    await loadFullSiteData();
     const cleanName = gameName.trim().toUpperCase();
     const selectedYear = year || '2026';
     const fullName = `${cleanName} SATTA KING CHART ${selectedYear}`;
