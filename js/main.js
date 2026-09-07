@@ -80,84 +80,129 @@
 
   window.latestSiteData = null;
 
-  const yearlySampleDataGlobal = [
-    [27, 79, 60, 53, 16, 76, 55, 55, '-', '-', '-', '-'],
-    [55, 69, 42, 44, 72, 10, 46, 16, '-', '-', '-', '-'],
-    [59, 58, 49, 50, 54, 77, 83, 10, '-', '-', '-', '-'],
-    [86, 34, 55, 78, 98, 20, 22, 21, '-', '-', '-', '-'],
-    [92, 11, 45, 56, 65, 24, 14, 13, '-', '-', '-', '-'],
-    [98, 53, '00', 14, 68, 78, 40, 93, '-', '-', '-', '-'],
-    [27, 63, '01', 45, 47, 72, 43, 63, '-', '-', '-', '-'],
-    [95, 36, 34, 46, 44, 91, 42, 55, '-', '-', '-', '-'],
-    [44, 40, 46, 97, 45, 20, 49, 43, '-', '-', '-', '-'],
-    [56, 33, 85, 78, 35, 38, 60, '-', '-', '-', '-', '-'],
-    [56, 65, 23, 21, 13, 55, 99, '-', '-', '-', '-', '-'],
-    [64, 44, 33, 11, 88, 75, 50, '-', '-', '-', '-', '-'],
-    [22, 44, 66, 64, 55, 68, 25, '-', '-', '-', '-', '-'],
-    [43, 49, 44, 23, 60, 45, 23, '-', '-', '-', '-', '-'],
-    [42, 11, 55, 54, '09', 50, 62, '-', '-', '-', '-', '-'],
-    [31, 22, 89, 16, 58, 29, '06', 42, '-', '-', '-', '-'],
-    ['05', 80, 53, 56, 31, 73, 95, 59, '-', '-', '-', '-'],
-    [99, '01', 12, 67, 10, 78, 12, 34, '-', '-', '-', '-'],
-    [24, 60, 47, 19, 75, 76, 57, 56, '-', '-', '-', '-'],
-    [95, 21, 61, 16, 97, 48, 22, 24, '-', '-', '-', '-'],
-    [48, 15, 52, 27, 80, '02', 26, '09', '-', '-', '-', '-'],
-    [30, 47, 91, 45, 93, 18, 81, 20, '-', '-', '-', '-'],
-    [35, 87, 89, '07', 74, 39, 63, 82, '-', '-', '-', '-'],
-    [71, 12, 69, '00', 76, 59, 57, '08', '-', '-', '-', '-'],
-    [93, 18, 88, '05', 42, 20, 74, 94, '-', '-', '-', '-'],
-    [73, 92, 33, 45, 39, 64, 78, 64, '-', '-', '-', '-'],
-    [60, 31, '03', 71, 84, 25, 18, 18, '-', '-', '-', '-'],
-    [59, 45, 86, 21, 67, 99, 69, 54, '-', '-', '-', '-'],
-    [54, 10, 78, 29, 17, 71, 13, 51, '-', '-', '-', '-'],
-    [66, 82, 52, '01', '01', 70, 92, 74, '-', '-', '-', '-'],
-    [15, 88, 34, 90, 27, 52, 61, 19, '-', '-', '-', '-']
-  ];
+  function getDeterministicResultGlobal(gameName, year, month, day) {
+    const daysInMonth = new Date(year, month, 0).getDate();
+    if (day > daysInMonth) return '-';
+    
+    const gUpper = String(gameName || '').trim().toUpperCase();
+    let str = `${gUpper}|${year}|${month}|${day}|a77satta`;
+    let h = 2166136261 >>> 0;
+    for (let i = 0; i < str.length; i++) {
+      h ^= str.charCodeAt(i);
+      h = Math.imul(h, 16777619) >>> 0;
+    }
+    h ^= h >>> 16;
+    h = Math.imul(h, 0x85ebca6b) >>> 0;
+    h ^= h >>> 13;
+    h = Math.imul(h, 0xc2b2ae35) >>> 0;
+    h ^= h >>> 16;
 
-  function buildTableMarkupGlobal(name, chartRecords) {
-    const cleanName = name.replace('SATTA KING CHART', '').replace('CHART 2026', '').replace('CHART', '').trim();
-    let tableRows = yearlySampleDataGlobal;
+    const rand = (h >>> 0) % 100;
+    return String(rand).padStart(2, '0');
+  }
 
+  function buildTableMarkupGlobal(name, chartRecords, year) {
+    const cleanName = name
+      .replace('SATTA KING CHART 2026', '')
+      .replace('SATTA KING CHART 2025', '')
+      .replace('SATTA KING CHART 2024', '')
+      .replace('SATTA KING CHART', '')
+      .replace('CHART 2026', '')
+      .replace('CHART 2025', '')
+      .replace('CHART 2024', '')
+      .replace('CHART', '')
+      .trim();
+
+    const targetYear = parseInt(year, 10) || 2026;
+    const cUpper = cleanName.trim().toUpperCase();
+
+    const fullDateMap = {};
     if (chartRecords && Array.isArray(chartRecords)) {
-      const fullDateMap = {};
       chartRecords.forEach(r => {
         if (!r || !r.record_date || !r.game_name) return;
         const gUpper = r.game_name.trim().toUpperCase();
-        const cUpper = cleanName.trim().toUpperCase();
-        if (gUpper === cUpper || (gUpper === 'DISAWER' && cUpper === 'DESAWAR') || (gUpper === 'DESAWAR' && cUpper === 'DISAWER')) {
-          const parts = r.record_date.trim().split('-');
-          if (parts.length === 2) {
-            const dayNum = parseInt(parts[0], 10);
-            const monthNum = parseInt(parts[1], 10);
-            if (!isNaN(dayNum) && !isNaN(monthNum)) {
-              fullDateMap[`${monthNum}_${dayNum}`] = r.result_val;
+        const isGameMatch = (gUpper === cUpper) ||
+          (cUpper === 'DISAWAR' && gUpper.startsWith('DISAW')) ||
+          (gUpper === 'DISAWAR' && cUpper.startsWith('DISAW'));
+        if (isGameMatch) {
+          const rawDate = r.record_date.trim();
+          let rDay = null;
+          let rMonth = null;
+          let rYear = null;
+
+          if (rawDate.includes('-')) {
+            const parts = rawDate.split('-');
+            if (parts.length === 2) {
+              rDay = parseInt(parts[0], 10);
+              rMonth = parseInt(parts[1], 10);
+              rYear = 2026;
+            } else if (parts.length === 3) {
+              if (parts[0].length === 4) {
+                rYear = parseInt(parts[0], 10);
+                rMonth = parseInt(parts[1], 10);
+                rDay = parseInt(parts[2], 10);
+              } else {
+                rDay = parseInt(parts[0], 10);
+                rMonth = parseInt(parts[1], 10);
+                rYear = parseInt(parts[2], 10);
+              }
             }
           }
-        }
-      });
 
-      tableRows = yearlySampleDataGlobal.map((row, dayIdx) => {
-        const dayNum = dayIdx + 1;
-        const newRow = [...row];
-        for (let monthNum = 1; monthNum <= 12; monthNum++) {
-          const key = `${monthNum}_${dayNum}`;
-          if (fullDateMap[key] !== undefined) {
-            newRow[monthNum - 1] = fullDateMap[key];
+          if (rDay && rMonth && rYear === targetYear) {
+            fullDateMap[`${rMonth}_${rDay}`] = r.result_val !== undefined && r.result_val !== null ? String(r.result_val).trim() : '-';
           }
         }
-        return newRow;
       });
+    }
+
+    const tableRows = [];
+    for (let day = 1; day <= 31; day++) {
+      const row = [];
+      for (let month = 1; month <= 12; month++) {
+        const daysInMonth = new Date(targetYear, month, 0).getDate();
+        if (day > daysInMonth) {
+          row.push('-');
+          continue;
+        }
+
+        const key = `${month}_${day}`;
+        const dbVal = fullDateMap[key];
+
+        if (targetYear === 2026) {
+          if (month <= 7) {
+            row.push((dbVal && dbVal !== '-' && dbVal !== 'WAIT') ? dbVal : getDeterministicResultGlobal(cleanName, 2026, month, day));
+          } else if (month === 8) {
+            row.push((dbVal && dbVal !== '') ? dbVal : getDeterministicResultGlobal(cleanName, 2026, 8, day));
+          } else if (month === 9) {
+            if (dbVal !== undefined && dbVal !== null && dbVal !== '' && dbVal !== 'WAIT') {
+              row.push(dbVal);
+            } else if (dbVal === 'WAIT') {
+              row.push('WAIT');
+            } else {
+              row.push('-');
+            }
+          } else {
+            row.push('-');
+          }
+        } else if (targetYear === 2025) {
+          row.push((dbVal && dbVal !== '-' && dbVal !== 'WAIT') ? dbVal : getDeterministicResultGlobal(cleanName, 2025, month, day));
+        } else {
+          row.push((dbVal && dbVal !== '-' && dbVal !== 'WAIT') ? dbVal : getDeterministicResultGlobal(cleanName, targetYear, month, day));
+        }
+      }
+      tableRows.push(row);
     }
 
     return `
       <div class="yearly-chart-modal-banner">
-        ${cleanName} YEARLY CHART 2026
+        ${cleanName} YEARLY CHART ${targetYear}
       </div>
       <div class="table-scroll-wrapper">
         <table class="satta-yearly-chart-table">
           <thead>
             <tr>
-              <th>2026</th>
+              <th>${targetYear}</th>
               <th>JAN</th><th>FEB</th><th>MAR</th><th>APR</th><th>MAY</th><th>JUN</th>
               <th>JUL</th><th>AUG</th><th>SEP</th><th>OCT</th><th>NOV</th><th>DEC</th>
             </tr>
@@ -175,10 +220,11 @@
     `;
   }
 
-  window.openChartForGameName = function(gameName) {
+  window.openChartForGameName = function(gameName, year) {
     if (!gameName) return;
     const cleanName = gameName.trim().toUpperCase();
-    const fullName = `${cleanName} SATTA KING CHART 2026`;
+    const selectedYear = year || '2026';
+    const fullName = `${cleanName} SATTA KING CHART ${selectedYear}`;
     const modal = document.getElementById('chartModalOverlay');
     const modalTitle = document.getElementById('modalChartTitle');
     const modalBody = document.getElementById('chartModalBody');
@@ -186,11 +232,11 @@
     if (modal && modalBody) {
       if (modalTitle) modalTitle.textContent = fullName;
       const records = (window.latestSiteData && window.latestSiteData.chart_records) ? window.latestSiteData.chart_records : [];
-      modalBody.innerHTML = buildTableMarkupGlobal(fullName, records);
+      modalBody.innerHTML = buildTableMarkupGlobal(cleanName, records, selectedYear);
       modal.classList.add('is-open');
       modal.setAttribute('aria-hidden', 'false');
     } else {
-      window.location.href = '/chart?game=' + encodeURIComponent(cleanName);
+      window.location.href = '/chart?game=' + encodeURIComponent(cleanName) + '&year=' + encodeURIComponent(selectedYear);
     }
   };
 

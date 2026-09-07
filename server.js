@@ -600,15 +600,6 @@ app.post('/api/admin/update-game', async (req, res) => {
   if (!isWaitToday) {
     updateChartBackup(todayStr, gNameUpper, today_result.trim());
     updateChartBackup(todayFull, gNameUpper, today_result.trim());
-  } else {
-    backup.chart_records = (backup.chart_records || []).filter(r => {
-      if (!r || !r.record_date || !r.game_name) return true;
-      const rDate = r.record_date.trim();
-      const rGame = r.game_name.trim().toUpperCase();
-      const isGameMatch = rGame === gNameUpper || (gNameUpper.startsWith('DISAW') && rGame.startsWith('DISAW'));
-      const isDateMatch = rDate === todayStr || rDate === todayFull;
-      return !(isGameMatch && isDateMatch);
-    });
   }
 
   if (yesterday_result && yesterday_result.trim() !== '' && yesterday_result !== '-') {
@@ -683,7 +674,7 @@ app.post('/api/admin/update-game', async (req, res) => {
     }
   } catch (e) {}
 
-  memoryBackupCache = null;
+  await syncJSONBackup().catch(() => {});
   res.json({ success: true, message: 'Game updated successfully' });
 });
 
@@ -941,11 +932,6 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
            ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
           [todayFull, gNameUpper, g.today_result.trim()]
         ).catch(() => {});
-      } else {
-        await safeQuery(
-          `DELETE FROM chart_records WHERE (record_date = $1 OR record_date = $2) AND (UPPER(game_name) = UPPER($3) OR (UPPER(game_name) LIKE 'DISAW%' AND UPPER($3) LIKE 'DISAW%'))`,
-          [todayStr, todayFull, gNameUpper]
-        ).catch(() => {});
       }
 
       if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
@@ -979,7 +965,6 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
     ).catch(() => {});
   }
 
-  memoryBackupCache = null;
   await syncJSONBackup().catch(() => {});
 
   res.json({ success: true, count: games.length });
@@ -1197,7 +1182,7 @@ app.post('/api/admin/update-settings', async (req, res) => {
     } catch (e) {}
   }
 
-  memoryBackupCache = null;
+  await syncJSONBackup().catch(() => {});
   res.json({ success: true, message: 'Settings saved successfully' });
 });
 

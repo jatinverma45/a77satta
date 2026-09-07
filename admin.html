@@ -699,8 +699,8 @@
                 <option value="05">05 - MAY</option>
                 <option value="06">06 - JUNE</option>
                 <option value="07">07 - JULY</option>
-                <option value="08" selected>08 - AUGUST</option>
-                <option value="09">09 - SEPTEMBER</option>
+                <option value="08">08 - AUGUST</option>
+                <option value="09" selected>09 - SEPTEMBER</option>
                 <option value="10">10 - OCTOBER</option>
                 <option value="11">11 - NOVEMBER</option>
                 <option value="12">12 - DECEMBER</option>
@@ -723,10 +723,10 @@
         </div>
       </div>
 
-      <!-- 1. AUGUST 2026 RECORD CHART MANAGER -->
+      <!-- 1. LIVE MONTH RECORD CHART MANAGER -->
       <div class="admin-card-box">
         <div class="admin-card-header">
-          <h3>AUGUST 2026 RECORD CHART MANAGER</h3>
+          <h3 id="chartAdminHeaderMonthTitle">CURRENT MONTH RECORD CHART MANAGER</h3>
           <div class="action-row-flex">
             <button class="btn-adm btn-adm-green" onclick="addNewChartColumn1()">+ ADD COLUMN</button>
             <button class="btn-adm btn-adm-green" onclick="addNewChartDateRow()">+ ADD DATE</button>
@@ -1826,15 +1826,6 @@
               siteDataCache.games[gIdx].yesterday_result = yesterday_result;
               siteDataCache.games[gIdx].open_time = open_time;
             }
-            if (today_result.toUpperCase() === 'WAIT') {
-              const { todayStr } = getTodayAndYesterdayDateStr();
-              if (siteDataCache.chart_records) {
-                siteDataCache.chart_records = siteDataCache.chart_records.filter(r => {
-                  if (!r || !r.game_name || !r.record_date) return true;
-                  return !(r.game_name.toUpperCase() === name.toUpperCase() && (r.record_date === todayStr || r.record_date.includes(todayStr)));
-                });
-              }
-            }
           }
           showToast(`✅ ${name} saved as ${today_result}!`);
           if (btn) {
@@ -2316,6 +2307,14 @@
       if (!tbody) return;
 
       const currentMonthStr = String(new Date().getMonth() + 1).padStart(2, '0');
+      const monthNamesFull = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
+      const currentMonthName = monthNamesFull[new Date().getMonth()];
+      const currentYearVal = new Date().getFullYear();
+      const headerTitleEl = document.getElementById('chartAdminHeaderMonthTitle');
+      if (headerTitleEl) {
+        headerTitleEl.textContent = `${currentMonthName} ${currentYearVal} RECORD CHART MANAGER`;
+      }
+
       const doRender = (dataObj) => {
         const records = (dataObj && dataObj.chart_records) || [];
         let dbDates = records.map(r => {
@@ -2339,7 +2338,7 @@
             <tr>
               <td colspan="2" style="text-align: center; padding: 30px; font-weight: 700; color: #ffd700; background: rgba(0,0,0,0.4);">
                 🚫 NO GAMES CREATED IN TABLE 1 YET.<br>
-                <span style="font-weight: 400; font-size: 13px; color: #aaa;">Add games to Table 1 above to enable the August 2026 Record Chart Editor.</span>
+                <span style="font-weight: 400; font-size: 13px; color: #aaa;">Add games to Table 1 above to enable the ${currentMonthName} ${currentYearVal} Record Chart Editor.</span>
               </td>
             </tr>
           `;
