@@ -258,12 +258,12 @@
 
               if (dbVal !== undefined && dbVal !== null && dbVal.trim() !== '' && dbVal.trim() !== '-' && dbVal.trim().toUpperCase() !== 'WAIT') {
                 row.push(dbVal.trim());
-              } else if (day === currKDay && month === currKMonth && gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
-                row.push(gObj.today_result.trim());
-              } else if (day === yestKDay && month === yestKMonth && gObj && gObj.yesterday_result && gObj.yesterday_result !== '-' && gObj.yesterday_result.toUpperCase() !== 'WAIT') {
-                row.push(gObj.yesterday_result.trim());
-              } else if (day === currKDay && month === currKMonth && gObj && gObj.today_result && gObj.today_result.toUpperCase() === 'WAIT') {
-                row.push('WAIT');
+              } else if (day === currKDay && month === currKMonth) {
+                if (gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
+                  row.push(gObj.today_result.trim());
+                } else {
+                  row.push('WAIT');
+                }
               } else {
                 row.push('-');
               }

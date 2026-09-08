@@ -200,12 +200,12 @@
 
             if (dbVal !== undefined && dbVal !== null && dbVal.trim() !== '' && dbVal.trim() !== '-' && dbVal.trim().toUpperCase() !== 'WAIT') {
               row.push(dbVal.trim());
-            } else if (day === currKDay && month === currKMonth && gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
-              row.push(gObj.today_result.trim());
-            } else if (day === yestKDay && month === yestKMonth && gObj && gObj.yesterday_result && gObj.yesterday_result !== '-' && gObj.yesterday_result.toUpperCase() !== 'WAIT') {
-              row.push(gObj.yesterday_result.trim());
-            } else if (day === currKDay && month === currKMonth && gObj && gObj.today_result && gObj.today_result.toUpperCase() === 'WAIT') {
-              row.push('WAIT');
+            } else if (day === currKDay && month === currKMonth) {
+              if (gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
+                row.push(gObj.today_result.trim());
+              } else {
+                row.push('WAIT');
+              }
             } else {
               row.push('-');
             }
@@ -530,9 +530,7 @@
           ? disawerGame.open_time.trim()
           : (s.disawer_time ? s.disawer_time.trim() : '05:15 AM');
 
-        let finalYest = (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-')
-          ? disawerGame.yesterday_result.trim()
-          : (getResultFromChartRecords(chartRecords, yestStr, actualGameName) || '-');
+        let finalYest = (getResultFromChartRecords(chartRecords, yestStr, actualGameName) || (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-' ? disawerGame.yesterday_result.trim() : '-'));
 
         let finalToday = 'WAIT';
         if (disawerGame && disawerGame.today_result && disawerGame.today_result.trim() !== '' && disawerGame.today_result.trim().toUpperCase() !== 'WAIT' && disawerGame.today_result.trim() !== '-') {
@@ -580,9 +578,9 @@
             const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, g.name);
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name);
 
-            const yestRes = (g.yesterday_result && g.yesterday_result !== '-' && g.yesterday_result.trim())
-              ? g.yesterday_result.trim()
-              : (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' ? chartYestVal : '-');
+            const yestRes = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
+              ? chartYestVal
+              : ((g.yesterday_result && g.yesterday_result !== '-' && g.yesterday_result.trim()) ? g.yesterday_result.trim() : '-');
 
             let todayRaw = 'WAIT';
             if (g.today_result && g.today_result.trim() !== '' && g.today_result.trim().toUpperCase() !== 'WAIT' && g.today_result.trim() !== '-') {
@@ -677,20 +675,15 @@
             return String(val).trim();
           }
 
-          // 2. Direct fallback to Table 1 games data if today/yesterday result is set in admin
-          if (gObj) {
-            if (date === todayStr && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
-              return gObj.today_result.trim();
-            }
-            if (date === yestStr && gObj.yesterday_result && gObj.yesterday_result !== '-' && gObj.yesterday_result.toUpperCase() !== 'WAIT') {
-              return gObj.yesterday_result.trim();
-            }
+          // 2. Direct check for today result
+          if (date === todayStr && gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
+            return gObj.today_result.trim();
           }
 
           if (val === '-') return '-';
 
           // 3. If today is still WAIT
-          if (date === todayStr && gObj && gObj.today_result && gObj.today_result.toUpperCase() === 'WAIT') {
+          if (date === todayStr && gObj && (!gObj.today_result || gObj.today_result.toUpperCase() === 'WAIT')) {
             return '<span class="market-wait" style="font-size:11px;">WAIT</span>';
           }
 

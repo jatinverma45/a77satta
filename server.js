@@ -439,24 +439,24 @@ app.get('/api/site-data', async (req, res) => {
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
-      // Yesterday Result Sync
+      // Yesterday Result Sync: Strictly from chart_records for yestStr (e.g. 08-09)
       const yestRec = chartMap[`${yestStr}_${gName}`];
-      if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
-        if (!yestRec || !yestRec.result_val || yestRec.result_val === '-' || yestRec.result_val === '') {
-          chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result.trim() };
-        }
-      } else if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
+      if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
         g.yesterday_result = yestRec.result_val.trim();
+      } else if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
+        // If present on game row, sync into chartMap for yesterday
+        chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result.trim() };
       } else {
         g.yesterday_result = '-';
       }
 
-      // Today Result Sync
+      // Today Result Sync: Strictly from chart_records for todayStr (e.g. 09-09) or game.today_result
       const todayRec = chartMap[`${todayStr}_${gName}`];
-      if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
-        chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result.trim() };
-      } else if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
+      if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
         g.today_result = todayRec.result_val.trim();
+      } else if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
+        g.today_result = g.today_result.trim();
+        chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result.trim() };
       } else {
         g.today_result = 'WAIT';
         if (todayRec) {

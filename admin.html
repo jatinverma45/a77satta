@@ -1006,10 +1006,18 @@
       }
 
       const settings = (siteDataCache && siteDataCache.settings) ? siteDataCache.settings : {};
+      const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
+      const chartRecords = (siteDataCache && siteDataCache.chart_records) ? siteDataCache.chart_records : [];
+      const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, 'DISAWAR');
+      const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, 'DISAWAR');
 
       timeInp.value = (disawerGame && disawerGame.open_time) ? disawerGame.open_time : (settings.disawer_time || '05:15 AM');
-      yestInp.value = (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-') ? disawerGame.yesterday_result : '';
-      todayInp.value = (disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT') ? disawerGame.today_result : 'WAIT';
+      yestInp.value = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
+        ? chartYestVal
+        : ((disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-') ? disawerGame.yesterday_result : '');
+      todayInp.value = (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT')
+        ? chartTodayVal
+        : ((disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT') ? disawerGame.today_result : 'WAIT');
     }
 
     async function setDisawerWait(btn) {
@@ -1691,9 +1699,9 @@
       const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, game.name);
       const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, game.name);
 
-      const yestVal = (game.yesterday_result && game.yesterday_result !== '-' && game.yesterday_result.trim())
-        ? game.yesterday_result.trim()
-        : (chartYestVal !== null ? chartYestVal : '');
+      const yestVal = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
+        ? chartYestVal
+        : ((game.yesterday_result && game.yesterday_result !== '-') ? game.yesterday_result.trim() : '');
 
       let todayVal = 'WAIT';
       const rawToday = (game.today_result !== undefined && game.today_result !== null) ? String(game.today_result).trim() : '';
