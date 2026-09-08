@@ -13,13 +13,13 @@
     "telegram_url": "https://t.me/+Mcnw6vRvig0wNDI1",
     "notice_1": "FARIDABAD SATTA KING RESULT IS UPDATED EVERYDAY AT 6:10 PM.",
     "notice_2": "LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE",
-    "featured_banner_game": "DISAWAR",
-    "disawer_time": "05:15 AM",
-    "disawer_prev": "64",
-    "disawer_today": "WAIT",
     "chart1_columns_json": "[\"LAAL BAZAR\",\"KASHMIRI BAZAR\",\"MATKA KING\",\"DELHI LAXMI\",\"FARIDABAD\",\"SHIV PURI\",\"GAZIABAD\",\"DWARKA PURI\",\"DISAWAR\",\"GALI\"]",
     "hero_games_json": "[{\"id\":688,\"name\":\"SHIV PURI\",\"today_result\":\"36\"}]",
-    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"KASHMIRI BAZAR SATTA KING CHART 2026\",\"MATKA KING SATTA KING CHART 2026\",\"DELHI LAXMI SATTA KING CHART 2026\",\"FARIDABAD SATTA KING CHART 2026\",\"SHIV PURI SATTA KING CHART 2026\",\"GAZIABAD SATTA KING CHART 2026\",\"DWARKA PURI SATTA KING CHART 2026\",\"DISAWAR SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\"]"
+    "featured_banner_game": "DISAWAR",
+    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"KASHMIRI BAZAR SATTA KING CHART 2026\",\"MATKA KING SATTA KING CHART 2026\",\"DELHI LAXMI SATTA KING CHART 2026\",\"FARIDABAD SATTA KING CHART 2026\",\"SHIV PURI SATTA KING CHART 2026\",\"GAZIABAD SATTA KING CHART 2026\",\"DWARKA PURI SATTA KING CHART 2026\",\"DISAWAR SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\"]",
+    "disawer_time": "05:15 AM",
+    "disawer_prev": "64",
+    "disawer_today": "WAIT"
   },
   "games": [
     {
@@ -127,19 +127,6 @@
       "is_permanent": 0
     },
     {
-      "id": 682,
-      "name": "DISAWAR",
-      "open_time": "05:15 AM",
-      "close_time": "",
-      "yesterday_result": "-",
-      "today_result": "WAIT",
-      "table_group": 1,
-      "sort_order": 9,
-      "is_hero": 0,
-      "is_featured": 1,
-      "is_permanent": 1
-    },
-    {
       "id": 787,
       "name": "GALI",
       "open_time": "11:50 PM",
@@ -147,10 +134,23 @@
       "yesterday_result": "-",
       "today_result": "WAIT",
       "table_group": 1,
-      "sort_order": 10,
+      "sort_order": 9,
       "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
+    },
+    {
+      "id": 682,
+      "name": "DISAWAR",
+      "open_time": "05:15 AM",
+      "close_time": "",
+      "yesterday_result": "-",
+      "today_result": "WAIT",
+      "table_group": 1,
+      "sort_order": 10,
+      "is_hero": 0,
+      "is_featured": 1,
+      "is_permanent": 1
     }
   ],
   "chart_records": [
