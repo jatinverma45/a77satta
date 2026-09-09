@@ -19,37 +19,18 @@ const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.ss
 const pgPool = new PgPool({
   connectionString: SUPABASE_DB_URI,
   ssl: { rejectUnauthorized: false },
-  max: 5,
-  idleTimeoutMillis: 10000,
-  connectionTimeoutMillis: 10000
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000
 });
 
-function safeQuery(text, params = []) {
-  return new Promise((resolve, reject) => {
-    let finished = false;
-    const timer = setTimeout(() => {
-      if (!finished) {
-        finished = true;
-        reject(new Error('PostgreSQL query timeout (10s limit)'));
-      }
-    }, 10000);
-
-    pgPool.query(text, params)
-      .then(res => {
-        if (!finished) {
-          finished = true;
-          clearTimeout(timer);
-          resolve(res);
-        }
-      })
-      .catch(err => {
-        if (!finished) {
-          finished = true;
-          clearTimeout(timer);
-          reject(err);
-        }
-      });
-  });
+async function safeQuery(text, params = []) {
+  try {
+    return await pgPool.query(text, params);
+  } catch (err) {
+    console.warn('Database query error:', err.message);
+    throw err;
+  }
 }
 
 // Setup SQLite fallback instance for local or offline use
@@ -263,10 +244,12 @@ async function ensureMonthlyChartRecordsInDb() {
   }
 }
 
-// Run DB initialization in background without blocking serverless requests
-initDatabase().catch(err => {
-  console.error('Background initDatabase error:', err);
-});
+// Run DB initialization only in local environment, NOT on every serverless lambda request
+if (!process.env.VERCEL) {
+  initDatabase().catch(err => {
+    console.error('Background initDatabase error:', err);
+  });
+}
 
 // Serve sitemap.xml with explicit XML content-type header for Google Search Console
 app.get('/sitemap.xml', (req, res) => {

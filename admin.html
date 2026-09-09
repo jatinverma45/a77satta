@@ -1099,6 +1099,9 @@
           return;
         }
         siteDataCache = data;
+        try {
+          localStorage.setItem('a77_admindata_cache', JSON.stringify(data));
+        } catch (e) {}
         currentKhaiwalCardsList = getInitialKhaiwalCards();
         populateDisawerBannerFields();
         renderHeroGamesAdminTable();
@@ -1115,6 +1118,26 @@
         console.error('Error loading admin data:', e);
       }
     }
+
+    // Instant 0ms First Paint from LocalStorage in Admin
+    try {
+      const cachedAdminStr = localStorage.getItem('a77_admindata_cache');
+      if (cachedAdminStr) {
+        siteDataCache = JSON.parse(cachedAdminStr);
+        currentKhaiwalCardsList = getInitialKhaiwalCards();
+        populateDisawerBannerFields();
+        renderHeroGamesAdminTable();
+        renderGamesTable();
+        renderNoticeBannersAdminTable();
+        renderKhaiwalCardsAdminTable();
+        renderChartCardsAdminTable();
+        populateMonthlyGameSelect();
+        loadMonthlyChartEditorData();
+        renderChartTable();
+        renderSettings();
+        renderBlogs();
+      }
+    } catch (e) {}
 
     // Notice Banners Admin Logic
     function renderNoticeBannersAdminTable() {

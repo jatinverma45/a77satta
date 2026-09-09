@@ -68,6 +68,9 @@
 
         // Render fresh live API data immediately
         renderSiteData(data);
+        try {
+          localStorage.setItem('a77_sitedata_cache', JSON.stringify(data));
+        } catch(e) {}
       } catch(err) {
         console.warn('⚠️ API fetch failed:', err);
       } finally {
@@ -77,6 +80,15 @@
 
     return activeFetchPromise;
   }
+
+  // Instant 0ms First Paint from LocalStorage
+  try {
+    const cachedStr = localStorage.getItem('a77_sitedata_cache');
+    if (cachedStr) {
+      const cachedData = JSON.parse(cachedStr);
+      renderSiteData(cachedData);
+    }
+  } catch(e) {}
 
   window.latestSiteData = null;
 
