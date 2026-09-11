@@ -2378,7 +2378,12 @@
           return null;
         }).filter(Boolean);
         let defaultDates = getAutoDatesUpToToday();
-        const dates = Array.from(new Set([...defaultDates, ...dbDates, ...(extraChartDates || [])]));
+        const dates = Array.from(new Set([...defaultDates, ...dbDates, ...(extraChartDates || [])])).sort((a, b) => {
+          const [dA, mA] = (a || '').split('-').map(Number);
+          const [dB, mB] = (b || '').split('-').map(Number);
+          if (mA !== mB) return (mA || 0) - (mB || 0);
+          return (dA || 0) - (dB || 0);
+        });
         const gamesList = getChart1ActiveColumns();
 
         if (gamesList.length === 0) {

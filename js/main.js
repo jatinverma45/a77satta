@@ -78,6 +78,8 @@
         activeFetchPromise = null;
       }
     })();
+    return activeFetchPromise;
+  }
 
   function getTodayKolkataDateStr() {
     const nowDate = new Date();
