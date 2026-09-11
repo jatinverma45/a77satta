@@ -1078,23 +1078,29 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
     }
   });
 
-  memoryBackupCache = backup;
-  saveBackupDataLocally(backup);
+  const dates = [];
+  const gamesList = [];
+  const vals = [];
+  items.forEach(item => {
+    if (item && item.record_date && item.game_name) {
+      const gNameUpper = item.game_name.trim().toUpperCase();
+      dates.push(item.record_date.trim());
+      gamesList.push(gNameUpper);
+      vals.push(item.result_val !== undefined && item.result_val !== null ? String(item.result_val).trim() : '-');
+    }
+  });
 
-  for (const item of items) {
-    const gNameUpper = (item.game_name || '').trim().toUpperCase();
+  if (dates.length > 0) {
     try {
       await safeQuery(
-        `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+        `INSERT INTO chart_records (record_date, game_name, result_val)
+         SELECT * FROM UNNEST($1::text[], $2::text[], $3::text[])
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
-        [item.record_date, gNameUpper, item.result_val]
+        [dates, gamesList, vals]
       );
-      if (item.record_date === todayStr) {
-        await safeQuery(`UPDATE games SET today_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [item.result_val || 'WAIT', gNameUpper]).catch(() => {});
-      } else if (item.record_date === yestStr) {
-        await safeQuery(`UPDATE games SET yesterday_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [item.result_val || '-', gNameUpper]).catch(() => {});
-      }
-    } catch (e) {}
+    } catch (e) {
+      console.error('Bulk chart upsert error:', e.message);
+    }
   }
 
   res.json({ success: true, count: items.length });

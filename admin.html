@@ -1099,10 +1099,6 @@
           return;
         }
         siteDataCache = data;
-        try {
-          data._cachedDate = getTodayKolkataDateStr();
-          localStorage.setItem('a77_admindata_cache', JSON.stringify(data));
-        } catch (e) {}
         currentKhaiwalCardsList = getInitialKhaiwalCards();
         populateDisawerBannerFields();
         renderHeroGamesAdminTable();
@@ -1133,29 +1129,6 @@
       const kDay = todayParts.find(p => p.type === 'day').value;
       return `${kDay}-${kMonth}`;
     }
-
-    // Instant 0ms First Paint from LocalStorage in Admin ONLY IF FROM TODAY
-    try {
-      const cachedAdminStr = localStorage.getItem('a77_admindata_cache');
-      if (cachedAdminStr) {
-        const parsed = JSON.parse(cachedAdminStr);
-        if (parsed && parsed._cachedDate === getTodayKolkataDateStr()) {
-          siteDataCache = parsed;
-          currentKhaiwalCardsList = getInitialKhaiwalCards();
-          populateDisawerBannerFields();
-          renderHeroGamesAdminTable();
-          renderGamesTable();
-          renderNoticeBannersAdminTable();
-          renderKhaiwalCardsAdminTable();
-          renderChartCardsAdminTable();
-          populateMonthlyGameSelect();
-          loadMonthlyChartEditorData();
-          renderChartTable();
-          renderSettings();
-          renderBlogs();
-        }
-      }
-    } catch (e) {}
 
     // Notice Banners Admin Logic
     function renderNoticeBannersAdminTable() {
