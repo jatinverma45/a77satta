@@ -1014,10 +1014,10 @@
       timeInp.value = (disawerGame && disawerGame.open_time) ? disawerGame.open_time : (settings.disawer_time || '05:15 AM');
       yestInp.value = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
         ? chartYestVal
-        : ((disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-') ? disawerGame.yesterday_result : '');
+        : '';
       todayInp.value = (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT')
         ? chartTodayVal
-        : ((disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT') ? disawerGame.today_result : 'WAIT');
+        : 'WAIT';
     }
 
     async function setDisawerWait(btn) {
@@ -1742,13 +1742,10 @@
 
       const yestVal = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
         ? chartYestVal
-        : ((game.yesterday_result && game.yesterday_result !== '-') ? game.yesterday_result.trim() : '');
+        : '';
 
       let todayVal = 'WAIT';
-      const rawToday = (game.today_result !== undefined && game.today_result !== null) ? String(game.today_result).trim() : '';
-      if (rawToday && rawToday.toUpperCase() !== 'WAIT' && rawToday !== '-') {
-        todayVal = rawToday;
-      } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+      if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
         todayVal = chartTodayVal;
       } else {
         todayVal = 'WAIT';
