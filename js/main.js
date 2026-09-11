@@ -523,9 +523,7 @@
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
             
             let resVal = 'WAIT';
-            if (g.today_result && g.today_result.trim() !== '' && g.today_result.trim().toUpperCase() !== 'WAIT' && g.today_result.trim() !== '-') {
-              resVal = g.today_result.trim();
-            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+            if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               resVal = chartTodayVal.trim();
             }
 
@@ -559,15 +557,11 @@
           ? disawerGame.open_time.trim()
           : (s.disawer_time ? s.disawer_time.trim() : '05:15 AM');
 
-        let finalYest = (getResultFromChartRecords(chartRecords, yestStr, actualGameName) || (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-' ? disawerGame.yesterday_result.trim() : '-'));
+        const chartYestDisaw = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
+        let finalYest = (chartYestDisaw && chartYestDisaw !== '-') ? chartYestDisaw.trim() : '-';
 
-        let finalToday = 'WAIT';
-        if (disawerGame && disawerGame.today_result && disawerGame.today_result.trim() !== '' && disawerGame.today_result.trim().toUpperCase() !== 'WAIT' && disawerGame.today_result.trim() !== '-') {
-          finalToday = disawerGame.today_result.trim();
-        } else {
-          const chartVal = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
-          finalToday = (chartVal && chartVal.toUpperCase() !== 'WAIT' && chartVal !== '-') ? chartVal : 'WAIT';
-        }
+        const chartTodayDisaw = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
+        let finalToday = (chartTodayDisaw && chartTodayDisaw !== '-' && chartTodayDisaw.toUpperCase() !== 'WAIT') ? chartTodayDisaw.trim() : 'WAIT';
 
         console.log('📌 [DISAWAR BANNER RENDERED]:', {
           time: bannerTime,
@@ -575,8 +569,8 @@
           today: finalToday
         });
 
-        const todayHtml = (!finalToday || finalToday.toUpperCase() === 'WAIT')
-          ? `<span class="wait-starburst-badge">WAIT</span>`
+        const todayHtml = (finalToday === 'WAIT')
+          ? `<span class="wait-badge">WAIT</span>`
           : `<span class="score-number score-number-today">${finalToday}</span>`;
 
         bannerBox.innerHTML = `
@@ -608,13 +602,11 @@
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name);
 
             const yestRes = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
-              ? chartYestVal
-              : ((g.yesterday_result && g.yesterday_result !== '-' && g.yesterday_result.trim()) ? g.yesterday_result.trim() : '-');
+              ? chartYestVal.trim()
+              : '-';
 
             let todayRaw = 'WAIT';
-            if (g.today_result && g.today_result.trim() !== '' && g.today_result.trim().toUpperCase() !== 'WAIT' && g.today_result.trim() !== '-') {
-              todayRaw = g.today_result.trim();
-            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+            if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               todayRaw = chartTodayVal.trim();
             }
 
@@ -704,15 +696,10 @@
             return String(val).trim();
           }
 
-          // 2. Direct check for today result
-          if (date === todayStr && gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
-            return gObj.today_result.trim();
-          }
-
           if (val === '-') return '-';
 
-          // 3. If today is still WAIT
-          if (date === todayStr && gObj && (!gObj.today_result || gObj.today_result.toUpperCase() === 'WAIT')) {
+          // 2. If today is still WAIT
+          if (date === todayStr) {
             return '<span class="market-wait" style="font-size:11px;">WAIT</span>';
           }
 
