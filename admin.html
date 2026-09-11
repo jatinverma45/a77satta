@@ -1100,6 +1100,7 @@
         }
         siteDataCache = data;
         try {
+          data._cachedDate = getTodayKolkataDateStr();
           localStorage.setItem('a77_admindata_cache', JSON.stringify(data));
         } catch (e) {}
         currentKhaiwalCardsList = getInitialKhaiwalCards();
@@ -1119,23 +1120,40 @@
       }
     }
 
-    // Instant 0ms First Paint from LocalStorage in Admin
+    function getTodayKolkataDateStr() {
+      const nowDate = new Date();
+      const kFormatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      const todayParts = kFormatter.formatToParts(nowDate);
+      const kMonth = todayParts.find(p => p.type === 'month').value;
+      const kDay = todayParts.find(p => p.type === 'day').value;
+      return `${kDay}-${kMonth}`;
+    }
+
+    // Instant 0ms First Paint from LocalStorage in Admin ONLY IF FROM TODAY
     try {
       const cachedAdminStr = localStorage.getItem('a77_admindata_cache');
       if (cachedAdminStr) {
-        siteDataCache = JSON.parse(cachedAdminStr);
-        currentKhaiwalCardsList = getInitialKhaiwalCards();
-        populateDisawerBannerFields();
-        renderHeroGamesAdminTable();
-        renderGamesTable();
-        renderNoticeBannersAdminTable();
-        renderKhaiwalCardsAdminTable();
-        renderChartCardsAdminTable();
-        populateMonthlyGameSelect();
-        loadMonthlyChartEditorData();
-        renderChartTable();
-        renderSettings();
-        renderBlogs();
+        const parsed = JSON.parse(cachedAdminStr);
+        if (parsed && parsed._cachedDate === getTodayKolkataDateStr()) {
+          siteDataCache = parsed;
+          currentKhaiwalCardsList = getInitialKhaiwalCards();
+          populateDisawerBannerFields();
+          renderHeroGamesAdminTable();
+          renderGamesTable();
+          renderNoticeBannersAdminTable();
+          renderKhaiwalCardsAdminTable();
+          renderChartCardsAdminTable();
+          populateMonthlyGameSelect();
+          loadMonthlyChartEditorData();
+          renderChartTable();
+          renderSettings();
+          renderBlogs();
+        }
       }
     } catch (e) {}
 

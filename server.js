@@ -14,7 +14,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static(path.join(__dirname)));
 
-const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.sszqmfagodieabgsbzev:SattaaA77king@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres';
+const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.sszqmfagodieabgsbzev:SattaaA77king@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres';
 
 const pgPool = new PgPool({
   connectionString: SUPABASE_DB_URI,
@@ -51,7 +51,7 @@ async function syncJSONBackup() {
     const [settingsRes, gamesRes, chartsRes, blogsRes] = await Promise.all([
       safeQuery('SELECT key, value FROM site_settings').catch(() => null),
       safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null),
-      safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null),
+      safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC, game_name ASC').catch(() => null),
       safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null)
     ]);
 
@@ -320,28 +320,27 @@ function getBackupData() {
   return { settings: {}, games: [], chart_records: [], blogs: [] };
 }
 
-// Public: Get all site data for homepage & chart page
+// Public: Get all site data for homepage & chart page (Lightning Fast Single-Query Engine)
 app.get('/api/site-data', async (req, res) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '0');
 
   try {
-    const [settingsRes, gamesRes, chartsRes, blogsRes] = await Promise.all([
-      safeQuery('SELECT key, value FROM site_settings').catch(() => null),
-      safeQuery('SELECT * FROM games ORDER BY sort_order ASC, id ASC').catch(() => null),
-      safeQuery('SELECT * FROM chart_records ORDER BY record_date ASC').catch(() => null),
-      safeQuery('SELECT * FROM blogs ORDER BY id DESC').catch(() => null)
-    ]);
+    // Single round-trip combined query for instant response (100-200ms)
+    const fastSql = `
+      SELECT
+        (SELECT json_object_agg(key, value) FROM site_settings) as settings,
+        (SELECT json_agg(g) FROM (SELECT * FROM games ORDER BY sort_order ASC, id ASC) g) as games,
+        (SELECT json_agg(c) FROM (SELECT * FROM chart_records ORDER BY record_date ASC, game_name ASC) c) as charts,
+        (SELECT json_agg(b) FROM (SELECT * FROM blogs ORDER BY id DESC) b) as blogs
+    `;
+    const dbRes = await safeQuery(fastSql);
+    const row = (dbRes && dbRes.rows && dbRes.rows[0]) ? dbRes.rows[0] : {};
 
-    let settings = {};
-    if (settingsRes && settingsRes.rows) {
-      settingsRes.rows.forEach(s => {
-        if (s.key !== 'chart1_columns_json' && s.key !== 'chart2_columns_json') {
-          settings[s.key] = s.value;
-        }
-      });
-    }
+    let settings = row.settings || {};
+    delete settings.chart1_columns_json;
+    delete settings.chart2_columns_json;
 
     const backup = getBackupData();
     if (backup && backup.settings) {
@@ -356,10 +355,8 @@ app.get('/api/site-data', async (req, res) => {
       settings.khaiwal_cards_json = "[]";
     }
 
-    let games = [];
-    if (gamesRes && gamesRes.rows) {
-      games = gamesRes.rows.filter(g => g && g.name);
-    } else if (memoryBackupCache && Array.isArray(memoryBackupCache.games)) {
+    let games = Array.isArray(row.games) ? row.games.filter(g => g && g.name) : [];
+    if (games.length === 0 && memoryBackupCache && Array.isArray(memoryBackupCache.games)) {
       games = memoryBackupCache.games.filter(g => g && g.name);
     }
 
@@ -396,18 +393,9 @@ app.get('/api/site-data', async (req, res) => {
     const activeGameNames = new Set(games.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean));
 
     const chartMap = {};
-    if (chartsRes && chartsRes.rows && chartsRes.rows.length > 0) {
-      chartsRes.rows.forEach(r => {
-        if (r && r.record_date && r.game_name) {
-          let gNameUpper = r.game_name.trim().toUpperCase();
-          if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
-          if (activeGameNames.has(gNameUpper)) {
-            chartMap[`${r.record_date.trim()}_${gNameUpper}`] = { ...r, game_name: gNameUpper };
-          }
-        }
-      });
-    } else if (backup && Array.isArray(backup.chart_records)) {
-      backup.chart_records.forEach(r => {
+    const rawCharts = Array.isArray(row.charts) ? row.charts : (backup ? backup.chart_records : []);
+    if (Array.isArray(rawCharts)) {
+      rawCharts.forEach(r => {
         if (r && r.record_date && r.game_name) {
           let gNameUpper = r.game_name.trim().toUpperCase();
           if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
@@ -417,29 +405,24 @@ app.get('/api/site-data', async (req, res) => {
         }
       });
     }
-    // Compute dynamic today_result and yesterday_result for games based on Asia/Kolkata dates
+
+    // Dynamic Today & Yesterday strictly based on actual calendar date
     const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
-      // Yesterday Result Sync: Strictly from chart_records for yestStr (e.g. 08-09)
+      // Yesterday Result: Strictly from chart_records for yestStr (e.g. 10-09)
       const yestRec = chartMap[`${yestStr}_${gName}`];
       if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
         g.yesterday_result = yestRec.result_val.trim();
-      } else if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
-        // If present on game row, sync into chartMap for yesterday
-        chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result.trim() };
       } else {
         g.yesterday_result = '-';
       }
 
-      // Today Result Sync: Strictly from chart_records for todayStr (e.g. 09-09) or game.today_result
+      // Today Result: Strictly from chart_records for todayStr (e.g. 11-09)
       const todayRec = chartMap[`${todayStr}_${gName}`];
       if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
         g.today_result = todayRec.result_val.trim();
-      } else if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
-        g.today_result = g.today_result.trim();
-        chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result.trim() };
       } else {
         g.today_result = 'WAIT';
         if (todayRec) {

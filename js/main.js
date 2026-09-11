@@ -69,6 +69,7 @@
         // Render fresh live API data immediately
         renderSiteData(data);
         try {
+          data._cachedDate = getTodayKolkataDateStr();
           localStorage.setItem('a77_sitedata_cache', JSON.stringify(data));
         } catch(e) {}
       } catch(err) {
@@ -78,15 +79,29 @@
       }
     })();
 
-    return activeFetchPromise;
+  function getTodayKolkataDateStr() {
+    const nowDate = new Date();
+    const kFormatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+    const todayParts = kFormatter.formatToParts(nowDate);
+    const kMonth = todayParts.find(p => p.type === 'month').value;
+    const kDay = todayParts.find(p => p.type === 'day').value;
+    return `${kDay}-${kMonth}`;
   }
 
-  // Instant 0ms First Paint from LocalStorage
+  // Instant 0ms First Paint from LocalStorage ONLY IF CACHE IS FROM TODAY
   try {
     const cachedStr = localStorage.getItem('a77_sitedata_cache');
     if (cachedStr) {
       const cachedData = JSON.parse(cachedStr);
-      renderSiteData(cachedData);
+      const currentToday = getTodayKolkataDateStr();
+      if (cachedData && cachedData._cachedDate === currentToday) {
+        renderSiteData(cachedData);
+      }
     }
   } catch(e) {}
 
