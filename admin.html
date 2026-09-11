@@ -977,15 +977,22 @@
       setTimeout(() => { t.style.display = 'none'; }, 2500);
     }
 
-    // Automatic Date Generator up to current day
+    // Automatic Date Generator up to current day (strictly Asia/Kolkata timezone)
     function getAutoDatesUpToToday() {
       const dates = [];
-      const now = new Date();
-      const currentDay = now.getDate();
-      const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+      const nowDate = new Date();
+      const kolkataFormatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      const todayParts = kolkataFormatter.formatToParts(nowDate);
+      const kMonth = todayParts.find(p => p.type === 'month').value;
+      const currentDay = parseInt(todayParts.find(p => p.type === 'day').value, 10);
       for (let d = 1; d <= currentDay; d++) {
         const dayStr = String(d).padStart(2, '0');
-        dates.push(`${dayStr}-${currentMonth}`);
+        dates.push(`${dayStr}-${kMonth}`);
       }
       return dates;
     }
@@ -1645,16 +1652,25 @@
     }
 
     function getTodayAndYesterdayDateStr() {
-      const now = new Date();
-      const dayToday = String(now.getDate()).padStart(2, '0');
-      const monthToday = String(now.getMonth() + 1).padStart(2, '0');
-      const todayStr = `${dayToday}-${monthToday}`;
+      const nowDate = new Date();
+      const kolkataFormatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'Asia/Kolkata',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+      const todayFull = kolkataFormatter.format(nowDate);
+      const [tY, tM, tD] = todayFull.split('-');
+      const todayStr = `${tD}-${tM}`;
 
-      const yest = new Date(now);
-      yest.setDate(now.getDate() - 1);
-      const dayYest = String(yest.getDate()).padStart(2, '0');
-      const monthYest = String(yest.getMonth() + 1).padStart(2, '0');
-      const yestStr = `${dayYest}-${monthYest}`;
+      const kolkataNowParts = kolkataFormatter.formatToParts(nowDate);
+      let kYear = parseInt(kolkataNowParts.find(p => p.type === 'year').value, 10);
+      let kMonth = parseInt(kolkataNowParts.find(p => p.type === 'month').value, 10) - 1;
+      let kDay = parseInt(kolkataNowParts.find(p => p.type === 'day').value, 10);
+      const kDateObj = new Date(Date.UTC(kYear, kMonth, kDay - 1));
+      const yestFull = kolkataFormatter.format(kDateObj);
+      const [yY, yM, yD] = yestFull.split('-');
+      const yestStr = `${yD}-${yM}`;
 
       return { todayStr, yestStr };
     }

@@ -25,12 +25,19 @@
 
   function getAutoDatesUpToToday() {
     const dates = [];
-    const now = new Date();
-    const currentDay = now.getDate();
-    const currentMonth = String(now.getMonth() + 1).padStart(2, '0');
+    const nowDate = new Date();
+    const kolkataFormatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Kolkata',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
+    const todayParts = kolkataFormatter.formatToParts(nowDate);
+    const kMonth = todayParts.find(p => p.type === 'month').value;
+    const currentDay = parseInt(todayParts.find(p => p.type === 'day').value, 10);
     for (let d = 1; d <= currentDay; d++) {
       const dayStr = String(d).padStart(2, '0');
-      dates.push(`${dayStr}-${currentMonth}`);
+      dates.push(`${dayStr}-${kMonth}`);
     }
     return dates;
   }
