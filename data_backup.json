@@ -41,7 +41,7 @@
       "open_time": "1:00 PM",
       "close_time": "04:00 PM",
       "yesterday_result": "27",
-      "today_result": "27",
+      "today_result": "65",
       "table_group": 1,
       "sort_order": 2,
       "is_hero": 0,
@@ -53,8 +53,8 @@
       "name": "MATKA KING",
       "open_time": "02:20 PM",
       "close_time": "02:40 PM",
-      "yesterday_result": "15",
-      "today_result": "45",
+      "yesterday_result": "45",
+      "today_result": "79",
       "table_group": 1,
       "sort_order": 3,
       "is_hero": 0,
@@ -66,8 +66,8 @@
       "name": "DELHI LAXMI",
       "open_time": "03:20 PM",
       "close_time": "03:50 PM",
-      "yesterday_result": "96",
-      "today_result": "78",
+      "yesterday_result": "78",
+      "today_result": "16",
       "table_group": 1,
       "sort_order": 4,
       "is_hero": 0,
@@ -79,8 +79,8 @@
       "name": "FARIDABAD",
       "open_time": "06:10 PM",
       "close_time": "06:10 PM",
-      "yesterday_result": "15",
-      "today_result": "72",
+      "yesterday_result": "72",
+      "today_result": "65",
       "table_group": 1,
       "sort_order": 5,
       "is_hero": 0,
@@ -93,7 +93,7 @@
       "open_time": "07:00 PM",
       "close_time": "07:30 PM",
       "yesterday_result": "59",
-      "today_result": "WAIT",
+      "today_result": "44",
       "table_group": 1,
       "sort_order": 6,
       "is_hero": 0,
@@ -109,7 +109,7 @@
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 7,
-      "is_hero": 0,
+      "is_hero": 1,
       "is_featured": 0,
       "is_permanent": 0
     },
@@ -1538,7 +1538,7 @@
       "id": 21555,
       "record_date": "12-09",
       "game_name": "DELHI LAXMI",
-      "result_val": "-"
+      "result_val": "16"
     },
     {
       "id": 21795,
@@ -1556,7 +1556,7 @@
       "id": 21790,
       "record_date": "12-09",
       "game_name": "FARIDABAD",
-      "result_val": "-"
+      "result_val": "65"
     },
     {
       "id": 21794,
@@ -1574,7 +1574,7 @@
       "id": 21787,
       "record_date": "12-09",
       "game_name": "KASHMIRI BAZAR",
-      "result_val": "-"
+      "result_val": "65"
     },
     {
       "id": 21786,
@@ -1586,13 +1586,13 @@
       "id": 21788,
       "record_date": "12-09",
       "game_name": "MATKA KING",
-      "result_val": "-"
+      "result_val": "79"
     },
     {
       "id": 21791,
       "record_date": "12-09",
       "game_name": "SHIV PURI",
-      "result_val": "-"
+      "result_val": "44"
     },
     {
       "id": 11417,

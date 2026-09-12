@@ -14,7 +14,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static(path.join(__dirname)));
 
-const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.sszqmfagodieabgsbzev:SattaaA77king@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres';
+const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.sszqmfagodieabgsbzev:SattaaA77king@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres';
 
 let pgPool = null;
 
@@ -23,9 +23,10 @@ function getPgPool() {
     pgPool = new PgPool({
       connectionString: SUPABASE_DB_URI,
       ssl: { rejectUnauthorized: false },
-      max: process.env.VERCEL ? 2 : 10,
-      idleTimeoutMillis: process.env.VERCEL ? 1000 : 30000,
-      connectionTimeoutMillis: 5000,
+      max: process.env.VERCEL ? 3 : 10,
+      idleTimeoutMillis: 10000,
+      connectionTimeoutMillis: 4000,
+      statement_timeout: 8000,
       allowExitOnIdle: true
     });
     pgPool.on('error', (err) => {
@@ -43,6 +44,9 @@ async function safeQuery(text, params = []) {
   } catch (err) {
     console.warn('⚠️ PostgreSQL query error, reconnecting and retrying once:', err.message);
     try {
+      if (pgPool) {
+        try { await pgPool.end(); } catch(e) {}
+      }
       pgPool = null;
       const freshPool = getPgPool();
       return await freshPool.query(text, params);
@@ -431,23 +435,25 @@ app.get('/api/site-data', async (req, res) => {
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
-      // Yesterday Result: Strictly from chart_records for yestStr (e.g. 10-09)
+      // Yesterday Result: Strictly from chart_records or games table
       const yestRec = chartMap[`${yestStr}_${gName}`];
       if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
         g.yesterday_result = yestRec.result_val.trim();
+      } else if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
+        chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result.trim() };
       } else {
         g.yesterday_result = '-';
       }
 
-      // Today Result: Strictly from chart_records for todayStr (e.g. 11-09)
+      // Today Result: Strictly from chart_records or games table
       const todayRec = chartMap[`${todayStr}_${gName}`];
       if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
         g.today_result = todayRec.result_val.trim();
+      } else if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
+        chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result.trim() };
       } else {
         g.today_result = 'WAIT';
-        if (todayRec) {
-          todayRec.result_val = '-';
-        } else {
+        if (!todayRec) {
           chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: '-' };
         }
       }
@@ -1118,11 +1124,24 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [dates, gamesList, vals]
       );
+
+      for (const item of items) {
+        if (!item || !item.game_name) continue;
+        const gNameUpper = item.game_name.trim().toUpperCase();
+        if (item.record_date === todayStr) {
+          const tVal = item.result_val && item.result_val !== '-' ? item.result_val.trim() : 'WAIT';
+          await safeQuery(`UPDATE games SET today_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [tVal, gNameUpper]).catch(() => {});
+        } else if (item.record_date === yestStr) {
+          const yVal = item.result_val && item.result_val !== '-' ? item.result_val.trim() : '-';
+          await safeQuery(`UPDATE games SET yesterday_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [yVal, gNameUpper]).catch(() => {});
+        }
+      }
     } catch (e) {
       console.error('Bulk chart upsert error:', e.message);
     }
   }
 
+  await syncJSONBackup().catch(() => {});
   res.json({ success: true, count: items.length });
 });
 

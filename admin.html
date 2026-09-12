@@ -1731,11 +1731,13 @@
 
       const yestVal = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
         ? chartYestVal
-        : '';
+        : (game.yesterday_result && game.yesterday_result !== '-' ? game.yesterday_result : '');
 
       let todayVal = 'WAIT';
       if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
         todayVal = chartTodayVal;
+      } else if (game.today_result && game.today_result.toUpperCase() !== 'WAIT' && game.today_result !== '-') {
+        todayVal = game.today_result;
       } else {
         todayVal = 'WAIT';
       }

@@ -507,6 +507,8 @@
             let resVal = 'WAIT';
             if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               resVal = chartTodayVal.trim();
+            } else if (g.today_result && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
+              resVal = g.today_result.trim();
             }
 
             const resHtml = (!resVal || resVal.toUpperCase() === 'WAIT')
@@ -540,10 +542,14 @@
           : (s.disawer_time ? s.disawer_time.trim() : '05:15 AM');
 
         const chartYestDisaw = getResultFromChartRecords(chartRecords, yestStr, actualGameName);
-        let finalYest = (chartYestDisaw && chartYestDisaw !== '-') ? chartYestDisaw.trim() : '-';
+        let finalYest = (chartYestDisaw && chartYestDisaw !== '-')
+          ? chartYestDisaw.trim()
+          : (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-' ? disawerGame.yesterday_result.trim() : (s.disawer_prev ? s.disawer_prev.trim() : '-'));
 
         const chartTodayDisaw = getResultFromChartRecords(chartRecords, todayStr, actualGameName);
-        let finalToday = (chartTodayDisaw && chartTodayDisaw !== '-' && chartTodayDisaw.toUpperCase() !== 'WAIT') ? chartTodayDisaw.trim() : 'WAIT';
+        let finalToday = (chartTodayDisaw && chartTodayDisaw !== '-' && chartTodayDisaw.toUpperCase() !== 'WAIT')
+          ? chartTodayDisaw.trim()
+          : (disawerGame && disawerGame.today_result && disawerGame.today_result.toUpperCase() !== 'WAIT' && disawerGame.today_result !== '-' ? disawerGame.today_result.trim() : (s.disawer_today && s.disawer_today !== 'WAIT' ? s.disawer_today.trim() : 'WAIT'));
 
         console.log('📌 [DISAWAR BANNER RENDERED]:', {
           time: bannerTime,
@@ -585,11 +591,13 @@
 
             const yestRes = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
               ? chartYestVal.trim()
-              : '-';
+              : (g.yesterday_result && g.yesterday_result !== '-' ? g.yesterday_result.trim() : '-');
 
             let todayRaw = 'WAIT';
             if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               todayRaw = chartTodayVal.trim();
+            } else if (g.today_result && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
+              todayRaw = g.today_result.trim();
             }
 
             const todayResHtml = (!todayRaw || todayRaw.toUpperCase() === 'WAIT')
