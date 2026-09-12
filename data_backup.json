@@ -15,10 +15,10 @@
     "notice_2": "LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE",
     "featured_banner_game": "DISAWAR",
     "disawer_time": "05:15 AM",
-    "disawer_prev": "54",
+    "disawer_prev": "46",
     "disawer_today": "WAIT",
     "chart1_columns_json": "[\"LAAL BAZAR\",\"KASHMIRI BAZAR\",\"MATKA KING\",\"DELHI LAXMI\",\"FARIDABAD\",\"SHIV PURI\",\"GAZIABAD\",\"DWARKA PURI\",\"DISAWAR\",\"GALI\"]",
-    "hero_games_json": "[{\"id\":688,\"name\":\"SHIV PURI\",\"today_result\":\"59\"}]",
+    "hero_games_json": "[{\"id\":665,\"name\":\"LAAL BAZAR\",\"today_result\":\"41\"}]",
     "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"KASHMIRI BAZAR SATTA KING CHART 2026\",\"MATKA KING SATTA KING CHART 2026\",\"DELHI LAXMI SATTA KING CHART 2026\",\"FARIDABAD SATTA KING CHART 2026\",\"SHIV PURI SATTA KING CHART 2026\",\"GAZIABAD SATTA KING CHART 2026\",\"DWARKA PURI SATTA KING CHART 2026\",\"DISAWAR SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\"]"
   },
   "games": [
@@ -27,11 +27,11 @@
       "name": "LAAL BAZAR",
       "open_time": "12:30 PM",
       "close_time": "01:40 PM",
-      "yesterday_result": "18",
-      "today_result": "36",
+      "yesterday_result": "36",
+      "today_result": "41",
       "table_group": 1,
       "sort_order": 1,
-      "is_hero": 0,
+      "is_hero": 1,
       "is_featured": 0,
       "is_permanent": 0
     },
@@ -92,11 +92,11 @@
       "name": "SHIV PURI",
       "open_time": "07:00 PM",
       "close_time": "07:30 PM",
-      "yesterday_result": "36",
-      "today_result": "59",
+      "yesterday_result": "59",
+      "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 6,
-      "is_hero": 1,
+      "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
     },
@@ -105,7 +105,7 @@
       "name": "GAZIABAD",
       "open_time": "09:50 PM",
       "close_time": "09:50 PM",
-      "yesterday_result": "83",
+      "yesterday_result": "98",
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 7,
@@ -118,7 +118,7 @@
       "name": "DWARKA PURI",
       "open_time": "10:30 PM",
       "close_time": "09:50 PM",
-      "yesterday_result": "18",
+      "yesterday_result": "37",
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 8,
@@ -131,7 +131,7 @@
       "name": "GALI",
       "open_time": "11:50 PM",
       "close_time": "11:50 PM",
-      "yesterday_result": "64",
+      "yesterday_result": "34",
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 9,
@@ -144,7 +144,7 @@
       "name": "DISAWAR",
       "open_time": "05:15 AM",
       "close_time": "",
-      "yesterday_result": "54",
+      "yesterday_result": "46",
       "today_result": "WAIT",
       "table_group": 1,
       "sort_order": 10,
@@ -1424,13 +1424,13 @@
       "id": 21785,
       "record_date": "11-09",
       "game_name": "DISAWAR",
-      "result_val": "-"
+      "result_val": "46"
     },
     {
       "id": 21783,
       "record_date": "11-09",
       "game_name": "DWARKA PURI",
-      "result_val": "-"
+      "result_val": "37"
     },
     {
       "id": 21780,
@@ -1442,13 +1442,13 @@
       "id": 21784,
       "record_date": "11-09",
       "game_name": "GALI",
-      "result_val": "-"
+      "result_val": "34"
     },
     {
       "id": 21782,
       "record_date": "11-09",
       "game_name": "GAZIABAD",
-      "result_val": "-"
+      "result_val": "98"
     },
     {
       "id": 21777,
@@ -1580,7 +1580,7 @@
       "id": 21786,
       "record_date": "12-09",
       "game_name": "LAAL BAZAR",
-      "result_val": "-"
+      "result_val": "41"
     },
     {
       "id": 21788,
@@ -3764,7 +3764,7 @@
       "post_date": "Posted on May 9",
       "tags": "#shriganeshsattaking #playbajar #playbazaar #sattaking",
       "content": "Shri Ganesh Satta King is widely followed for its timely 4:40 PM result declaration everyday...",
-      "created_at": "2026-08-10T19:59:15.279824"
+      "created_at": "2026-08-10T14:29:15.279Z"
     },
     {
       "id": 1,
@@ -3774,7 +3774,7 @@
       "post_date": "Posted on Jul 27",
       "tags": "#delhibazarsattaking #delhibazarsatta #sattaking #delhibajarsattaking",
       "content": "Delhi Bazar Satta King has become one of the most famous games in the Satta King market...",
-      "created_at": "2026-08-10T19:59:15.419801"
+      "created_at": "2026-08-10T14:29:15.419Z"
     }
   ]
 }

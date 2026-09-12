@@ -16,20 +16,40 @@ app.use(express.static(path.join(__dirname)));
 
 const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.sszqmfagodieabgsbzev:SattaaA77king@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres';
 
-const pgPool = new PgPool({
-  connectionString: SUPABASE_DB_URI,
-  ssl: { rejectUnauthorized: false },
-  max: 10,
-  idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 15000
-});
+let pgPool = null;
+
+function getPgPool() {
+  if (!pgPool) {
+    pgPool = new PgPool({
+      connectionString: SUPABASE_DB_URI,
+      ssl: { rejectUnauthorized: false },
+      max: process.env.VERCEL ? 2 : 10,
+      idleTimeoutMillis: process.env.VERCEL ? 1000 : 30000,
+      connectionTimeoutMillis: 5000,
+      allowExitOnIdle: true
+    });
+    pgPool.on('error', (err) => {
+      console.warn('⚠️ Idle PostgreSQL client error in pool:', err.message);
+      pgPool = null;
+    });
+  }
+  return pgPool;
+}
 
 async function safeQuery(text, params = []) {
   try {
-    return await pgPool.query(text, params);
+    const pool = getPgPool();
+    return await pool.query(text, params);
   } catch (err) {
-    console.warn('Database query error:', err.message);
-    throw err;
+    console.warn('⚠️ PostgreSQL query error, reconnecting and retrying once:', err.message);
+    try {
+      pgPool = null;
+      const freshPool = getPgPool();
+      return await freshPool.query(text, params);
+    } catch (retryErr) {
+      console.error('❌ PostgreSQL retry query failed:', retryErr.message);
+      throw retryErr;
+    }
   }
 }
 
@@ -154,10 +174,10 @@ async function initDatabase() {
     `);
 
     // Ensure Admin User Exists
-    const adminRes = await pgPool.query('SELECT COUNT(*) as count FROM admin');
+    const adminRes = await safeQuery('SELECT COUNT(*) as count FROM admin');
     if (parseInt(adminRes.rows[0].count) === 0) {
       const adminPassword = bcrypt.hashSync('SattaA77@77', 10);
-      await pgPool.query('INSERT INTO admin (username, password) VALUES ($1, $2)', ['A77SattaOfficial', adminPassword]);
+      await safeQuery('INSERT INTO admin (username, password) VALUES ($1, $2)', ['A77SattaOfficial', adminPassword]);
       console.log('🔑 Admin credentials initialized in Supabase PostgreSQL');
     }
 
@@ -167,7 +187,7 @@ async function initDatabase() {
       if (backup && backup.settings) {
         for (const [key, value] of Object.entries(backup.settings)) {
           const valStr = typeof value === 'object' ? JSON.stringify(value) : String(value);
-          await pgPool.query('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING', [key, valStr]).catch(()=>{});
+          await safeQuery('INSERT INTO site_settings (key, value) VALUES ($1, $2) ON CONFLICT (key) DO NOTHING', [key, valStr]).catch(()=>{});
         }
       }
 
@@ -497,7 +517,7 @@ app.get('/api/site-data', async (req, res) => {
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
   try {
-    const adminRes = await pgPool.query('SELECT * FROM admin WHERE username = $1', [username]);
+    const adminRes = await safeQuery('SELECT * FROM admin WHERE username = $1', [username]);
     if (adminRes.rows.length === 0) return res.status(401).json({ error: 'Invalid username or password' });
     const row = adminRes.rows[0];
     if (bcrypt.compareSync(password, row.password)) {
