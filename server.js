@@ -435,27 +435,20 @@ app.get('/api/site-data', async (req, res) => {
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
-      // Yesterday Result: Strictly from chart_records or games table
+      // Yesterday Result: Strictly from chart_records (yestStr e.g. 12-09)
       const yestRec = chartMap[`${yestStr}_${gName}`];
       if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
         g.yesterday_result = yestRec.result_val.trim();
-      } else if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-') {
-        chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result.trim() };
       } else {
         g.yesterday_result = '-';
       }
 
-      // Today Result: Strictly from chart_records or games table
+      // Today Result: Strictly from chart_records (todayStr e.g. 13-09)
       const todayRec = chartMap[`${todayStr}_${gName}`];
       if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
         g.today_result = todayRec.result_val.trim();
-      } else if (g.today_result && g.today_result.trim() !== '' && g.today_result.toUpperCase() !== 'WAIT' && g.today_result !== '-') {
-        chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result.trim() };
       } else {
         g.today_result = 'WAIT';
-        if (!todayRec) {
-          chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: '-' };
-        }
       }
     });
 
