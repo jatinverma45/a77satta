@@ -264,6 +264,12 @@
                 } else {
                   row.push('WAIT');
                 }
+              } else if (day === yestKDay && month === yestKMonth) {
+                if (gObj && gObj.yesterday_result && gObj.yesterday_result.toUpperCase() !== 'WAIT' && gObj.yesterday_result !== '-') {
+                  row.push(gObj.yesterday_result.trim());
+                } else {
+                  row.push('-');
+                }
               } else {
                 row.push('-');
               }
@@ -480,6 +486,6 @@
     </span>
   </div>
 
-  <script src="js/main.js?v=20260912_03"></script>
+  <script src="js/main.js?v=20260915_02"></script>
 </body>
 </html>

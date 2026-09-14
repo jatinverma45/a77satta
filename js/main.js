@@ -45,7 +45,7 @@
   // Instant Cache Render & Authoritative Live Data Engine
   function tryRenderCache() {
     try {
-      const cachedStr = localStorage.getItem('a77_sitedata_cache_v2');
+      const cachedStr = localStorage.getItem('a77_sitedata_cache_v4');
       if (cachedStr) {
         const cachedData = JSON.parse(cachedStr);
         if (cachedData && (cachedData.games || cachedData.hero_games)) {
@@ -89,7 +89,7 @@
         // Render fresh live API data immediately
         renderSiteData(data);
         try {
-          localStorage.setItem('a77_sitedata_cache_v2', JSON.stringify(data));
+          localStorage.setItem('a77_sitedata_cache_v4', JSON.stringify(data));
         } catch(e) {}
       } catch(err) {
         console.warn('⚠️ API fetch failed:', err);
@@ -230,6 +230,12 @@
                 row.push(gObj.today_result.trim());
               } else {
                 row.push('WAIT');
+              }
+            } else if (day === yestKDay && month === yestKMonth) {
+              if (gObj && gObj.yesterday_result && gObj.yesterday_result.toUpperCase() !== 'WAIT' && gObj.yesterday_result !== '-') {
+                row.push(gObj.yesterday_result.trim());
+              } else {
+                row.push('-');
               }
             } else {
               row.push('-');
@@ -705,9 +711,19 @@
             return String(val).trim();
           }
 
+          // 2. If yesterday date and yesterday_result is present
+          if (date === yestStr && gObj && gObj.yesterday_result && gObj.yesterday_result.trim() !== '' && gObj.yesterday_result.trim() !== '-' && gObj.yesterday_result.trim().toUpperCase() !== 'WAIT') {
+            return gObj.yesterday_result.trim();
+          }
+
+          // 3. If today date and today_result is present
+          if (date === todayStr && gObj && gObj.today_result && gObj.today_result.trim() !== '' && gObj.today_result.trim() !== '-' && gObj.today_result.trim().toUpperCase() !== 'WAIT') {
+            return gObj.today_result.trim();
+          }
+
           if (val === '-') return '-';
 
-          // 2. If today is still WAIT
+          // 4. If today is still WAIT
           if (date === todayStr) {
             return '<span class="market-wait" style="font-size:11px;">WAIT</span>';
           }
