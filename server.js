@@ -124,6 +124,31 @@ function saveBackupDataLocally(updatedData) {
   } catch(e) {}
 }
 
+function getTodayAndYesterdayDateStr() {
+  const now = new Date();
+  const kolkataFormatter = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Asia/Kolkata',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  const todayFull = kolkataFormatter.format(now);
+  const [tY, tM, tD] = todayFull.split('-');
+  const todayStr = `${tD}-${tM}`;
+
+  const kolkataNowParts = kolkataFormatter.formatToParts(now);
+  let kYear = parseInt(kolkataNowParts.find(p => p.type === 'year').value, 10);
+  let kMonth = parseInt(kolkataNowParts.find(p => p.type === 'month').value, 10) - 1;
+  let kDay = parseInt(kolkataNowParts.find(p => p.type === 'day').value, 10);
+
+  const kDateObj = new Date(Date.UTC(kYear, kMonth, kDay - 1));
+  const yestFull = kolkataFormatter.format(kDateObj);
+  const [yY, yM, yD] = yestFull.split('-');
+  const yestStr = `${yD}-${yM}`;
+
+  return { todayStr, yestStr };
+}
+
 // Database Initialization Middleware
 let isDbReady = false;
 async function initDatabase() {
@@ -439,6 +464,12 @@ app.get('/api/site-data', async (req, res) => {
       const yestRec = chartMap[`${yestStr}_${gName}`];
       if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-') {
         g.yesterday_result = yestRec.result_val.trim();
+      } else if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-' && g.yesterday_result.toUpperCase() !== 'WAIT') {
+        chartMap[`${yestStr}_${gName}`] = {
+          record_date: yestStr,
+          game_name: gName,
+          result_val: g.yesterday_result.trim()
+        };
       } else if (!g.yesterday_result || g.yesterday_result.trim() === '') {
         g.yesterday_result = '-';
       }
@@ -447,6 +478,12 @@ app.get('/api/site-data', async (req, res) => {
       const todayRec = chartMap[`${todayStr}_${gName}`];
       if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
         g.today_result = todayRec.result_val.trim();
+      } else if (g.today_result && g.today_result.trim() !== '' && g.today_result !== '-' && g.today_result.toUpperCase() !== 'WAIT') {
+        chartMap[`${todayStr}_${gName}`] = {
+          record_date: todayStr,
+          game_name: gName,
+          result_val: g.today_result.trim()
+        };
       } else if (!g.today_result || g.today_result.trim() === '') {
         g.today_result = 'WAIT';
       }
@@ -498,6 +535,7 @@ app.get('/api/site-data', async (req, res) => {
       blogs
     });
   } catch (e) {
+    console.error('❌ /api/site-data query error:', e);
     const backup = getBackupData();
     const bgames = backup.games || [];
     const bGameNames = new Set(bgames.map(g => (g.name || '').trim().toUpperCase()).filter(Boolean));
@@ -528,31 +566,6 @@ app.post('/api/admin/login', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 });
-
-function getTodayAndYesterdayDateStr() {
-  const now = new Date();
-  const kolkataFormatter = new Intl.DateTimeFormat('en-CA', {
-    timeZone: 'Asia/Kolkata',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-  const todayFull = kolkataFormatter.format(now); // e.g. "2026-09-07"
-  const [tY, tM, tD] = todayFull.split('-');
-  const todayStr = `${tD}-${tM}`; // e.g. "07-09"
-
-  const kolkataNowParts = kolkataFormatter.formatToParts(now);
-  let kYear = parseInt(kolkataNowParts.find(p => p.type === 'year').value, 10);
-  let kMonth = parseInt(kolkataNowParts.find(p => p.type === 'month').value, 10) - 1;
-  let kDay = parseInt(kolkataNowParts.find(p => p.type === 'day').value, 10);
-
-  const kDateObj = new Date(Date.UTC(kYear, kMonth, kDay - 1));
-  const yestFull = kolkataFormatter.format(kDateObj); // e.g. "2026-09-06"
-  const [yY, yM, yD] = yestFull.split('-');
-  const yestStr = `${yD}-${yM}`; // e.g. "06-09"
-
-  return { todayStr, yestStr };
-}
 
 // Admin: Update Game Result (Today / Yesterday)
 app.post('/api/admin/update-game', async (req, res) => {
