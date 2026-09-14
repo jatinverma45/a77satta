@@ -14,7 +14,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
 app.use(express.static(path.join(__dirname)));
 
-const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.sszqmfagodieabgsbzev:SattaaA77king@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres';
+const SUPABASE_DB_URI = process.env.SUPABASE_DB_URI || 'postgresql://postgres.sszqmfagodieabgsbzev:SattaaA77king@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres';
 
 let pgPool = null;
 
@@ -23,10 +23,10 @@ function getPgPool() {
     pgPool = new PgPool({
       connectionString: SUPABASE_DB_URI,
       ssl: { rejectUnauthorized: false },
-      max: process.env.VERCEL ? 3 : 10,
-      idleTimeoutMillis: 10000,
-      connectionTimeoutMillis: 4000,
-      statement_timeout: 8000,
+      max: process.env.VERCEL ? 4 : 10,
+      idleTimeoutMillis: 15000,
+      connectionTimeoutMillis: 10000,
+      statement_timeout: 15000,
       allowExitOnIdle: true
     });
     pgPool.on('error', (err) => {
@@ -625,10 +625,10 @@ app.post('/api/admin/update-game', async (req, res) => {
 
   // Synchronous Awaited DB save
   try {
-    const heroVal = is_hero !== undefined ? (is_hero ? 1 : 0) : 0;
+    const heroVal = is_hero !== undefined ? (is_hero ? 1 : 0) : null;
     const isPermVal = gNameUpper === 'DISAWAR' ? 1 : 0;
     await safeQuery(
-      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4, is_hero = $5, is_permanent = GREATEST(is_permanent, $6) WHERE id = $7 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
+      `UPDATE games SET name = $1, yesterday_result = $2, today_result = $3, open_time = $4, is_hero = COALESCE($5, is_hero), is_permanent = GREATEST(is_permanent, $6) WHERE id = $7 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
       [gNameUpper, yesterday_result, today_result, open_time, heroVal, isPermVal, id || -1]
     );
 
@@ -865,8 +865,8 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
     if (!g || !g.name) continue;
     let gNameUpper = g.name.trim().toUpperCase();
     if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
-    const heroVal = g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : 0;
-    const featVal = g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : 0;
+    const heroVal = g.is_hero !== undefined ? (g.is_hero ? 1 : 0) : null;
+    const featVal = g.is_featured !== undefined ? (g.is_featured ? 1 : 0) : null;
     const isPermVal = gNameUpper === 'DISAWAR' ? 1 : 0;
     const isWaitToday = !g.today_result || g.today_result.trim() === '' || g.today_result.toUpperCase() === 'WAIT';
     const sortOrderVal = (g.sort_order !== undefined && !isNaN(parseInt(g.sort_order, 10))) ? parseInt(g.sort_order, 10) : (i + 1);
@@ -874,7 +874,7 @@ app.post('/api/admin/update-games-batch', async (req, res) => {
 
     try {
       await safeQuery(
-        `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5, is_hero = $6, is_featured = $7, is_permanent = GREATEST(is_permanent, $8) WHERE id = $9 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
+        `UPDATE games SET name = $1, open_time = $2, yesterday_result = $3, today_result = $4, sort_order = $5, is_hero = COALESCE($6, is_hero), is_featured = COALESCE($7, is_featured), is_permanent = GREATEST(is_permanent, $8) WHERE id = $9 OR UPPER(name) = UPPER($1) OR (UPPER(name) LIKE 'DISAW%' AND UPPER($1) LIKE 'DISAW%')`,
         [gNameUpper, g.open_time || '', g.yesterday_result || '', g.today_result || 'WAIT', sortOrderVal, heroVal, featVal, isPermVal, gameId]
       );
 
