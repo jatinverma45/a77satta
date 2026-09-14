@@ -421,6 +421,14 @@ img{max-width:100%;height:auto;display:block}
   box-sizing: border-box;
 }
 
+.bottom-disclaimer:empty,
+.hero-games-wrap:empty {
+  display: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
 .bottom-disclaimer .bottom-title {
   font-size: 32px;
   font-weight: 900;

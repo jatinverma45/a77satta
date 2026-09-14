@@ -42,6 +42,19 @@
     return dates;
   }
 
+  // Instant Cache Render & Authoritative Live Data Engine
+  function tryRenderCache() {
+    try {
+      const cachedStr = localStorage.getItem('a77_sitedata_cache_v2');
+      if (cachedStr) {
+        const cachedData = JSON.parse(cachedStr);
+        if (cachedData && (cachedData.games || cachedData.hero_games)) {
+          renderSiteData(cachedData);
+        }
+      }
+    } catch(e) {}
+  }
+
   // Fetch Site Data & Render Homepage Dynamically (Authoritative Live API)
   let activeFetchPromise = null;
   let mainFetchSeq = 0;
@@ -75,6 +88,9 @@
 
         // Render fresh live API data immediately
         renderSiteData(data);
+        try {
+          localStorage.setItem('a77_sitedata_cache_v2', JSON.stringify(data));
+        } catch(e) {}
       } catch(err) {
         console.warn('⚠️ API fetch failed:', err);
       } finally {
@@ -84,10 +100,8 @@
     return activeFetchPromise;
   }
 
-  // Clear any legacy client-side cache to ensure users only see real-time live data
-  try {
-    localStorage.removeItem('a77_sitedata_cache');
-  } catch(e) {}
+  // Initial instant paint from cache
+  tryRenderCache();
 
   window.latestSiteData = null;
 

@@ -1045,9 +1045,9 @@
 
       const timeVal = timeInp.value.trim();
       const yestVal = yestInp.value.trim();
-      const todayVal = todayInp.value.trim();
+      const todayVal = todayInp.value.trim() || 'WAIT';
 
-      const origText = btn ? btn.textContent : '';
+      const origText = (btn && btn.textContent && !btn.textContent.includes('⏳') && !btn.textContent.includes('✅')) ? btn.textContent : '🚀 UPDATE DISAWAR BANNER LIVE';
       if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING DISAWAR...'; }
 
       try {
@@ -1068,7 +1068,9 @@
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             featured_banner_game: 'DISAWAR',
-            disawer_time: timeVal
+            disawer_time: timeVal,
+            disawer_prev: yestVal,
+            disawer_today: todayVal
           })
         }).catch(() => {});
 
@@ -1078,7 +1080,7 @@
             btn.textContent = '✅ SAVED!';
             setTimeout(() => { btn.disabled = false; btn.textContent = origText; }, 1500);
           }
-          loadAdminData();
+          await loadAdminData();
         } else {
           alert('Failed to update DISAWAR banner data');
           if (btn) { btn.disabled = false; btn.textContent = origText; }
@@ -1614,7 +1616,8 @@
     }
 
     async function saveHeroGamesList(btn) {
-      if (btn) { btn.disabled = true; btn.textContent = '⏳ SAVING HERO BOX...'; }
+      const origText = (btn && btn.textContent && !btn.textContent.includes('⏳') && !btn.textContent.includes('✅')) ? btn.textContent : '💾 SAVE HERO BOX & ORDER';
+      if (btn) { btn.disabled = true; btn.textContent = '⏳'; }
       const tbody = document.getElementById('heroAdminGamesTbody');
       const nameInputs = tbody ? tbody.querySelectorAll('.hero-game-name') : [];
       const resInputs = tbody ? tbody.querySelectorAll('.hero-game-result') : [];
@@ -1637,17 +1640,17 @@
         if (res.ok) {
           showToast('Hero Box Games Saved Successfully!');
           if (btn) {
-            btn.textContent = '✅ HERO BOX SAVED!';
-            setTimeout(() => { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX & ORDER'; }, 1500);
+            btn.textContent = '✅';
+            setTimeout(() => { btn.disabled = false; btn.textContent = origText; }, 1500);
           }
           await loadAdminData();
         } else {
           alert('Failed to save Hero games');
-          if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX & ORDER'; }
+          if (btn) { btn.disabled = false; btn.textContent = origText; }
         }
       } catch (e) {
         alert('Server error saving Hero games');
-        if (btn) { btn.disabled = false; btn.textContent = '💾 SAVE HERO BOX & ORDER'; }
+        if (btn) { btn.disabled = false; btn.textContent = origText; }
       }
     }
 
@@ -1829,7 +1832,7 @@
       const is_hero = heroCheck ? (heroCheck.checked ? 1 : 0) : 0;
       const is_featured = featRadio ? (featRadio.checked ? 1 : 0) : 0;
 
-      const origText = btn ? btn.textContent : '';
+      const origText = (btn && btn.textContent && !btn.textContent.includes('⏳') && !btn.textContent.includes('✅')) ? btn.textContent : 'SAVE';
       if (btn) {
         btn.disabled = true;
         btn.textContent = '⏳';
@@ -1870,7 +1873,7 @@
             setTimeout(() => {
               if (btn) {
                 btn.disabled = false;
-                btn.textContent = origText || 'SAVE';
+                btn.textContent = origText;
               }
             }, 1500);
           }
@@ -1879,14 +1882,14 @@
           alert('Failed to save game row');
           if (btn) {
             btn.disabled = false;
-            btn.textContent = origText || 'SAVE';
+            btn.textContent = origText;
           }
         }
       } catch (e) {
         alert('Error saving game row');
         if (btn) {
           btn.disabled = false;
-          btn.textContent = origText || 'SAVE';
+          btn.textContent = origText;
         }
       }
     }
