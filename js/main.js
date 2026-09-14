@@ -499,6 +499,10 @@
 
         if (heroList.length > 0) {
           heroContainer.style.display = 'flex';
+          heroContainer.style.flexDirection = 'column';
+          heroContainer.style.alignItems = 'center';
+          heroContainer.style.gap = '22px';
+          heroContainer.style.width = '100%';
           let heroHtml = '';
           heroList.forEach(g => {
             const name = g.name ? g.name.trim().toUpperCase() : 'GAME';
@@ -514,7 +518,7 @@
               : `<div class="game-result-main">${resVal}</div>`;
 
             heroHtml += `
-              <div class="result-block">
+              <div class="result-block" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin-bottom: 8px;">
                 <div class="game-name-main">${name}</div>
                 ${resHtml}
               </div>

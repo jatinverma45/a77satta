@@ -368,12 +368,13 @@ img{max-width:100%;height:auto;display:block}
   font-family: 'Noto Sans Devanagari', 'Mangal', Arial, sans-serif;
 }
 
-.hero-games-wrap {
+.hero-games-wrap,
+#heroGamesList {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 16px !important;
+  gap: 22px !important;
   width: 100% !important;
   margin: 10px 0 16px !important;
 }
@@ -383,7 +384,7 @@ img{max-width:100%;height:auto;display:block}
   flex-direction: column !important;
   align-items: center !important;
   justify-content: center !important;
-  margin: 0 !important;
+  margin: 0 0 6px 0 !important;
   width: 100% !important;
   text-align: center !important;
 }
