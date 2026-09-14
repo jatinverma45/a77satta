@@ -605,12 +605,17 @@
             const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, g.name);
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name);
 
-            const yestRes = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
-              ? chartYestVal.trim()
-              : (g.yesterday_result && g.yesterday_result !== '-' ? g.yesterday_result.trim() : '-');
+            let yestRes = '-';
+            if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-' && g.yesterday_result.toUpperCase() !== 'WAIT') {
+              yestRes = g.yesterday_result.trim();
+            } else if (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-' && chartYestVal.toUpperCase() !== 'WAIT') {
+              yestRes = chartYestVal.trim();
+            }
 
             let todayRaw = 'WAIT';
-            if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+            if (g.today_result && g.today_result.trim() !== '' && g.today_result !== '-' && g.today_result.toUpperCase() !== 'WAIT') {
+              todayRaw = g.today_result.trim();
+            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               todayRaw = chartTodayVal.trim();
             }
 

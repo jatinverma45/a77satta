@@ -1732,13 +1732,18 @@
       const chartYestVal = getResultFromChartRecords(chartRecords, yestStr, game.name);
       const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, game.name);
 
-      const yestVal = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
-        ? chartYestVal
-        : '';
+      let yestVal = '';
+      if (game.yesterday_result && game.yesterday_result.trim() !== '' && game.yesterday_result !== '-' && game.yesterday_result.toUpperCase() !== 'WAIT') {
+        yestVal = game.yesterday_result.trim();
+      } else if (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-' && chartYestVal.toUpperCase() !== 'WAIT') {
+        yestVal = chartYestVal.trim();
+      }
 
       let todayVal = 'WAIT';
-      if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
-        todayVal = chartTodayVal;
+      if (game.today_result && game.today_result.trim() !== '' && game.today_result !== '-' && game.today_result.toUpperCase() !== 'WAIT') {
+        todayVal = game.today_result.trim();
+      } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+        todayVal = chartTodayVal.trim();
       } else {
         todayVal = 'WAIT';
       }
