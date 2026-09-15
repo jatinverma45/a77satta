@@ -4,13 +4,8 @@
     "main_game_result": "97",
     "disawer_wait": "WAIT",
     "notice_banners_json": "[{\"id\":1,\"text\":\"FARIDABAD SATTA KING RESULT IS UPDATED EVERYDAY AT 6:10 PM.\"},{\"id\":2,\"text\":\"LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.COM\"}]",
-    "hero_games_json": "[{\"id\":654,\"name\":\"KASHMIRI BAZAR\",\"today_result\":\"45\"}]",
-    "featured_banner_game": "DISAWAR",
-    "disawer_time": "05:15 AM",
     "khaiwal_cards_json": "[]",
-    "disawer_prev": "86",
     "last_sync": "1786373486679.0",
-    "disawer_today": "WAIT",
     "chart2_columns_json": "[\"HR SATTA\",\"UJJALA SUPER\",\"KKR CITY\",\"MADHUPURI\",\"ANMOL BAZAR\",\"KAROL BAGH\",\"DELHI DARBAR\",\"NEW GANGA\",\"SKY KING\",\"FATEHABAD\",\"UDAIPUR CITY\",\"RAJ SHREE\",\"VIP AGRA\",\"MOHALI-7\",\"BHADRA BAZAR\",\"MANDI BAZAR\",\"LION BAZAR\",\"SIALKOT\",\"DEHRADUN CITY\",\"DAMAN\"]",
     "hindi_tagline": "हा भाई यही आती हे सबसे पहले खबर रूको और देखो",
     "ticker_text": "A77satta official website welcomes you. Get informed about satta king's history, rules, and valuable winning news and all satta news about games.Explore the intriguing world of satta king with informative details and real time sattaking results\n",
@@ -18,7 +13,12 @@
     "telegram_url": "https://t.me/+Mcnw6vRvig0wNDI1",
     "notice_1": "FARIDABAD SATTA KING RESULT IS UPDATED EVERYDAY AT 6:10 PM.",
     "notice_2": "LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE",
+    "featured_banner_game": "DISAWAR",
+    "disawer_time": "05:15 AM",
+    "disawer_prev": "86",
+    "disawer_today": "WAIT",
     "chart1_columns_json": "[\"LAAL BAZAR\",\"KASHMIRI BAZAR\",\"MATKA KING\",\"DELHI LAXMI\",\"FARIDABAD\",\"SHIV PURI\",\"GAZIABAD\",\"DWARKA PURI\",\"DISAWAR\",\"GALI\"]",
+    "hero_games_json": "[{\"id\":null,\"name\":\"LAAL BAZAR\",\"today_result\":\"76\"}]",
     "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"KASHMIRI BAZAR SATTA KING CHART 2026\",\"MATKA KING SATTA KING CHART 2026\",\"DELHI LAXMI SATTA KING CHART 2026\",\"FARIDABAD SATTA KING CHART 2026\",\"SHIV PURI SATTA KING CHART 2026\",\"GAZIABAD SATTA KING CHART 2026\",\"DWARKA PURI SATTA KING CHART 2026\",\"DISAWAR SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\"]"
   },
   "games": [
@@ -28,10 +28,10 @@
       "open_time": "12:30 PM",
       "close_time": "01:40 PM",
       "yesterday_result": "35",
-      "today_result": "WAIT",
+      "today_result": "76",
       "table_group": 1,
       "sort_order": 1,
-      "is_hero": 0,
+      "is_hero": 1,
       "is_featured": 0,
       "is_permanent": 0
     },
@@ -41,10 +41,10 @@
       "open_time": "1:00 PM",
       "close_time": "04:00 PM",
       "yesterday_result": "36",
-      "today_result": "WAIT",
+      "today_result": "66",
       "table_group": 1,
       "sort_order": 2,
-      "is_hero": 1,
+      "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
     },
@@ -54,7 +54,7 @@
       "open_time": "02:20 PM",
       "close_time": "02:40 PM",
       "yesterday_result": "15",
-      "today_result": "WAIT",
+      "today_result": "56",
       "table_group": 1,
       "sort_order": 3,
       "is_hero": 0,
@@ -1934,19 +1934,19 @@
       "id": 21823,
       "record_date": "15-09",
       "game_name": "KASHMIRI BAZAR",
-      "result_val": "-"
+      "result_val": "66"
     },
     {
       "id": 21822,
       "record_date": "15-09",
       "game_name": "LAAL BAZAR",
-      "result_val": "-"
+      "result_val": "76"
     },
     {
       "id": 21825,
       "record_date": "15-09",
       "game_name": "MATKA KING",
-      "result_val": "-"
+      "result_val": "56"
     },
     {
       "id": 21829,

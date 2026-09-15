@@ -460,38 +460,40 @@ app.get('/api/site-data', async (req, res) => {
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
-      // Yesterday Result: Authoritative resolution with zero ghost resurrection
+      // Yesterday Result: Authoritative resolution - valid declared number always wins over WAIT/-
       const yestRec = chartMap[`${yestStr}_${gName}`];
-      if (g.yesterday_result && (g.yesterday_result.trim() === '-' || g.yesterday_result.trim() === '' || g.yesterday_result.toUpperCase() === 'WAIT')) {
-        g.yesterday_result = '-';
-        if (yestRec) yestRec.result_val = '-';
-        else chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: '-' };
-      } else if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-' && g.yesterday_result.toUpperCase() !== 'WAIT') {
+      const hasYestRec = yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val.trim() !== '-' && yestRec.result_val.trim().toUpperCase() !== 'WAIT';
+      const hasGYest = g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result.trim() !== '-' && g.yesterday_result.trim().toUpperCase() !== 'WAIT';
+
+      if (hasYestRec) {
+        g.yesterday_result = yestRec.result_val.trim();
+        yestRec.result_val = yestRec.result_val.trim();
+      } else if (hasGYest) {
         g.yesterday_result = g.yesterday_result.trim();
         if (yestRec) yestRec.result_val = g.yesterday_result;
         else chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result };
-      } else if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val !== '-' && yestRec.result_val.toUpperCase() !== 'WAIT') {
-        g.yesterday_result = yestRec.result_val.trim();
       } else {
         g.yesterday_result = '-';
         if (yestRec) yestRec.result_val = '-';
+        else chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: '-' };
       }
 
-      // Today Result: Authoritative resolution with zero ghost resurrection
+      // Today Result: Authoritative resolution - valid declared number always wins over WAIT/-
       const todayRec = chartMap[`${todayStr}_${gName}`];
-      if (g.today_result && (g.today_result.trim().toUpperCase() === 'WAIT' || g.today_result.trim() === '-' || g.today_result.trim() === '')) {
-        g.today_result = 'WAIT';
-        if (todayRec) todayRec.result_val = '-';
-        else chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: '-' };
-      } else if (g.today_result && g.today_result.trim() !== '' && g.today_result !== '-' && g.today_result.toUpperCase() !== 'WAIT') {
+      const hasTodayRec = todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val.trim() !== '-' && todayRec.result_val.trim().toUpperCase() !== 'WAIT';
+      const hasGToday = g.today_result && g.today_result.trim() !== '' && g.today_result.trim() !== '-' && g.today_result.trim().toUpperCase() !== 'WAIT';
+
+      if (hasTodayRec) {
+        g.today_result = todayRec.result_val.trim();
+        todayRec.result_val = todayRec.result_val.trim();
+      } else if (hasGToday) {
         g.today_result = g.today_result.trim();
         if (todayRec) todayRec.result_val = g.today_result;
         else chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result };
-      } else if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
-        g.today_result = todayRec.result_val.trim();
       } else {
         g.today_result = 'WAIT';
         if (todayRec) todayRec.result_val = '-';
+        else chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: '-' };
       }
     });
 
