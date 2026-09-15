@@ -529,7 +529,9 @@
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, name);
             
             let resVal = 'WAIT';
-            if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+            if (g.today_result && g.today_result.trim() !== '' && g.today_result !== '-' && g.today_result.toUpperCase() !== 'WAIT') {
+              resVal = g.today_result.trim();
+            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               resVal = chartTodayVal.trim();
             }
 

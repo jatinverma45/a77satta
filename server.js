@@ -1119,22 +1119,43 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
   const backup = getBackupData() || { settings: {}, games: [], chart_records: [], blogs: [] };
   if (!backup.chart_records) backup.chart_records = [];
 
+  const dedupedMap = new Map();
   items.forEach(item => {
-    const gNameUpper = (item.game_name || '').trim().toUpperCase();
+    if (item && item.record_date && item.game_name) {
+      let gUpper = item.game_name.trim().toUpperCase();
+      if (gUpper === 'DISAWER') gUpper = 'DISAWAR';
+      const rDate = item.record_date.trim();
+      const key = `${rDate}_${gUpper}`;
+      dedupedMap.set(key, {
+        record_date: rDate,
+        game_name: gUpper,
+        result_val: item.result_val !== undefined && item.result_val !== null ? String(item.result_val).trim() : '-'
+      });
+    }
+  });
+  const dedupedItems = Array.from(dedupedMap.values());
+
+  dedupedItems.forEach(item => {
     const existingIdx = backup.chart_records.findIndex(
-      r => r.record_date === item.record_date && (r.game_name || '').toUpperCase() === gNameUpper
+      r => r.record_date === item.record_date && (r.game_name || '').toUpperCase() === item.game_name
     );
     if (existingIdx !== -1) {
       backup.chart_records[existingIdx].result_val = item.result_val;
     } else {
-      backup.chart_records.push({ record_date: item.record_date, game_name: gNameUpper, result_val: item.result_val });
+      backup.chart_records.push({ record_date: item.record_date, game_name: item.game_name, result_val: item.result_val });
     }
 
     if (backup.games) {
-      const gIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === gNameUpper);
+      const gIdx = backup.games.findIndex(g => (g.name || '').toUpperCase() === item.game_name);
       if (gIdx !== -1) {
-        if (item.record_date === todayStr) backup.games[gIdx].today_result = item.result_val || 'WAIT';
-        if (item.record_date === yestStr) backup.games[gIdx].yesterday_result = item.result_val || '-';
+        if (item.record_date === todayStr) {
+          const isWait = !item.result_val || item.result_val === '-' || item.result_val.toUpperCase() === 'WAIT';
+          backup.games[gIdx].today_result = isWait ? 'WAIT' : item.result_val;
+        }
+        if (item.record_date === yestStr) {
+          const isWait = !item.result_val || item.result_val === '-' || item.result_val.toUpperCase() === 'WAIT';
+          backup.games[gIdx].yesterday_result = isWait ? '-' : item.result_val;
+        }
       }
     }
   });
@@ -1142,13 +1163,10 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
   const dates = [];
   const gamesList = [];
   const vals = [];
-  items.forEach(item => {
-    if (item && item.record_date && item.game_name) {
-      const gNameUpper = item.game_name.trim().toUpperCase();
-      dates.push(item.record_date.trim());
-      gamesList.push(gNameUpper);
-      vals.push(item.result_val !== undefined && item.result_val !== null ? String(item.result_val).trim() : '-');
-    }
+  dedupedItems.forEach(item => {
+    dates.push(item.record_date);
+    gamesList.push(item.game_name);
+    vals.push(item.result_val);
   });
 
   if (dates.length > 0) {
@@ -1159,25 +1177,34 @@ app.post('/api/admin/update-chart-batch', async (req, res) => {
          ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
         [dates, gamesList, vals]
       );
-
-      for (const item of items) {
-        if (!item || !item.game_name) continue;
-        const gNameUpper = item.game_name.trim().toUpperCase();
-        if (item.record_date === todayStr) {
-          const tVal = item.result_val && item.result_val !== '-' ? item.result_val.trim() : 'WAIT';
-          await safeQuery(`UPDATE games SET today_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [tVal, gNameUpper]).catch(() => {});
-        } else if (item.record_date === yestStr) {
-          const yVal = item.result_val && item.result_val !== '-' ? item.result_val.trim() : '-';
-          await safeQuery(`UPDATE games SET yesterday_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [yVal, gNameUpper]).catch(() => {});
-        }
-      }
     } catch (e) {
-      console.error('Bulk chart upsert error:', e.message);
+      console.warn('⚠️ Batch UNNEST failed, falling back to sequential upserts:', e.message);
+      for (const item of dedupedItems) {
+        await safeQuery(
+          `INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, $2, $3)
+           ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`,
+          [item.record_date, item.game_name, item.result_val]
+        ).catch(() => {});
+      }
+    }
+
+    for (const item of dedupedItems) {
+      if (item.record_date === todayStr) {
+        const isWait = !item.result_val || item.result_val === '-' || item.result_val.toUpperCase() === 'WAIT';
+        const tVal = isWait ? 'WAIT' : item.result_val;
+        await safeQuery(`UPDATE games SET today_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [tVal, item.game_name]).catch(() => {});
+      } else if (item.record_date === yestStr) {
+        const isWait = !item.result_val || item.result_val === '-' || item.result_val.toUpperCase() === 'WAIT';
+        const yVal = isWait ? '-' : item.result_val;
+        await safeQuery(`UPDATE games SET yesterday_result = $1 WHERE UPPER(name) = $2 OR (UPPER(name) LIKE 'DISAW%' AND $2 LIKE 'DISAW%')`, [yVal, item.game_name]).catch(() => {});
+      }
     }
   }
 
+  memoryBackupCache = backup;
+  saveBackupDataLocally(backup);
   await syncJSONBackup().catch(() => {});
-  res.json({ success: true, count: items.length });
+  res.json({ success: true, count: dedupedItems.length });
 });
 
 // Admin: Save Settings (Ticker, Hindi tagline, Links, Khaiwal Cards, etc.)
@@ -1201,6 +1228,32 @@ app.post('/api/admin/update-settings', async (req, res) => {
         [key, valStr]
       );
     } catch (e) {}
+  }
+
+  // If Disawar banner settings are included, sync with games table & chart_records
+  const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
+  if (settings.disawer_today !== undefined || settings.disawer_prev !== undefined || settings.disawer_time !== undefined) {
+    const dToday = settings.disawer_today !== undefined ? (String(settings.disawer_today).trim() || 'WAIT') : null;
+    const dPrev = settings.disawer_prev !== undefined ? (String(settings.disawer_prev).trim() || '-') : null;
+    const dTime = settings.disawer_time !== undefined ? String(settings.disawer_time).trim() : null;
+
+    if (dToday !== null) {
+      const isWait = dToday.toUpperCase() === 'WAIT' || dToday === '-';
+      const chartVal = isWait ? '-' : dToday;
+      const gameVal = isWait ? 'WAIT' : dToday;
+      await safeQuery(`UPDATE games SET today_result = $1 WHERE UPPER(name) LIKE 'DISAW%'`, [gameVal]).catch(()=>{});
+      await safeQuery(`INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, 'DISAWAR', $2) ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`, [todayStr, chartVal]).catch(()=>{});
+    }
+    if (dPrev !== null) {
+      const isWait = dPrev.toUpperCase() === 'WAIT' || dPrev === '-';
+      const chartVal = isWait ? '-' : dPrev;
+      const gameVal = isWait ? '-' : dPrev;
+      await safeQuery(`UPDATE games SET yesterday_result = $1 WHERE UPPER(name) LIKE 'DISAW%'`, [gameVal]).catch(()=>{});
+      await safeQuery(`INSERT INTO chart_records (record_date, game_name, result_val) VALUES ($1, 'DISAWAR', $2) ON CONFLICT (record_date, game_name) DO UPDATE SET result_val = EXCLUDED.result_val`, [yestStr, chartVal]).catch(()=>{});
+    }
+    if (dTime !== null) {
+      await safeQuery(`UPDATE games SET open_time = $1 WHERE UPPER(name) LIKE 'DISAW%'`, [dTime]).catch(()=>{});
+    }
   }
 
   await syncJSONBackup().catch(() => {});

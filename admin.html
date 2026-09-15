@@ -1019,12 +1019,26 @@
       const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, 'DISAWAR');
 
       timeInp.value = (disawerGame && disawerGame.open_time) ? disawerGame.open_time : (settings.disawer_time || '05:15 AM');
-      yestInp.value = (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-')
-        ? chartYestVal
-        : '';
-      todayInp.value = (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT')
-        ? chartTodayVal
-        : 'WAIT';
+
+      let yVal = '';
+      if (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-') {
+        yVal = chartYestVal;
+      } else if (disawerGame && disawerGame.yesterday_result && disawerGame.yesterday_result !== '-' && disawerGame.yesterday_result.toUpperCase() !== 'WAIT') {
+        yVal = disawerGame.yesterday_result;
+      } else if (settings.disawer_prev && settings.disawer_prev !== '-' && settings.disawer_prev.toUpperCase() !== 'WAIT') {
+        yVal = settings.disawer_prev;
+      }
+      yestInp.value = yVal;
+
+      let tVal = 'WAIT';
+      if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+        tVal = chartTodayVal;
+      } else if (disawerGame && disawerGame.today_result && disawerGame.today_result !== '-' && disawerGame.today_result.toUpperCase() !== 'WAIT') {
+        tVal = disawerGame.today_result;
+      } else if (settings.disawer_today && settings.disawer_today !== '-' && settings.disawer_today.toUpperCase() !== 'WAIT') {
+        tVal = settings.disawer_today;
+      }
+      todayInp.value = tVal;
     }
 
     async function setDisawerWait(btn) {
@@ -1680,14 +1694,15 @@
 
     function getResultFromChartRecords(chartRecords, dateStr, gameName) {
       if (!chartRecords || !Array.isArray(chartRecords) || !dateStr || !gameName) return null;
-      const gNameUpper = gameName.trim().toUpperCase();
+      let gNameUpper = gameName.trim().toUpperCase();
+      if (gNameUpper === 'DISAWER') gNameUpper = 'DISAWAR';
       const rec = chartRecords.find(r => {
         if (!r || !r.record_date || !r.game_name) return false;
         const rDate = r.record_date.trim();
-        const rGame = r.game_name.trim().toUpperCase();
+        let rGame = r.game_name.trim().toUpperCase();
+        if (rGame === 'DISAWER') rGame = 'DISAWAR';
         const isMatch = (rGame === gNameUpper) ||
-          (gNameUpper === 'DISAWER' && rGame === 'DESAWAR') ||
-          (gNameUpper === 'DESAWAR' && rGame === 'DISAWER');
+          (gNameUpper.startsWith('DISAW') && rGame.startsWith('DISAW'));
         return rDate === dateStr && isMatch;
       });
       if (rec && rec.result_val && rec.result_val.trim() !== '' && rec.result_val.trim() !== '-') {
@@ -2285,11 +2300,22 @@
       const monthNum = parseInt(selectedMonth, 10) || 9;
       const daysInMonth = new Date(year, monthNum, 0).getDate();
 
+      const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
+      const currentSelectedGameObj = (siteDataCache && siteDataCache.games)
+        ? siteDataCache.games.find(g => (g.name || '').trim().toUpperCase() === selectedGame || ((g.name || '').trim().toUpperCase().startsWith('DISAW') && selectedGame.startsWith('DISAW')))
+        : null;
+
       for (let day = 1; day <= daysInMonth; day++) {
         const dayStr = String(day).padStart(2, '0');
         const dateKey = `${dayStr}-${selectedMonth}`;
         const mapKey = `${dateKey}_${selectedGame}`;
-        const val = recordsMap[mapKey] !== undefined ? recordsMap[mapKey] : '-';
+        let val = recordsMap[mapKey] !== undefined ? recordsMap[mapKey] : '-';
+
+        if ((val === '-' || val === '') && dateKey === todayStr && currentSelectedGameObj && currentSelectedGameObj.today_result && currentSelectedGameObj.today_result !== '-' && currentSelectedGameObj.today_result.toUpperCase() !== 'WAIT') {
+          val = currentSelectedGameObj.today_result;
+        } else if ((val === '-' || val === '') && dateKey === yestStr && currentSelectedGameObj && currentSelectedGameObj.yesterday_result && currentSelectedGameObj.yesterday_result !== '-' && currentSelectedGameObj.yesterday_result.toUpperCase() !== 'WAIT') {
+          val = currentSelectedGameObj.yesterday_result;
+        }
 
         const tr = document.createElement('tr');
         tr.innerHTML = `
@@ -2418,12 +2444,34 @@
           }
         });
 
+        const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
+        const gamesMap = {};
+        if (siteDataCache && siteDataCache.games) {
+          siteDataCache.games.forEach(g => {
+            if (g && g.name) {
+              let gU = g.name.trim().toUpperCase();
+              if (gU === 'DISAWER') gU = 'DISAWAR';
+              gamesMap[gU] = g;
+            }
+          });
+        }
+
         tbody.innerHTML = '';
         dates.forEach(date => {
           const tr = document.createElement('tr');
           let cellsHtml = `<td><strong>${date}</strong></td>`;
           gamesList.forEach((g, gIdx) => {
-            const val = recordsMap[`${date}_${g}`] !== undefined ? recordsMap[`${date}_${g}`] : '-';
+            let gU = g.trim().toUpperCase();
+            if (gU === 'DISAWER') gU = 'DISAWAR';
+            let val = recordsMap[`${date}_${gU}`] !== undefined ? recordsMap[`${date}_${gU}`] : '-';
+            const gObj = gamesMap[gU];
+
+            if ((val === '-' || val === '') && date === todayStr && gObj && gObj.today_result && gObj.today_result !== '-' && gObj.today_result.toUpperCase() !== 'WAIT') {
+              val = gObj.today_result;
+            } else if ((val === '-' || val === '') && date === yestStr && gObj && gObj.yesterday_result && gObj.yesterday_result !== '-' && gObj.yesterday_result.toUpperCase() !== 'WAIT') {
+              val = gObj.yesterday_result;
+            }
+
             cellsHtml += `<td><input type="text" class="adm-input-cell chart1-cell-input" data-date="${date}" data-col-idx="${gIdx}" value="${val}"></td>`;
           });
           tr.innerHTML = cellsHtml;
