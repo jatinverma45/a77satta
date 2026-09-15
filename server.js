@@ -491,23 +491,39 @@ app.get('/api/site-data', async (req, res) => {
 
     let charts = Object.values(chartMap);
 
-    let heroGames = games.filter(g => parseInt(g.is_hero) === 1);
-    if (heroGames.length === 0 && settings.hero_games_json) {
+    let heroGames = [];
+    if (settings.hero_games_json) {
       try {
-        const parsedHero = JSON.parse(settings.hero_games_json);
+        const parsedHero = typeof settings.hero_games_json === 'string' ? JSON.parse(settings.hero_games_json) : settings.hero_games_json;
         if (Array.isArray(parsedHero) && parsedHero.length > 0) {
-          const heroNames = new Set(parsedHero.map(h => (h.name || '').trim().toUpperCase()));
-          heroGames = games.filter(g => heroNames.has((g.name || '').trim().toUpperCase()));
+          heroGames = parsedHero.map(hg => {
+            const hgName = (hg.name || '').trim().toUpperCase();
+            const match = games.find(g => (g.name || '').trim().toUpperCase() === hgName || (hgName.startsWith('DISAW') && (g.name || '').trim().toUpperCase().startsWith('DISAW')));
+            const todayRec = chartMap[`${todayStr}_${hgName}`];
+            let resVal = 'WAIT';
+            if (match && match.today_result && match.today_result !== '-' && match.today_result.toUpperCase() !== 'WAIT') {
+              resVal = match.today_result.trim();
+            } else if (todayRec && todayRec.result_val && todayRec.result_val !== '-' && todayRec.result_val.toUpperCase() !== 'WAIT') {
+              resVal = todayRec.result_val.trim();
+            } else if (hg.today_result && hg.today_result !== '-' && hg.today_result.toUpperCase() !== 'WAIT') {
+              resVal = hg.today_result.trim();
+            }
+            return {
+              id: match ? match.id : (hg.id || null),
+              name: hgName,
+              today_result: resVal
+            };
+          }).filter(h => h && h.name && activeGameNames.has(h.name));
         }
       } catch(e) {}
     }
-
-    heroGames.forEach(hg => {
-      const match = games.find(g => (g.name || '').trim().toUpperCase() === (hg.name || '').trim().toUpperCase());
-      if (match) {
-        hg.today_result = match.today_result;
-      }
-    });
+    if (heroGames.length === 0) {
+      heroGames = games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
+        id: g.id || null,
+        name: (g.name || '').trim().toUpperCase(),
+        today_result: g.today_result || 'WAIT'
+      }));
+    }
 
     if (games.length === 0) {
       charts = [];
@@ -626,12 +642,27 @@ app.post('/api/admin/update-game', async (req, res) => {
     backup.settings.disawer_today = finalTodayVal;
   }
 
-  const heroGamesList = backup.games.filter(g => parseInt(g.is_hero) === 1).map(g => ({
-    id: g.id || null,
-    name: g.name ? g.name.trim().toUpperCase() : '',
-    today_result: g.today_result ? g.today_result.trim() : 'WAIT'
-  }));
-  backup.settings.hero_games_json = JSON.stringify(heroGamesList);
+  if (is_hero !== undefined) {
+    let currentHeroList = [];
+    if (backup.settings && backup.settings.hero_games_json) {
+      try {
+        currentHeroList = typeof backup.settings.hero_games_json === 'string' ? JSON.parse(backup.settings.hero_games_json) : backup.settings.hero_games_json;
+      } catch(e) {}
+    }
+    if (!Array.isArray(currentHeroList)) currentHeroList = [];
+
+    if (is_hero) {
+      if (!currentHeroList.some(h => (h.name || '').toUpperCase() === gNameUpper)) {
+        currentHeroList.push({ id, name: gNameUpper, today_result: finalTodayVal });
+      } else {
+        const hIdx = currentHeroList.findIndex(h => (h.name || '').toUpperCase() === gNameUpper);
+        if (hIdx !== -1) currentHeroList[hIdx].today_result = finalTodayVal;
+      }
+    } else {
+      currentHeroList = currentHeroList.filter(h => (h.name || '').toUpperCase() !== gNameUpper && !(gNameUpper.startsWith('DISAW') && (h.name || '').toUpperCase().startsWith('DISAW')));
+    }
+    backup.settings.hero_games_json = JSON.stringify(currentHeroList);
+  }
 
   memoryBackupCache = backup;
   saveBackupDataLocally(backup);
@@ -652,8 +683,8 @@ app.post('/api/admin/update-game', async (req, res) => {
       await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('disawer_today', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [finalTodayVal]).catch(() => {});
     }
 
-    if (heroGamesList.length > 0) {
-      await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [JSON.stringify(heroGamesList)]).catch(() => {});
+    if (is_hero !== undefined && backup.settings.hero_games_json) {
+      await safeQuery(`INSERT INTO site_settings (key, value) VALUES ('hero_games_json', $1) ON CONFLICT (key) DO UPDATE SET value = EXCLUDED.value`, [backup.settings.hero_games_json]).catch(() => {});
     }
 
     // Update chart_records for today
