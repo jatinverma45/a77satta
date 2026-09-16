@@ -1,5 +1,6 @@
 {
   "settings": {
+    "hero_games_json": "[{\"id\":null,\"name\":\"LAAL BAZAR\",\"today_result\":\"76\"}]",
     "main_game_name": "GALI",
     "main_game_result": "97",
     "disawer_wait": "WAIT",
@@ -18,7 +19,6 @@
     "disawer_prev": "86",
     "disawer_today": "WAIT",
     "chart1_columns_json": "[\"LAAL BAZAR\",\"KASHMIRI BAZAR\",\"MATKA KING\",\"DELHI LAXMI\",\"FARIDABAD\",\"SHIV PURI\",\"GAZIABAD\",\"DWARKA PURI\",\"DISAWAR\",\"GALI\"]",
-    "hero_games_json": "[{\"id\":null,\"name\":\"LAAL BAZAR\",\"today_result\":\"76\"}]",
     "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"KASHMIRI BAZAR SATTA KING CHART 2026\",\"MATKA KING SATTA KING CHART 2026\",\"DELHI LAXMI SATTA KING CHART 2026\",\"FARIDABAD SATTA KING CHART 2026\",\"SHIV PURI SATTA KING CHART 2026\",\"GAZIABAD SATTA KING CHART 2026\",\"DWARKA PURI SATTA KING CHART 2026\",\"DISAWAR SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\"]"
   },
   "games": [
@@ -28,7 +28,7 @@
       "open_time": "12:30 PM",
       "close_time": "01:40 PM",
       "yesterday_result": "35",
-      "today_result": "76",
+      "today_result": "89",
       "table_group": 1,
       "sort_order": 1,
       "is_hero": 1,
@@ -41,7 +41,7 @@
       "open_time": "1:00 PM",
       "close_time": "04:00 PM",
       "yesterday_result": "36",
-      "today_result": "66",
+      "today_result": "90",
       "table_group": 1,
       "sort_order": 2,
       "is_hero": 0,
@@ -54,7 +54,7 @@
       "open_time": "02:20 PM",
       "close_time": "02:40 PM",
       "yesterday_result": "15",
-      "today_result": "56",
+      "today_result": "01",
       "table_group": 1,
       "sort_order": 3,
       "is_hero": 0,
@@ -80,7 +80,7 @@
       "open_time": "06:10 PM",
       "close_time": "06:10 PM",
       "yesterday_result": "65",
-      "today_result": "WAIT",
+      "today_result": "67",
       "table_group": 1,
       "sort_order": 5,
       "is_hero": 0,
@@ -93,7 +93,7 @@
       "open_time": "07:00 PM",
       "close_time": "07:30 PM",
       "yesterday_result": "46",
-      "today_result": "WAIT",
+      "today_result": "90",
       "table_group": 1,
       "sort_order": 6,
       "is_hero": 0,
@@ -106,7 +106,7 @@
       "open_time": "09:50 PM",
       "close_time": "09:50 PM",
       "yesterday_result": "99",
-      "today_result": "WAIT",
+      "today_result": "87",
       "table_group": 1,
       "sort_order": 7,
       "is_hero": 0,
@@ -1916,7 +1916,7 @@
       "id": 21828,
       "record_date": "15-09",
       "game_name": "FARIDABAD",
-      "result_val": "-"
+      "result_val": "67"
     },
     {
       "id": 21834,
@@ -1928,31 +1928,31 @@
       "id": 21831,
       "record_date": "15-09",
       "game_name": "GAZIABAD",
-      "result_val": "-"
+      "result_val": "87"
     },
     {
       "id": 21823,
       "record_date": "15-09",
       "game_name": "KASHMIRI BAZAR",
-      "result_val": "66"
+      "result_val": "90"
     },
     {
       "id": 21822,
       "record_date": "15-09",
       "game_name": "LAAL BAZAR",
-      "result_val": "76"
+      "result_val": "89"
     },
     {
       "id": 21825,
       "record_date": "15-09",
       "game_name": "MATKA KING",
-      "result_val": "56"
+      "result_val": "01"
     },
     {
       "id": 21829,
       "record_date": "15-09",
       "game_name": "SHIV PURI",
-      "result_val": "-"
+      "result_val": "90"
     },
     {
       "id": 11477,

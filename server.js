@@ -455,41 +455,27 @@ app.get('/api/site-data', async (req, res) => {
       });
     }
 
-    // Dynamic Today & Yesterday resolution (consistent between DB games table & chart_records)
+    // Dynamic Today & Yesterday resolution (strictly derived from chart_records for exact date keys)
     const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
     games.forEach(g => {
       const gName = (g.name || '').trim().toUpperCase();
 
-      // Yesterday Result: Authoritative resolution - valid declared number always wins over WAIT/-
+      // Yesterday Result: Authoritative resolution strictly from chart_records for yestStr
       const yestRec = chartMap[`${yestStr}_${gName}`];
-      const hasYestRec = yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val.trim() !== '-' && yestRec.result_val.trim().toUpperCase() !== 'WAIT';
-      const hasGYest = g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result.trim() !== '-' && g.yesterday_result.trim().toUpperCase() !== 'WAIT';
-
-      if (hasYestRec) {
+      if (yestRec && yestRec.result_val && yestRec.result_val.trim() !== '' && yestRec.result_val.trim() !== '-' && yestRec.result_val.trim().toUpperCase() !== 'WAIT') {
         g.yesterday_result = yestRec.result_val.trim();
         yestRec.result_val = yestRec.result_val.trim();
-      } else if (hasGYest) {
-        g.yesterday_result = g.yesterday_result.trim();
-        if (yestRec) yestRec.result_val = g.yesterday_result;
-        else chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: g.yesterday_result };
       } else {
         g.yesterday_result = '-';
         if (yestRec) yestRec.result_val = '-';
         else chartMap[`${yestStr}_${gName}`] = { record_date: yestStr, game_name: gName, result_val: '-' };
       }
 
-      // Today Result: Authoritative resolution - valid declared number always wins over WAIT/-
+      // Today Result: Authoritative resolution strictly from chart_records for todayStr
       const todayRec = chartMap[`${todayStr}_${gName}`];
-      const hasTodayRec = todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val.trim() !== '-' && todayRec.result_val.trim().toUpperCase() !== 'WAIT';
-      const hasGToday = g.today_result && g.today_result.trim() !== '' && g.today_result.trim() !== '-' && g.today_result.trim().toUpperCase() !== 'WAIT';
-
-      if (hasTodayRec) {
+      if (todayRec && todayRec.result_val && todayRec.result_val.trim() !== '' && todayRec.result_val.trim() !== '-' && todayRec.result_val.trim().toUpperCase() !== 'WAIT') {
         g.today_result = todayRec.result_val.trim();
         todayRec.result_val = todayRec.result_val.trim();
-      } else if (hasGToday) {
-        g.today_result = g.today_result.trim();
-        if (todayRec) todayRec.result_val = g.today_result;
-        else chartMap[`${todayStr}_${gName}`] = { record_date: todayStr, game_name: gName, result_val: g.today_result };
       } else {
         g.today_result = 'WAIT';
         if (todayRec) todayRec.result_val = '-';
