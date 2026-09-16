@@ -216,17 +216,7 @@
             if (dbVal !== undefined && dbVal !== null && dbVal.trim() !== '' && dbVal.trim() !== '-' && dbVal.trim().toUpperCase() !== 'WAIT') {
               row.push(dbVal.trim());
             } else if (day === currKDay && month === currKMonth) {
-              if (gObj && gObj.today_result && gObj.today_result.toUpperCase() !== 'WAIT' && gObj.today_result !== '-') {
-                row.push(gObj.today_result.trim());
-              } else {
-                row.push('WAIT');
-              }
-            } else if (day === yestKDay && month === yestKMonth) {
-              if (gObj && gObj.yesterday_result && gObj.yesterday_result.toUpperCase() !== 'WAIT' && gObj.yesterday_result !== '-') {
-                row.push(gObj.yesterday_result.trim());
-              } else {
-                row.push('-');
-              }
+              row.push('WAIT');
             } else {
               row.push('-');
             }
@@ -604,16 +594,12 @@
             const chartTodayVal = getResultFromChartRecords(chartRecords, todayStr, g.name);
 
             let yestRes = '-';
-            if (g.yesterday_result && g.yesterday_result.trim() !== '' && g.yesterday_result !== '-' && g.yesterday_result.toUpperCase() !== 'WAIT') {
-              yestRes = g.yesterday_result.trim();
-            } else if (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-' && chartYestVal.toUpperCase() !== 'WAIT') {
+            if (chartYestVal !== null && chartYestVal !== undefined && chartYestVal !== '' && chartYestVal !== '-' && chartYestVal.toUpperCase() !== 'WAIT') {
               yestRes = chartYestVal.trim();
             }
 
             let todayRaw = 'WAIT';
-            if (g.today_result && g.today_result.trim() !== '' && g.today_result !== '-' && g.today_result.toUpperCase() !== 'WAIT') {
-              todayRaw = g.today_result.trim();
-            } else if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
+            if (chartTodayVal !== null && chartTodayVal !== undefined && chartTodayVal !== '' && chartTodayVal !== '-' && chartTodayVal.toUpperCase() !== 'WAIT') {
               todayRaw = chartTodayVal.trim();
             }
 
@@ -701,16 +687,6 @@
           // 1. If valid result entered in chart_records
           if (val !== undefined && val !== null && String(val).trim() !== '' && String(val).trim() !== '-' && String(val).trim().toUpperCase() !== 'WAIT') {
             return String(val).trim();
-          }
-
-          // 2. If yesterday date and yesterday_result is present
-          if (date === yestStr && gObj && gObj.yesterday_result && gObj.yesterday_result.trim() !== '' && gObj.yesterday_result.trim() !== '-' && gObj.yesterday_result.trim().toUpperCase() !== 'WAIT') {
-            return gObj.yesterday_result.trim();
-          }
-
-          // 3. If today date and today_result is present
-          if (date === todayStr && gObj && gObj.today_result && gObj.today_result.trim() !== '' && gObj.today_result.trim() !== '-' && gObj.today_result.trim().toUpperCase() !== 'WAIT') {
-            return gObj.today_result.trim();
           }
 
           if (val === '-') return '-';
