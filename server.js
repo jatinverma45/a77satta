@@ -4,7 +4,7 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 const cors = require('cors');
 const fs = require('fs');
-const { Pool: PgPool } = require('pg');
+const { Pool: PgPool, Client: PgClient } = require('pg');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -31,10 +31,10 @@ function getPgPool() {
     pgPool = new PgPool({
       connectionString: SUPABASE_DB_URI,
       ssl: { rejectUnauthorized: false },
-      max: process.env.VERCEL ? 4 : 10,
-      idleTimeoutMillis: 15000,
-      connectionTimeoutMillis: 10000,
-      statement_timeout: 15000,
+      max: process.env.VERCEL ? 1 : 10,
+      idleTimeoutMillis: 3000,
+      connectionTimeoutMillis: 6000,
+      statement_timeout: 10000,
       allowExitOnIdle: true
     });
     pgPool.on('error', (err) => {
@@ -50,17 +50,22 @@ async function safeQuery(text, params = []) {
     const pool = getPgPool();
     return await pool.query(text, params);
   } catch (err) {
-    console.warn('⚠️ PostgreSQL query error, reconnecting and retrying once:', err.message);
-    try {
-      if (pgPool) {
-        try { await pgPool.end(); } catch(e) {}
-      }
+    console.warn('⚠️ PostgreSQL pool query error, reconnecting with fresh client:', err.message);
+    if (pgPool) {
+      try { await pgPool.end(); } catch(e) {}
       pgPool = null;
-      const freshPool = getPgPool();
-      return await freshPool.query(text, params);
-    } catch (retryErr) {
-      console.error('❌ PostgreSQL retry query failed:', retryErr.message);
-      throw retryErr;
+    }
+    const client = new PgClient({
+      connectionString: SUPABASE_DB_URI,
+      ssl: { rejectUnauthorized: false },
+      connectionTimeoutMillis: 8000,
+      statement_timeout: 10000
+    });
+    await client.connect();
+    try {
+      return await client.query(text, params);
+    } finally {
+      await client.end().catch(() => {});
     }
   }
 }

@@ -13,13 +13,13 @@
     "telegram_url": "https://t.me/+Mcnw6vRvig0wNDI1",
     "notice_1": "FARIDABAD SATTA KING RESULT IS UPDATED EVERYDAY AT 6:10 PM.",
     "notice_2": "LAAL BAZAR SATTA KING 2026 CHART IS AVAILABLE ON A77SATTA.ONLINE",
-    "chart1_columns_json": "[\"LAAL BAZAR\",\"KASHMIRI BAZAR\",\"MATKA KING\",\"DELHI LAXMI\",\"FARIDABAD\",\"SHIV PURI\",\"GAZIABAD\",\"DWARKA PURI\",\"DISAWAR\",\"GALI\"]",
-    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"KASHMIRI BAZAR SATTA KING CHART 2026\",\"MATKA KING SATTA KING CHART 2026\",\"DELHI LAXMI SATTA KING CHART 2026\",\"FARIDABAD SATTA KING CHART 2026\",\"SHIV PURI SATTA KING CHART 2026\",\"GAZIABAD SATTA KING CHART 2026\",\"DWARKA PURI SATTA KING CHART 2026\",\"DISAWAR SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\"]",
-    "hero_games_json": "[{\"id\":789,\"name\":\"FARIDABAD\",\"today_result\":\"71\"}]",
+    "hero_games_json": "[{\"id\":690,\"name\":\"DWARKA PURI\",\"today_result\":\"66\"}]",
     "featured_banner_game": "DISAWAR",
-    "disawer_time": "05:15 AM",
-    "disawer_prev": "21",
-    "disawer_today": "WAIT"
+    "disawer_time": "10:30 PM",
+    "disawer_prev": "23",
+    "disawer_today": "66",
+    "chart1_columns_json": "[\"LAAL BAZAR\",\"KASHMIRI BAZAR\",\"MATKA KING\",\"DELHI LAXMI\",\"FARIDABAD\",\"SHIV PURI\",\"GAZIABAD\",\"DWARKA PURI\",\"DISAWAR\",\"GALI\"]",
+    "custom_chart_cards_json": "[\"LAAL BAZAR SATTA KING CHART 2026\",\"KASHMIRI BAZAR SATTA KING CHART 2026\",\"MATKA KING SATTA KING CHART 2026\",\"DELHI LAXMI SATTA KING CHART 2026\",\"FARIDABAD SATTA KING CHART 2026\",\"SHIV PURI SATTA KING CHART 2026\",\"GAZIABAD SATTA KING CHART 2026\",\"DWARKA PURI SATTA KING CHART 2026\",\"DISAWAR SATTA KING CHART 2026\",\"GALI SATTA KING CHART 2026\"]"
   },
   "games": [
     {
@@ -83,7 +83,7 @@
       "today_result": "71",
       "table_group": 1,
       "sort_order": 5,
-      "is_hero": 1,
+      "is_hero": 0,
       "is_featured": 0,
       "is_permanent": 0
     },
@@ -106,7 +106,7 @@
       "open_time": "09:50 PM",
       "close_time": "09:50 PM",
       "yesterday_result": "87",
-      "today_result": "WAIT",
+      "today_result": "88",
       "table_group": 1,
       "sort_order": 7,
       "is_hero": 0,
@@ -119,10 +119,10 @@
       "open_time": "10:30 PM",
       "close_time": "09:50 PM",
       "yesterday_result": "23",
-      "today_result": "WAIT",
+      "today_result": "66",
       "table_group": 1,
       "sort_order": 8,
-      "is_hero": 0,
+      "is_hero": 1,
       "is_featured": 0,
       "is_permanent": 0
     },
@@ -142,10 +142,10 @@
     {
       "id": 682,
       "name": "DISAWAR",
-      "open_time": "05:15 AM",
+      "open_time": "10:30 PM",
       "close_time": "",
-      "yesterday_result": "21",
-      "today_result": "WAIT",
+      "yesterday_result": "23",
+      "today_result": "66",
       "table_group": 1,
       "sort_order": 10,
       "is_hero": 0,
@@ -1904,7 +1904,7 @@
       "id": 21835,
       "record_date": "15-09",
       "game_name": "DISAWAR",
-      "result_val": "21"
+      "result_val": "23"
     },
     {
       "id": 21832,
@@ -2024,13 +2024,13 @@
       "id": 21850,
       "record_date": "16-09",
       "game_name": "DISAWAR",
-      "result_val": "-"
+      "result_val": "66"
     },
     {
       "id": 21847,
       "record_date": "16-09",
       "game_name": "DWARKA PURI",
-      "result_val": "-"
+      "result_val": "66"
     },
     {
       "id": 21843,
@@ -2048,7 +2048,7 @@
       "id": 21846,
       "record_date": "16-09",
       "game_name": "GAZIABAD",
-      "result_val": "-"
+      "result_val": "88"
     },
     {
       "id": 21838,
