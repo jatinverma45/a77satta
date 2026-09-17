@@ -550,6 +550,8 @@ app.get('/api/site-data', async (req, res) => {
       } catch(e) {}
     }
 
+    const blogs = Array.isArray(row.blogs) ? row.blogs : (backup ? backup.blogs || [] : []);
+
     return res.json({
       settings,
       games,
@@ -1303,12 +1305,12 @@ app.post('/api/admin/save-blog', async (req, res) => {
   const { id, title, slug, image, post_date, tags, content } = req.body;
   try {
     if (id) {
-      await pgPool.query(
+      await safeQuery(
         'UPDATE blogs SET title=$1, slug=$2, image=$3, post_date=$4, tags=$5, content=$6 WHERE id=$7',
         [title, slug, image, post_date, tags, content, id]
       );
     } else {
-      await pgPool.query(
+      await safeQuery(
         'INSERT INTO blogs (title, slug, image, post_date, tags, content) VALUES ($1, $2, $3, $4, $5, $6)',
         [title, slug, image, post_date, tags, content]
       );
@@ -1325,7 +1327,7 @@ app.post('/api/admin/save-blog', async (req, res) => {
 app.post('/api/admin/delete-blog', async (req, res) => {
   const { id } = req.body;
   try {
-    await pgPool.query('DELETE FROM blogs WHERE id = $1', [id]);
+    await safeQuery('DELETE FROM blogs WHERE id = $1', [id]);
     await syncJSONBackup();
     res.json({ success: true });
   } catch (e) {
@@ -1339,12 +1341,34 @@ app.post('/api/admin/change-password', async (req, res) => {
   const { new_password } = req.body;
   const hash = bcrypt.hashSync(new_password, 10);
   try {
-    await pgPool.query("UPDATE admin SET password = $1 WHERE username = 'A77SattaOfficial'", [hash]);
+    await safeQuery("UPDATE admin SET password = $1 WHERE username = 'A77SattaOfficial'", [hash]);
     await syncJSONBackup();
     res.json({ success: true, message: 'Password updated successfully' });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: e.message });
+  }
+});
+
+// Health check endpoint
+app.get('/api/health', async (req, res) => {
+  try {
+    const dbRes = await safeQuery('SELECT NOW() as db_time, COUNT(*) as game_count FROM games');
+    const { todayStr, yestStr } = getTodayAndYesterdayDateStr();
+    res.json({
+      status: 'ok',
+      db: 'connected',
+      db_time: dbRes.rows[0].db_time,
+      game_count: dbRes.rows[0].game_count,
+      todayStr,
+      yestStr
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      db: 'failed',
+      message: err.message
+    });
   }
 });
 
